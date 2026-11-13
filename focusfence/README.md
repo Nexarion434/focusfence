@@ -66,7 +66,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 36 tests: core unit tests + e2e + production-build smoke test
+npm test            # 41 tests: core unit tests + e2e + production-build smoke test
 ```
 
 The e2e suite launches Playwright's Chromium (new headless) with the unpacked extension and routes all traffic through a local "fake internet" proxy (TLS terminated with a throwaway self-signed cert, so HSTS-preloaded hosts such as reddit.com work). Headless Chromium cannot click Chrome's permission prompt, so the test copy of the extension gets host access up front; one test uses the real manifest to verify the no-access fallback.
@@ -85,7 +85,24 @@ npm run screenshots  # screenshots/*.png
 npm run icons        # src/icons/*.png
 ```
 
-## Third-party
+## Website (GitHub Pages)
 
-- [ExtensionPay](https://github.com/Glench/ExtPay) (`extpay`, AGPL-3.0-or-later) — vendored in `src/vendor/ExtPay.js`.
-- [Inter](https://rsms.me/inter/) font (SIL OFL 1.1) — `src/fonts/`.
+`npm run docs` regenerates `../docs/` (repo root): landing page + `privacy.html`, rendered from `store/privacy-policy.md`. Serve it with GitHub Pages from branch `main`, folder `/docs`.
+
+## License
+
+FocusFence is licensed under the **GNU AGPL v3 or later** (`LICENSE`).
+
+Why: the ExtensionPay client (`extpay`) declares `AGPL-3.0-or-later` in its package.json and source header, while its LICENSE file says `LGPL-3.0`. Shipping it inside the extension makes the package a combined work. The cleanest option that complies with either reading is to license FocusFence itself under AGPL-3.0-or-later:
+
+- `src/vendor/ExtPay.js` is byte-for-byte `extpay@3.1.2/dist/ExtPay.js` (checked by `tests/build.spec.mjs`);
+- `LICENSE`, `THIRD_PARTY_NOTICES.txt` and `licenses/` ship inside the zip;
+- the zip contains the complete, unminified source (the Corresponding Source), and Settings → Plan links the license, notices and source repository.
+
+Alternatives considered: "load extpay from npm as-is with a notice" doesn't avoid copyleft, because the library is still distributed inside the extension. A clean-room payment client against ExtensionPay's HTTP API would allow a proprietary license, but it is riskier and has to be maintained by hand. Not legal advice. Have counsel confirm before launch.
+
+Third-party: ExtPay (AGPL-3.0-or-later), webextension-polyfill 0.7.0 bundled inside it (MPL-2.0), Inter font (SIL OFL 1.1). See `src/THIRD_PARTY_NOTICES.txt`.
+
+## Strict mode limits
+
+Chrome always lets users disable or remove extensions, and no extension can block `chrome://extensions`. Mitigations: timed strict sessions pause while FocusFence isn't running (heartbeat every minute, so disabling it can't run out the clock), and the options page and popup warn when FocusFence isn't allowed in Incognito. The limits are documented in the UI, the listing and the landing page FAQ.

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "FocusFence — Website Blocker & Focus Timer",
+  "name": "FocusFence – Website Blocker & Pomodoro Focus Timer",
   "short_name": "FocusFence",
   "version": "1.0.0",
-  "description": "Block distracting websites in one click. Pro adds schedules, path blocking, focus sessions, strict mode and stats.",
+  "description": "Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomodoro focus timer and strict mode. 100% private.",
   "minimum_chrome_version": "120",
   "icons": {
     "16": "icons/icon16.png",
@@ -20,19 +20,43 @@
       "48": "icons/icon48.png"
     }
   },
-  "options_ui": { "page": "options.html", "open_in_tab": true },
-  "background": { "service_worker": "background.js" },
-  "permissions": ["storage", "declarativeNetRequest", "alarms", "activeTab", "scripting"],
-  "optional_host_permissions": ["*://*/*"],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "alarms",
+    "activeTab",
+    "scripting"
+  ],
+  "optional_host_permissions": [
+    "*://*/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://extensionpay.com/*"],
-      "js": ["vendor/ExtPay.js"],
+      "matches": [
+        "https://extensionpay.com/*"
+      ],
+      "js": [
+        "vendor/ExtPay.js"
+      ],
       "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
-    { "resources": ["blocked.html"], "matches": ["<all_urls>"] }
+    {
+      "resources": [
+        "blocked.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"

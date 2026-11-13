@@ -154,6 +154,8 @@ try {
   await opt.waitForTimeout(500);
   await opt.screenshot({ path: path.join(OUT, `options${suffix}.png`) });
   await opt.screenshot({ path: path.join(OUT, `store-3-options-blocklist${suffix}.png`) });
+  // The incognito warning depends on the viewer's Chrome settings; keep it out of marketing shots.
+  await opt.addStyleTag({ content: '#incognito-warning{display:none!important}' });
   await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
   await opt.waitForTimeout(400);
   await opt.screenshot({ path: path.join(OUT, `store-4-schedule-focus-strict${suffix}.png`) });

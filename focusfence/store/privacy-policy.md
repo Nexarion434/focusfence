@@ -56,6 +56,10 @@ FocusFence is not directed at children under 13 and does not knowingly collect p
 
 We do not sell, rent, or share your data. We do not use or transfer your data for purposes unrelated to the extension's single purpose, and we do not use it to determine creditworthiness or for lending.
 
+## Open source
+
+FocusFence is free software under the GNU Affero General Public License v3 (or later). You can check every claim in this policy against the source code: <https://github.com/Nexarion434/focusfence>.
+
 ## Changes
 
 If this policy changes, the new version will be published at the same address with a new effective date. Material changes will be noted in the extension's release notes.
