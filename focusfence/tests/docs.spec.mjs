@@ -85,11 +85,12 @@ test('motion is optional: blocks reveal on scroll, and nothing stays hidden with
   const browser = await chromium.launch({ env });
   const hidden = (page) =>
     page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((el) => getComputedStyle(el).opacity !== '1').length);
-  // the closing fence: every picket of the wall standing (not sunk into the ground)
+  // the closing fence: every pill of the row standing (not sunk into the ground)
   const standing = (page) =>
-    page.evaluate(() =>
-      [...document.querySelectorAll('.scene .wall .pk')].every((pk) => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(pk).transform))
-    );
+    page.evaluate(() => {
+      const pills = [...document.querySelectorAll('.scene .fence .pill')];
+      return pills.length > 0 && pills.every((p) => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(p).transform));
+    });
   try {
     const url = 'file://' + path.join(DOCS, 'index.html');
     // motion allowed: below-the-fold blocks start hidden, and all are shown once scrolled into view
@@ -293,28 +294,45 @@ test('pricing: the yearly comparison and the saving are computed from the real p
   }
 });
 
-test("the closing fence is the extension's lantern wall in both themes, with nothing left of the old fence", () => {
+test("the closing fence is the extension's row of glass pills in both themes, with nothing left of the older fences", () => {
   for (const lang of SITE_LANGS) {
     const rel = dirOf(lang) + 'index.html';
     const html = read('docs', rel);
-    expect(html, rel).not.toMatch(/class="fence"|id="pickets"/);
-    expect(all(/<div class="(wall(?: mirror)?)">/g, html), rel).toEqual(['wall mirror', 'wall']);
-    const wall = /<div class="wall">([\s\S]*?)<span class="bloom"><\/span><\/div>/.exec(html)[1];
-    const pk = [...wall.matchAll(/<span class="pk ([^"]+)"(?: style="--d:(\d+);--v:([\d.]+);--rim:([\d.]+)")?><\/span>/g)];
-    expect(pk.length, rel).toBe(33);
-    // one lantern, in the middle; the other pickets fade and catch its light with the extension's formulas
-    expect(pk.map((p) => p[1]).filter((c) => c === 'lit').length, rel).toBe(1);
-    expect(pk[16][1], rel).toBe('lit');
-    for (const [, cls, d, v, rim] of pk.filter((p) => p[1] !== 'lit')) {
-      expect(cls, rel).toMatch(/^wall-pk [lr]$/);
-      expect(Number(v), `${rel} d=${d}`).toBeCloseTo(0.16 + 0.84 * Math.exp(-d / 4.4), 3);
-      expect(Number(rim), `${rel} d=${d}`).toBeCloseTo(Math.exp(-d / 2.3), 3);
-    }
+    // nothing left of the first site's SVG fence or of round 3's lantern wall
+    expect(html, rel).not.toMatch(/id="pickets"|class="wall|class="pk |class="bloom"/);
+    // the row and its reflection on the ground, with the light's pool in front
+    expect(all(/<div class="(fence(?: mirror)?)">/g, html), rel).toEqual(['fence mirror', 'fence']);
+    expect(html, rel).toContain('<span class="fence-pool"></span>');
+    const row = /<div class="fence"><span class="fence-halo"><\/span>([\s\S]*?)<\/div>/.exec(html)[1];
+    const pills = [...row.matchAll(/<span class="pill( lit)?" style="--k:([\d.]+);--t0:([\d.]+);--v0:([\d.]+);--side:(-?\d);--i:(\d)"><\/span>/g)];
+    // seven pills, as on the demo's block page (six sites), the light in the middle
+    expect(pills.length, rel).toBe(7);
+    expect(pills.filter((p) => p[1]).length, rel).toBe(1);
+    expect(pills[3][1], rel).toBe(' lit');
+    // each pill shaped by its place, with the extension's pillProfile (src/lib/ui.js)
+    const m = 3;
+    const sigma = 0.75 * (m + 1);
+    pills.forEach(([, , k, t, v, side, i], p) => {
+      const d = Math.abs(p - m);
+      expect([Number(i), Number(side)], `${rel} #${p}`).toEqual([d, Math.sign(p - m)]);
+      expect(Number(k), `${rel} #${p}`).toBeCloseTo(0.3 + 0.7 * Math.exp(-((d / sigma) ** 2)), 3);
+      expect(Number(t), `${rel} #${p}`).toBeCloseTo(d === 0 ? 1 : Math.exp(-d / 1.25), 3);
+      expect(Number(v), `${rel} #${p}`).toBeCloseTo(d === m ? 0.45 : d === m - 1 ? 0.75 : 1, 2);
+    });
   }
   const css = read('focusfence/scripts/site.css');
-  expect(css).not.toMatch(/--picket:|--picket-line|--rail-line|\.fence\b/);
-  // the extension's two palettes: graphite at night, sage at dawn, and the lantern's green in each
-  for (const token of ['--wall-0: #232927;', '--wall-0: #c3d1c8;', '--lit-1: #5cc583;', '--lit-1: #3a9a5b;']) expect(css).toContain(token);
+  // no lantern, rail or picket-tip leftovers
+  expect(css).not.toMatch(/--picket:|--picket-line|--rail|--wall-|--rim-rgb|\.wall\b|\.pk\b|\.bloom\b|clip-path: polygon|lantern/i);
+  // the extension's glass and light, at night and by day
+  for (const token of [
+    '--glass-0: rgb(205 245 222 / 0.1);',
+    '--glass-0: rgb(255 255 255 / 0.94);',
+    '--lit-1: #3fd67a;',
+    '--lit-1: #1e8a45;',
+    '--light-rgb: 63 214 122;',
+    '--light-rgb: 30 138 69;',
+  ])
+    expect(css).toContain(token);
 });
 
 test('the hero explains the product in the first screen: settings, popup and block page, at 1440x900 and 390x844', async () => {
@@ -454,6 +472,9 @@ test('theme: follows the system, the header toggle switches light / dark / syste
     // 3. the toggle: dark, then back to system (the switch waits for the new theme's images, then cross-fades)
     await page.click('.theme label[data-v="dark"]');
     await expect.poll(() => state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK, dark: true, light: false, stored: 'dark', meta: ['#08090a', '#08090a'] });
+    // Chrome commits localStorage to the browser process asynchronously: on a busy machine, a reload
+    // fired at once could still read the old value (seen once in round 4). Let the write settle.
+    await page.waitForTimeout(200);
     await page.reload();
     expect(await state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK });
     await page.click('.theme label[data-v="system"]');

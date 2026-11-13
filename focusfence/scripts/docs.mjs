@@ -204,24 +204,27 @@ const ICON = {
 };
 const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name]}</svg>`;
 const PRO = '<span class="pro">PRO</span>';
-/* The closing scene is the extension's block-page wall (design/extension-ui: src/blocked.js and
- * src/styles/blocked.css): pickets 14 px wide, 28 px apart, and a lantern in the middle. Each picket's
- * distance from the lantern sets how much it fades (--v) and how much of the lantern's light it
- * catches on its facing edge (--rim), with the extension's own formulas. 33 pickets (1.4k px) are
- * plenty: the wall fades out toward its edges, and every element here costs style and layout time
- * on load, even below the fold. The ground reflects it (the mirror). */
-const WALL = (() => {
-  const n = 33;
-  const mid = (n - 1) / 2;
-  const pickets = Array.from({ length: n }, (_, i) => {
-    const d = Math.abs(i - mid);
-    if (!d) return '<span class="pk lit"></span>';
-    const v = (0.16 + 0.84 * Math.exp(-d / 4.4)).toFixed(3);
-    const rim = Math.exp(-d / 2.3).toFixed(3);
-    return `<span class="pk wall-pk ${i < mid ? 'l' : 'r'}" style="--d:${d};--v:${v};--rim:${rim}"></span>`;
-  });
-  return `<div class="wall">${pickets.join('')}<span class="bloom"></span></div>`;
+/* The closing scene is the extension's block page (design/extension-ui: src/lib/ui.js FFUI.fence and
+ * pillProfile, src/styles/base.css .fence and .pill, src/styles/blocked.css): a short row of glass
+ * pills, one per blocked site, stepping down from the light in the middle like a bell. Each pill's
+ * place sets its height (--k), how much of the light it catches (--t0), how much of it shows (--v0:
+ * the ends fade), which side of the light it stands (--side) and its distance from it (--i: the
+ * rise's stagger), with the extension's own formulas. Seven pills, as on the demo's block page (six
+ * sites); the ground reflects them (the mirror). */
+const FENCE_N = 7;
+const PILLS = (() => {
+  const n = FENCE_N;
+  const m = (n - 1) / 2;
+  const sigma = 0.75 * (m + 1);
+  return Array.from({ length: n }, (_, p) => {
+    const d = Math.abs(p - m);
+    const k = (0.3 + 0.7 * Math.exp(-((d / sigma) ** 2))).toFixed(3);
+    const t = (d === 0 ? 1 : Math.exp(-d / 1.25)).toFixed(3);
+    const v = (m >= 2 && d === m ? 0.45 : m >= 3 && d === m - 1 ? 0.75 : 1).toFixed(2);
+    return `<span class="pill${d ? '' : ' lit'}" style="--k:${k};--t0:${t};--v0:${v};--side:${Math.sign(p - m)};--i:${d}"></span>`;
+  }).join('');
 })();
+const FENCE = (cls) => `<div class="${cls}"><span class="fence-halo"></span>${PILLS}</div>`;
 // Prices as written in each language ('$2.99', '2,99 €', '2,99 US$'): the amount, and an amount
 // formatted the same way. The yearly card compares a year of each plan from these figures.
 const amount = (price) => Number(/(\d+)[.,](\d\d)/.exec(price).slice(1).join('.'));
@@ -531,8 +534,9 @@ ${T.faq.map(([q, a]) => `      <details><summary><span>${q}</span>${icon('plus',
   </div>
   <div class="scene" aria-hidden="true" data-rise>
     <div class="floor"></div>
-    ${WALL.replace('class="wall"', 'class="wall mirror"')}
-    ${WALL}
+    ${FENCE('fence mirror')}
+    ${FENCE('fence')}
+    <span class="fence-pool"></span>
   </div>
 </section>
 </main>`;

@@ -94,31 +94,31 @@
   --best-edge: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
   --save-ink: #04130a;
   --sel: rgba(108, 197, 138, 0.3);
-  /* the lantern fence: the extension's block-page wall (design/extension-ui, blocked.css and
-     base.css), graphite at night; the lantern is a light, pale at the top and green below */
-  --wall-0: #232927;
-  --wall-1: #151a18;
-  --wall-2: #0b0e0d;
-  --wall-shade: rgb(0 0 0 / 0.3);
-  --wall-cap: rgb(255 255 255 / 0.07);
-  --wall-cap-r: rgb(0 0 0 / 0.35);
-  --wall-edge: rgb(255 255 255 / 0.05);
-  --lit-0: #c4f4d4;
-  --lit-1: #5cc583;
-  --lit-2: #2c7c48;
-  --lit-cap: 0.45;
-  --lit-edge: 0.5;
-  --lit-bloom: 0.85;
-  --rim-rgb: 127 217 160;
-  --rail: #0f1412;
-  --rail-hi: rgb(255 255 255 / 0.035);
-  --horizon: rgba(58, 154, 91, 0.34);
-  --sky-low: #08100c;
-  --floor-0: #080b0a;
-  --floor-1: #030404;
-  --ground-line: rgb(255 255 255 / 0.06);
-  --refl: 0.3;
-  --pool: rgb(76 184 115 / 0.5);
+  /* the fence: the extension's glass pills (design/extension-ui: base.css .fence and .pill,
+     blocked.css), at night: frosted, faintly emissive glass and a bright emerald light */
+  --glass-0: rgb(205 245 222 / 0.1);
+  --glass-1: rgb(120 190 150 / 0.035);
+  --glass-tint: 63 214 122;
+  --glass-tint-a: 0.3;
+  --glass-rim: rgb(255 255 255 / 0.4);
+  --glass-edge: rgb(255 255 255 / 0.07);
+  --glass-shade: 0 0 0 transparent;
+  --glass-blur: blur(16px) saturate(1.4);
+  --light-rgb: 63 214 122;
+  --lit-0: #66e396;
+  --lit-1: #3fd67a;
+  --lit-2: #1e9f55;
+  --lit-core: rgb(225 255 236 / 0.5);
+  --lit-bloom: 0 0 26px rgb(63 214 122 / 0.75), 0 0 70px rgb(63 214 122 / 0.35);
+  --halo-a: 0.55;
+  --halo-h: 1.65;
+  /* its scene: a deep green horizon over black, and a glossy ground that reflects the row */
+  --horizon: rgb(63 214 122 / 0.12);
+  --sky-low: #041309;
+  --floor-0: #020c06;
+  --floor-1: #000;
+  --ground-line: rgb(63 214 122 / 0.14);
+  --refl: 0.42;
   --link-line: rgba(108, 197, 138, 0.55);
   --mark-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
   /* type */
@@ -133,7 +133,7 @@
   --r-lg: 18px;
   /* motion */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --spring: cubic-bezier(0.25, 1.35, 0.4, 1); /* the extension's: pickets rise with a little give */
+  --spring: cubic-bezier(0.25, 1.35, 0.4, 1); /* the extension's: pills rise with a little give */
   --dur: 0.7s;
 }
 /* Light: warm paper and ink, like the extension's light theme (its #f5f4ef is --screen).
@@ -182,30 +182,30 @@
     --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
     --save-ink: #ffffff;
     --sel: rgba(39, 107, 91, 0.18);
-    /* the lantern fence at dawn: sage pickets, soft as stone, and a jewel-green lantern */
-    --wall-0: #c3d1c8;
-    --wall-1: #d0dbd4;
-    --wall-2: #e2e9e4;
-    --wall-shade: rgb(17 21 19 / 0.05);
-    --wall-cap: rgb(255 255 255 / 0.55);
-    --wall-cap-r: rgb(17 21 19 / 0.06);
-    --wall-edge: rgb(255 255 255 / 0.75);
-    --lit-0: #52b678;
-    --lit-1: #3a9a5b;
-    --lit-2: #2a7845;
-    --lit-cap: 0.3;
-    --lit-edge: 0.28;
-    --lit-bloom: 0.4;
-    --rim-rgb: 58 154 91;
-    --rail: #d2ddd6;
-    --rail-hi: rgb(255 255 255 / 0.6);
-    --horizon: rgba(58, 154, 91, 0.1);
-    --sky-low: #edf3ec;
-    --floor-0: #e3eae2;
-    --floor-1: #f4f5f0;
-    --ground-line: rgb(17 21 19 / 0.1);
-    --refl: 0.16;
-    --pool: rgb(58 154 91 / 0.24);
+    /* the fence by day: milky glass, pale sage, greener near a solid green light */
+    --glass-0: rgb(255 255 255 / 0.94);
+    --glass-1: rgb(243 247 244 / 0.8);
+    --glass-tint: 112 176 134;
+    --glass-tint-a: 0.42;
+    --glass-rim: rgb(255 255 255 / 1);
+    --glass-edge: rgb(24 66 40 / 0.1);
+    --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+    --glass-blur: blur(14px) saturate(1.15);
+    --light-rgb: 30 138 69;
+    --lit-0: #33a861;
+    --lit-1: #1e8a45;
+    --lit-2: #17723a;
+    --lit-core: rgb(255 255 255 / 0.1);
+    --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+    --halo-a: 0.26;
+    --halo-h: 1.3;
+    /* its scene: warm paper, a faint green horizon and a pale glossy ground */
+    --horizon: rgb(30 138 69 / 0.07);
+    --sky-low: #f7f8f5;
+    --floor-0: #eef1ec;
+    --floor-1: #f7f8f5;
+    --ground-line: rgb(24 66 40 / 0.1);
+    --refl: 0.3;
     --link-line: rgba(39, 107, 91, 0.45);
     --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
   }
@@ -253,30 +253,30 @@
   --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
   --save-ink: #ffffff;
   --sel: rgba(39, 107, 91, 0.18);
-  /* the lantern fence at dawn: sage pickets, soft as stone, and a jewel-green lantern */
-  --wall-0: #c3d1c8;
-  --wall-1: #d0dbd4;
-  --wall-2: #e2e9e4;
-  --wall-shade: rgb(17 21 19 / 0.05);
-  --wall-cap: rgb(255 255 255 / 0.55);
-  --wall-cap-r: rgb(17 21 19 / 0.06);
-  --wall-edge: rgb(255 255 255 / 0.75);
-  --lit-0: #52b678;
-  --lit-1: #3a9a5b;
-  --lit-2: #2a7845;
-  --lit-cap: 0.3;
-  --lit-edge: 0.28;
-  --lit-bloom: 0.4;
-  --rim-rgb: 58 154 91;
-  --rail: #d2ddd6;
-  --rail-hi: rgb(255 255 255 / 0.6);
-  --horizon: rgba(58, 154, 91, 0.1);
-  --sky-low: #edf3ec;
-  --floor-0: #e3eae2;
-  --floor-1: #f4f5f0;
-  --ground-line: rgb(17 21 19 / 0.1);
-  --refl: 0.16;
-  --pool: rgb(58 154 91 / 0.24);
+  /* the fence by day: milky glass, pale sage, greener near a solid green light */
+  --glass-0: rgb(255 255 255 / 0.94);
+  --glass-1: rgb(243 247 244 / 0.8);
+  --glass-tint: 112 176 134;
+  --glass-tint-a: 0.42;
+  --glass-rim: rgb(255 255 255 / 1);
+  --glass-edge: rgb(24 66 40 / 0.1);
+  --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+  --glass-blur: blur(14px) saturate(1.15);
+  --light-rgb: 30 138 69;
+  --lit-0: #33a861;
+  --lit-1: #1e8a45;
+  --lit-2: #17723a;
+  --lit-core: rgb(255 255 255 / 0.1);
+  --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+  --halo-a: 0.26;
+  --halo-h: 1.3;
+  /* its scene: warm paper, a faint green horizon and a pale glossy ground */
+  --horizon: rgb(30 138 69 / 0.07);
+  --sky-low: #f7f8f5;
+  --floor-0: #eef1ec;
+  --floor-1: #f7f8f5;
+  --ground-line: rgb(24 66 40 / 0.1);
+  --refl: 0.3;
   --link-line: rgba(39, 107, 91, 0.45);
   --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
 }
@@ -1006,12 +1006,12 @@ code {
   text-transform: uppercase;
 }
 .picket {
-  /* the extension's picket ornament: the logo's 45° tip, as on its focus-round counters */
+  /* the extension's picket ornament: a small pill, as on its focus-round counters and plan marks */
   flex: none;
-  width: 8px;
-  height: 13px;
+  width: 7px;
+  height: 12px;
+  border-radius: 99px 99px 1.5px 1.5px;
   background: var(--green);
-  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
 }
 .h2 {
   font-size: clamp(32px, 1.9vw + 20px, 48px);
@@ -1480,25 +1480,27 @@ details[open] .faq-i {
   }
 }
 
-/* final call: the page closes on the extension's block-page scene. A wall of pickets stands on a
-   ground that reflects it; the lantern in the middle holds the light and throws it on its neighbours,
-   the rails and the ground. Graphite at night (dark), sage at dawn (light). Ported from the
-   extension (design/extension-ui: src/styles/base.css .pk, src/styles/blocked.css); the wall's
-   markup and per-picket values come from scripts/docs.mjs. */
+/* final call: the page closes on the extension's block-page scene (design/extension-ui:
+   src/styles/base.css .fence and .pill, src/styles/blocked.css, src/lib/ui.js pillProfile). A short
+   row of frosted-glass pills steps down from the middle like a bell, on a glossy ground that reflects
+   it. The pill in the middle holds the light: it glows from inside, a halo rises behind it, its
+   neighbours catch the light on the side that faces it, and a pool of it lies on the ground. A deep
+   green horizon over black at night (dark), warm paper by day (light). The row's markup and each
+   pill's values come from scripts/docs.mjs. */
 .final {
-  --wall-h: 150px;
   --floor-h: 76px;
-  --lit-rise: 50px;
-  --pk-w: 14px;
-  --pk-gap: 28px;
-  --lit-w: 22px;
+  /* the extension's proportions (blocked.css .scene-row): pills 2.7 times as tall as wide, 9 % of
+     their width apart; on a phone they narrow so the row keeps 24 px on each side */
+  --n: 7;
+  --pw: min(80px, calc((100vw - 48px) / (var(--n) * 1.09 - 0.09)));
+  --ph: calc(var(--pw) * 2.7);
   position: relative;
   padding: clamp(96px, 10vw, 152px) 0 0;
   overflow: hidden;
   text-align: center;
   isolation: isolate;
   background:
-    radial-gradient(min(520px, 62vw) 460px at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    radial-gradient(min(620px, 66vw) 420px at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
     linear-gradient(to bottom, var(--bg) 0%, var(--bg) 40%, var(--sky-low) 100%);
 }
 .final-in {
@@ -1526,10 +1528,11 @@ details[open] .faq-i {
 }
 .scene {
   position: relative;
-  height: calc(var(--wall-h) + var(--lit-rise) + 40px + var(--floor-h));
-  margin-top: clamp(40px, 5vw, 72px);
+  /* room above the tallest pill for its halo */
+  height: calc(var(--ph) * 1.8 + var(--floor-h));
+  margin-top: clamp(16px, 2vw, 32px);
 }
-/* the ground: it reflects the fence and catches the lantern's light */
+/* the ground: glossy, it reflects the fence and holds the pool of light */
 .scene .floor {
   position: absolute;
   left: 0;
@@ -1539,136 +1542,111 @@ details[open] .faq-i {
   background: linear-gradient(var(--floor-0), var(--floor-1));
 }
 .scene .floor::before {
-  /* the ground line, fading out at the sides */
+  /* the horizon line, fading out at the sides */
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--ground-line) 20%, var(--ground-line) 80%, transparent);
+  background: linear-gradient(to right, transparent 8%, var(--ground-line) 35%, var(--ground-line) 65%, transparent 92%);
 }
-.scene .floor::after {
-  /* the pool of light at the lantern's foot */
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -18px;
-  width: 440px;
-  height: 44px;
-  margin-left: -220px;
-  background: radial-gradient(closest-side, var(--pool), transparent);
-}
-/* the wall: as wide as the section, the pickets overflow it evenly and fade toward its edges; its
-   mask also hides whatever is below the ground line (the pickets rise out of it) */
-.wall {
+/* the row: the pills stand on the ground line, and rise out of it (it clips what is below) */
+.fence {
   position: absolute;
   left: 0;
   right: 0;
   bottom: var(--floor-h);
-  height: calc(var(--wall-h) + var(--lit-rise) + 40px);
+  height: calc(var(--ph) * 1.8);
   display: flex;
-  align-items: flex-end;
   justify-content: center;
-  gap: var(--pk-gap);
-  -webkit-mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
-  mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  align-items: flex-end;
+  gap: calc(var(--pw) * 0.09);
+  overflow: hidden;
 }
-/* the reflection: the same wall, flipped at the ground line, gone a few dozen pixels down */
-.wall.mirror {
+/* the reflection: the same row, flipped at the ground line, soft and gone halfway down */
+.fence.mirror {
   transform: scaleY(-1);
   transform-origin: 50% 100%;
   opacity: var(--refl);
-  -webkit-mask-image: linear-gradient(to top, #000, transparent 46px), linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to top, #000, transparent 46px), linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
-  mask-composite: intersect;
+  filter: blur(1.5px);
+  -webkit-mask-image: linear-gradient(to top, #000, transparent calc(var(--ph) * 0.55));
+  mask-image: linear-gradient(to top, #000, transparent calc(var(--ph) * 0.55));
 }
-/* rails, behind the pickets; the lantern lights the stretch around it */
-.wall::before,
-.wall::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background:
-    linear-gradient(90deg, transparent calc(50% - 300px), rgb(var(--rim-rgb) / 0.55) 50%, transparent calc(50% + 300px)),
-    linear-gradient(var(--rail-hi), var(--rail-hi)) 0 0 / 100% 1px no-repeat,
-    var(--rail);
+.fence.mirror .pill {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
-.wall::before {
-  bottom: calc(var(--wall-h) * 0.3);
-}
-.wall::after {
-  bottom: calc(var(--wall-h) * 0.68);
-}
-/* the picket material: a body that darkens toward the ground, a tip cut in two facets (the left one
-   catches the light), a shaded right face and a 1 px edge light, all gradients on a clip-path */
-.wall .pk {
-  --w: var(--pk-w);
-  --v: 1;
-  --rim: 0;
-  --pk-0: var(--wall-0);
-  --pk-1: var(--wall-1);
-  --pk-2: var(--wall-2);
-  --pk-cap: var(--wall-cap);
-  --pk-cap-r: var(--wall-cap-r);
-  --pk-edge: var(--wall-edge);
-  --pk-shade: var(--wall-shade);
-  --pk-layers:
-    linear-gradient(90deg, var(--pk-cap) 50%, var(--pk-cap-r) 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
-    linear-gradient(90deg, var(--pk-edge) 1px, transparent 1px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
-    linear-gradient(90deg, transparent 50%, var(--pk-shade) 50%) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
-    linear-gradient(180deg, var(--pk-0), var(--pk-1) 42%, var(--pk-2));
+/* a pill: a full semicircle on top, standing square on the ground. Frosted glass, greener and lit
+   on the side that faces the light the nearer it stands. Per pill: --k its height as a share of the
+   tallest, --t0 how much of the light it catches, --v0 how much of it shows (the ends fade),
+   --side which side of the light it stands, --i its distance from it */
+.pill {
+  --t: var(--t0, 0);
+  --v: var(--v0, 1);
   position: relative;
   z-index: 1;
   flex: none;
-  width: var(--w);
-  height: var(--wall-h);
-  clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%);
-  background: var(--pk-layers);
-  /* the fence recedes into the dark (or the haze) away from the lantern */
+  width: var(--pw);
+  height: calc(var(--ph) * var(--k, 1));
+  border-radius: calc(var(--pw) / 2) calc(var(--pw) / 2) 0 0;
+  background:
+    /* the light, on the side that faces it */
+    linear-gradient(calc(var(--side, 0) * 90deg), rgb(var(--light-rgb) / calc(var(--t) * 0.5)), transparent 62%),
+    /* greener the nearer the light */
+    linear-gradient(rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a))), rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a) * 0.45))),
+    linear-gradient(var(--glass-0), var(--glass-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 0 calc(var(--pw) * 0.3) rgb(var(--light-rgb) / calc(0.04 + var(--t) * 0.3)),
+    var(--glass-shade);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   opacity: var(--v);
 }
-/* the lantern's light on its neighbours: the edge and the tip facet that face it */
-.wall .pk.l {
+/* the pill that holds the light: it glows from inside */
+.pill.lit {
+  z-index: 2;
   background:
-    linear-gradient(90deg, transparent 50%, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
-    linear-gradient(270deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
-    var(--pk-layers);
+    radial-gradient(60% 46% at 50% 62%, var(--lit-core), transparent),
+    linear-gradient(var(--lit-0), var(--lit-1) 42%, var(--lit-2));
+  box-shadow:
+    inset 0 1.5px 0 rgb(255 255 255 / 0.45),
+    inset 0 0 calc(var(--pw) * 0.35) rgb(255 255 255 / 0.22),
+    inset 0 -14px 22px -14px rgb(0 40 18 / 0.35),
+    var(--lit-bloom);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
-.wall .pk.r {
-  background:
-    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%, transparent 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
-    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
-    var(--pk-layers);
-}
-/* the lantern: taller, lit from within */
-.wall .pk.lit {
-  --w: var(--lit-w);
-  --pk-0: var(--lit-0);
-  --pk-1: var(--lit-1);
-  --pk-2: var(--lit-2);
-  --pk-cap: rgb(255 255 255 / var(--lit-cap));
-  --pk-cap-r: rgb(0 0 0 / 0.08);
-  --pk-edge: rgb(255 255 255 / var(--lit-edge));
-  --pk-shade: rgb(0 0 0 / 0.08);
-  z-index: 3;
-  height: calc(var(--wall-h) + var(--lit-rise));
-}
-.wall .bloom {
+/* the light's halo, rising behind the lit pill */
+.fence-halo {
   position: absolute;
   left: 50%;
   bottom: 0;
-  z-index: 2;
-  width: calc(var(--lit-w) + 10px);
-  height: calc(var(--wall-h) + var(--lit-rise) - 12px);
-  margin-left: calc((var(--lit-w) + 10px) / -2);
-  border-radius: 999px;
-  background: var(--lit-1);
-  filter: blur(18px);
-  opacity: var(--lit-bloom);
+  z-index: 0;
+  width: calc(var(--pw) * 4.6);
+  height: calc(var(--ph) * var(--halo-h));
+  margin-left: calc(var(--pw) * -2.3);
+  border-radius: 50%;
+  background:
+    radial-gradient(21% 62% at 50% 64%, rgb(var(--light-rgb) / var(--halo-a)), transparent),
+    radial-gradient(46% 38% at 50% 86%, rgb(var(--light-rgb) / calc(var(--halo-a) * 0.8)), transparent);
+  filter: blur(calc(var(--pw) * 0.2));
+  pointer-events: none;
+}
+/* its pool on the ground, at the lit pill's foot, in front of the row */
+.fence-pool {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--floor-h) - var(--pw) * 0.16);
+  z-index: 3;
+  width: calc(var(--pw) * 3.6);
+  height: calc(var(--pw) * 0.34);
+  margin-left: calc(var(--pw) * -1.8);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--light-rgb) / calc(var(--halo-a) * 1.3)), transparent);
+  pointer-events: none;
 }
 
 /* footer */
@@ -1876,33 +1854,36 @@ th {
 .motion [data-reveal].in {
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
-/* The closing wall rises once it comes into view, in a wave from the lantern, then the lantern
-   lights up (as on the extension's block page). Without the script, or with reduced motion, it
-   simply stands. */
-.motion [data-rise]:not(.in) .pk {
+/* The closing fence rises once it comes into view, in a wave from the light (45 ms a pill, the
+   extension's spring), then the halo breathes in and the pool of light fades in (as on the
+   extension's block page). Without the script, or with reduced motion, it simply stands. */
+.motion [data-rise]:not(.in) .pill {
   transform: translateY(102%);
 }
-.motion [data-rise]:not(.in) .bloom,
-.motion [data-rise]:not(.in) .floor::after {
+.motion [data-rise]:not(.in) .fence-halo,
+.motion [data-rise]:not(.in) .fence-pool {
   opacity: 0;
 }
-.motion [data-rise].in .pk {
-  animation: wall-rise 0.9s var(--spring) both;
-  animation-delay: calc(var(--d, 0) * 24ms + 80ms);
+.motion [data-rise].in .pill {
+  animation: pill-rise 0.7s var(--spring) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 60ms);
 }
-.motion [data-rise].in .pk.lit {
-  animation-duration: 1.1s;
-  animation-delay: 40ms;
+.motion [data-rise].in .fence-halo {
+  animation: halo-in 1.8s var(--ease) 0.2s both;
 }
-.motion [data-rise].in .bloom {
-  animation: light-on 1.1s ease 0.5s both;
+.motion [data-rise].in .fence-pool {
+  animation: light-on 1.2s ease 0.35s both;
 }
-.motion [data-rise].in .floor::after {
-  animation: light-on 1.1s ease 0.55s both;
-}
-@keyframes wall-rise {
+@keyframes pill-rise {
   from {
     transform: translateY(102%);
+  }
+}
+@keyframes halo-in {
+  /* the light breathes in, once */
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(6%);
   }
 }
 @keyframes light-on {
@@ -2124,15 +2105,9 @@ th {
   .cta .btn {
     width: 100%;
   }
-  /* phones: a lower wall, as on the extension's block page in a short window */
+  /* phones: a shorter ground, as on the extension's block page in a small window */
   .final {
-    --wall-h: 112px;
-    --lit-rise: 38px;
     --floor-h: 56px;
-  }
-  .scene .floor::after {
-    width: 300px;
-    margin-left: -150px;
   }
   .ticks {
     flex-direction: column;
@@ -2189,12 +2164,12 @@ th {
     <div class="win-wrap">
       <div class="win win-hero">
         <div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence-Einstellungen</span></span><span class="win-ext"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg></span></div>
-        <div class="win-body"><img class="win-img th-d" src="../assets/de/blocklist-1x.webp" srcset="../assets/de/blocklist-1x.webp 1280w, ../assets/de/blocklist.webp 2560w" sizes="(max-width: 720px) 600px, min(864px, calc((100vw - 80px) * 0.675))" width="1280" height="740" loading="lazy" decoding="async" fetchpriority="high" alt="FocusFence-Einstellungen: Die Sperrliste beginnt mit Ihrem Zaun, eine leuchtende Latte pro Website, über Websites, dem Pfad youtube.com/shorts und einem Stichwort"><img class="win-img th-l" src="../assets/de/blocklist-light-1x.webp" srcset="../assets/de/blocklist-light-1x.webp 1280w, ../assets/de/blocklist-light.webp 2560w" sizes="(max-width: 720px) 600px, min(864px, calc((100vw - 80px) * 0.675))" width="1280" height="740" loading="lazy" decoding="async" fetchpriority="high" alt="FocusFence-Einstellungen: Die Sperrliste beginnt mit Ihrem Zaun, eine leuchtende Latte pro Website, über Websites, dem Pfad youtube.com/shorts und einem Stichwort"></div>
+        <div class="win-body"><img class="win-img th-d" src="../assets/de/blocklist-1x.webp" srcset="../assets/de/blocklist-1x.webp 1280w, ../assets/de/blocklist.webp 2560w" sizes="(max-width: 720px) 600px, min(864px, calc((100vw - 80px) * 0.675))" width="1280" height="740" loading="lazy" decoding="async" fetchpriority="high" alt="FocusFence-Einstellungen: Die Sperrliste beginnt mit Ihrem Zaun, eine gläserne Säule pro Website, die neueste leuchtet, über Websites, dem Pfad youtube.com/shorts und einem Stichwort"><img class="win-img th-l" src="../assets/de/blocklist-light-1x.webp" srcset="../assets/de/blocklist-light-1x.webp 1280w, ../assets/de/blocklist-light.webp 2560w" sizes="(max-width: 720px) 600px, min(864px, calc((100vw - 80px) * 0.675))" width="1280" height="740" loading="lazy" decoding="async" fetchpriority="high" alt="FocusFence-Einstellungen: Die Sperrliste beginnt mit Ihrem Zaun, eine gläserne Säule pro Website, die neueste leuchtet, über Websites, dem Pfad youtube.com/shorts und einem Stichwort"></div>
       </div>
-      <div class="win-popup"><img class="th-d" src="../assets/de/popup.webp" width="360" height="448" loading="lazy" decoding="async" alt="Das FocusFence-Fenster: Ihre sechs gesperrten Websites als leuchtender Zaun, „Blockieren ist an“ und die Schaltfläche „Seite blockieren“ für einen Klick"><img class="th-l" src="../assets/de/popup-light.webp" width="360" height="448" loading="lazy" decoding="async" alt="Das FocusFence-Fenster: Ihre sechs gesperrten Websites als leuchtender Zaun, „Blockieren ist an“ und die Schaltfläche „Seite blockieren“ für einen Klick"></div>
+      <div class="win-popup"><img class="th-d" src="../assets/de/popup.webp" width="360" height="448" loading="lazy" decoding="async" alt="Das FocusFence-Fenster: Ihre sechs gesperrten Websites als Reihe gläserner Säulen, die neueste leuchtet, „Blockieren ist an“ und die Schaltfläche „Seite blockieren“ für einen Klick"><img class="th-l" src="../assets/de/popup-light.webp" width="360" height="448" loading="lazy" decoding="async" alt="Das FocusFence-Fenster: Ihre sechs gesperrten Websites als Reihe gläserner Säulen, die neueste leuchtet, „Blockieren ist an“ und die Schaltfläche „Seite blockieren“ für einen Klick"></div>
       <div class="win win-card">
         <div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>reddit.com ist blockiert · FocusFence</span></span></div>
-        <div class="win-body"><img class="th-d" src="../assets/de/block-card.webp" width="720" height="600" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einem Zaun, in dem die Latte von reddit.com wie eine Laterne leuchtet"><img class="th-l" src="../assets/de/block-card-light.webp" width="720" height="600" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einem Zaun, in dem die Latte von reddit.com wie eine Laterne leuchtet"></div>
+        <div class="win-body"><img class="th-d" src="../assets/de/block-card.webp" width="720" height="600" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einer Reihe gläserner Säulen, in der die Säule von reddit.com leuchtet"><img class="th-l" src="../assets/de/block-card-light.webp" width="720" height="600" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einer Reihe gläserner Säulen, in der die Säule von reddit.com leuchtet"></div>
       </div>
     </div>
   </div>
@@ -2220,7 +2195,7 @@ th {
     <div class="shot" data-reveal>
       <div class="win">
         <div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>reddit.com ist blockiert · FocusFence</span></span></div>
-        <div class="win-body"><picture class="th-d"><source media="(max-width: 720px)" srcset="../assets/de/block-page-m.webp" width="400" height="720"><img class="win-img" src="../assets/de/block-page-1x.webp" srcset="../assets/de/block-page-1x.webp 1280w, ../assets/de/block-page.webp 2560w" sizes="min(1200px, calc(100vw - 48px))" width="1280" height="800" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einem Zaun, in dem die Latte von reddit.com wie eine Laterne leuchtet"></picture><picture class="th-l"><source media="(max-width: 720px)" srcset="../assets/de/block-page-m-light.webp" width="400" height="720"><img class="win-img" src="../assets/de/block-page-light-1x.webp" srcset="../assets/de/block-page-light-1x.webp 1280w, ../assets/de/block-page-light.webp 2560w" sizes="min(1200px, calc(100vw - 48px))" width="1280" height="800" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einem Zaun, in dem die Latte von reddit.com wie eine Laterne leuchtet"></picture></div>
+        <div class="win-body"><picture class="th-d"><source media="(max-width: 720px)" srcset="../assets/de/block-page-m.webp" width="400" height="720"><img class="win-img" src="../assets/de/block-page-1x.webp" srcset="../assets/de/block-page-1x.webp 1280w, ../assets/de/block-page.webp 2560w" sizes="min(1200px, calc(100vw - 48px))" width="1280" height="800" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einer Reihe gläserner Säulen, in der die Säule von reddit.com leuchtet"></picture><picture class="th-l"><source media="(max-width: 720px)" srcset="../assets/de/block-page-m-light.webp" width="400" height="720"><img class="win-img" src="../assets/de/block-page-light-1x.webp" srcset="../assets/de/block-page-light-1x.webp 1280w, ../assets/de/block-page-light.webp 2560w" sizes="min(1200px, calc(100vw - 48px))" width="1280" height="800" loading="lazy" decoding="async" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat und den heutigen Sperrungen, über einer Reihe gläserner Säulen, in der die Säule von reddit.com leuchtet"></picture></div>
       </div>
     </div>
     <div class="feats" data-reveal>
@@ -2259,7 +2234,7 @@ th {
       <div><p class="kicker"><span class="picket" aria-hidden="true"></span>Statistik<span class="pro">PRO</span></p><h2 id="stats-h" class="h2">Sehen Sie, was Sie lockt. <span class="dim">Nur auf diesem Gerät gezählt.</span></h2></div>
       <p class="sec-lead">Gesperrte Aufrufe pro Tag und pro Website, über die letzten sieben Tage. Die Zahlen bleiben in Chrome auf Ihrem Computer und werden nirgendwohin gesendet.</p>
     </header>
-    <div class="screen screen-stats" data-reveal><picture class="th-d"><source media="(max-width: 720px)" srcset="../assets/de/stats-m.webp" width="396" height="670"><img src="../assets/de/stats.webp" width="784" height="664" loading="lazy" decoding="async" alt="Statistik: gesperrte Aufrufe pro Tag in den letzten 7 Tagen, als Latten gezeichnet, und die meistgesperrten Websites"></picture><picture class="th-l"><source media="(max-width: 720px)" srcset="../assets/de/stats-m-light.webp" width="396" height="670"><img src="../assets/de/stats-light.webp" width="784" height="664" loading="lazy" decoding="async" alt="Statistik: gesperrte Aufrufe pro Tag in den letzten 7 Tagen, als Latten gezeichnet, und die meistgesperrten Websites"></picture></div>
+    <div class="screen screen-stats" data-reveal><picture class="th-d"><source media="(max-width: 720px)" srcset="../assets/de/stats-m.webp" width="396" height="670"><img src="../assets/de/stats.webp" width="784" height="664" loading="lazy" decoding="async" alt="Statistik: gesperrte Aufrufe pro Tag in den letzten 7 Tagen, als Säulen gezeichnet, die heutige leuchtet, und die meistgesperrten Websites"></picture><picture class="th-l"><source media="(max-width: 720px)" srcset="../assets/de/stats-m-light.webp" width="396" height="670"><img src="../assets/de/stats-light.webp" width="784" height="664" loading="lazy" decoding="async" alt="Statistik: gesperrte Aufrufe pro Tag in den letzten 7 Tagen, als Säulen gezeichnet, die heutige leuchtet, und die meistgesperrten Websites"></picture></div>
     <ul class="details" data-reveal>
       <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg><h3>Passwortschutz<span class="pro">PRO</span></h3><p>Verlangen Sie ein Passwort, um die Sperre abzuschalten, Websites zu entfernen oder Einstellungen zu ändern. Ideal, wenn jemand anderes den Schlüssel hat.</p></li>
       <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><h3>Ihre eigene Nachricht<span class="pro">PRO</span></h3><p>Schreiben Sie Ihrem zukünftigen Ich eine Notiz. Sie ersetzt die wechselnden Zitate auf der Sperrseite.</p></li>
@@ -2353,8 +2328,9 @@ th {
   </div>
   <div class="scene" aria-hidden="true" data-rise>
     <div class="floor"></div>
-    <div class="wall mirror"><span class="pk wall-pk l" style="--d:16;--v:0.182;--rim:0.001"></span><span class="pk wall-pk l" style="--d:15;--v:0.188;--rim:0.001"></span><span class="pk wall-pk l" style="--d:14;--v:0.195;--rim:0.002"></span><span class="pk wall-pk l" style="--d:13;--v:0.204;--rim:0.004"></span><span class="pk wall-pk l" style="--d:12;--v:0.215;--rim:0.005"></span><span class="pk wall-pk l" style="--d:11;--v:0.229;--rim:0.008"></span><span class="pk wall-pk l" style="--d:10;--v:0.247;--rim:0.013"></span><span class="pk wall-pk l" style="--d:9;--v:0.269;--rim:0.020"></span><span class="pk wall-pk l" style="--d:8;--v:0.296;--rim:0.031"></span><span class="pk wall-pk l" style="--d:7;--v:0.331;--rim:0.048"></span><span class="pk wall-pk l" style="--d:6;--v:0.375;--rim:0.074"></span><span class="pk wall-pk l" style="--d:5;--v:0.430;--rim:0.114"></span><span class="pk wall-pk l" style="--d:4;--v:0.498;--rim:0.176"></span><span class="pk wall-pk l" style="--d:3;--v:0.585;--rim:0.271"></span><span class="pk wall-pk l" style="--d:2;--v:0.693;--rim:0.419"></span><span class="pk wall-pk l" style="--d:1;--v:0.829;--rim:0.647"></span><span class="pk lit"></span><span class="pk wall-pk r" style="--d:1;--v:0.829;--rim:0.647"></span><span class="pk wall-pk r" style="--d:2;--v:0.693;--rim:0.419"></span><span class="pk wall-pk r" style="--d:3;--v:0.585;--rim:0.271"></span><span class="pk wall-pk r" style="--d:4;--v:0.498;--rim:0.176"></span><span class="pk wall-pk r" style="--d:5;--v:0.430;--rim:0.114"></span><span class="pk wall-pk r" style="--d:6;--v:0.375;--rim:0.074"></span><span class="pk wall-pk r" style="--d:7;--v:0.331;--rim:0.048"></span><span class="pk wall-pk r" style="--d:8;--v:0.296;--rim:0.031"></span><span class="pk wall-pk r" style="--d:9;--v:0.269;--rim:0.020"></span><span class="pk wall-pk r" style="--d:10;--v:0.247;--rim:0.013"></span><span class="pk wall-pk r" style="--d:11;--v:0.229;--rim:0.008"></span><span class="pk wall-pk r" style="--d:12;--v:0.215;--rim:0.005"></span><span class="pk wall-pk r" style="--d:13;--v:0.204;--rim:0.004"></span><span class="pk wall-pk r" style="--d:14;--v:0.195;--rim:0.002"></span><span class="pk wall-pk r" style="--d:15;--v:0.188;--rim:0.001"></span><span class="pk wall-pk r" style="--d:16;--v:0.182;--rim:0.001"></span><span class="bloom"></span></div>
-    <div class="wall"><span class="pk wall-pk l" style="--d:16;--v:0.182;--rim:0.001"></span><span class="pk wall-pk l" style="--d:15;--v:0.188;--rim:0.001"></span><span class="pk wall-pk l" style="--d:14;--v:0.195;--rim:0.002"></span><span class="pk wall-pk l" style="--d:13;--v:0.204;--rim:0.004"></span><span class="pk wall-pk l" style="--d:12;--v:0.215;--rim:0.005"></span><span class="pk wall-pk l" style="--d:11;--v:0.229;--rim:0.008"></span><span class="pk wall-pk l" style="--d:10;--v:0.247;--rim:0.013"></span><span class="pk wall-pk l" style="--d:9;--v:0.269;--rim:0.020"></span><span class="pk wall-pk l" style="--d:8;--v:0.296;--rim:0.031"></span><span class="pk wall-pk l" style="--d:7;--v:0.331;--rim:0.048"></span><span class="pk wall-pk l" style="--d:6;--v:0.375;--rim:0.074"></span><span class="pk wall-pk l" style="--d:5;--v:0.430;--rim:0.114"></span><span class="pk wall-pk l" style="--d:4;--v:0.498;--rim:0.176"></span><span class="pk wall-pk l" style="--d:3;--v:0.585;--rim:0.271"></span><span class="pk wall-pk l" style="--d:2;--v:0.693;--rim:0.419"></span><span class="pk wall-pk l" style="--d:1;--v:0.829;--rim:0.647"></span><span class="pk lit"></span><span class="pk wall-pk r" style="--d:1;--v:0.829;--rim:0.647"></span><span class="pk wall-pk r" style="--d:2;--v:0.693;--rim:0.419"></span><span class="pk wall-pk r" style="--d:3;--v:0.585;--rim:0.271"></span><span class="pk wall-pk r" style="--d:4;--v:0.498;--rim:0.176"></span><span class="pk wall-pk r" style="--d:5;--v:0.430;--rim:0.114"></span><span class="pk wall-pk r" style="--d:6;--v:0.375;--rim:0.074"></span><span class="pk wall-pk r" style="--d:7;--v:0.331;--rim:0.048"></span><span class="pk wall-pk r" style="--d:8;--v:0.296;--rim:0.031"></span><span class="pk wall-pk r" style="--d:9;--v:0.269;--rim:0.020"></span><span class="pk wall-pk r" style="--d:10;--v:0.247;--rim:0.013"></span><span class="pk wall-pk r" style="--d:11;--v:0.229;--rim:0.008"></span><span class="pk wall-pk r" style="--d:12;--v:0.215;--rim:0.005"></span><span class="pk wall-pk r" style="--d:13;--v:0.204;--rim:0.004"></span><span class="pk wall-pk r" style="--d:14;--v:0.195;--rim:0.002"></span><span class="pk wall-pk r" style="--d:15;--v:0.188;--rim:0.001"></span><span class="pk wall-pk r" style="--d:16;--v:0.182;--rim:0.001"></span><span class="bloom"></span></div>
+    <div class="fence mirror"><span class="fence-halo"></span><span class="pill" style="--k:0.558;--t0:0.091;--v0:0.45;--side:-1;--i:3"></span><span class="pill" style="--k:0.749;--t0:0.202;--v0:0.75;--side:-1;--i:2"></span><span class="pill" style="--k:0.926;--t0:0.449;--v0:1.00;--side:-1;--i:1"></span><span class="pill lit" style="--k:1.000;--t0:1.000;--v0:1.00;--side:0;--i:0"></span><span class="pill" style="--k:0.926;--t0:0.449;--v0:1.00;--side:1;--i:1"></span><span class="pill" style="--k:0.749;--t0:0.202;--v0:0.75;--side:1;--i:2"></span><span class="pill" style="--k:0.558;--t0:0.091;--v0:0.45;--side:1;--i:3"></span></div>
+    <div class="fence"><span class="fence-halo"></span><span class="pill" style="--k:0.558;--t0:0.091;--v0:0.45;--side:-1;--i:3"></span><span class="pill" style="--k:0.749;--t0:0.202;--v0:0.75;--side:-1;--i:2"></span><span class="pill" style="--k:0.926;--t0:0.449;--v0:1.00;--side:-1;--i:1"></span><span class="pill lit" style="--k:1.000;--t0:1.000;--v0:1.00;--side:0;--i:0"></span><span class="pill" style="--k:0.926;--t0:0.449;--v0:1.00;--side:1;--i:1"></span><span class="pill" style="--k:0.749;--t0:0.202;--v0:0.75;--side:1;--i:2"></span><span class="pill" style="--k:0.558;--t0:0.091;--v0:0.45;--side:1;--i:3"></span></div>
+    <span class="fence-pool"></span>
   </div>
 </section>
 </main>
