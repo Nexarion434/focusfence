@@ -333,7 +333,7 @@
     "message": "Heute blockiert: $1 · Diese Woche: $2"
   },
   "allSettings": {
-    "message": "Alle Einstellungen →"
+    "message": "Einstellungen →"
   },
   "toastAlreadyBlocked": {
     "message": "$1 ist bereits blockiert"

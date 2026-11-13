@@ -249,7 +249,7 @@
     "message": "$1 · cycle $2 sur $3"
   },
   "startFocus": {
-    "message": "Lancer la concentration"
+    "message": "Démarrer"
   },
   "blockingEnabledAria": {
     "message": "Blocage activé"
@@ -333,7 +333,7 @@
     "message": "Bloqués aujourd’hui : $1 · Cette semaine : $2"
   },
   "allSettings": {
-    "message": "Tous les réglages →"
+    "message": "Réglages →"
   },
   "toastAlreadyBlocked": {
     "message": "$1 est déjà bloqué"

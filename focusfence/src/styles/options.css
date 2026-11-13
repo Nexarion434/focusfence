@@ -221,8 +221,10 @@ body.is-pro #side-plan-btn {
 .card-body {
   padding: 16px;
 }
+/* in a narrow window (or a long language) the buttons wrap; the main one stays on the right */
 .card-foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   min-height: 52px;
@@ -230,6 +232,9 @@ body.is-pro #side-plan-btn {
   border-top: 1px solid var(--line);
   background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
   border-radius: 0 0 var(--radius) var(--radius);
+}
+.card-foot .btn-primary {
+  margin-left: auto;
 }
 .state {
   font-size: 12.5px;
@@ -244,6 +249,7 @@ body.is-pro #side-plan-btn {
 }
 .actions-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   padding: 14px 16px;

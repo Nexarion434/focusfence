@@ -135,7 +135,7 @@ export const S = {
   phaseFocusing: { en: 'Focusing', fr: 'Concentration', es: 'Concentrado', de: 'Fokussiert' },
   phaseBreak: { en: 'Break', fr: 'Pause', es: 'Descanso', de: 'Pause' },
   focusRound: { en: '$1 · round $2 of $3', fr: '$1 · cycle $2 sur $3', es: '$1 · ronda $2 de $3', de: '$1 · Runde $2 von $3' },
-  startFocus: { en: 'Start focus', fr: 'Lancer la concentration', es: 'Empezar', de: 'Fokus starten' },
+  startFocus: { en: 'Start focus', fr: 'Démarrer', es: 'Empezar', de: 'Fokus starten' },
   blockingEnabledAria: { en: 'Blocking enabled', fr: 'Blocage activé', es: 'Bloqueo activado', de: 'Blockieren aktiviert' },
 
   // ------------------------------------------------------------ popup
@@ -165,7 +165,7 @@ export const S = {
   focusTeaser: { en: 'Pomodoro sessions that block everything on your list', fr: 'Des sessions Pomodoro qui bloquent toute votre liste', es: 'Sesiones Pomodoro que bloquean toda tu lista', de: 'Pomodoro-Sitzungen, die deine ganze Liste blockieren' },
   todayNone: { en: 'Nothing blocked yet today', fr: 'Rien de bloqué aujourd’hui', es: 'Nada bloqueado hoy todavía', de: 'Heute noch nichts blockiert' },
   todayCount: { en: 'Blocked today: $1 · This week: $2', fr: 'Bloqués aujourd’hui : $1 · Cette semaine : $2', es: 'Bloqueos hoy: $1 · Esta semana: $2', de: 'Heute blockiert: $1 · Diese Woche: $2' },
-  allSettings: { en: 'All settings →', fr: 'Tous les réglages →', es: 'Todos los ajustes →', de: 'Alle Einstellungen →' },
+  allSettings: { en: 'All settings →', fr: 'Réglages →', es: 'Todos los ajustes →', de: 'Einstellungen →' },
   toastAlreadyBlocked: { en: '$1 is already blocked', fr: '$1 est déjà bloqué', es: '$1 ya está bloqueada', de: '$1 ist bereits blockiert' },
   toastBlocked: { en: 'Blocked $1', fr: '$1 bloqué', es: '$1 bloqueada', de: '$1 blockiert' },
 
