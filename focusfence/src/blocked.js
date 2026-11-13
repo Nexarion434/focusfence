@@ -26,27 +26,32 @@
   $('site').textContent = host || t('thisSite');
 
   /* The scene: your fence, one glass pill per blocked site, the site you tried in the middle
-     holding the light; the same row again, flipped by CSS, is its reflection in the ground. The
-     pills are sized by CSS from the window, so resizing needs no rebuild. */
-  function buildWall(items, lit, state) {
-    for (const node of [$('wall'), $('mirror')]) fence(node, { items, lit, state, min: 5, max: 11, rise: true });
-  }
-  const here = () => [{ key: 'here', label: host, letter: (host[0] || '·').toUpperCase() }];
-
-  /* The words come first: in a short window, or with a long note and a focus session, the fence
-     gets smaller (narrower, so shorter pills) until the words have their room above it. */
-  function fit() {
+     holding the light; the same row again, flipped by CSS, is its reflection in the floor.
+     layout() sizes it. The words come first: the pills are about 132 px wide, but never so tall
+     that the words (a long note, a focus session, a short window) lose their room above them. The
+     row is at most 1000 px wide; when more sites would need a wider row, fewer pills show (7 at
+     most, 5 at least, always odd), never thinner ones. */
+  const PW = 132;
+  let scene = null; // { items, lit, state } once the blocklist is known
+  function layout() {
     const wrap = document.querySelector('.wrap');
     const kids = [...wrap.children].filter((k) => k.getBoundingClientRect().height);
-    if (!kids.length) return;
     const cs = getComputedStyle(wrap);
-    const copy = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
+    const copy = kids.length ? kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top : 0;
     const floor = document.querySelector('.floor').getBoundingClientRect().height;
     const room = window.innerHeight - floor - 16 - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - copy;
-    document.body.style.setProperty('--pw-fit', Math.max(24, Math.floor(room / 2.7)) + 'px');
+    const rowMax = Math.min(1000, window.innerWidth - 48);
+    let pw = Math.max(20, Math.min(PW, window.innerHeight * 0.2, room / 1.6));
+    let n = Math.floor((rowMax + 0.09 * pw) / (1.09 * pw));
+    if (n % 2 === 0) n -= 1;
+    n = Math.max(5, Math.min(7, n));
+    pw = Math.min(pw, rowMax / (1.09 * n - 0.09));
+    document.body.style.setProperty('--scene-pw', pw.toFixed(1) + 'px');
+    if (scene) for (const node of [$('wall'), $('mirror')]) fence(node, Object.assign({ min: 5, max: n, rise: true }, scene));
   }
-  window.addEventListener('resize', fit);
-  document.fonts.ready.then(fit);
+  window.addEventListener('resize', layout);
+  document.fonts.ready.then(layout);
+  const here = () => [{ key: 'here', label: host, letter: (host[0] || '·').toUpperCase() }];
   $('url').textContent = original;
   $('url').title = original;
   document.title = host ? t('blockedDocTitleHost', host) : t('blockedDocTitle');
@@ -64,13 +69,13 @@
     if (left <= 0) {
       if (!$('session').classList.contains('hidden')) {
         $('session').classList.add('hidden');
-        fit();
+        layout();
       }
       return;
     }
     if ($('session').classList.contains('hidden')) {
       $('session').classList.remove('hidden');
-      fit();
+      layout();
     }
     $('session-text').textContent = t(
       'sessionLeft',
@@ -84,18 +89,19 @@
     try {
       state = await send('getState');
     } catch (e) {
-      buildWall(here(), 'here', 'up');
+      scene = { items: here(), lit: 'here', state: 'up' };
+      layout();
       throw e;
     }
     const entry = C.findMatchingEntry(state.settings.entries, hash, state.isPro);
     if (entry && entry.type !== 'domain') $('site').textContent = entry.label;
     const items = fenceItems(state.settings.entries, state.isPro, C.isProEntry);
-    buildWall(entry ? items : here().concat(items), entry ? entry.id : 'here', state.strict.active ? 'strict' : state.pomodoro ? 'focus' : 'up');
+    scene = { items: entry ? items : here().concat(items), lit: entry ? entry.id : 'here', state: state.strict.active ? 'strict' : state.pomodoro ? 'focus' : 'up' };
     const custom = state.isPro && state.settings.blockMessage;
     $('message').textContent = custom || C.quote(Math.floor(Math.random() * C.QUOTES.length));
-    fit();
     pomodoro = state.pomodoro;
     tick();
+    layout();
     setInterval(tick, 1000);
     renderStats(state.stats);
     // Record the attempt (reloads and back/forward don't count). Stats stay on this device.

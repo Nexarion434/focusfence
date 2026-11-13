@@ -83,13 +83,15 @@
         <!-- The stage: your fence, built picket by picket (decorative; the text says the same) -->
         <div class="stage" id="ob-stage" data-step="1" aria-hidden="true">
           <div class="stage-fence">
-            <div class="fence ob-row" id="ob-row" data-state="up"><b class="fence-halo"></b><span class="ob-pills" id="slots"></span><b class="fence-pool"></b></div>
-            <div class="stage-ground"></div>
+            <div class="ob-scene">
+              <div class="fence ob-row" id="ob-row" data-state="up"><b class="fence-halo"></b><span class="ob-pills" id="slots"></span><b class="fence-pool"></b></div>
+              <div class="fence ob-row mirror" id="ob-mirror" data-state="up"><b class="fence-halo"></b><span class="ob-pills" id="slots-mirror"></span></div>
+            </div>
             <p class="picked" id="picked"></p>
           </div>
           <div class="windows">
-            <div class="win"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-fence fence" data-state="up"><b class="fence-halo"></b><i class="pill"></i><i class="pill"></i><i class="pill lit"></i><i class="pill"></i><i class="pill"></i><b class="fence-pool"></b></div></div>
-            <div class="win incog"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-mask"></div><div class="win-fence fence" data-state="up"><b class="fence-halo"></b><i class="pill"></i><i class="pill"></i><i class="pill lit"></i><i class="pill"></i><i class="pill"></i><b class="fence-pool"></b></div></div>
+            <div class="win"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-fence fence" data-state="up"></div></div>
+            <div class="win incog"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-mask"></div><div class="win-fence fence" data-state="up"></div></div>
           </div>
         </div>
       </div>

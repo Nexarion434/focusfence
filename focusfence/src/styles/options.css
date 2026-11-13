@@ -266,18 +266,20 @@ body.is-pro #side-plan-btn {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 126px;
+  height: 112px;
   /* the pills sink below the ground when blocking is off; the light may rise freely */
   clip-path: inset(-200px -200px 0 -200px);
 }
 #hero-fence {
-  --pw: 40px;
-  --ph: 104px;
+  /* chunky glass pills: the middle one 1.6 times as tall as wide */
+  --pw: 58px;
+  --ph: 93px;
 }
+/* the ground: a soft line that fades out well before the edges */
 .hero-ground {
   position: relative;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--line-3) 20%, var(--line-3) 80%, transparent);
+  background: linear-gradient(to right, transparent 10%, var(--line-2) 35%, var(--line-2) 65%, transparent 90%);
 }
 .count {
   flex: none;
@@ -489,9 +491,9 @@ body.is-pro .seg .badge {
   min-height: 196px;
   padding: 26px 20px 84px;
   text-align: center;
-  /* the block page's scene, small: paper, a ground line, the light's bloom */
+  /* the block page's scene, small: paper, and a glossy floor without a line */
   background:
-    linear-gradient(to bottom, transparent calc(100% - 22px), var(--line-2) calc(100% - 22px), var(--line-2) calc(100% - 21px), #eef1ec calc(100% - 21px), #f7f8f5),
+    radial-gradient(60% 34% at 50% calc(100% - 26px), rgb(30 138 69 / 0.06), transparent),
     #f7f8f5;
   border-right: 1px solid var(--line);
   overflow: hidden;
@@ -517,36 +519,12 @@ body.is-pro .seg .badge {
   overflow: hidden;
 }
 .wp-fence {
-  --pw: 15px;
-  --ph: 42px;
+  --pw: 22px;
+  --ph: 35px;
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 22px;
-}
-/* the shape of a seven-pill fence (FFUI.pillProfile(7)); no inline styles, the CSP forbids them */
-.wp-fence i:nth-of-type(1),
-.wp-fence i:nth-of-type(7) {
-  --k: 0.557;
-  --t0: 0.091;
-  --v0: 0.45;
-}
-.wp-fence i:nth-of-type(2),
-.wp-fence i:nth-of-type(6) {
-  --k: 0.749;
-  --t0: 0.202;
-  --v0: 0.75;
-}
-.wp-fence i:nth-of-type(3),
-.wp-fence i:nth-of-type(5) {
-  --k: 0.927;
-  --t0: 0.449;
-}
-.wp-fence i:nth-of-type(-n + 3) {
-  --side: -1;
-}
-.wp-fence i:nth-of-type(n + 5) {
-  --side: 1;
+  bottom: 26px;
 }
 .wall-form {
   display: flex;
@@ -567,7 +545,7 @@ body.is-pro .seg .badge {
 @media (prefers-color-scheme: dark) {
   .wall-preview {
     background:
-      linear-gradient(to bottom, transparent calc(100% - 22px), rgb(63 214 122 / 0.14) calc(100% - 22px), rgb(63 214 122 / 0.14) calc(100% - 21px), #020c06 calc(100% - 21px), #000),
+      radial-gradient(64% 40% at 50% calc(100% - 26px), rgb(63 214 122 / 0.12), transparent),
       linear-gradient(to top, #041309 0%, #020a05 40%, #000 80%);
   }
 }
@@ -779,42 +757,24 @@ body.is-pro .seg .badge {
   gap: 28px;
   padding: 22px 22px;
 }
-/* the strict-mode gate: five pills, the middle one an amber light with a lock */
+/* the strict-mode gate: five pills, the middle one an amber light with a lock (FFUI.pillRow) */
 .gate-art {
-  --pw: 22px;
-  --ph: 76px;
+  --pw: 32px;
+  --ph: 51px;
   flex: none;
   width: max-content;
-  height: 78px;
+  height: 56px;
   padding: 0 6px;
 }
 .gate-art::after {
-  /* the ground under it */
+  /* the ground under it, soft */
   content: '';
   position: absolute;
   left: -10px;
   right: -10px;
   bottom: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--pro-line) 25%, var(--pro-line) 75%, transparent);
-}
-/* the shape of a five-pill fence (FFUI.pillProfile(5)); no inline styles, the CSP forbids them */
-.gate-art i:nth-of-type(1),
-.gate-art i:nth-of-type(5) {
-  --k: 0.618;
-  --t0: 0.202;
-  --v0: 0.45;
-}
-.gate-art i:nth-of-type(2),
-.gate-art i:nth-of-type(4) {
-  --k: 0.874;
-  --t0: 0.449;
-}
-.gate-art i:nth-of-type(-n + 2) {
-  --side: -1;
-}
-.gate-art i:nth-of-type(n + 4) {
-  --side: 1;
+  background: linear-gradient(to right, transparent 10%, var(--pro-line) 40%, var(--pro-line) 60%, transparent 90%);
 }
 .strict-start {
   display: flex;
@@ -1062,41 +1022,24 @@ body.is-pro .seg .badge {
   text-align: center;
   padding: 8px 0 6px;
 }
-/* the plan's fence: five pills, the light amber for the Pro offer, green once you have it */
+/* the plan's fence: five pills, the light amber for the Pro offer, green once you have it (FFUI.pillRow) */
 .plan-fence {
-  --pw: 22px;
-  --ph: 66px;
+  --pw: 32px;
+  --ph: 51px;
   --light: var(--amber-rgb);
   width: max-content;
-  height: 70px;
+  height: 56px;
   margin: 0 auto 20px;
 }
 .plan-fence::after {
-  /* the ground under it */
+  /* the ground under it, soft */
   content: '';
   position: absolute;
   left: -24px;
   right: -24px;
   bottom: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--line-3) 25%, var(--line-3) 75%, transparent);
-}
-.plan-fence i:nth-of-type(1),
-.plan-fence i:nth-of-type(5) {
-  --k: 0.618;
-  --t0: 0.202;
-  --v0: 0.45;
-}
-.plan-fence i:nth-of-type(2),
-.plan-fence i:nth-of-type(4) {
-  --k: 0.874;
-  --t0: 0.449;
-}
-.plan-fence i:nth-of-type(-n + 2) {
-  --side: -1;
-}
-.plan-fence i:nth-of-type(n + 4) {
-  --side: 1;
+  background: linear-gradient(to right, transparent 10%, var(--line-2) 40%, var(--line-2) 60%, transparent 90%);
 }
 .plan-fence .pill.lit {
   --lit-0: #f2c56e;

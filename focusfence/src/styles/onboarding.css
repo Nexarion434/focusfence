@@ -305,29 +305,24 @@ body {
 .stage {
   --paper: #f7f8f5;
   --horizon: rgb(30 138 69 / 0.08);
-  --floor-0: #eef1ec;
-  --floor-1: #f7f8f5;
-  --ground-line: rgb(24 66 40 / 0.1);
-  --floor-h: 64px;
+  --floor-h: 76px;
   position: relative;
   height: 460px;
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid var(--line);
   box-shadow: var(--shadow), var(--edge);
+  /* a seamless glossy floor: no band, no line; the reflection is the floor */
   background:
-    linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), var(--floor-0) calc(100% - var(--floor-h)), var(--floor-1)),
+    linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), rgb(24 66 40 / 0) calc(100% - var(--floor-h)), rgb(24 66 40 / 0.035)),
     radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
     var(--paper);
 }
 @media (prefers-color-scheme: dark) {
   .stage {
-    --horizon: rgb(63 214 122 / 0.12);
-    --floor-0: #020c06;
-    --floor-1: #000;
-    --ground-line: rgb(63 214 122 / 0.14);
+    --horizon: rgb(63 214 122 / 0.13);
     background:
-      linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), var(--floor-0) calc(100% - var(--floor-h)), var(--floor-1)),
+      linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), rgb(0 0 0 / 0) calc(100% - var(--floor-h)), rgb(0 0 0 / 0.5)),
       radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
       linear-gradient(to top, #041309 0%, #020a05 40%, #000 80%);
   }
@@ -341,38 +336,46 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 22px;
+  padding-bottom: 16px;
   transition: opacity 0.35s ease, transform 0.45s var(--ease);
 }
-/* your fence in the making: seven pills, the three in the middle are yours */
+/* your fence in the making: five pills, the three in the middle are yours */
+.ob-scene {
+  position: relative;
+}
 .ob-row {
-  --pw: 44px;
-  --ph: 206px;
+  /* chunky glass pills: the middle one 1.6 times as tall as wide */
+  --pw: 72px;
+  --ph: 115px;
 }
 .ob-pills {
   display: contents;
+}
+/* its reflection, over the same box, flipped at the ground line */
+.ob-row.mirror {
+  --refl-len: 0.42;
+  position: absolute;
+  inset: 0;
 }
 /* no site picked yet: no light */
 .ob-row:not(.is-lit) .fence-halo,
 .ob-row:not(.is-lit) .fence-pool {
   opacity: 0;
 }
-/* the Pro pill (step 3): amber, with a lock */
+/* the Pro pill (step 3): amber, with a lock, and fully visible although it stands at the end */
 .pill.pro {
+  --v: 1;
   --lit-0: #f2c56e;
   --lit-1: #d9a13f;
   --lit-2: #b5832b;
   --lit-core: rgb(255 248 230 / 0.25);
   --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
 }
-.stage-ground {
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--ground-line) 15%, var(--ground-line) 85%, transparent);
-}
-/* the sites in your fence, named on the ground */
+/* the sites in your fence, named on the floor */
 .picked {
   min-height: 18px;
-  margin: 16px 24px 0;
+  /* below the reflection */
+  margin: 44px 24px 0;
   text-align: center;
   font-size: 12.5px;
   font-weight: 550;
@@ -466,30 +469,12 @@ body {
   right: 8px;
 }
 .win-fence {
-  --pw: 24px;
-  --ph: 76px;
+  --pw: 26px;
+  --ph: 42px;
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-}
-/* the shape of a five-pill fence (FFUI.pillProfile(5)); no inline styles, the CSP forbids them */
-.win-fence i:nth-of-type(1),
-.win-fence i:nth-of-type(5) {
-  --k: 0.618;
-  --t0: 0.202;
-  --v0: 0.45;
-}
-.win-fence i:nth-of-type(2),
-.win-fence i:nth-of-type(4) {
-  --k: 0.874;
-  --t0: 0.449;
-}
-.win-fence i:nth-of-type(-n + 2) {
-  --side: -1;
-}
-.win-fence i:nth-of-type(n + 4) {
-  --side: 1;
 }
 /* not allowed in Incognito: that window's fence is only outlines, and holds no light */
 .stage:not(.incog-ok) .win.incog .pill {
@@ -523,22 +508,22 @@ body {
     --floor-h: 40px;
   }
   .ob-row {
-    --pw: 30px;
-    --ph: 124px;
+    --pw: 50px;
+    --ph: 80px;
   }
   .stage-fence {
-    padding-bottom: 12px;
+    padding-bottom: 10px;
   }
   .picked {
-    margin-top: 10px;
+    margin-top: 30px;
   }
   .win {
     width: 130px;
     height: 150px;
   }
   .win-fence {
-    --pw: 19px;
-    --ph: 58px;
+    --pw: 20px;
+    --ph: 32px;
   }
 }
 @media (max-width: 560px) {

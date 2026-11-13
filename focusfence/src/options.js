@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, el, icon, fence, fenceItems, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
+  const { send, toast, logo, el, icon, fence, fenceItems, pillRow, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
   const { t, plural, rich, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
   // Localized day names from Intl (2026-11-15 is a Sunday).
@@ -21,6 +21,10 @@
 
   $('logo').insertAdjacentHTML('afterbegin', logo(22));
   $('lock-logo').innerHTML = logo(48);
+  // the decorative fences: the block page's miniature, the strict-mode gate, the Plan's fence
+  pillRow($('wp-fence'), 7);
+  pillRow($('gate-art'), 5, { lock: true });
+  pillRow($('plan-fence'), 5);
 
   /* Pro gates. A view that is all Pro opens on an offer with the real prices; a single Pro
      section in a Free view gets a slim bar. The controls stay visible underneath, softened. */
@@ -179,7 +183,7 @@
     const s = state;
     const r = s.status.reason;
     const st = s.strict.active ? 'strict' : r === 'focus' ? 'focus' : r === 'off' ? 'down' : r === 'outside-schedule' ? 'paused' : 'up';
-    fence($('hero-fence'), { items: fenceItems(s.settings.entries, s.isPro, C.isProEntry), state: st, min: 5, max: 11 });
+    fence($('hero-fence'), { items: fenceItems(s.settings.entries, s.isPro, C.isProEntry), state: st, min: 5, max: 9 });
     const n = s.settings.entries.length;
     $('fence-count').textContent = n ? plural(n, 'sitesFenced') : '';
   }

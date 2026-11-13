@@ -623,13 +623,13 @@ textarea.input {
  * light it stands), --i its distance from the light (for the stagger).
  * <div class="fence" data-state="up|focus|paused|down|strict|empty"> */
 :root {
-  /* glass: milky, pale sage, greener near the light */
-  --glass-0: rgb(255 255 255 / 0.94);
-  --glass-1: rgb(243 247 244 / 0.8);
+  /* glass: milky, pale sage, greener near the light; a bright rim along the top */
+  --glass-0: rgb(240 246 242 / 0.94);
+  --glass-1: rgb(222 234 226 / 0.86);
   --glass-tint: 112 176 134;
   --glass-tint-a: 0.42;
   --glass-rim: rgb(255 255 255 / 1);
-  --glass-edge: rgb(24 66 40 / 0.1);
+  --glass-edge: rgb(24 66 40 / 0.13);
   --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
   --glass-blur: blur(14px) saturate(1.15);
   /* the light: a solid, saturated green with a soft bloom */
@@ -641,7 +641,7 @@ textarea.input {
   --lit-core: rgb(255 255 255 / 0.1);
   --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
   --halo-a: 0.26;
-  --halo-h: 1.3;
+  --halo-h: 1.4;
   --light: var(--light-rgb);
   /* the light in strict mode */
   --amber-rgb: 217 161 63;
@@ -670,7 +670,7 @@ textarea.input {
     --lit-core: rgb(225 255 236 / 0.5);
     --lit-bloom: 0 0 26px rgb(63 214 122 / 0.75), 0 0 70px rgb(63 214 122 / 0.35);
     --halo-a: 0.55;
-    --halo-h: 1.65;
+    --halo-h: 2.05;
     --light: var(--light-rgb);
     --amber-rgb: 230 178 82;
     --dim-0: rgb(255 255 255 / 0.06);
@@ -679,9 +679,10 @@ textarea.input {
   }
 }
 .fence {
-  /* pill width, tallest pill, gap (the reference: 110 px pills, 10 px apart) */
-  --pw: 26px;
-  --ph: 56px;
+  /* pill width, the middle pill's height (1.6 times the width, as in the owner's reference) and
+     the gap (9 % of a pill). Every page sets its own size. */
+  --pw: 36px;
+  --ph: 58px;
   --gap: calc(var(--pw) * 0.09);
   --drop: 0;
   position: relative;
@@ -704,8 +705,8 @@ textarea.input {
   /* a full semicircle on top, standing square on the ground */
   border-radius: calc(var(--pw) / 2) calc(var(--pw) / 2) 0 0;
   background:
-    /* the light, on the side that faces it */
-    linear-gradient(calc(var(--side) * 90deg), rgb(var(--light) / calc(var(--t) * 0.5)), transparent 62%),
+    /* the light, spilling onto the side that faces it */
+    linear-gradient(calc(var(--side) * 90deg), rgb(var(--light) / calc(var(--t) * 0.62)), transparent 72%),
     /* greener the nearer the light */
     linear-gradient(rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a))), rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a) * 0.45))),
     linear-gradient(var(--glass-0), var(--glass-1));
@@ -724,7 +725,7 @@ textarea.input {
 }
 /* a spare pill: the fence is never shorter than five, but the spare ones are fainter */
 .pill.pad {
-  --v: calc(var(--v0, 1) * 0.55);
+  --v: calc(var(--v0, 1) * 0.85);
 }
 /* a Pro rule kept after Pro lapsed: it stands in the fence, but catches no light */
 .pill.off {
@@ -793,9 +794,9 @@ textarea.input {
   margin-left: calc(var(--pw) * -2.3);
   border-radius: 50%;
   background:
-    radial-gradient(21% 62% at 50% 64%, rgb(var(--light) / var(--halo-a)), transparent),
-    radial-gradient(46% 38% at 50% 86%, rgb(var(--light) / calc(var(--halo-a) * 0.8)), transparent);
-  filter: blur(calc(var(--pw) * 0.2));
+    radial-gradient(27% 60% at 50% 66%, rgb(var(--light) / var(--halo-a)), transparent),
+    radial-gradient(56% 40% at 50% 88%, rgb(var(--light) / calc(var(--halo-a) * 0.8)), transparent);
+  filter: blur(calc(var(--pw) * 0.22));
   pointer-events: none;
   transition: opacity 0.5s ease;
   animation: halo-in 1.8s var(--ease) both;
@@ -810,15 +811,49 @@ textarea.input {
 .fence-pool {
   position: absolute;
   left: 50%;
-  bottom: calc(var(--pw) * -0.16);
+  bottom: calc(var(--pw) * -0.15);
   z-index: 3;
-  width: calc(var(--pw) * 3.6);
-  height: calc(var(--pw) * 0.34);
-  margin-left: calc(var(--pw) * -1.8);
+  width: calc(var(--pw) * 4.2);
+  height: calc(var(--pw) * 0.3);
+  margin-left: calc(var(--pw) * -2.1);
   border-radius: 50%;
   background: radial-gradient(closest-side, rgb(var(--light) / calc(var(--halo-a) * 1.3)), transparent);
   pointer-events: none;
   transition: opacity 0.5s ease;
+}
+/* a fence's reflection in a glossy floor: the same row, flipped at the ground line (the page puts
+   it over the row it mirrors); every pill mirrored faintly, fading downward, the light brightest */
+.fence.mirror {
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: var(--refl, 0.62);
+  filter: blur(1.2px);
+  -webkit-mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent calc(var(--ph) * var(--refl-len, 0.62)));
+  mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent calc(var(--ph) * var(--refl-len, 0.62)));
+  pointer-events: none;
+}
+/* glass doesn't mirror as glass: a soft silhouette in its own tint, greener near the light */
+.fence.mirror .pill:not(.lit):not(.ghost) {
+  background: linear-gradient(rgb(var(--glass-tint) / calc(0.16 + var(--t) * 0.3)), rgb(var(--glass-tint) / calc(0.08 + var(--t) * 0.2)));
+  box-shadow: inset 0 1.5px 0 var(--glass-rim);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.fence.mirror .pill.lit {
+  box-shadow: none;
+}
+.fence.mirror .pill-letter,
+.fence.mirror .lock,
+.fence.mirror .fence-pool {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  .fence.mirror {
+    opacity: var(--refl, 0.7);
+  }
+  .fence.mirror .pill:not(.lit):not(.ghost) {
+    background: linear-gradient(rgb(var(--glass-tint) / calc(0.2 + var(--t) * 0.35)), rgb(var(--glass-tint) / calc(0.12 + var(--t) * 0.3)));
+  }
 }
 .pill.enter {
   animation: pill-rise 0.7s var(--spring) both;

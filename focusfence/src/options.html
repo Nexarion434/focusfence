@@ -103,7 +103,7 @@
               <div class="wall-preview" aria-hidden="true">
                 <p class="wp-title"><span>reddit.com</span><span data-i18n="isFencedOff"> is fenced off</span></p>
                 <p class="wp-message" id="wp-message"></p>
-                <div class="wp-fence fence" data-state="up"><b class="fence-halo"></b><i class="pill"></i><i class="pill"></i><i class="pill"></i><i class="pill lit"></i><i class="pill"></i><i class="pill"></i><i class="pill"></i><b class="fence-pool"></b></div>
+                <div class="wp-fence fence" data-state="up" id="wp-fence"></div>
               </div>
               <div class="wall-form">
                 <textarea class="input" id="message" rows="4" maxlength="280" aria-label="Block page message" aria-describedby="message-count" placeholder="e.g. You promised yourself the thesis chapter first." data-i18n-attr="aria-label:messageAria;placeholder:messagePlaceholder"></textarea>
@@ -198,7 +198,7 @@
               <button class="btn btn-sm" id="incognito-open" type="button" data-i18n="openExtDetails">Open extension details</button>
             </div>
             <div class="card strict-card" id="strict-off">
-              <div class="gate-art fence" data-state="strict" aria-hidden="true"><b class="fence-halo"></b><i class="pill"></i><i class="pill"></i><i class="pill lit"><b class="lock"></b></i><i class="pill"></i><i class="pill"></i><b class="fence-pool"></b></div>
+              <div class="gate-art fence" data-state="strict" id="gate-art" aria-hidden="true"></div>
               <div class="strict-start">
                 <label class="field"><span data-i18n="duration">Duration</span>
                   <span class="select">
@@ -320,7 +320,7 @@
         <div class="view" id="view-plan" data-view="plan" hidden>
           <section class="panel lead" id="plan">
             <div class="plan-hero">
-              <div class="plan-fence fence" data-state="up" aria-hidden="true"><b class="fence-halo"></b><i class="pill"></i><i class="pill"></i><i class="pill lit"></i><i class="pill"></i><i class="pill"></i><b class="fence-pool"></b></div>
+              <div class="plan-fence fence" data-state="up" id="plan-fence" aria-hidden="true"></div>
               <h2 id="plan-title">FocusFence Pro</h2>
               <p id="plan-sub" data-i18n="planSub">Everything in Free, plus the tools that make focus stick.</p>
               <p class="current-plan"><strong id="side-plan-title" data-i18n="sidePlanFree">Free plan</strong> · <span id="side-plan-text" data-i18n="sidePlanFreeText">Unlimited sites. Upgrade for schedules, focus sessions and strict mode.</span></p>
