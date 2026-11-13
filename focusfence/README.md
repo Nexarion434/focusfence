@@ -66,7 +66,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 41 tests: core unit tests + e2e + production-build smoke test
+npm test            # 69 tests (unit, e2e, axe accessibility, store checks): core unit tests + e2e + production-build smoke test
 ```
 
 The e2e suite launches Playwright's Chromium (new headless) with the unpacked extension and routes all traffic through a local "fake internet" proxy (TLS terminated with a throwaway self-signed cert, so HSTS-preloaded hosts such as reddit.com work). Headless Chromium cannot click Chrome's permission prompt, so the test copy of the extension gets host access up front; one test uses the real manifest to verify the no-access fallback.

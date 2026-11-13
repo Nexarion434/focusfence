@@ -5,6 +5,9 @@ import path from 'node:path';
 import { ROOT, launchExtension, startFakeInternet } from './launch.mjs';
 
 const OUT = path.join(ROOT, 'screenshots');
+const SHOTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'store/screenshots.json'), 'utf8')).shots;
+const shot = (file) => SHOTS.find((x) => x.file === file);
+const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 fs.mkdirSync(OUT, { recursive: true });
 const DARK = process.argv.includes('--dark');
 const MIN = 60 * 1000;
@@ -41,6 +44,39 @@ function frameHtml({ title, body, popupQuery, popupHeight }) {
 <div class="device"><div class="chrome"><i></i><i></i><i></i><span class="url">instagram.com</span><span class="ext">${LOGO.replace(/SIZE/g, '18')}</span></div>
 <div class="pop"><iframe src="popup.html${popupQuery || ''}"></iframe></div></div>
 </body></html>`;
+}
+
+/** 1280x800 store screenshot: caption on top, the real UI in a browser frame bleeding off the bottom. */
+function captionHtml({ kicker, headline, sub }, img) {
+  return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="styles/base.css">
+<style>
+  body{width:1280px;height:800px;overflow:hidden;margin:0;position:relative;
+    background:radial-gradient(900px 520px at 0% 0%, var(--accent-soft), transparent 62%),radial-gradient(800px 500px at 100% 0%, var(--pro-soft), transparent 60%),var(--bg);}
+  .cap{position:absolute;left:0;right:0;top:56px;text-align:center}
+  .kicker{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:46px;line-height:1.08;letter-spacing:-.035em;font-weight:760;margin:14px 0 12px}
+  p{font-size:20px;color:var(--ink-2);margin:0 auto;max-width:1000px}
+  .win{position:absolute;left:120px;top:256px;width:1040px;border-radius:16px 16px 0 0;overflow:hidden;background:var(--surface);
+    box-shadow:0 2px 6px rgba(28,38,34,.06),0 40px 80px rgba(28,38,34,.18);border:1px solid var(--line)}
+  .bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--bg-2);border-bottom:1px solid var(--line)}
+  .bar i{width:10px;height:10px;border-radius:50%;background:var(--line-2);display:block}
+  .win img{display:block;width:1040px;height:650px}
+</style></head><body>
+<div class="cap"><div class="kicker">${LOGO.replace(/SIZE/g, '22')}${escHtml(kicker)}</div><h1>${escHtml(headline)}</h1><p>${escHtml(sub)}</p></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i></div><img src="${img}" alt=""></div>
+</body></html>`;
+}
+
+async function captioned(context, base, extDir, spec) {
+  const name = 'cap-' + spec.file.replace('.png', '.html');
+  fs.copyFileSync(path.join(OUT, spec.raw.replace('.png', suffix + '.png')), path.join(extDir, 'raw-' + spec.raw));
+  fs.writeFileSync(path.join(extDir, name), captionHtml(spec, 'raw-' + spec.raw));
+  const p = await context.newPage();
+  await p.setViewportSize({ width: 1280, height: 800 });
+  await p.goto(base + name);
+  await p.waitForTimeout(500);
+  await p.screenshot({ path: path.join(OUT, spec.file.replace('.png', suffix + '.png')) });
+  await p.close();
 }
 
 function promoHtml() {
@@ -150,7 +186,6 @@ try {
   });
   await blocked.waitForTimeout(700);
   await blocked.screenshot({ path: path.join(OUT, `block-page${suffix}.png`) });
-  await blocked.screenshot({ path: path.join(OUT, `store-1-block-page${suffix}.png`) });
 
   // ---- options page
   const opt = await context.newPage();
@@ -158,15 +193,14 @@ try {
   await opt.goto(base + 'options.html');
   await opt.waitForTimeout(500);
   await opt.screenshot({ path: path.join(OUT, `options${suffix}.png`) });
-  await opt.screenshot({ path: path.join(OUT, `store-3-options-blocklist${suffix}.png`) });
   // The incognito warning depends on the viewer's Chrome settings; keep it out of marketing shots.
   await opt.addStyleTag({ content: '#incognito-warning{display:none!important}' });
   await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
   await opt.waitForTimeout(400);
-  await opt.screenshot({ path: path.join(OUT, `store-4-schedule-focus-strict${suffix}.png`) });
+  await opt.screenshot({ path: path.join(OUT, `options-schedule${suffix}.png`) });
   await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
   await opt.waitForTimeout(400);
-  await opt.screenshot({ path: path.join(OUT, `store-5-stats${suffix}.png`) });
+  await opt.screenshot({ path: path.join(OUT, `options-stats${suffix}.png`) });
   await opt.evaluate(() => document.getElementById('plan').scrollIntoView({ block: 'end' }));
   await opt.waitForTimeout(300);
   await opt.screenshot({ path: path.join(OUT, `options-plan${suffix}.png`) });
@@ -193,7 +227,7 @@ try {
     frameHtml({
       title: '<h1>Fence off the <em>endless feeds.</em></h1>',
       body:
-        '<p class="lead">Block distracting sites in one click — or just the worst part, like YouTube Shorts.</p>' +
+        `<p class="lead">${escHtml(shot('store-2-popup.png').sub)}</p>` +
         '<ul><li>Unlimited sites, subdomains included</li><li>Pomodoro focus sessions &amp; schedules</li><li>Strict mode when willpower runs out</li><li>100% private — nothing leaves your device</li></ul>',
       popupQuery: frameQuery,
       popupHeight: Math.ceil(h),
@@ -204,6 +238,12 @@ try {
   await frame.goto(base + 'frame.html');
   await frame.waitForTimeout(900);
   await frame.screenshot({ path: path.join(OUT, `store-2-popup${suffix}.png`) });
+
+  // ---- captioned store screenshots 1, 3, 4, 5 (texts from store/screenshots.json)
+  for (const spec of SHOTS) {
+    if (spec.file === 'store-2-popup.png') continue;
+    await captioned(context, base, ext.extDir, spec);
+  }
 
   // ---- promo tile
   if (!DARK) {

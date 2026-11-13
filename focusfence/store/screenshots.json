@@ -1,0 +1,40 @@
+{
+  "_comment": "Single source for the Chrome Web Store screenshot captions. Used by scripts/screenshots.mjs; documented in store/screenshots.md.",
+  "shots": [
+    {
+      "file": "store-1-block-page.png",
+      "raw": "block-page.png",
+      "kicker": "Block page",
+      "headline": "Distractions hit a calm wall",
+      "sub": "Blocked sites show a gentle reminder and today's reclaimed time, not an error."
+    },
+    {
+      "file": "store-2-popup.png",
+      "raw": "popup.png",
+      "kicker": "One click",
+      "headline": "Fence off the endless feeds.",
+      "sub": "Block distracting sites in one click, or just the worst part, like YouTube Shorts."
+    },
+    {
+      "file": "store-3-options-blocklist.png",
+      "raw": "options.png",
+      "kicker": "Blocklist",
+      "headline": "Block whole sites, or just the worst part",
+      "sub": "Subdomains included. Pro blocks paths like youtube.com/shorts, or any keyword."
+    },
+    {
+      "file": "store-4-schedule-focus-strict.png",
+      "raw": "options-schedule.png",
+      "kicker": "Schedules · Focus · Strict mode",
+      "headline": "Focus on your schedule",
+      "sub": "Block during work hours, run Pomodoro sessions, lock it in with strict mode."
+    },
+    {
+      "file": "store-5-stats.png",
+      "raw": "options-stats.png",
+      "kicker": "Private stats",
+      "headline": "See the time you take back",
+      "sub": "Blocked attempts per site and per day, counted on your device only."
+    }
+  ]
+}

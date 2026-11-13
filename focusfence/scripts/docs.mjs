@@ -19,8 +19,8 @@ copy('src/icons/icon32.png', 'favicon.png');
 copy('src/fonts/inter-var-latin.woff2', 'inter.woff2');
 copy('screenshots/popup.png', 'popup.png');
 copy('screenshots/block-page.png', 'block-page.png');
-copy('screenshots/store-5-stats.png', 'stats.png');
-copy('screenshots/store-4-schedule-focus-strict.png', 'schedule.png');
+copy('screenshots/options-stats.png', 'stats.png');
+copy('screenshots/options-schedule.png', 'schedule.png');
 copy('screenshots/promo-tile-440x280.png', 'social.png');
 fs.writeFileSync(path.join(DOCS, '.nojekyll'), '');
 

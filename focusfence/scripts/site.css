@@ -11,13 +11,13 @@
   --surface: #ffffff;
   --ink: #1c2622;
   --ink-2: #3b4842;
-  --muted: #6b7570;
+  --muted: #5a645f;
   --line: #e3e1d9;
-  --accent: #2e7d6b;
-  --accent-strong: #236456;
+  --accent: #276b5b;
+  --accent-strong: #1f5a4c;
   --accent-soft: #e2efe9;
   --accent-ink: #fff;
-  --pro: #a9771f;
+  --pro: #7d5710;
   --pro-soft: #f7eedb;
   --shadow: 0 1px 2px rgba(28, 38, 34, 0.05), 0 12px 32px rgba(28, 38, 34, 0.08);
 }
@@ -52,6 +52,8 @@ body {
 }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--accent); }
+p a, li a, details a { text-decoration: underline; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em; background: var(--bg-2); padding: 1px 6px; border-radius: 6px; }
 h1, h2, h3 { letter-spacing: -0.025em; line-height: 1.15; margin: 0; }
 h2 { font-size: clamp(26px, 4vw, 36px); margin-bottom: 28px; }
