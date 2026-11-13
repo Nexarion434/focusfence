@@ -13,6 +13,7 @@
     "i18n": "node scripts/i18n/build.mjs",
     "i18n:check": "node scripts/i18n/build.mjs --check",
     "screenshots:all": "node scripts/screenshots.mjs && node scripts/screenshots.mjs --lang fr && node scripts/screenshots.mjs --lang es && node scripts/screenshots.mjs --lang de",
+    "screenshots:site": "node scripts/screenshots.mjs --site && node scripts/screenshots.mjs --site --lang fr && node scripts/screenshots.mjs --site --lang es && node scripts/screenshots.mjs --site --lang de",
     "cws:check": "node scripts/build.mjs >/dev/null && node scripts/cws-check.mjs"
   },
   "keywords": [],

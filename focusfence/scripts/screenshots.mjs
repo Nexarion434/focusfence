@@ -2,6 +2,8 @@
 // Usage: npm run screenshots                       English  -> ./screenshots/
 //        node scripts/screenshots.mjs --lang fr    French   -> ./screenshots/fr/  (also es, de)
 //        npm run screenshots:all                   all four languages
+//        node scripts/screenshots.mjs --site [--lang fr]  website images -> ./screenshots/site/<lang>/
+//        npm run screenshots:site                  website images, all four languages
 // (set FF_CHROME_LIBS if Chromium needs local libs)
 import fs from 'node:fs';
 import path from 'node:path';
@@ -159,6 +161,208 @@ async function seed(send, page) {
     });
     await chrome.storage.local.set({ stats: { days } });
   });
+}
+
+/* ------------------------------------------------------------------ website
+ * --site: crisp 2x captures of the real UI for the website (docs/), in the dark
+ * theme the site uses, encoded to WebP in the browser (no image tooling needed),
+ * plus the localized 1200x630 Open Graph image.
+ * Output: screenshots/site/<lang>/ (read by scripts/docs.mjs).
+ */
+function ogHtml(T) {
+  return `<!doctype html><html><head><meta charset="utf-8">
+<style>
+  @font-face{font-family:'InterOG';src:url('fonts/inter-opsz.woff2') format('woff2');font-weight:100 900}
+  :root{color-scheme:dark}
+  *{box-sizing:border-box}
+  body{width:1200px;height:630px;margin:0;overflow:hidden;position:relative;background:#08090A;color:#F3F5F4;
+    font-family:InterOG,sans-serif;font-feature-settings:'cv11','ss01';-webkit-font-smoothing:antialiased}
+  .light{position:absolute;inset:0;background:
+    radial-gradient(560px 380px at 86% 62%, rgba(58,154,91,.26), transparent 70%),
+    radial-gradient(900px 500px at 70% -10%, rgba(58,154,91,.08), transparent 70%)}
+  .copy{position:absolute;left:72px;top:66px;width:496px}
+  .brand{display:flex;align-items:center;gap:14px;font-weight:620;font-size:25px;letter-spacing:-.02em}
+  .brand svg{border-radius:10px}
+  .kicker{margin-top:64px;display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 15px 0 13px;border-radius:999px;
+    font-size:16px;font-weight:500;color:#C9D0CC;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);background:rgba(255,255,255,.03)}
+  .kicker i{width:7px;height:7px;border-radius:50%;background:#3A9A5B;box-shadow:0 0 0 3px rgba(58,154,91,.22),0 0 12px 2px rgba(58,154,91,.6)}
+  h1{margin:22px 0 0;font-size:68px;line-height:1;letter-spacing:-.046em;font-weight:620;text-wrap:balance}
+  h1 em{font-style:normal;color:#8E9893}
+  .foot{position:absolute;left:72px;bottom:56px;display:grid;gap:10px;font-size:17px;color:#8E9893;letter-spacing:-.01em}
+  .foot span{display:flex;align-items:center;gap:9px}
+  .foot svg{width:17px;height:17px;fill:none;stroke:#6CC58A;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .win{position:absolute;left:640px;top:84px;width:760px;border-radius:16px;overflow:hidden;background:#141917;
+    box-shadow:0 0 0 1px rgba(255,255,255,.11),0 40px 90px rgba(0,0,0,.65)}
+  .bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:#0E1211;border-bottom:1px solid rgba(255,255,255,.07)}
+  .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.13)}
+  .win img{display:block;width:760px;height:475px}
+  .pop{position:absolute;left:592px;top:300px;width:250px;border-radius:13px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 70px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5)}
+  .pop img{display:block;width:250px}
+</style></head><body><div class="light"></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i></div><img src="og-block.png" alt=""></div>
+<div class="pop"><img src="og-popup.png" alt=""></div>
+<div class="copy"><div class="brand">${LOGO.replace(/SIZE/g, '44')}FocusFence</div>
+<div class="kicker"><i></i>${T.eyebrow}</div><h1>${T.h1}</h1></div>
+<div class="foot">${T.heroSmall.split(' · ').map((x) => `<span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>${x}</span>`).join('')}</div>
+</body></html>`;
+}
+
+async function captureSite() {
+  const SITE_OUT = path.join(ROOT, 'screenshots', 'site', LANG);
+  fs.rmSync(SITE_OUT, { recursive: true, force: true });
+  fs.mkdirSync(SITE_OUT, { recursive: true });
+  const { SITE } = await import('./site-strings.mjs');
+  const OG_FONT = path.join(ROOT, 'node_modules/@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2');
+  const net = await startFakeInternet();
+  const ext = await launchExtension({
+    proxyPort: net.port,
+    colorScheme: 'dark',
+    deviceScaleFactor: 2,
+    ...(LANG === 'en' ? {} : { lang: LANG }),
+    mutate(mf, dir) {
+      mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'");
+      fs.copyFileSync(OG_FONT, path.join(dir, 'fonts', 'inter-opsz.woff2'));
+    },
+  });
+  const { context, base, extDir } = ext;
+  const written = [];
+  // WebP encoding in a blank page: Chromium's canvas encoder, optional downscale.
+  const encoder = await context.newPage();
+  const webp = async (png, file, { scale = 1, quality = 0.88 } = {}) => {
+    const b64 = await encoder.evaluate(
+      async ([src, k, q]) => {
+        const img = new Image();
+        img.src = src;
+        await img.decode();
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * k);
+        c.height = Math.round(img.naturalHeight * k);
+        const g = c.getContext('2d');
+        g.imageSmoothingQuality = 'high';
+        g.drawImage(img, 0, 0, c.width, c.height);
+        return c.toDataURL('image/webp', q).split(',')[1];
+      },
+      ['data:image/png;base64,' + png.toString('base64'), scale, quality]
+    );
+    fs.writeFileSync(path.join(SITE_OUT, file), Buffer.from(b64, 'base64'));
+    written.push(file);
+  };
+  const clipOf = async (page, selector, pad) => {
+    const r = await page.locator(selector).first().evaluate((el) => {
+      const b = el.getBoundingClientRect();
+      return { x: b.x, y: b.y, width: b.width, height: b.height };
+    });
+    return { x: Math.max(0, r.x - pad), y: Math.max(0, r.y - pad), width: r.width + pad * 2, height: r.height + pad * 2 };
+  };
+  try {
+    const api = await context.newPage();
+    await api.goto(base + 'options.html');
+    const send = (type, payload = {}) => api.evaluate(([t, p]) => chrome.runtime.sendMessage({ type: t, ...p }), [type, payload]);
+    await seed(send, api);
+    const insta = await context.newPage();
+    await insta.goto('https://www.instagram.com/');
+    const tabId = await api.evaluate(async () => (await chrome.tabs.query({})).find((t) => t.url && t.url.includes('instagram.com')).id);
+    const hideIncognito = (pg) => pg.addStyleTag({ content: '#incognito-warning{display:none!important}' });
+    // ---- a running focus session: the block page and the popup show the same moment, 18:42 left.
+    // The countdowns tick, so each capture starts a little above 18:42 and waits for that exact value.
+    await send('startPomodoro');
+    const setLeft = (ms) =>
+      api.evaluate(async (left) => {
+        const { pomodoro } = await chrome.storage.local.get('pomodoro');
+        pomodoro.endsAt = Date.now() + left;
+        await chrome.storage.local.set({ pomodoro });
+      }, ms);
+    const LEFT = (18 * 60 + 42) * 1000;
+    const waitFor = (pg, sel, text) =>
+      pg.waitForFunction(([s, t]) => (document.querySelector(s)?.textContent || '').includes(t), [sel, text], { polling: 50, timeout: 10000 });
+    // block page (hero), 1280x800 CSS px; this visit is today's 5th blocked attempt
+    await setLeft(LEFT + 2500);
+    const blocked = await context.newPage();
+    await blocked.setViewportSize({ width: 1280, height: 800 });
+    await blocked.goto('https://www.reddit.com/r/all/');
+    await blocked.evaluate(() => {
+      document.getElementById('message').textContent = self.FFCore.quote(1);
+    });
+    await blocked.waitForTimeout(600); // entrance animation
+    await waitFor(blocked, '#session-text', '18:42');
+    const blockPng = await blocked.screenshot();
+    await blocked.close();
+    await webp(blockPng, 'block-page.webp');
+    await webp(blockPng, 'block-page-1x.webp', { scale: 0.5 });
+    fs.writeFileSync(path.join(extDir, 'og-block.png'), blockPng);
+    // popup (360 CSS px wide) and its focus-session card
+    await setLeft(LEFT + 2500);
+    const popup = await context.newPage();
+    await popup.setViewportSize({ width: 360, height: 640 });
+    await popup.goto(base + 'popup.html?tabId=' + tabId);
+    await popup.waitForTimeout(300);
+    const h = await popup.evaluate(() => Math.ceil(document.querySelector('.popup').getBoundingClientRect().height));
+    await popup.setViewportSize({ width: 360, height: h });
+    await waitFor(popup, '#focus-timer', '18:42');
+    const popupPng = await popup.screenshot();
+    const focusPng = await popup.screenshot({ clip: await clipOf(popup, '#focus-card', 1) });
+    await popup.close();
+    await webp(popupPng, 'popup.webp');
+    await webp(focusPng, 'focus.webp');
+    fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
+    await send('stopPomodoro');
+
+    // ---- settings at 1280 px: the blocklist (full window) and the stats panel
+    const opt = await context.newPage();
+    await opt.setViewportSize({ width: 1280, height: 800 });
+    await opt.goto(base + 'options.html');
+    await hideIncognito(opt);
+    await opt.waitForTimeout(600);
+    const optPng = await opt.screenshot();
+    await webp(optPng, 'blocklist.webp');
+    await webp(optPng, 'blocklist-1x.webp', { scale: 0.5 });
+    await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
+    await opt.waitForTimeout(300);
+    await webp(await opt.screenshot({ clip: await clipOf(opt, '#stats', 24) }), 'stats.webp');
+    // ---- settings at 900 px: compact cards for the feature crops
+    await opt.setViewportSize({ width: 900, height: 800 });
+    await opt.waitForTimeout(300);
+    await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
+    await opt.waitForTimeout(300);
+    await webp(await opt.screenshot({ clip: await clipOf(opt, '#schedule .card', 1) }), 'schedule.webp');
+
+    // ---- strict mode switched on ("until I unlock it": no date in the picture), 900 px window
+    await send('startStrict', { hours: 0 });
+    await opt.reload();
+    await hideIncognito(opt);
+    await opt.waitForTimeout(600);
+    await opt.evaluate(() => document.getElementById('strict').scrollIntoView());
+    await opt.waitForTimeout(300);
+    await webp(await opt.screenshot({ clip: await clipOf(opt, '#strict-on', 1) }), 'strict.webp');
+
+    // ---- Open Graph image, 1200x630 (PNG: the most widely supported format for link previews)
+    fs.writeFileSync(path.join(extDir, 'og.html'), ogHtml(SITE[LANG]));
+    const og = await context.newPage();
+    await og.setViewportSize({ width: 1200, height: 630 });
+    await og.goto(base + 'og.html');
+    await og.evaluate(() => document.fonts.ready);
+    // Translations differ in length: shrink the headline until it clears the bottom list.
+    await og.evaluate(() => {
+      const h1 = document.querySelector('h1');
+      const limit = document.querySelector('.foot').getBoundingClientRect().top - 36;
+      let size = 68;
+      while (h1.getBoundingClientRect().bottom > limit && size > 44) h1.style.fontSize = --size + 'px';
+    });
+    await og.waitForTimeout(400);
+    const ogPng = await og.screenshot({ scale: 'css' });
+    fs.writeFileSync(path.join(SITE_OUT, 'og.png'), ogPng);
+    written.push('og.png');
+    console.log('site images written to', SITE_OUT, '\n ', written.join(' '));
+  } finally {
+    await ext.close();
+    await net.close();
+  }
+}
+
+if (process.argv.includes('--site')) {
+  await captureSite();
+  process.exit(0);
 }
 
 const net = await startFakeInternet();
