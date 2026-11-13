@@ -93,7 +93,7 @@ export const S = {
   // ------------------------------------------------------------ units
   unitMin: { en: '$1 min', fr: '$1 min', es: '$1 min', de: '$1 Min.' },
   unitHour: { en: '$1h', fr: '$1 h', es: '$1 h', de: '$1 Std.' },
-  unitHourMin: { en: '$1h $2m', fr: '$1 h $2', es: '$1 h $2 min', de: '$1 Std. $2 Min.' },
+  unitHourMin: { en: '$1h $2m', fr: '$1 h $2 min', es: '$1 h $2 min', de: '$1 Std. $2 Min.' },
 
   // ------------------------------------------------------------ quotes (block page)
   quote1: { en: 'The successful warrior is the average person, with laser-like focus. — Bruce Lee', fr: 'Le guerrier qui réussit est une personne ordinaire, avec une concentration de laser. — Bruce Lee', es: 'El guerrero exitoso es una persona corriente con una concentración de láser. — Bruce Lee', de: 'Der erfolgreiche Krieger ist ein Durchschnittsmensch mit laserscharfem Fokus. — Bruce Lee' },
@@ -155,7 +155,7 @@ export const S = {
   browserPagesNo: { en: "Browser pages can't be blocked", fr: 'Les pages du navigateur ne peuvent pas être bloquées', es: 'Las páginas del navegador no se pueden bloquear', de: 'Browser-Seiten können nicht blockiert werden' },
   alreadyOnList: { en: 'Already on your blocklist', fr: 'Déjà dans votre liste', es: 'Ya está en tu lista', de: 'Schon auf deiner Sperrliste' },
   coveredBy: { en: 'Covered by $1', fr: 'Couvert par $1', es: 'Cubierta por $1', de: 'Abgedeckt durch $1' },
-  addPlaceholder: { en: 'Add a site, e.g. reddit.com', fr: 'Ajouter un site, ex. : reddit.com', es: 'Añade una web, p. ej. reddit.com', de: 'Seite hinzufügen, z. B. reddit.com' },
+  addPlaceholder: { en: 'Add a site, e.g. reddit.com', fr: 'ex. : reddit.com', es: 'p. ej. reddit.com', de: 'z. B. reddit.com' },
   addAria: { en: 'Website to block', fr: 'Site à bloquer', es: 'Web que bloquear', de: 'Zu blockierende Website' },
   focusTimerAria: { en: 'Focus time', fr: 'Temps de concentration', es: 'Tiempo de concentración', de: 'Fokuszeit' },
   stop: { en: 'Stop', fr: 'Arrêter', es: 'Detener', de: 'Stopp' },

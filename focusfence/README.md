@@ -18,19 +18,24 @@ No backend, no analytics; nothing leaves the device except ExtensionPay license 
 
 ```
 src/                  the extension (load this folder unpacked)
-  manifest.json
+  manifest.json       MV3, localized via __MSG_*__ (default_locale: en)
+  _locales/           en, fr, es, de (generated from scripts/i18n/strings.mjs)
   background.js       service worker: rule sync, timers, licensing, message API
   lib/core.js         pure logic (parsing, matching, schedules, DNR rule builder, stats)
+  lib/i18n.js         translations for pages (data-i18n attributes, Intl formatting)
   lib/ui.js           shared page helpers
-  popup.*  options.*  blocked.*   UI
+  popup.*  options.*  blocked.*  onboarding.*   UI
   spa-guard.js        tiny content script for path rules on single-page apps
-  config.js           DEV flag + ExtensionPay id (placeholder 'focusfence')
-  vendor/ExtPay.js    ExtensionPay library (copied from node_modules/extpay)
-tests/                Playwright: core unit tests + e2e in headless Chromium
-scripts/              build, screenshots, icons, test launcher
-store/                privacy policy + Chrome Web Store listing
-screenshots/          UI shots, 1280×800 store screenshots, 440×280 promo tile
+  config.js           DEV flag, ExtensionPay id (placeholder 'focusfence'), prices, URLs
+  vendor/ExtPay.js    ExtensionPay library (unmodified copy of extpay@3.1.2)
+  LICENSE, THIRD_PARTY_NOTICES.txt, licenses/
+tests/                Playwright: unit, e2e, accessibility, i18n, onboarding, site, store, zip
+scripts/              build, zip, cws-check, screenshots, icons, docs, i18n, test launcher
+store/                privacy policy, listings (en/fr/es/de), screenshot plan + captions
+screenshots/          UI shots + store set (en); fr/, es/, de/ localized store sets
 dist/                 focusfence-<version>.zip (store package)
+../docs/              static website (landing, privacy, blog drafts) for GitHub Pages
+../marketing/         unpublished drafts (Product Hunt, Reddit, blog sources)
 ```
 
 ## How blocking works
@@ -50,6 +55,7 @@ dist/                 focusfence-<version>.zip (store package)
 ```js
 DEV: true,              // build flips this to false
 EXTPAY_ID: 'focusfence' // placeholder — replace with your ExtensionPay extension id
+PRICES: { currency: 'USD', monthly: 2.99, yearly: 19.99 } // must match the ExtensionPay plans
 ```
 
 - `DEV: true` → "Simulate Pro" switch in Settings → Plan; **no** ExtensionPay network calls.
@@ -66,7 +72,8 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 80 tests (unit, e2e, axe accessibility, i18n fr/es/de, onboarding, site, store checks): core unit tests + e2e + production-build smoke test
+npm test            # 83 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+                    # website, store assets, production build, zip pre-submission checks
 ```
 
 The e2e suite launches Playwright's Chromium (new headless) with the unpacked extension and routes all traffic through a local "fake internet" proxy (TLS terminated with a throwaway self-signed cert, so HSTS-preloaded hosts such as reddit.com work). Headless Chromium cannot click Chrome's permission prompt, so the test copy of the extension gets host access up front; one test uses the real manifest to verify the no-access fallback.
@@ -80,10 +87,20 @@ FF_CHROME_LIBS=/path/to/libs npm test
 ## Build & assets
 
 ```bash
-npm run build        # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=false)
-npm run screenshots  # screenshots/*.png
-npm run icons        # src/icons/*.png
+npm run build            # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=false)
+npm run cws:check        # build + Chrome Web Store pre-submission checks on the zip
+npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
+npm run i18n             # regenerate src/_locales from scripts/i18n/strings.mjs
+npm run docs             # regenerate ../docs (website)
+npm run icons            # src/icons/*.png
 ```
+
+`npm run cws:check` checks the following, and fails on the usual rejection causes:
+- size limits, CRC integrity and Manifest V3 keys;
+- `__MSG_` keys resolvable in every locale, with name ≤ 75 and description ≤ 132 characters;
+- real PNG icons at their declared sizes, and every file the manifest references present;
+- no remote code (remote `<script>`/`@import`/`importScripts`, `eval`, `new Function`), no unsafe CSP, no `<all_urls>` install-time access;
+- no reserved or hidden files.
 
 ## Languages
 

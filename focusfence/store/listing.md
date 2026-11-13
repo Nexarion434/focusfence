@@ -50,6 +50,7 @@ PRIVATE BY DESIGN
 • Your blocklist, settings and stats stay on your device
 • Site access is requested one site at a time, only for sites you block. If you decline, the site is still blocked
 • Open source under the GNU AGPL v3
+• Available in English, French, Spanish and German
 
 ━━━━━━━━━━━━━━━━━━━━
 GOOD TO KNOW (HONEST LIMITS)
@@ -62,7 +63,7 @@ GOOD TO KNOW (HONEST LIMITS)
 HOW TO USE
 ━━━━━━━━━━━━━━━━━━━━
 1. Pin FocusFence to your toolbar.
-2. On a distracting site, open the popup and click "Block site". Or add sites in Settings.
+2. When you install, pick 3 sites to block. Later, open the popup on any site and click "Block site", or add sites in Settings.
 3. Allow site access when Chrome asks, so FocusFence can show its block page.
 4. Pro: set a schedule, start a focus session, or turn on strict mode before a deadline.
 
@@ -119,10 +120,11 @@ Privacy policy URL: `https://nexarion434.github.io/focusfence/privacy.html` (liv
 | Asset | File |
 |---|---|
 | Store icon 128×128 | `src/icons/icon128.png` |
+| Screenshots (1280×800), 5 per language | `screenshots/` (en), `screenshots/fr/`, `screenshots/es/`, `screenshots/de/`; order and captions in `store/screenshots.md` |
 | Screenshot 1 (1280×800): block page | `screenshots/store-1-block-page.png` |
 | Screenshot 2 (1280×800): popup | `screenshots/store-2-popup.png` |
 | Screenshot 3 (1280×800): blocklist | `screenshots/store-3-options-blocklist.png` |
 | Screenshot 4 (1280×800): schedule, focus, strict | `screenshots/store-4-schedule-focus-strict.png` |
 | Screenshot 5 (1280×800): stats | `screenshots/store-5-stats.png` |
-| Small promo tile 440×280 | `screenshots/promo-tile-440x280.png` |
-| Package | `dist/focusfence-1.0.0.zip` |
+| Small promo tile 440×280 | `screenshots/promo-tile-440x280.png` (+ `fr/`, `es/`, `de/` versions) |
+| Package | `dist/focusfence-1.0.0.zip`: run `npm run cws:check` before uploading |

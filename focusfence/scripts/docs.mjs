@@ -173,7 +173,7 @@ const landing = page({
     <div class="price"><h3>Pro monthly</h3><div class="amt">$2.99<span>/month</span></div><ul class="checks">${['Everything in Free', 'Schedules', 'Path & keyword blocking', 'Pomodoro focus sessions', 'Strict mode', 'Password lock, stats, custom message, backup'].map(check).join('')}</ul></div>
     <div class="price featured"><h3>Pro yearly <span class="save">Save 44%</span></h3><div class="amt">$19.99<span>/year</span></div><ul class="checks">${['Everything in Pro monthly', '12 months for less than the price of 7'].map(check).join('')}</ul></div>
   </div>
-  <p class="small muted center">Payments are processed by ExtensionPay (Stripe). Cancel anytime.</p>
+  <p class="small muted center">Payments are processed by ExtensionPay (Stripe).</p>
 </div></section>
 
 <section id="faq"><div class="wrap narrow">

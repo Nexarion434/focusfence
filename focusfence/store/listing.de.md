@@ -48,6 +48,7 @@ PRIVAT VON GRUND AUF
 • Sperrliste, Einstellungen und Statistik bleiben auf deinem Gerät
 • Zugriff auf Websites wird einzeln angefragt, nur für die Seiten, die du blockierst. Lehnst du ab, bleibt die Seite trotzdem gesperrt
 • Freie Software unter der GNU AGPL v3
+• Verfügbar auf Deutsch, Englisch, Französisch und Spanisch
 
 ━━━━━━━━━━━━━━━━━━━━
 GUT ZU WISSEN (EHRLICHE GRENZEN)

@@ -135,7 +135,7 @@
     "message": "$1 h"
   },
   "unitHourMin": {
-    "message": "$1 h $2"
+    "message": "$1 h $2 min"
   },
   "quote1": {
     "message": "Le guerrier qui réussit est une personne ordinaire, avec une concentration de laser. — Bruce Lee"
@@ -303,7 +303,7 @@
     "message": "Couvert par $1"
   },
   "addPlaceholder": {
-    "message": "Ajouter un site, ex. : reddit.com"
+    "message": "ex. : reddit.com"
   },
   "addAria": {
     "message": "Site à bloquer"

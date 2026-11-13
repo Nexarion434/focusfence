@@ -48,6 +48,7 @@ PRIVADO POR DISEÑO
 • Tu lista, tus ajustes y tus estadísticas se quedan en tu dispositivo
 • El acceso a las webs se pide de una en una, solo para las que bloqueas. Si lo rechazas, la web sigue bloqueada
 • Software libre bajo licencia GNU AGPL v3
+• Disponible en español, inglés, francés y alemán
 
 ━━━━━━━━━━━━━━━━━━━━
 BUENO SABERLO (LÍMITES HONESTOS)

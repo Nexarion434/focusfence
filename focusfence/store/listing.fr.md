@@ -48,6 +48,7 @@ PRIVÉ PAR CONCEPTION
 • Votre liste, vos réglages et vos statistiques restent sur votre appareil
 • L'accès aux sites est demandé un site à la fois, seulement pour ceux que vous bloquez. Si vous refusez, le site reste bloqué
 • Logiciel libre sous licence GNU AGPL v3
+• Disponible en français, anglais, espagnol et allemand
 
 ━━━━━━━━━━━━━━━━━━━━
 BON À SAVOIR (LIMITES HONNÊTES)

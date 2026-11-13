@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 80 automated tests green, store zip in `focusfence/dist/`. UI in English, French, Spanish and German.
+Current state: PR #1 open, 83 automated tests green. The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
 
 ## Costs at a glance
 
@@ -73,17 +73,17 @@ Load `focusfence/dist/focusfence/` unpacked after `npm run build`. These checks 
 
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
-- [ ] `cd focusfence && npm test && npm run build`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
+- [ ] After setting `EXTPAY_ID` (step 5): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
 - [ ] Copy listing text, single-purpose statement, permission justifications and privacy answers from `focusfence/store/listing.md`.
-- [ ] Upload the 5 screenshots in the order given in `focusfence/store/screenshots.md`, plus `promo-tile-440x280.png`.
+- [ ] Upload the 5 English screenshots (`focusfence/screenshots/store-*.png`) in the order given in `focusfence/store/screenshots.md`, plus `promo-tile-440x280.png`.
 - [ ] Privacy policy URL: the published `privacy.html` (from step 2).
 - [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the listing file.
 
 ## 8. Translations
 
 - [ ] In the dashboard, add the **French, Spanish and German** listings from `focusfence/store/listing.fr.md`, `listing.es.md` and `listing.de.md`. Title and short description must match `src/_locales/<lang>/messages.json`.
+- [ ] For each of those languages, upload its own screenshots and promo tile from `focusfence/screenshots/fr/`, `es/` and `de/` (same order as English).
 - [ ] Optional: have a native speaker proofread the UI strings (`focusfence/scripts/i18n/strings.mjs`, one table for all four languages), then run `npm run i18n`.
-- [ ] Optional: localized screenshots. The current set is English only.
 
 ## 9. Marketing (drafts only; nothing was posted)
 
