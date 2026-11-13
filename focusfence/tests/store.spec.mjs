@@ -40,3 +40,26 @@ test('five 1280x800 store screenshots + 440x280 promo tile per language, caption
   }
   expect(pngSize('src/icons/icon128.png')).toEqual([128, 128]);
 });
+
+test('CWS submission checklist: every permission justified (≤ 1000 chars), values match manifest, listing and config', () => {
+  const doc = read('store/cws-submission.md');
+  const mf = JSON.parse(read('src/manifest.json'));
+  const block = (label) => {
+    const m = new RegExp('\\*\\*' + label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\*\\*[^\\n]*\\n```\\n([\\s\\S]*?)\\n```').exec(doc);
+    return m && m[1];
+  };
+  for (const p of mf.permissions) {
+    const j = block(p);
+    expect(j, `justification for ${p}`).toBeTruthy();
+    expect(j.length, p).toBeLessThanOrEqual(1000);
+  }
+  const host = block('Host permission');
+  expect(host.length).toBeLessThanOrEqual(1000);
+  for (const h of [...mf.optional_host_permissions, ...mf.content_scripts.flatMap((c) => c.matches)]) expect(host).toContain(h);
+  const single = /## Single purpose description\n\n```\n([\s\S]*?)\n```/.exec(doc)[1];
+  expect(single.length).toBeLessThanOrEqual(1000);
+  expect(read('store/listing.md')).toContain(single);
+  const privacyUrl = /PRIVACY_URL: '([^']+)'/.exec(read('src/config.js'))[1];
+  expect(doc).toContain('```\n' + privacyUrl + '\n```');
+  expect(doc).toContain(S.extName.en);
+});

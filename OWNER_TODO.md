@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 83 automated tests green. The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
+Current state: PR #1 open, 84 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
 
 ## Costs at a glance
 
@@ -10,7 +10,7 @@ Current state: PR #1 open, 83 automated tests green. The store zip in `focusfenc
 | 1 | Chrome Web Store developer registration | **US$5, one-time** (covers all your extensions; confirm the amount on the registration page) | Before the first upload | **Yes** |
 | 2 | Stripe card processing (through ExtensionPay) | **≈ 2.9% + US$0.30 per US card payment**, about +1–1.5% for international cards, +1% if currency conversion applies. No monthly fee | Per sale | Yes, if you sell Pro |
 | 3 | ExtensionPay service fee | **5% per transaction, at time of charge.** No up-front cost, no monthly fee (source: extensionpay.com pricing section, checked 2026-11-13; "lower fees and flat monthly rates are available for high-volume accounts"). Payments land in **your own Stripe account**, so Stripe's fees (#2) come **on top** | Per sale | Yes, if you sell Pro |
-| 4 | GitHub Pages while the repo stays **private** | **≈ US$4/month** for GitHub Pro (from memory, check github.com/pricing); **US$0** if the repo is made public | Monthly | Only if you keep the repo private *and* host the site on GitHub |
+| 4 | GitHub Pages | **US$0**: the repo is public (done 2026-11-13) | — | Done, free |
 | 5 | Sales tax / VAT handling (e.g. Stripe Tax or an accountant) | Variable, to check with your accountant | Ongoing | Depends on where you sell |
 | 6 | Legal review of AGPL licensing / privacy policy | Variable | Once | Optional, recommended |
 | 7 | Custom domain for the website | Optional, not needed (GitHub Pages URL works) | Yearly | No |
@@ -29,21 +29,21 @@ On the monthly plan, 18% goes to fees, mostly because of Stripe's fixed 30¢. Ov
 - [ ] Review and merge **PR #1** (`feat/focusfence-v1` → `main`): https://github.com/Nexarion434/focusfence/pull/1
       Agents are not allowed to merge on this server.
 
-## 2. Repository visibility + website (owner decision, not done)
+## 2. Repository visibility + website (done 2026-11-13, one follow-up after merge)
 
-The repo is **private**, and GitHub Pages is **not enabled**: both are your call.
+Done on your approval, after a history scan: gitleaks 8.21.2 found 0 leaks in 25 commits, and a grep of every blob found no tokens, keys, `.env`, local paths or personal emails. The only identity in the history is the commit author `Steve (agents-paradev) <hello@retype.studio>`, which is now public.
 
-- [ ] Decide on the website host. Either make the repo public (free Pages, and it also satisfies the AGPL "source available" link in the extension), or keep it private and pay for GitHub Pro (cost #4), or host `docs/` anywhere else that serves static files.
-      Make public: `gh repo edit Nexarion434/focusfence --visibility public --accept-visibility-change-consequences`
-- [ ] Enable Pages from `main` / `/docs` (after step 1):
-      `gh api -X POST repos/Nexarion434/focusfence/pages -f 'source[branch]=main' -f 'source[path]=/docs'`
-- [ ] Check that https://nexarion434.github.io/focusfence/ and `/privacy.html` load.
-- [ ] If the repo stays private, AGPL users can't follow the "Source code" link. The zip itself contains the full source, but publish the source somewhere public or change `SOURCE_URL` in `focusfence/src/config.js`.
+- [x] Repo made **public**.
+- [x] GitHub Pages enabled from **`feat/focusfence-v1` / `/docs`** (main isn't merged yet). The landing page, `privacy.html`, `blog/`, `robots.txt` and `sitemap.xml` return 200.
+- [ ] **After merging PR #1, switch Pages to `main`.** Otherwise the site stops updating, and breaks if the branch is deleted:
+      `gh api -X PUT repos/Nexarion434/focusfence/pages -f 'source[branch]=main' -f 'source[path]=/docs'`
+      Then check https://nexarion434.github.io/focusfence/ and `/privacy.html` again.
+- [ ] Until the merge, the site footer's "GNU AGPL v3" link (`/blob/main/focusfence/LICENSE`) returns 404. It fixes itself once `main` has the code.
 - [ ] If the account, repo or host changes, update `SOURCE_URL`/`PRIVACY_URL` in `focusfence/src/config.js`, `SOURCE_URL`/`SITE_URL` in `focusfence/scripts/docs.mjs` and the URLs in `focusfence/store/*.md`. Then run `npm run docs && npm run build`.
 
 ## 3. Privacy policy contact
 
-- [ ] Replace `[CONTACT EMAIL — to be filled in before publication]` in `focusfence/store/privacy-policy.md` with a dedicated support address.
+- [ ] Replace `[CONTACT EMAIL — to be filled in before publication]` in `focusfence/store/privacy-policy.md` with a dedicated support address. **The live privacy page shows this placeholder now**, so do this before submitting.
 - [ ] `cd focusfence && npm run docs`, then commit `docs/` and push.
 
 ## 4. Licensing decision
@@ -71,13 +71,22 @@ Load `focusfence/dist/focusfence/` unpacked after `npm run build`. These checks 
 
 ## 7. Chrome Web Store submission
 
+Follow **`focusfence/store/cws-submission.md`** field by field. It has the exact values to paste:
+- privacy URL
+- single-purpose statement
+- one justification per permission plus the host permission
+- remote code: No
+- data-usage boxes and certifications
+- distribution: in-app purchases
+- reviewer test instructions
+
+A test keeps it in sync with the manifest and the listing.
+
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
-- [ ] After setting `EXTPAY_ID` (step 5): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
-- [ ] Copy listing text, single-purpose statement, permission justifications and privacy answers from `focusfence/store/listing.md`.
-- [ ] Upload the 5 English screenshots (`focusfence/screenshots/store-*.png`) in the order given in `focusfence/store/screenshots.md`, plus `promo-tile-440x280.png`.
-- [ ] Privacy policy URL: the published `privacy.html` (from step 2).
-- [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the listing file.
+- [ ] After setting `EXTPAY_ID` (step 5) and the contact email (step 3): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
+- [ ] Fill the Store listing, Privacy, Distribution and Test instructions tabs from the checklist. Upload the 5 English screenshots plus the promo tile.
+- [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the checklist.
 
 ## 8. Translations
 

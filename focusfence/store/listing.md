@@ -113,7 +113,7 @@ Certifications (all three apply):
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose
 - I do not use or transfer user data to determine creditworthiness or for lending purposes
 
-Privacy policy URL: `https://nexarion434.github.io/focusfence/privacy.html` (live once GitHub Pages is enabled, see OWNER_TODO.md).
+Privacy policy URL: `https://nexarion434.github.io/focusfence/privacy.html` (live since 2026-11-13). Field-by-field submission values: `store/cws-submission.md`.
 
 ## Assets
 
