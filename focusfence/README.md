@@ -66,7 +66,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 69 tests (unit, e2e, axe accessibility, store checks): core unit tests + e2e + production-build smoke test
+npm test            # 80 tests (unit, e2e, axe accessibility, i18n fr/es/de, onboarding, site, store checks): core unit tests + e2e + production-build smoke test
 ```
 
 The e2e suite launches Playwright's Chromium (new headless) with the unpacked extension and routes all traffic through a local "fake internet" proxy (TLS terminated with a throwaway self-signed cert, so HSTS-preloaded hosts such as reddit.com work). Headless Chromium cannot click Chrome's permission prompt, so the test copy of the extension gets host access up front; one test uses the real manifest to verify the no-access fallback.
@@ -85,9 +85,22 @@ npm run screenshots  # screenshots/*.png
 npm run icons        # src/icons/*.png
 ```
 
+## Languages
+
+The UI, manifest name/description and store listings are available in **English (default), French, Spanish and German**.
+
+- Single source: `scripts/i18n/strings.mjs` (one table, four languages side by side).
+- `npm run i18n` writes `src/_locales/*/messages.json`; `npm run i18n:check` validates it (also part of `npm test`).
+- Pages use `data-i18n`, `data-i18n-rich` and `data-i18n-attr`. JS uses `FFI18N.t()` and `plural()`. Weekdays, dates, times and prices come from `Intl`.
+- To add a language: add a column to every row in `strings.mjs`, add the code to `LANGS`, run `npm run i18n`, and add a `store/listing.<lang>.md`.
+
+## Onboarding
+
+`src/onboarding.html` opens on first install of the store build. It has three steps: pick up to 3 sites (one permission prompt for all of them), how Incognito works, then Free vs Pro. It can be reopened from Settings → Plan.
+
 ## Website (GitHub Pages)
 
-`npm run docs` regenerates `../docs/` (repo root): landing page + `privacy.html`, rendered from `store/privacy-policy.md`. Serve it with GitHub Pages from branch `main`, folder `/docs`.
+`npm run docs` regenerates `../docs/` (repo root): landing page, `privacy.html` (rendered from `store/privacy-policy.md`) and `blog/` (rendered from `../marketing/blog/*.md`; posts with `draft: true` get `noindex` and stay out of the sitemap). Marketing drafts live in `../marketing/` and are not published. Serve it with GitHub Pages from branch `main`, folder `/docs`.
 
 ## License
 
