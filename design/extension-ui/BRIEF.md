@@ -5,7 +5,8 @@ Status: **proposal on branch `design/extension-ui`** (PR #4 against `feat/focusf
 - **Round 1** restyled the existing layouts. The owner's verdict: a recolour of the same screens.
 - **Round 2** started again from the feature list: "the living fence". The three concepts and the choice are in [`CONCEPTS.md`](CONCEPTS.md).
 - **Round 3** redrew the fence itself after the owner's verdict on round 2 ("much better overall, but the fence itself is ugly"): four directions, and the lantern. It also made the popup shorter and corrected the onboarding's claim about the free plan.
-- **Round 4** (this update) follows the owner's own decision: from AI reference renders, they picked an **abstract** fence, a short row of frosted-glass pills with the current site lit ([`CONCEPTS.md`](CONCEPTS.md), round 4). The round also fixes two findings logged by the website's branch: the popup's height in French and German, and the schedule footer in a 400 px window. Its critique log is in section 7.
+- **Round 4** followed the owner's own decision: from AI reference renders, they picked an **abstract** fence, a short row of frosted-glass pills with the current site lit ([`CONCEPTS.md`](CONCEPTS.md), round 4). It also fixed two findings logged by the website's branch (the popup's height in French and German, the schedule footer in a 400 px window).
+- **Round 5** (this update) is a polish pass after a side-by-side review against the owner's references: chunky pills instead of slender arches, every pill mirrored on a seamless glossy floor, end pills that stay visible in light, a soft and wide halo. Its critique log is in section 7.
 
 This brief describes the system as it now stands.
 
@@ -13,7 +14,7 @@ Nothing about behaviour changes: same features, prices, payments (ExtensionPay),
 
 ## 1. Direction: the living fence, in glass and light
 
-Your blocklist is a fence. Every site you block becomes a **pill**: a wide, soft arch, a rectangle with a full semicircle on top, in frosted glass. The pills stand in a short, symmetrical row, tallest in the middle and stepping down toward the ends like a bell, never a full-width barcode. The pill in the middle **holds the light**: it glows from inside, a halo rises behind it, its neighbours catch the light (green near it, grey-green farther out) and a pool of it lies on the ground. Which site holds the light depends on where you are:
+Your blocklist is a fence. Every site you block becomes a **pill**: a wide, soft arch, a rectangle with a full semicircle on top, in frosted glass, chunky like a pebble: the middle pill is 1.6 times as tall as wide, the end pills a little wider than tall. The pills stand in a short, symmetrical row, tallest in the middle and stepping down gently toward the ends (the middle one about 1.7 times as tall as the end ones), never a full-width barcode. A glossy floor mirrors every pill. The pill in the middle **holds the light**: it glows from inside, a halo rises behind it, its neighbours catch the light (green near it, grey-green farther out) and a pool of it lies on the ground. Which site holds the light depends on where you are:
 - on the block page, the site you just tried;
 - in the popup, the site on this tab when it's on your list, otherwise your newest site;
 - in Settings and onboarding, your newest site (in onboarding, your first pick).
@@ -85,26 +86,28 @@ Below 900 px the stage sits above the step.
 
 **The pill** (`.pill` in `src/styles/base.css`) is one object on every page: a `border-radius` arch with three layers of gradient (the glass, the green it takes on near the light, the light on the side that faces it), an inset rim highlight along its top, a hairline edge, an inner glow and a `backdrop-filter` frost. `.pill.lit` is the light: a vertical gradient (`--lit-0/1/2`), a bright core low in the pill, an inner glow and a bloom (`--lit-bloom`). `.fence-halo` (the halo rising behind it) and `.fence-pool` (its light on the ground) belong to the same row.
 
-**The shape** comes from `FFUI.pillProfile(n)` in `src/lib/ui.js`. For position *p* of *n* (always odd, so the row stays symmetrical), at distance *d* from the middle:
-- height: `k = 0.3 + 0.7 · e^(−(d / σ)²)`, with σ = 0.75 · (m + 1) and m = (n − 1) / 2, a gentle bell;
+**The shape** comes from `FFUI.pillProfile(n)` in `src/lib/ui.js`. For position *p* of *n* (always odd, so the row stays symmetrical), at distance *d* from the middle and with m = (n − 1) / 2:
+- height, as a share of the middle pill: `k = 0.575 + 0.425 · cos²(π · d / 2m)`, a gentle bell whose ends are always 0.575 of the middle (about 1.7 times shorter), whatever the count. With the middle pill 1.6 times as tall as wide, the end pills are 0.92 times as tall as wide;
 - the light it catches: `t = e^(−d / 1.25)`;
-- how much of it shows: 1, then 0.75 for the next-to-last and 0.45 for the last pills of long rows (the ends fade);
-- which side of the light it stands on (`--side`), so the light falls on the facing side.
+- how much of it shows: 1, then 0.92 for the next-to-last and 0.6 for the last pills (the ends fade to about two thirds of their neighbour, and stay visible glass);
+- which side of the light it stands on (`--side`), so the light spills onto the facing side.
 
-Each pill gets these values through the CSSOM (`--k`, `--t0`, `--v0`, `--side`, `--i`), never through markup: the extension's CSP forbids inline style attributes. The static rows (the miniature in Settings, the windows in onboarding) take the same values from CSS.
+Each pill gets these values through the CSSOM (`--k`, `--t0`, `--v0`, `--side`, `--i`), never through markup: the extension's CSP forbids inline style attributes. The decorative rows (the block-page miniature, the Plan's fence and the Strict gate in Settings, the windows in onboarding) are built by `FFUI.pillRow(node, n)` from the same profile.
+
+**The reflection** (`.fence.mirror` in `base.css`) is the same row again, put over the row it mirrors and flipped at the ground line: every pill mirrored faintly as a silhouette in its own tint (glass doesn't mirror as glass), the light brightest, all fading downward. The floor itself has no band and no line.
 
 **The fence** is `FFUI.fence(node, { items, state, lit, min, max, progress, rise })`.
 - **Order:** the `lit` entry stands in the middle; the others alternate right and left in list order.
-- **Count:** never fewer than `min` pills (spare pills are fainter, `.pad`), never more than `max` (5 to 9 in the popup, 5 to 11 on the block page and in Settings), always odd. Beyond `max`, the words say how many sites are fenced.
+- **Count:** never fewer than `min` pills (spare pills are a little fainter, `.pad`), never more than `max` (5 to 7 in the popup, 5 to 9 in Settings, 5 to 7 on the block page), always odd. Beyond `max`, the words say how many sites are fenced.
 - **Postures** come from `data-state`: no light when paused or down, and the pills sink (`--drop`: 0.22 and 0.42 of their height); amber when strict.
 - **Diffing:** re-rendering the same entries only changes `data-state` and `--progress`, so posture changes animate, staggered from the middle (30 ms a step). A new entry's pill rises (`.enter`); with `rise`, every pill rises on the first render (the block page).
-- **Size:** each page sets `--pw` (pill width) and `--ph` (tallest pill); the gap is 9 % of the width (the reference: 110 px pills, 10 px apart). Popup: 26 × 54 px. Settings: 40 × 104 px.
+- **Size:** each page sets `--pw` (pill width) and `--ph` (the middle pill's height, 1.6 × `--pw`); the gap is 9 % of the width. Popup: 37 × 59 px. Settings: 58 × 93 px. Onboarding: 72 × 115 px (five pills).
 - **Lapsed Pro:** rules kept after Pro lapses stand in the row without catching any light (`.off`).
 
-**The block page** draws your fence with the same component, twice: the second copy, flipped at the ground line, blurred and faded, is the reflection in the glossy floor.
-- Pills are up to 110 px wide, 2.7 times as tall at the middle, and never more than 12 % of the window's height. More sites make narrower pills: the row is at most 1000 px wide (`--n`, the number of pills, is set by `FFUI.fence`).
-- The words come first. They sit in the top half, centred while they fit; otherwise they grow upward, never into the fence. When a long note, a focus session or a short window leaves them too little room, `fit()` in `blocked.js` measures them and caps the pill width (`--pw-fit`), so the fence gets smaller instead.
-- Resizing needs no rebuild: the pills are sized by CSS.
+**The block page** draws your fence with the same component, twice: the second copy is its reflection in the glossy floor, fading out before the window's edge.
+- `layout()` in `blocked.js` sizes it. Pills are about 132 px wide (at most a fifth of the window's height). The row is at most 1000 px wide: when more sites would need a wider row, fewer pills show (7 at most, 5 at least), never thinner ones. Only below about 760 px of width do the pills narrow, keeping their proportions.
+- The words come first. They sit in the top half, centred while they fit; otherwise they grow upward, never into the fence. When a long note, a focus session or a short window leaves them too little room, `layout()` measures them and makes the pills smaller instead.
+- `layout()` runs again on resize, when the fonts load and when a focus session starts or ends.
 
 ## 4. Tokens
 
@@ -187,6 +190,17 @@ Every motion runs once per change, nothing loops, and `prefers-reduced-motion` t
 
 ## 7. Critique log
 
+### Round 5: closer to the references
+
+A side-by-side review of round 4 against the owner's reference renders asked for four changes. Each was measured on the block page (1280 × 800, 1366 × 600, 1280 × 540, 1024 × 640, 900 × 700, 420 × 800, 1920 × 1080; 1, 9 and 11 sites; with a focus session and a three-line note), then checked on every surface in both themes.
+
+1. **Proportions.** Round 4's pills were slender arches (the ends 1:1.45, the middle 1:2.7) and read as tall windows. The middle pill is now 1.6 times as tall as wide and the ends 0.92, with a gentler step (the middle is 1.74 times the ends, for any count). Pills are 38 % wider on the block page (132 px; seven make a 995 px row), and 42 to 64 % wider elsewhere (popup 37 px, Settings 58 px, onboarding 72 px). To stay within 1000 px, the block page shows fewer pills rather than thinner ones: 7 at most, 5 in windows under about 1050 px. The popup shows up to 7, Settings up to 9, onboarding 5.
+2. **Floor.** The dark block page had a hard floor band with almost no reflection, and the light one a flat grey band with only the middle pill mirrored. The floor is now seamless (no band, no line), and every pill is mirrored as a faint silhouette in its own tint, fading downward, with the light brightest and its pool under the middle. The same reflection was added to onboarding's card, and the ground lines in the popup, Settings and the decorative rows were softened.
+3. **Light falloff.** The end pills had faded to almost nothing in light. They now show at 0.6 (about two thirds of their neighbour), the light-theme glass is a milkier sage with a visible rim and edge, and spare pills are only a little fainter (× 0.85 instead of × 0.55).
+4. **Dark halo.** It is wider and taller (2.05 × the middle pill's height) and softer, and the light spills further onto the facing sides of the neighbours.
+
+Also: the decorative rows (miniature, Plan, Strict gate, onboarding's windows) are now built from the shared profile instead of numbers copied into CSS; and in step 3 of onboarding, the Pro pill stands at the end of the row, so it opts out of the end fade.
+
 ### Round 4: glass pills
 
 Each pass captured every state × 2 themes (`npm run design:shots`), the block page at 1280 × 800, 1366 × 600, 1280 × 540, 1024 × 640, 900 × 700, 420 × 800 and 1920 × 1080 with 1, 9 and 11 sites, a focus session and a three-line note, and the popup and Settings in en, fr, es and de at 400 px.
@@ -267,6 +281,11 @@ No structural issues left.
 - "m.reddit.com ." in the Blocklist helper and the strict-mode limits: inline code no longer has a chip, so its padding no longer reads as a space before the period, in every language.
 
 ## 8. Results
+
+Round 5:
+- **Tests:** 101 passed (`npm test`, the full suite).
+- **Final screenshots:** `design/extension-ui/screenshots/` (`npm run design:shots`), every state in light and dark.
+- **Store assets, website, zip:** regenerated (`npm run screenshots:all`, `npm run docs`, `npm run build`).
 
 Round 4:
 - **Tests:** 101 passed (`npm test`, the full suite).

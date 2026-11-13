@@ -1,6 +1,6 @@
 # FocusFence extension: concepts
 
-- **Round 4** (at the end): the owner's own decision, an abstract fence of frosted-glass pills, and how it maps onto real data.
+- **Round 4** (near the end): the owner's own decision, an abstract fence of frosted-glass pills, and how it maps onto real data. **Round 5** brings its proportions and floor closer to the owner's references.
 - **Round 3** (below the round 2 decision): four ways to draw the fence itself, and the choice.
 - **Round 2**: three concepts for the whole UI, and the choice of "the living fence".
 
@@ -174,12 +174,12 @@ The reference is a single composition. The fence is data, so it needs rules:
 
 | The reference shows | Rule |
 |---|---|
-| 7–9 pills | one pill per blocked site, at least 5 (spare pills are fainter) and at most 11 on the block page and in Settings, 9 in the popup; always odd, so the bell stays symmetrical. Beyond the maximum, the words carry the count |
+| 7–9 pills | one pill per blocked site, at least 5 (spare pills are fainter) and at most 7 on the block page and in the popup, 9 in Settings (round 5; round 4 allowed 11); always odd, so the bell stays symmetrical. Beyond the maximum, the words carry the count |
 | the middle pill lit | the site you tried (block page), the site on this tab or your newest (popup), your newest (Settings), your first pick (onboarding) |
-| heights stepping down like a bell | `k = 0.3 + 0.7 · e^(−(d / σ)²)`, σ = 0.75 · (m + 1): the same gentle curve for 5 pills or 11 |
+| heights stepping down like a bell | `k = 0.575 + 0.425 · cos²(π · d / 2m)` since round 5: the ends always 0.575 of the middle, for any count |
 | neighbours tinted by the light | each pill catches `t = e^(−d / 1.25)` of the light, on the side that faces it |
-| the ends fading | the last two pills of a long row show at 75 % and 45 % |
-| a compact row, never a barcode | more sites make narrower pills; the row is at most 1000 px wide on the block page |
+| the ends fading | the last two pills show at 92 % and 60 % (round 5; round 4 faded them to 45 %) |
+| a compact row, never a barcode | the row is at most 1000 px wide on the block page; since round 5, more sites mean fewer pills shown, not thinner ones |
 | the top half empty for the text | the words keep their room at every window size; the fence shrinks rather than meet them |
 | the light's halo | a volumetric column in dark; a soft bloom in light, where a tall column would read as a stain (the round 2 lesson) |
 
@@ -190,6 +190,21 @@ States are light, as before: no light (and sunk pills) when blocking is off or p
 - **Block page:** the composition itself, the fence and its reflection on a glossy floor.
 - **Popup:** the same row, compact (26 px pills).
 - **Settings:** the Blocklist header (40 px pills), the block-page miniature, the Plan view (an amber light for the offer, green once you have Pro) and the stats chart (today's bar holds the light).
-- **Onboarding:** seven pills, the three in the middle are yours: outlines that fill as you pick sites, the first one lit. The Incognito window's fence is outlines until FocusFence is allowed there; step 3 adds an amber pill with a lock.
+- **Onboarding:** five pills since round 5 (seven in round 4), the three in the middle are yours: outlines that fill as you pick sites, the first one lit. The Incognito window's fence is outlines until FocusFence is allowed there; step 3 adds an amber pill with a lock.
 
 Renders: `screenshots/block-light.png` and `screenshots/block-dark.png`, and every state in `screenshots/`. The build and its critique passes are in `BRIEF.md` (round 4).
+
+## Round 5: closer to the references
+
+A side-by-side review against the owner's renders found round 4's pills too slender: they read as tall windows, not soft glass pebbles. The references, measured:
+
+| | Reference | Round 4 | Round 5 |
+|---|---|---|---|
+| middle pill, width : height | about 1 : 1.6 | 1 : 2.7 | 1 : 1.6 |
+| end pills, width : height | about 1 : 0.9 | 1 : 1.45 | 1 : 0.92 |
+| middle ÷ end height | about 1.7 | 1.9 and more | 1.74, for any count |
+| gap | 8–10 % of a pill | 9 % | 9 % |
+| floor | glossy, every pill mirrored faintly, a light pool | a band, little reflection | seamless, every pill mirrored |
+| end pills (light) | clearly visible milky glass | almost invisible | about two thirds of their neighbour |
+
+To keep the row within 1000 px with wider pills, the block page shows fewer of them rather than thinner ones (7 at most). The rule from round 4 stands: one pill per site, the current site lit, the words carry the count.
