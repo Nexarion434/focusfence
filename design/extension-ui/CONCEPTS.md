@@ -1,5 +1,6 @@
 # FocusFence extension: concepts
 
+- **Round 4** (at the end): the owner's own decision, an abstract fence of frosted-glass pills, and how it maps onto real data.
 - **Round 3** (below the round 2 decision): four ways to draw the fence itself, and the choice.
 - **Round 2**: three concepts for the whole UI, and the choice of "the living fence".
 
@@ -158,3 +159,37 @@ The first pass of all four repeated round 2's mistake: a dense row across the wh
 - **From Horizon:** atmospheric falloff. The wall fades into haze (dawn) or darkness (night) away from the lantern.
 
 The build and its critique passes are in `BRIEF.md` (round 3).
+
+## Round 4: the owner's direction, glass pills
+
+The owner generated AI reference renders and picked an **abstract** direction for the fence. Its description, in short:
+- **Dark:** near-black with a deep green tint, fading to pure black at the top; a short row of 7–9 wide pills (rectangles with a full semicircle top, about 110 px wide and 10 px apart, no rails, no points), the tallest in the middle and the others stepping down like a bell. The pills are frosted, faintly emissive glass with a brighter rim along the top. The middle pill is the light: bright emerald, glowing from inside, with a volumetric halo behind it, lighting its neighbours (green nearby, grey-green farther out), over a glossy floor with a soft reflection and a pool of light. The top half stays empty for the words.
+- **Light:** warm paper (`#F7F8F5`), the same row in milky frosted glass, very pale sage, greener toward the middle; the middle pill solid saturated green (`#1E8A45`) with a soft bloom; a subtle reflection; airy.
+
+The idea of rounds 2 and 3 survives intact (one element per blocked site, your site lit); the drawing becomes the owner's.
+
+### From a picture to data
+
+The reference is a single composition. The fence is data, so it needs rules:
+
+| The reference shows | Rule |
+|---|---|
+| 7–9 pills | one pill per blocked site, at least 5 (spare pills are fainter) and at most 11 on the block page and in Settings, 9 in the popup; always odd, so the bell stays symmetrical. Beyond the maximum, the words carry the count |
+| the middle pill lit | the site you tried (block page), the site on this tab or your newest (popup), your newest (Settings), your first pick (onboarding) |
+| heights stepping down like a bell | `k = 0.3 + 0.7 · e^(−(d / σ)²)`, σ = 0.75 · (m + 1): the same gentle curve for 5 pills or 11 |
+| neighbours tinted by the light | each pill catches `t = e^(−d / 1.25)` of the light, on the side that faces it |
+| the ends fading | the last two pills of a long row show at 75 % and 45 % |
+| a compact row, never a barcode | more sites make narrower pills; the row is at most 1000 px wide on the block page |
+| the top half empty for the text | the words keep their room at every window size; the fence shrinks rather than meet them |
+| the light's halo | a volumetric column in dark; a soft bloom in light, where a tall column would read as a stain (the round 2 lesson) |
+
+States are light, as before: no light (and sunk pills) when blocking is off or paused, amber light in strict mode, outlines for an empty fence. The site's initial stays on the lit pill, small and white near the top, as the brief allows.
+
+### Applied everywhere
+
+- **Block page:** the composition itself, the fence and its reflection on a glossy floor.
+- **Popup:** the same row, compact (26 px pills).
+- **Settings:** the Blocklist header (40 px pills), the block-page miniature, the Plan view (an amber light for the offer, green once you have Pro) and the stats chart (today's bar holds the light).
+- **Onboarding:** seven pills, the three in the middle are yours: outlines that fill as you pick sites, the first one lit. The Incognito window's fence is outlines until FocusFence is allowed there; step 3 adds an amber pill with a lock.
+
+Renders: `screenshots/block-light.png` and `screenshots/block-dark.png`, and every state in `screenshots/`. The build and its critique passes are in `BRIEF.md` (round 4).

@@ -4,32 +4,40 @@ Status: **proposal on branch `design/extension-ui`** (PR #4 against `feat/focusf
 
 - **Round 1** restyled the existing layouts. The owner's verdict: a recolour of the same screens.
 - **Round 2** started again from the feature list: "the living fence". The three concepts and the choice are in [`CONCEPTS.md`](CONCEPTS.md).
-- **Round 3** (this update) redraws the fence itself, after the owner's verdict on round 2: "much better overall, but the fence itself is ugly". Four directions were explored; the lantern was chosen ([`CONCEPTS.md`](CONCEPTS.md), round 3). The round also makes the popup shorter and corrects the onboarding's claim about the free plan. Its critique log is in section 7.
+- **Round 3** redrew the fence itself after the owner's verdict on round 2 ("much better overall, but the fence itself is ugly"): four directions, and the lantern. It also made the popup shorter and corrected the onboarding's claim about the free plan.
+- **Round 4** (this update) follows the owner's own decision: from AI reference renders, they picked an **abstract** fence, a short row of frosted-glass pills with the current site lit ([`CONCEPTS.md`](CONCEPTS.md), round 4). The round also fixes two findings logged by the website's branch: the popup's height in French and German, and the schedule footer in a 400 px window. Its critique log is in section 7.
 
 This brief describes the system as it now stands.
 
-Nothing about behaviour changes: same features, prices, payments (ExtensionPay), permissions, storage format and i18n semantics. One string was added, the "Focus" tab label in en, fr, es and de.
+Nothing about behaviour changes: same features, prices, payments (ExtensionPay), permissions, storage format and i18n semantics. Strings: round 2 added the "Focus" tab label in en, fr, es and de; round 3 corrected the onboarding's sentence on the free plan; round 4 shortened two labels in French and one in German so the popup keeps its height.
 
-## 1. Direction: the living fence, made of light
+## 1. Direction: the living fence, in glass and light
 
-Your blocklist is a fence. Every site you block becomes a picket, drawn with the logo's 45° tip (it rises half the picket's width) and the site's initial. The pickets are **lanterns**: while they stand guard they hold the light, and the fence's **posture and light are the state**:
+Your blocklist is a fence. Every site you block becomes a **pill**: a wide, soft arch, a rectangle with a full semicircle on top, in frosted glass. The pills stand in a short, symmetrical row, tallest in the middle and stepping down toward the ends like a bell, never a full-width barcode. The pill in the middle **holds the light**: it glows from inside, a halo rises behind it, its neighbours catch the light (green near it, grey-green farther out) and a pool of it lies on the ground. Which site holds the light depends on where you are:
+- on the block page, the site you just tried;
+- in the popup, the site on this tab when it's on your list, otherwise your newest site;
+- in Settings and onboarding, your newest site (in onboarding, your first pick).
+
+The fence's **light is the state**:
 
 | Posture | When | Look |
 |---|---|---|
-| up | blocking on (always or within the schedule) | standing and lit: jewel green with white initials in light, blades of light with a halo in dark |
-| focus | focus session running | lit, with a stronger halo; the lower rail fills as the round goes by |
-| paused | outside the schedule | a third sunk into the ground, a muted green |
-| down | blocking off | unlit (sage in light, graphite in dark) and half sunk; the initials still show |
+| up | blocking on (always or within the schedule) | lit: a solid saturated green pill with a soft bloom (light), a bright emerald pill with a volumetric halo (dark) |
+| focus | focus session running | lit, with a stronger halo; the light rises inside the lit pill as the round goes by |
+| paused | outside the schedule | no light, the pills a fifth sunk into the ground |
+| down | blocking off | no light, the pills almost half sunk; the initial still shows |
 | strict | strict mode | lit amber |
-| empty | nothing blocked yet | three or five outlined slots, open at the ground |
+| empty | nothing blocked yet | five outlines, waiting |
+
+Light theme: warm paper (`#F7F8F5`), milky pills in very pale sage, greener toward the light. Dark theme: near-black with a deep green tint at the horizon, fading to pure black at the top; translucent, faintly emissive glass with a brighter rim along each pill's top.
 
 The same object greets you everywhere:
 - in the popup, it is the status, readable in two seconds;
 - in Settings, it is the hero of the Blocklist;
-- on the block page, it is the wall you hit, and your site's picket is the lantern, the scene's only light;
-- in onboarding, you build it: each site you pick rises lit into an outlined slot.
+- on the block page, it is the fence you hit, with your site in the light, on a glossy ground that reflects it;
+- in onboarding, you build it: each site you pick rises into one of three outlined slots.
 
-The stats chart's bars are pickets too (today's is lit), and so are the Plan view's fence and the block-page miniature in Settings.
+The stats chart's bars are pills too (today's holds the light), and so are the Plan view's fence (amber for the offer, green once you have Pro), the Strict mode gate (amber, with a lock), the block-page miniature in Settings and the small counters (focus rounds, the Free and Pro marks).
 
 Text always says what the fence shows, so the fence is `aria-hidden` and nobody depends on the picture.
 
@@ -37,8 +45,8 @@ What stays from round 1 (the owner liked it): tokens, type, hairlines, the two-t
 
 ## 2. Information architecture
 
-**Popup (360 px, 448 px tall with a site on the tab; round 2 was 484), top to bottom.** Each part has one job.
-1. **Stage:** your fence on a ground line. Under it, the state title and summary and the master switch.
+**Popup (360 px, 448 px tall with a site on the tab in every language; round 2 was 484), top to bottom.** Each part has one job.
+1. **Stage:** your fence, a compact row of glass pills on a ground line, the site on this tab (or your newest) in the light. Under it, the state title and summary and the master switch.
 2. **This tab:** the site's monogram, host and note, and one full-width primary action, "Block site". A site already on the list shows a confirmed "✓ Blocked"; browser pages show only the note.
 3. **Add:** a typed field (Enter adds).
 4. **Focus:** one line while idle (what a session does, plus Start). While running, the row becomes the timer, with round pickets and a progress bar, and the stage fence glows.
@@ -75,40 +83,32 @@ Below 900 px the stage sits above the step.
 
 ## 3. The fence component
 
-**The picket material** (`.pk` in `src/styles/base.css`) is one object on every page:
-- a body that darkens toward the ground (`--pk-0`, `--pk-1`, `--pk-2`);
-- a tip cut in two facets, the left one catching the light;
-- a shaded right face and a 1 px edge light.
+**The pill** (`.pill` in `src/styles/base.css`) is one object on every page: a `border-radius` arch with three layers of gradient (the glass, the green it takes on near the light, the light on the side that faces it), an inset rim highlight along its top, a hairline edge, an inner glow and a `backdrop-filter` frost. `.pill.lit` is the light: a vertical gradient (`--lit-0/1/2`), a bright core low in the pill, an inner glow and a bloom (`--lit-bloom`). `.fence-halo` (the halo rising behind it) and `.fence-pool` (its light on the ground) belong to the same row.
 
-All of it is CSS gradients on a `clip-path` polygon, so it is crisp at any size and needs no image. A context only sets colours:
-- `.lit` turns a picket into a lantern (`--lit-*`);
-- `.wall-pk` makes it a picket of the block page's wall (`--wall-*`: sage at dawn, graphite at night);
-- unlit pickets use `--unlit-*`;
-- `.slot-outline` makes it an empty slot: the picket's outline, open at the ground (an even-odd `clip-path` ring).
+**The shape** comes from `FFUI.pillProfile(n)` in `src/lib/ui.js`. For position *p* of *n* (always odd, so the row stays symmetrical), at distance *d* from the middle:
+- height: `k = 0.3 + 0.7 · e^(−(d / σ)²)`, with σ = 0.75 · (m + 1) and m = (n − 1) / 2, a gentle bell;
+- the light it catches: `t = e^(−d / 1.25)`;
+- how much of it shows: 1, then 0.75 for the next-to-last and 0.45 for the last pills of long rows (the ends fade);
+- which side of the light it stands on (`--side`), so the light falls on the facing side.
 
-The colours are registered with `@property`, so a posture change cross-fades them instead of snapping.
+Each pill gets these values through the CSSOM (`--k`, `--t0`, `--v0`, `--side`, `--i`), never through markup: the extension's CSP forbids inline style attributes. The static rows (the miniature in Settings, the windows in onboarding) take the same values from CSS.
 
-**The fence** is `FFUI.fence(node, { items, state, max, progress, ghosts })` in `src/lib/ui.js`.
-- **Geometry:** `--w`, `--h` and `--gap`: 16 × 48 px with 10 px gaps in the popup, 22 × 70 px with 14 px gaps in Settings. Two thin rails sit behind the pickets at 30 % and 68 % of the height, and overhang the ends by only 3 px.
-- **Initials:** under the tip, at 0.6 × the width, so they still show when the fence sinks. They are white on the green in light (as in the logo), dark on the light in dark.
-- **Postures** come from `data-state`. The sink (`--drop`) is a share of the fence's height: 0.34 when paused, 0.52 when down. Rails sink with the pickets. Round 2 moved the rails by a percentage of their own 3 px height, so they barely moved.
-- **Ground:** the popup and the Blocklist hero stand the fence on a ground line with a soft contact shadow (light) or a pool of its light (dark), as wide as the fence (`--fence-w`, measured by the page). In dark, the fence also casts a halo (`drop-shadow` of the lantern colour).
-- **Diffing:** re-rendering the same entries only changes `data-state` and `--progress`, so posture changes animate with a 26 ms stagger per picket, on a spring curve. A new entry's picket rises (`.enter`). The first render is still.
-- **Long lists:** above `max` pickets (11 in the popup, 16 in Settings), the last slot becomes a "+N" count beside the fence, clear of its rails.
-- **Lapsed Pro:** rules kept after Pro lapses stand unlit among the lit ones (`.off`).
+**The fence** is `FFUI.fence(node, { items, state, lit, min, max, progress, rise })`.
+- **Order:** the `lit` entry stands in the middle; the others alternate right and left in list order.
+- **Count:** never fewer than `min` pills (spare pills are fainter, `.pad`), never more than `max` (5 to 9 in the popup, 5 to 11 on the block page and in Settings), always odd. Beyond `max`, the words say how many sites are fenced.
+- **Postures** come from `data-state`: no light when paused or down, and the pills sink (`--drop`: 0.22 and 0.42 of their height); amber when strict.
+- **Diffing:** re-rendering the same entries only changes `data-state` and `--progress`, so posture changes animate, staggered from the middle (30 ms a step). A new entry's pill rises (`.enter`); with `rise`, every pill rises on the first render (the block page).
+- **Size:** each page sets `--pw` (pill width) and `--ph` (tallest pill); the gap is 9 % of the width (the reference: 110 px pills, 10 px apart). Popup: 26 × 54 px. Settings: 40 × 104 px.
+- **Lapsed Pro:** rules kept after Pro lapses stand in the row without catching any light (`.off`).
 
-**The block page** draws its own wall in `blocked.js`:
-- pickets 14 px wide, 28 px apart, across the window;
-- the lantern in the middle, 22 px wide and 56 px taller;
-- each picket's distance from the lantern sets its fade (`--v`) and how much of the lantern's light it catches on its facing edge and tip facet (`--rim`);
-- the reflection is the same wall built a second time and flipped at the ground line. It is built through the CSSOM because the extension's CSP forbids inline style attributes, and `-webkit-box-reflect` does not render with the wall's edge mask;
-- the ground carries the lantern's pool of light.
-
-Resizing rebuilds the wall without animating; short windows get a lower fence (`max-height` 700 and 560 px).
+**The block page** draws your fence with the same component, twice: the second copy, flipped at the ground line, blurred and faded, is the reflection in the glossy floor.
+- Pills are up to 110 px wide, 2.7 times as tall at the middle, and never more than 12 % of the window's height. More sites make narrower pills: the row is at most 1000 px wide (`--n`, the number of pills, is set by `FFUI.fence`).
+- The words come first. They sit in the top half, centred while they fit; otherwise they grow upward, never into the fence. When a long note, a focus session or a short window leaves them too little room, `fit()` in `blocked.js` measures them and caps the pill width (`--pw-fit`), so the fence gets smaller instead.
+- Resizing needs no rebuild: the pills are sized by CSS.
 
 ## 4. Tokens
 
-The tokens are round 1's, plus the picket materials added in round 3 (the last three rows). They live in `src/styles/base.css`. The older names (`--bg`, `--surface`, `--ink`, `--accent`, `--pro-soft`, …) keep working for the store compositions.
+The tokens are round 1's, plus the fence's glass and light (round 4, the four rows after `--pro`). They live in `src/styles/base.css`. The older names (`--bg`, `--surface`, `--ink`, `--accent`, `--pro-soft`, …) keep working for the store compositions.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
@@ -116,12 +116,13 @@ The tokens are round 1's, plus the picket materials added in round 3 (the last t
 | `--surface` / `-2` / `-3` | `#FFFFFF` / `#F5F6F5` / `#EDEFEE` | `#111413` / `#171A19` / `#1D2120` | cards, hover, pressed |
 | `--line` / `-2` / `-3` | `#E5E8E6` / `#D7DBD9` / `#C2C8C5` | white 7 / 11 / 18 % | hairlines and borders |
 | `--ink` / `--ink-2` / `--muted` | `#111513` / `#3A423E` / `#5E6763` | `#F1F4F2` / `#C9D0CC` / `#8E9893` | text |
-| `--signal` | `#3A9A5B` | `#3A9A5B` | the logo green: pickets, light, chart. Never small text |
+| `--signal` | `#3A9A5B` | `#3A9A5B` | the logo green: icons, dots, progress. Never small text |
 | `--accent` / `--accent-solid` | `#287743` | `#6CC58A` / `#5DBE7E` | green text, primary buttons, focus ring |
 | `--pro` / `--pro-solid` | `#8A5A0B` / `#D9A13F` | `#D9A74B` | Pro and strict mode |
-| `--lit-0` / `-1` / `-2` | `#52B678` / `#3A9A5B` / `#2A7845` | `#C4F4D4` / `#5CC583` / `#2C7C48` | a lantern's body, top to foot (the middle stop is the logo green) |
-| `--unlit-0` / `-1` / `-2` | `#E1E7E3` / `#D5DDD8` / `#CBD4CE` | `#3B4340` / `#2E3532` / `#252B29` | a picket that holds no light (fence down, lapsed rule) |
-| `--wall-0` / `-1` / `-2` | `#C3D1C8` / `#D0DBD4` / `#E2E9E4` (sage, dawn) | `#232927` / `#151A18` / `#0B0E0D` (graphite, night) | the block page's other pickets |
+| `--lit-0` / `-1` / `-2` | `#33A861` / `#1E8A45` / `#17723A` | `#66E396` / `#3FD67A` / `#1E9F55` | the pill that holds the light, top to foot |
+| `--light-rgb` | `30 138 69` | `63 214 122` | the light: halo, pool, the tint it gives the glass |
+| `--glass-0` / `-1` | white 94 % / `#F3F7F4` 80 % | `#CDF5DE` 10 % / `#78BE96` 3.5 % | the glass, top to foot; `--glass-rim` is its top highlight |
+| `--amber-rgb` | `217 161 63` | `230 178 82` | the light in strict mode and on the Pro offer |
 | `--danger` / `--warn` | `#B42318` / `#9A5B00` | `#F2766B` / `#E5B567` | errors, warnings |
 
 All text pairs are at least 4.5:1. The switch and icons are at least 3:1. The measured table is in round 1, below.
@@ -148,10 +149,11 @@ Headlines use −0.03 to −0.045em tracking.
 
 Every motion runs once per change, nothing loops, and `prefers-reduced-motion` turns all of it off.
 
-- The fence rises when blocking turns on and sinks when it turns off; its colours cross-fade between lit and unlit as it moves.
-- A new site's picket rises in the popup and in Settings.
-- On the block page, the fence and its reflection rise in a wave from your picket, then the lantern lights up (its halo and its pool of light fade in) and the copy fades up.
-- In onboarding, each picked site rises lit into its slot.
+- The light breathes in once wherever a fence appears: the halo fades and swells into place over 1.8 s.
+- The fence rises when blocking turns on and sinks when it turns off, staggered from the middle.
+- A new site's pill rises in the popup and in Settings.
+- On the block page, the fence and its reflection rise from the ground, then the light breathes in and the copy fades up.
+- In onboarding, each picked site rises into its slot.
 - The schedule's week ribbon redraws as you toggle days and times, before you save.
 - The block-page miniature shows your note as you type.
 - The idle focus clock follows the length and rounds fields.
@@ -172,16 +174,41 @@ Every motion runs once per change, nothing loops, and `prefers-reduced-motion` t
   - locked Pro controls are `inert`;
   - the lock screen traps focus;
   - focus rings are 2 px green with a 2 px offset.
-- Tabs use `aria-current="page"`. The fence, the stage, the wall and its reflection, the week ribbon and the miniature are all `aria-hidden`; the surrounding text says the same in words.
-- No inline styles: the CSP (`style-src 'self'`) stays strict. Per-picket values are set through the CSSOM, and the static fences take their distances from CSS.
-- Reduced motion: no rise, no wave, no light-up, no cross-fade. Every fence appears in its final posture.
+- Tabs use `aria-current="page"`. Every fence (with its reflection), the stage, the week ribbon and the miniature are `aria-hidden`; the surrounding text says the same in words.
+- No inline styles: the CSP (`style-src 'self'`) stays strict. Per-pill values are set through the CSSOM, and the static rows take theirs from CSS.
+- Reduced motion: no rise, no breathing light, no fade. Every fence appears in its final posture.
 - Windows high contrast: the switch is drawn with system colours.
 - Text never clips:
   - the onboarding field gets the full width below 560 px;
   - placeholders were shortened to fit 390 px in en, fr, es and de;
-  - typed sites fit.
+  - typed sites fit;
+  - the block page's words keep their room above the fence at any window size (the fence shrinks instead);
+  - Settings fit a 400 px window in every language: card footers and the backup buttons wrap.
 
 ## 7. Critique log
+
+### Round 4: glass pills
+
+Each pass captured every state × 2 themes (`npm run design:shots`), the block page at 1280 × 800, 1366 × 600, 1280 × 540, 1024 × 640, 900 × 700, 420 × 800 and 1920 × 1080 with 1, 9 and 11 sites, a focus session and a three-line note, and the popup and Settings in en, fr, es and de at 400 px.
+
+**Pass 1** (first build):
+1. The halo's tall column of light read as a grey-green stain on paper, as the round 2 glow did. In light it is now a soft bloom around the lit pill (1.3 × its height); dark keeps the volumetric column (1.65 ×).
+2. In the popup, the stage clipped the halo into a hard-edged rectangle. The light now stays inside the stage and fades out before its edge.
+3. On the block page, the halo climbed behind the counts. It now fades out below the URL, so the top half is left to the words.
+
+**Pass 2:**
+1. With a focus session, the block page's copy was taller than its space. Centred, it overflowed both ways and the URL slid behind the tallest pill. The copy is now centred while it fits and grows upward when it doesn't (two flexible spacers, aligned to the bottom).
+2. In short windows it then left the screen at the top (93 px at 1280 × 540 with a note and a session). `fit()` now measures the copy and caps the pill width, so the fence gets smaller instead. The headline also scales with the window's height.
+3. Growing upward made the URL collapse to zero height: a flex item that clips its overflow has no automatic minimum height. The copy no longer shrinks; only the spacers do.
+4. With 11 sites, the row would have run the window's width. Pills now narrow as sites are added, and the row is at most 1000 px wide.
+
+**Pass 3:**
+1. The small counters still had pointed tops: the focus rounds in the popup and in Settings, and the Free and Pro marks in onboarding. They are small pills now.
+2. The Strict mode gate had kept round 2's flat pickets and rails. It is now five pills in amber light, the middle one carrying a lock; the lock is shared with onboarding's Pro pill.
+
+**Findings from the website's branch** (`design/landing-v2`, round 4):
+1. The French popup was 511 px tall: its focus row wrapped beside "Lancer la concentration", and the footer wrapped in French and German (461 px). The French button is now "Démarrer" and the footer link "Réglages →" (German "Einstellungen →"). The idle popup is 448 px in all four languages.
+2. In a 400 px window, the schedule's footer overflowed in French and German (the save button by 34 and 10 px). Card footers now wrap, the main button staying on the right. The same check found the backup buttons overflowing in French and German (by 17 and 66 px); they wrap too. Nothing in Settings overflows a 400 px window in any language now.
 
 ### Round 3: the fence
 
@@ -241,6 +268,12 @@ No structural issues left.
 
 ## 8. Results
 
+Round 4:
+- **Tests:** 101 passed (`npm test`, the full suite).
+- **Final screenshots:** `design/extension-ui/screenshots/` (`npm run design:shots`). The round 3 lantern explorations stay in `screenshots/fence-explorations/` for the record.
+- **Store assets:** `npm run screenshots:all` regenerated the screenshots in en, fr, es and de, and `npm run docs` refreshed the website's copies.
+- **Zip:** `npm run build` rebuilt `dist/focusfence-1.0.0.zip`. `manifest.json`, `background.js`, `config.js` and `vendor/ExtPay.js` are unchanged; `_locales` changed `startFocus` (fr) and `allSettings` (fr, de).
+
 Round 3:
 - **Tests:** 101 passed (`npm test`, the full suite). Two test helpers changed:
   - the axe test waits for animations to settle before auditing;
@@ -264,7 +297,10 @@ Round 2:
 
 ## 9. Open points for the owner
 
-- The store's promo tile (`scripts/screenshots.mjs`) still draws its own faint repeating fence. It could adopt the lantern in a later pass.
+- Round 4's shorter labels deserve a native proofread: fr "Démarrer" (start focus) and "Réglages →", de "Einstellungen →".
+- The website (`design/landing-v2`) shows the round 3 lantern; its BRIEF plans to re-sync its captures and closing scene to these pills once this round lands.
+
+- The store's promo tile (`scripts/screenshots.mjs`) still draws its own faint repeating fence. It could adopt the glass pills in a later pass.
 - The new onboarding sentence ("Later, add as many websites as you like on the free plan; paths and keywords need Pro.") deserves a native proofread in fr, es and de.
 
 - PR #3's `--site` captures scroll to `#stats`, `#schedule .card` and `#strict-on` with `scrollIntoView`. With one Settings view at a time, they need `location.hash = '#stats'` (or `#focus`, `#strict`) first. After both PRs merge:
