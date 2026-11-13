@@ -85,9 +85,9 @@ export async function startFakeInternet() {
   };
 }
 
-export function prepareExtension({ grantAll = true, mutate } = {}) {
+export function prepareExtension({ grantAll = true, mutate, srcDir = SRC } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'focusfence-ext-'));
-  fs.cpSync(SRC, dir, { recursive: true });
+  fs.cpSync(srcDir, dir, { recursive: true });
   const mfPath = path.join(dir, 'manifest.json');
   const mf = JSON.parse(fs.readFileSync(mfPath, 'utf8'));
   if (grantAll) mf.host_permissions = ['<all_urls>'];
@@ -96,8 +96,8 @@ export function prepareExtension({ grantAll = true, mutate } = {}) {
   return dir;
 }
 
-export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme } = {}) {
-  const extDir = prepareExtension({ grantAll, mutate });
+export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme, srcDir } = {}) {
+  const extDir = prepareExtension({ grantAll, mutate, srcDir });
   const args = [
     `--disable-extensions-except=${extDir}`,
     `--load-extension=${extDir}`,
