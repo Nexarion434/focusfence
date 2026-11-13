@@ -67,4 +67,4 @@ If this policy changes, the new version will be published at the same address wi
 
 ## Contact
 
-Questions about privacy: **[CONTACT EMAIL — to be filled in before publication]**
+Questions about privacy: **contact@focusfence.dev**

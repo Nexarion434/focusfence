@@ -8,7 +8,7 @@ Nothing here has been submitted. Dashboard field names can shift slightly betwee
 
 - [ ] PR #1 merged, and GitHub Pages switched to `main` / `/docs` (see `OWNER_TODO.md` step 2).
 - [ ] `EXTPAY_ID` set in `src/config.js` (`OWNER_TODO.md` step 5).
-- [ ] Contact email filled in `store/privacy-policy.md`, then `npm run docs` (the live privacy page must not show the placeholder).
+- [x] Contact email set: `contact@focusfence.dev` in `store/privacy-policy.md`, live on the privacy pages in all 4 languages.
 - [ ] `cd focusfence && npm test && npm run cws:check`. Expect `PASSED`, and use the zip it names: `dist/focusfence-1.0.0.zip`.
 - [ ] These URLs return 200 in a browser:
       `https://nexarion434.github.io/focusfence/` and `https://nexarion434.github.io/focusfence/privacy.html`
@@ -19,7 +19,7 @@ Nothing here has been submitted. Dashboard field names can shift slightly betwee
 |---|---|
 | Registration fee | US$5, one-time (owner pays) |
 | Publisher display name | `FocusFence` (or your studio name) |
-| Contact email | the dedicated support address (must be verified) |
+| Contact email | `contact@focusfence.dev` (the dashboard sends a verification email: check it arrives in iCloud Mail) |
 | Trader / non-trader declaration (EU DSA) | **Trader** if you sell Pro as a business; this shows your address/contact to EU users. Decide with your accountant. |
 | 2-step verification | On (required to publish) |
 

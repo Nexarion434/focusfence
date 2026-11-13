@@ -13,7 +13,7 @@ Current state: PR #1 open, 91 automated tests green. Repo **public** and site **
 | 4 | GitHub Pages | **US$0**: the repo is public (done 2026-11-13) | — | Done, free |
 | 5 | Sales tax / VAT handling (e.g. Stripe Tax or an accountant) | Variable, to check with your accountant | Ongoing | Depends on where you sell |
 | 6 | Legal review of AGPL licensing / privacy policy | Variable | Once | Optional, recommended |
-| 7 | Custom domain for the website | Optional, not needed (GitHub Pages URL works) | Yearly | No |
+| 7 | Domain `focusfence.dev` | **Already registered** by you at Hostinger (check the yearly renewal price there). Mail is handled by iCloud. Pointing the website at it is optional | Yearly renewal | Yes, for the contact email |
 
 **What you actually keep per payment** (ExtensionPay 5% + Stripe 2.9% + $0.30, US cards; international cards cost more; before taxes):
 
@@ -43,9 +43,10 @@ Done on your approval, after a history scan: gitleaks 8.21.2 found 0 leaks in 25
 
 ## 3. Privacy policy contact
 
-- [ ] Replace `[CONTACT EMAIL — to be filled in before publication]` in `focusfence/store/privacy-policy.md` with a dedicated support address. **The live privacy pages (all 4 languages) show this placeholder now**, so do this before submitting.
-      Edit the English file only. The French, Spanish and German policies use `{{CONTACT}}` and pick up the same address.
-- [ ] `cd focusfence && npm run docs`, then commit `docs/` and push.
+- [x] Contact address set to **contact@focusfence.dev**. The live privacy pages in all 4 languages show it as a mailto link (done 2026-11-13).
+      To change it later, edit the English file only (`focusfence/store/privacy-policy.md`, Contact line). The French, Spanish and German policies use `{{CONTACT}}` and pick up the same address. Then run `cd focusfence && npm run docs`, commit `docs/` and push.
+- [ ] Send a test email to contact@focusfence.dev and check it arrives in iCloud Mail (MX/SPF/DKIM records at Hostinger). Reviewers and users will write there.
+- [ ] Custom domain for the website (e.g. `focusfence.dev` → GitHub Pages) is **not** configured. That's your DNS step. If you do it, update `SITE_URL` in `focusfence/scripts/docs.mjs`, `PRIVACY_URL` in `focusfence/src/config.js` and the URLs in `focusfence/store/*.md`, then run `npm run docs && npm run build`.
 
 ## 4. Licensing decision
 
@@ -85,7 +86,7 @@ A test keeps it in sync with the manifest and the listing.
 
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
-- [ ] After setting `EXTPAY_ID` (step 5) and the contact email (step 3): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
+- [ ] After setting `EXTPAY_ID` (step 5): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
 - [ ] Fill the Store listing, Privacy, Distribution and Test instructions tabs from the checklist. Upload the 5 English screenshots plus the promo tile.
 - [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the checklist.
 

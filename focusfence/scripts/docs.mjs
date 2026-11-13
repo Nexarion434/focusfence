@@ -264,6 +264,8 @@ const enPrivacy = privacyMd('en');
 const contactMatch = /## Contact\n\n[^\n]*\*\*(.+?)\*\*/.exec(enPrivacy);
 if (!contactMatch) throw new Error('store/privacy-policy.md: no **contact** on the line after "## Contact"');
 export const CONTACT = contactMatch[1];
+const linkContact = (html) =>
+  /^[\w.+-]+@[\w-]+(\.[\w-]+)+$/.test(CONTACT) ? html.split(`<strong>${CONTACT}</strong>`).join(`<strong><a href="mailto:${CONTACT}">${CONTACT}</a></strong>`) : html;
 
 function privacy(lang) {
   const T = SITE[lang];
@@ -280,7 +282,7 @@ function privacy(lang) {
     title: typo(lang, T.privacyTitle),
     description: typo(lang, T.privacyDescription),
     canonical: SITE_URL + dirOf(lang) + 'privacy.html',
-    body: `<main class="doc"><div class="wrap narrow prose">${markdown(md)}</div></main>`,
+    body: `<main class="doc"><div class="wrap narrow prose">${linkContact(markdown(md))}</div></main>`,
   });
 }
 

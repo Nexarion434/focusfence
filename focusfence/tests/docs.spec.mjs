@@ -186,8 +186,7 @@ test('every page has a language switcher with all 4 languages, the current one m
 test('privacy translations: same structure as English and the same contact placeholder everywhere', () => {
   const en = read('focusfence/store/privacy-policy.md');
   const contact = /## Contact\n\n[^\n]*\*\*(.+?)\*\*/.exec(en)[1];
-  // the placeholder until the owner fills in a real address (OWNER_TODO step 3)
-  expect(contact).toMatch(/^(\[CONTACT EMAIL — to be filled in before publication\]|[\w.+-]+@[\w-]+(\.[\w-]+)+)$/);
+  expect(contact).toBe('contact@focusfence.dev');
   const shape = (md) => ({
     h2: (md.match(/^## /gm) || []).length,
     rows: (md.match(/^\|/gm) || []).length,
@@ -205,7 +204,8 @@ test('privacy translations: same structure as English and the same contact place
   }
   for (const lang of SITE_LANGS) {
     const html = read('docs', dirOf(lang) + 'privacy.html');
-    expect(html.split(contact).length - 1, lang).toBe(1);
+    expect(html, lang).toContain(`<strong><a href="mailto:${contact}">${contact}</a></strong>`);
+    expect(html, lang).not.toContain('CONTACT EMAIL');
   }
 });
 
