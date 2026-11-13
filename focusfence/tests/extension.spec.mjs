@@ -37,7 +37,11 @@ test.describe('Free tier: domain blocking', () => {
 
   test('popup and Stats tab show only real blocked counts, no time estimate', async ({ api, ext }) => {
     await api.send('addEntry', { raw: 'reddit.com', kind: 'domain' });
-    (await visit(ext.context, 'https://reddit.com/')).close();
+    // the block page records the visit once its script runs: wait for it before closing
+    const blocked = await visit(ext.context, 'https://reddit.com/');
+    await expect(blocked.locator('#today')).toHaveText('1');
+    await blocked.close();
+    await expect.poll(async () => (await api.send('getStats', { days: 7 })).summary.today).toBe(1);
     const popup = await ext.context.newPage();
     await popup.goto(ext.base + 'popup.html');
     await expect(popup.locator('#today-stats')).toHaveText('Blocked today: 1 · This week: 1');

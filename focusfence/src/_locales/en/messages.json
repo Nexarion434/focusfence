@@ -44,6 +44,9 @@
   "errDevPayments": {
     "message": "Payments are disabled in the DEV build. Use “Simulate Pro” instead."
   },
+  "errBadPlan": {
+    "message": "Unknown plan. Choose monthly or yearly."
+  },
   "errDevOnly": {
     "message": "Only available in development builds."
   },
@@ -802,6 +805,12 @@
   },
   "perMonth": {
     "message": "/month"
+  },
+  "priceNoteUSD": {
+    "message": "Prices in US dollars."
+  },
+  "priceNoteEUR": {
+    "message": "Prices in euros."
   },
   "perYear": {
     "message": "/year"

@@ -1,14 +1,14 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 94 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
+Current state: PR #1 open, 100 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
 
 ## Costs at a glance
 
 | # | Expense | Amount | When | Required? |
 |---|---|---|---|---|
 | 1 | Chrome Web Store developer registration | **US$5, one-time** (covers all your extensions; confirm the amount on the registration page) | Before the first upload | **Yes** |
-| 2 | Stripe card processing (through ExtensionPay) | **≈ 2.9% + US$0.30 per US card payment**, about +1–1.5% for international cards, +1% if currency conversion applies. No monthly fee | Per sale | Yes, if you sell Pro |
+| 2 | Stripe card processing (through ExtensionPay) | **≈ 2.9% + US$0.30 per US card payment** (EUR payments are charged at Stripe's rate for European cards, which depends on your account country: check stripe.com/pricing), about +1–1.5% for international cards, +1% if currency conversion applies. No monthly fee | Per sale | Yes, if you sell Pro |
 | 3 | ExtensionPay service fee | **5% per transaction, at time of charge.** No up-front cost, no monthly fee (source: extensionpay.com pricing section, checked 2026-11-13; "lower fees and flat monthly rates are available for high-volume accounts"). Payments land in **your own Stripe account**, so Stripe's fees (#2) come **on top** | Per sale | Yes, if you sell Pro |
 | 4 | GitHub Pages | **US$0**: the repo is public (done 2026-11-13) | — | Done, free |
 | 5 | Sales tax / VAT handling (e.g. Stripe Tax or an accountant) | Variable, to check with your accountant | Ongoing | Depends on where you sell |
@@ -55,10 +55,15 @@ Done on your approval, after a history scan: gitleaks 8.21.2 found 0 leaks in 25
 
 ## 5. ExtensionPay (payments)
 
-- [ ] Create an account at https://extensionpay.com, register the extension and note its **extension id**. Fee: 5% per transaction (cost #3); ask about high-volume rates later.
-- [ ] Set `EXTPAY_ID` in `focusfence/src/config.js` (currently the placeholder `focusfence`).
-- [ ] Connect Stripe and create two plans with the **nicknames** `monthly` = $2.99/month and `yearly` = $19.99/year. The Settings buttons call `openPaymentPage('monthly' | 'yearly')`.
-- [ ] Set up tax handling (cost #5).
+- [x] ExtensionPay account created and the extension registered: **extension id `focusfence-dev`**, set as `EXTPAY_ID` in `focusfence/src/config.js`. Fee: 5% per transaction (cost #3).
+- [x] Stripe connected, with four plans (nicknames), all wired in `PRICES`:
+  - `monthly`: US$2.99/month
+  - `yearly`: US$19.99/year
+  - `monthly-eur`: €2.99/month
+  - `yearly-eur`: €19.99/year
+- How the currency is chosen: users whose browser locale region is in the eurozone (e.g. `fr`, `de-AT`, `es-ES`, `en-IE`) see € prices and get the EUR plan; everyone else sees $ and gets the USD plan (`es-MX`, `fr-CA` and `en-GB` → USD). The Settings buttons call `openPaymentPage(<nickname>)`.
+- [ ] If you change a price or nickname in ExtensionPay, change `PRICES` in `focusfence/src/config.js` to match, then run `npm run build`.
+- [ ] Set up tax handling (cost #5). EU VAT matters now that you sell in EUR.
 
 ## 6. Manual QA in a real Chrome
 
@@ -67,7 +72,7 @@ Load `focusfence/dist/focusfence/` unpacked after `npm run build`. These checks 
 - [ ] Add a site from the popup and accept Chrome's permission prompt: the block page appears, not the error page.
 - [ ] Decline the prompt for another site: it is still blocked (error page) and Settings offers "Allow".
 - [ ] Real YouTube: block `youtube.com/shorts`. Shorts are blocked when opened directly and when clicked from the home page; regular videos still play.
-- [ ] Real purchase in ExtensionPay **test mode**: Pro unlocks; "Restore purchase" works on a second profile; offline, Settings shows the "Couldn't reach ExtensionPay" note and keeps Pro.
+- [ ] Real purchase in ExtensionPay **test mode**, once with Chrome's language set to an English (US) locale (USD plan) and once to a eurozone locale such as French or German (EUR plan): the right plan opens and Pro unlocks; "Restore purchase" works on a second profile; offline, Settings shows the "Couldn't reach ExtensionPay" note and keeps Pro.
 - [ ] Strict mode: the Incognito warning shows until "Allow in Incognito" is on. Disabling FocusFence during a timed session pauses its clock.
 - [ ] Screen reader spot check (e.g. ChromeVox or NVDA) on the popup and Settings. Automated axe checks already pass.
 

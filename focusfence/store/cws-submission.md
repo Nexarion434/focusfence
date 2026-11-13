@@ -7,7 +7,7 @@ Nothing here has been submitted. Dashboard field names can shift slightly betwee
 ## 0. Before you open the dashboard
 
 - [ ] PR #1 merged, and GitHub Pages switched to `main` / `/docs` (see `OWNER_TODO.md` step 2).
-- [ ] `EXTPAY_ID` set in `src/config.js` (`OWNER_TODO.md` step 5).
+- [x] ExtensionPay configured: `EXTPAY_ID` = `focusfence-dev` in `src/config.js`, with plans `monthly` / `yearly` (USD) and `monthly-eur` / `yearly-eur` (EUR) wired in `PRICES`.
 - [x] Contact email set: `contact@focusfence.dev` in `store/privacy-policy.md`, live on the privacy pages in all 4 languages.
 - [ ] `cd focusfence && npm test && npm run cws:check`. Expect `PASSED`, and use the zip it names: `dist/focusfence-1.0.0.zip`.
 - [ ] These URLs return 200 in a browser:
@@ -132,7 +132,7 @@ https://nexarion434.github.io/focusfence/privacy.html
 ## 6. Test instructions tab (for the reviewer)
 
 ```
-No account or login is needed. Free features: open the popup on any site and click "Block site", accept Chrome's site-access prompt, then reload: the FocusFence block page appears. Settings lists blocked sites and has an on/off switch. Pro features (schedules, path/keyword rules such as youtube.com/shorts, Pomodoro, strict mode, password lock, stats) are unlocked by a purchase through ExtensionPay (Stripe); the Upgrade buttons in Settings open the ExtensionPay checkout. Source code: https://github.com/Nexarion434/focusfence
+No account or login is needed. Free features: open the popup on any site and click "Block site", accept Chrome's site-access prompt, then reload: the FocusFence block page appears. Settings lists blocked sites and has an on/off switch. Pro features (schedules, path/keyword rules such as youtube.com/shorts, Pomodoro, strict mode, password lock, stats) are unlocked by a purchase through ExtensionPay (Stripe); the Upgrade buttons in Settings open the ExtensionPay checkout (EUR plans for eurozone locales, USD elsewhere). Source code: https://github.com/Nexarion434/focusfence
 ```
 
 ## 7. Submit

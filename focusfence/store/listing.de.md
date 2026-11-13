@@ -29,7 +29,7 @@ GRATIS: UNBEGRENZT VIELE SEITEN, FÜR IMMER
 ✓ Eine ruhige Sperrseite mit Zitat und den heutigen Sperrungen
 
 ━━━━━━━━━━━━━━━━━━━━
-FOCUSFENCE PRO: 2,99 $/MONAT ODER 19,99 $/JAHR
+FOCUSFENCE PRO: 2,99 €/MONAT ODER 19,99 €/JAHR (2,99 $ / 19,99 $ AUSSERHALB DER EUROZONE)
 ━━━━━━━━━━━━━━━━━━━━
 ✓ YouTube Shorts sperren, YouTube behalten: Pfadregeln blockieren nur einen Bereich (youtube.com/shorts), auch wenn du innerhalb von YouTube dorthin klickst
 ✓ Stichwort-Sperre: Blockiere jede Seite, deren Adresse ein bestimmtes Wort enthält

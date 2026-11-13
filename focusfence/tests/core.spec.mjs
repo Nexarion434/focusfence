@@ -212,3 +212,36 @@ test.describe('review edge cases', () => {
     expect(C.advancePomodoroTo({ ...p, cycle: 2 }, now)).toBeNull();
   });
 });
+
+test.describe('pricing: EUR in the eurozone, USD elsewhere', () => {
+  const vm = require('node:vm');
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const sandbox = { self: {} };
+  vm.runInNewContext(fs.readFileSync(new URL('../src/config.js', import.meta.url), 'utf8'), sandbox);
+  const CFG = sandbox.self.FF_CONFIG;
+
+  test('currency follows the region of the first preferred locale', () => {
+    const cases = {
+      EUR: [['fr'], ['fr-FR'], ['de'], ['de-AT'], ['es'], ['es-ES'], ['it-IT'], ['nl'], ['en-IE'], ['pt-PT'], ['fi-FI'], ['hr-HR'], ['bg-BG'], ['de_DE'], ['ca-AD']],
+      USD: [['en'], ['en-US'], ['en-GB'], ['es-MX'], ['es-419'], ['fr-CA'], ['de-CH'], ['pt-BR'], ['ja'], [], [''], ['not a locale!!'], ['en-US', 'fr-FR']],
+    };
+    for (const [cur, list] of Object.entries(cases)) for (const locales of list) expect(C.currencyForLocales(locales), JSON.stringify(locales)).toBe(cur);
+  });
+
+  test('config: ExtensionPay id and the four owner plans', () => {
+    expect(CFG.EXTPAY_ID).toBe('focusfence-dev');
+    expect(CFG.PRICES.USD).toMatchObject({ currency: 'USD', monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly', yearly: 'yearly' } });
+    expect(CFG.PRICES.EUR).toMatchObject({ currency: 'EUR', monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly-eur', yearly: 'yearly-eur' } });
+  });
+
+  test('plan nicknames follow the currency; unknown plans are rejected', () => {
+    const eur = C.pricingFor(CFG.PRICES, ['de-DE']);
+    const usd = C.pricingFor(CFG.PRICES, ['en-US']);
+    expect(C.planNickname(eur, 'monthly')).toBe('monthly-eur');
+    expect(C.planNickname(eur, 'yearly')).toBe('yearly-eur');
+    expect(C.planNickname(usd, 'monthly')).toBe('monthly');
+    expect(C.planNickname(usd, 'yearly')).toBe('yearly');
+    for (const bad of [undefined, '', 'lifetime', 'monthly-eur', '__proto__']) expect(C.planNickname(eur, bad), String(bad)).toBeNull();
+  });
+});

@@ -374,6 +374,7 @@
     $('plan-sub').textContent = s.isPro ? (s.devPro ? t('planSubProDev') : t('planSubPro')) : t('planSub');
     $('price-monthly').textContent = fmt.price(s.prices.monthly, s.prices.currency);
     $('price-yearly').textContent = fmt.price(s.prices.yearly, s.prices.currency);
+    $('price-note').textContent = s.prices.currency === 'EUR' ? t('priceNoteEUR') : t('priceNoteUSD');
     $('dev-panel').classList.toggle('hidden', !s.dev);
     const lic = s.license || {};
     $('license-note').hidden = !(lic.lastError && !s.dev);

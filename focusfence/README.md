@@ -2,7 +2,7 @@
 
 A calm, private, freemium **Chrome extension (Manifest V3)** that blocks distracting websites.
 
-| Free | Pro ($2.99/month or $19.99/year) |
+| Free | Pro ($2.99/month or $19.99/year; €2.99 / €19.99 in the eurozone) |
 |---|---|
 | Unlimited blocked sites | Schedules (days + time ranges, overnight supported) |
 | Domain blocking incl. subdomains (`reddit.com` → `old.reddit.com`, `m.youtube.com`, …) | Path & keyword blocking (`youtube.com/shorts` only) |
@@ -55,7 +55,11 @@ dist/                 focusfence-<version>.zip (store package)
 ```js
 DEV: true,              // build flips this to false
 EXTPAY_ID: 'focusfence' // placeholder — replace with your ExtensionPay extension id
-PRICES: { currency: 'USD', monthly: 2.99, yearly: 19.99 } // must match the ExtensionPay plans
+EXTPAY_ID: 'focusfence-dev'
+PRICES: {                // must match the ExtensionPay plans (amounts + nicknames)
+  USD: { monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly', yearly: 'yearly' } },
+  EUR: { monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly-eur', yearly: 'yearly-eur' } },
+}                        // EUR when the browser locale's region is in the eurozone, else USD
 ```
 
 - `DEV: true` → "Simulate Pro" switch in Settings → Plan; **no** ExtensionPay network calls.
@@ -72,7 +76,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 94 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 100 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 

@@ -44,6 +44,9 @@
   "errDevPayments": {
     "message": "Zahlungen sind im DEV-Build deaktiviert. Nutze stattdessen „Pro simulieren“."
   },
+  "errBadPlan": {
+    "message": "Unbekannter Tarif. Wähle monatlich oder jährlich."
+  },
   "errDevOnly": {
     "message": "Nur in Entwicklungs-Builds verfügbar."
   },
@@ -802,6 +805,12 @@
   },
   "perMonth": {
     "message": "/Monat"
+  },
+  "priceNoteUSD": {
+    "message": "Preise in US-Dollar."
+  },
+  "priceNoteEUR": {
+    "message": "Preise in Euro."
   },
   "perYear": {
     "message": "/Jahr"

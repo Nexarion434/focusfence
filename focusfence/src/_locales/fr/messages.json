@@ -44,6 +44,9 @@
   "errDevPayments": {
     "message": "Les paiements sont désactivés dans la version DEV. Utilisez « Simuler Pro »."
   },
+  "errBadPlan": {
+    "message": "Formule inconnue. Choisissez mensuelle ou annuelle."
+  },
   "errDevOnly": {
     "message": "Disponible uniquement dans les versions de développement."
   },
@@ -802,6 +805,12 @@
   },
   "perMonth": {
     "message": "/mois"
+  },
+  "priceNoteUSD": {
+    "message": "Prix en dollars US."
+  },
+  "priceNoteEUR": {
+    "message": "Prix en euros."
   },
   "perYear": {
     "message": "/an"

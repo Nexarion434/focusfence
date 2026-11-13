@@ -8,7 +8,7 @@
 | Tagline | Block distracting sites — or just YouTube Shorts | 60 chars (48 used) |
 | Alternative taglines | A calm, private website blocker for Chrome · Fence off the endless feeds | |
 | Topics | Productivity, Chrome Extensions, Privacy | up to 3 |
-| Pricing | Free (Pro: $2.99/mo or $19.99/yr) | "Freemium" |
+| Pricing | Free (Pro: $2.99/mo or $19.99/yr; €2.99 / €19.99 in the eurozone) | "Freemium" |
 | Link | Chrome Web Store URL (after approval) | |
 
 ## Description (≤ 260 chars)
@@ -38,7 +38,7 @@ Thumbnail: `focusfence/src/icons/icon128.png` (upload a 240×240 version).
 > • **Private by design.** No account, no analytics. Blocking runs in Chrome's built-in rule engine, so the extension never reads your pages, and it asks for site access one site at a time.
 > • **Calm, not shaming.** The block page shows a quote and how many times you've been blocked today, not a red stop sign.
 >
-> Free is unlimited for whole-site blocking (subdomains included). Pro ($2.99/mo or $19.99/yr) adds schedules, Pomodoro focus sessions, strict mode with a 10-minute cooling-off unlock, a password lock, stats and backup.
+> Free is unlimited for whole-site blocking (subdomains included). Pro ($2.99/mo or $19.99/yr, or €2.99 / €19.99 in the eurozone) adds schedules, Pomodoro focus sessions, strict mode with a 10-minute cooling-off unlock, a password lock, stats and backup.
 >
 > Honest limits: Chrome always lets you disable an extension from chrome://extensions. A timed strict session pauses while FocusFence is off, so switching it off doesn't run out the clock.
 >

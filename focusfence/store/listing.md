@@ -31,7 +31,7 @@ FREE: UNLIMITED SITES, FOREVER
 ✓ A calm block page with a motivational quote and how many times you've been blocked today
 
 ━━━━━━━━━━━━━━━━━━━━
-FOCUSFENCE PRO: $2.99/MONTH OR $19.99/YEAR
+FOCUSFENCE PRO: $2.99/MONTH OR $19.99/YEAR (€2.99 / €19.99 IN THE EUROZONE)
 ━━━━━━━━━━━━━━━━━━━━
 ✓ Block YouTube Shorts but keep YouTube: path rules block a single section (youtube.com/shorts), including when you click into it from inside YouTube
 ✓ Keyword blocking: block any page whose address contains a word

@@ -29,7 +29,7 @@ GRATUIT : SITES ILLIMITÉS, POUR TOUJOURS
 ✓ Une page de blocage apaisante, avec une citation et le nombre de blocages du jour
 
 ━━━━━━━━━━━━━━━━━━━━
-FOCUSFENCE PRO : 2,99 $/MOIS OU 19,99 $/AN
+FOCUSFENCE PRO : 2,99 €/MOIS OU 19,99 €/AN (2,99 $ / 19,99 $ HORS ZONE EURO)
 ━━━━━━━━━━━━━━━━━━━━
 ✓ Bloquez YouTube Shorts mais gardez YouTube : les règles de chemin bloquent une seule section (youtube.com/shorts), y compris quand vous y accédez depuis YouTube
 ✓ Blocage par mot-clé : bloquez toute page dont l'adresse contient un mot

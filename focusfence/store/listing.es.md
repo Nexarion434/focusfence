@@ -29,7 +29,7 @@ GRATIS: WEBS ILIMITADAS, PARA SIEMPRE
 ✓ Una página de bloqueo tranquila, con una cita y los bloqueos de hoy
 
 ━━━━━━━━━━━━━━━━━━━━
-FOCUSFENCE PRO: 2,99 US$/MES O 19,99 US$/AÑO
+FOCUSFENCE PRO: 2,99 US$/MES O 19,99 US$/AÑO (2,99 € / 19,99 € EN LA ZONA EURO)
 ━━━━━━━━━━━━━━━━━━━━
 ✓ Bloquea YouTube Shorts pero conserva YouTube: las reglas de ruta bloquean una sola sección (youtube.com/shorts), también cuando entras desde YouTube
 ✓ Bloqueo por palabra clave: bloquea cualquier página cuya dirección contenga una palabra

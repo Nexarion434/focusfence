@@ -38,7 +38,7 @@ What's your setup? Do you block whole sites or just the feeds?
 **FocusFence: a calm, private website blocker for Chrome (I'm the developer)**
 
 - Free: unlimited sites, subdomains included, one-click "Block site", calm block page
-- Pro ($2.99/mo or $19.99/yr): block just `youtube.com/shorts`, schedules, Pomodoro, strict mode with a 10-minute cooling-off unlock, password lock, stats
+- Pro ($2.99/mo or $19.99/yr; €2.99 / €19.99 in the eurozone): block just `youtube.com/shorts`, schedules, Pomodoro, strict mode with a 10-minute cooling-off unlock, password lock, stats
 - Privacy: no account, no analytics; blocking uses Chrome's built-in rule engine
 - Honest limit: Chrome always lets you disable extensions; a timed strict session pauses while it's off
 - Open source (AGPL v3), English, French, Spanish and German

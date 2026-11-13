@@ -13,6 +13,12 @@
   const STATS_RETENTION_DAYS = 90;
   const ALL_SITES_ORIGIN = '*://*/*';
   const MAX_PATH_LENGTH = 512;
+  // Countries and territories that use the euro (2026: Bulgaria joined on 1 January),
+  // plus the microstates and French overseas regions that use it as their currency.
+  const EUROZONE = new Set([
+    'AT', 'BE', 'BG', 'HR', 'CY', 'EE', 'FI', 'FR', 'DE', 'GR', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES',
+    'AD', 'MC', 'SM', 'VA', 'ME', 'XK', 'AX', 'GF', 'GP', 'MQ', 'RE', 'YT', 'PM', 'BL', 'MF',
+  ]);
   // Chrome allows at most 1000 regex rules per extension; path/keyword entries use one each.
   const MAX_PATTERN_ENTRIES = 500;
   const MAX_SCHEDULE_WINDOWS = 50;
@@ -553,7 +559,42 @@
     return { strict: next, pausedMs };
   }
 
+  /**
+   * Region of the user's first preferred locale ('fr' -> 'FR', 'en' -> 'US', 'es-MX' -> 'MX'),
+   * or null if it can't be determined.
+   */
+  function localeRegion(locales) {
+    const first = (Array.isArray(locales) ? locales : [locales]).find((l) => typeof l === 'string' && l.trim());
+    if (!first) return null;
+    try {
+      const loc = new Intl.Locale(first.replace(/_/g, '-'));
+      return (loc.region || loc.maximize().region || '').toUpperCase() || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** 'EUR' for eurozone regions, 'USD' otherwise (including when the region is unknown). */
+  function currencyForLocales(locales) {
+    return EUROZONE.has(localeRegion(locales)) ? 'EUR' : 'USD';
+  }
+
+  /** The price set (amounts + plan nicknames) to show and sell for these locales. */
+  function pricingFor(prices, locales) {
+    return prices[currencyForLocales(locales)] || prices.USD;
+  }
+
+  /** ExtensionPay plan nickname for 'monthly' | 'yearly' in this price set, or null. */
+  function planNickname(pricing, plan) {
+    return (plan === 'monthly' || plan === 'yearly') && pricing && pricing.plans ? pricing.plans[plan] || null : null;
+  }
+
   const api = {
+    EUROZONE,
+    localeRegion,
+    currencyForLocales,
+    pricingFor,
+    planNickname,
     MINUTE,
     STRICT_UNLOCK_DELAY_MS,
     ALL_SITES_ORIGIN,

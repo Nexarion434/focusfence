@@ -75,6 +75,21 @@ async function loadAll() {
   return st;
 }
 
+/** EUR in the eurozone, USD elsewhere: based on the browser's preferred languages. */
+function userLocales() {
+  const langs = (self.navigator && self.navigator.languages) || [];
+  if (langs.length) return langs;
+  try {
+    return [chrome.i18n.getUILanguage()];
+  } catch (e) {
+    return [];
+  }
+}
+
+function currentPricing() {
+  return C.pricingFor(CONFIG.PRICES, userLocales());
+}
+
 function isProFrom(st) {
   if (CONFIG.DEV && st.devPro) return true;
   return !!(st.license && st.license.paid);
@@ -319,7 +334,7 @@ async function getState() {
   }
   return {
     dev: CONFIG.DEV,
-    prices: CONFIG.PRICES,
+    prices: currentPricing(),
     sourceUrl: CONFIG.SOURCE_URL,
     privacyUrl: CONFIG.PRIVACY_URL,
     isPro,
@@ -656,11 +671,14 @@ const handlers = {
   },
 
   async openPayment({ plan }) {
+    // the plan in the user's currency: monthly / yearly (USD) or monthly-eur / yearly-eur (EUR)
+    const nickname = C.planNickname(currentPricing(), plan);
+    if (!nickname) throw new FFError('INVALID', M('errBadPlan'));
     if (CONFIG.DEV) {
       throw new FFError('DEV_ONLY', M('errDevPayments'));
     }
     try {
-      await extpay.openPaymentPage(plan === 'monthly' || plan === 'yearly' ? plan : undefined);
+      await extpay.openPaymentPage(nickname);
     } catch (e) {
       throw paymentError(e);
     }

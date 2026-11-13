@@ -59,6 +59,17 @@ test('the extracted zip (not the dist folder) loads in Chromium and blocks', asy
     expect(r.ok).toBe(true);
     expect(await outcome(ext.context, 'https://old.reddit.com/')).toBe('blocked');
     expect(await page.evaluate(() => chrome.i18n.getMessage('extName'))).toContain('FocusFence');
+    // production build: real ExtensionPay id, DEV off, Pro can't be unlocked for free
+    const cfg = fs.readFileSync(path.join(dir, 'config.js'), 'utf8');
+    expect(cfg).toMatch(/DEV:\s*false/);
+    expect(cfg).toContain("EXTPAY_ID: 'focusfence-dev'");
+    const send = (type, payload = {}) => page.evaluate(([type, payload]) => chrome.runtime.sendMessage({ type, ...payload }), [type, payload]);
+    expect((await send('setDevPro', { on: true })).code).toBe('DEV_ONLY');
+    await page.evaluate(() => chrome.storage.local.set({ devPro: true })); // even a leftover DEV flag is ignored
+    const st = await send('getState');
+    expect(st.dev).toBe(false);
+    expect(st.isPro).toBe(false);
+    expect(await outcome(ext.context, 'https://old.reddit.com/')).toBe('blocked'); // free features still work
   } finally {
     await ext.close();
     fs.rmSync(dir, { recursive: true, force: true });
