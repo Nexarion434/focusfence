@@ -82,11 +82,12 @@ function markdown(md) {
 const LOGO = (size) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2E7D6B"/><rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/></svg>`;
 
+let BASE = ''; // '' for root pages, '../' for pages in docs/blog/
 const CTA = STORE_URL
   ? `<a class="btn btn-primary" href="${STORE_URL}">Add to Chrome — it's free</a>`
   : `<span class="btn btn-primary is-soon" aria-disabled="true">Coming soon to the Chrome Web Store</span>`;
 
-function page({ title, description, body, canonical }) {
+function page({ title, description, body, canonical, noindex }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -94,24 +95,24 @@ function page({ title, description, body, canonical }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
 <meta name="description" content="${description}">
-<link rel="canonical" href="${canonical}">
+<link rel="canonical" href="${canonical}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:type" content="website">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
 <meta property="og:image" content="${SITE_URL}assets/social.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" type="image/png" href="${BASE}assets/favicon.png">
+<link rel="stylesheet" href="${BASE}assets/site.css">
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
-  <a class="brand" href="./">${LOGO(28)}<span>FocusFence</span></a>
-  <nav><a href="./#features">Features</a><a href="./#pricing">Pricing</a><a href="./#faq">FAQ</a><a href="privacy.html">Privacy</a></nav>
+  <a class="brand" href="${BASE}./">${LOGO(28)}<span>FocusFence</span></a>
+  <nav><a href="${BASE}./#features">Features</a><a href="${BASE}./#pricing">Pricing</a><a href="${BASE}blog/">Blog</a><a href="${BASE}privacy.html">Privacy</a></nav>
 </div></header>
 ${body}
 <footer class="foot"><div class="wrap foot-in">
   <div class="brand">${LOGO(22)}<span>FocusFence</span></div>
-  <p>Free software under the <a href="${SOURCE_URL}/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="${SOURCE_URL}">Source code</a> · <a href="privacy.html">Privacy policy</a></p>
+  <p>Free software under the <a href="${SOURCE_URL}/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="${SOURCE_URL}">Source code</a> · <a href="${BASE}privacy.html">Privacy policy</a> · <a href="${BASE}blog/">Blog</a></p>
   <p class="muted">Not affiliated with Google. Chrome is a trademark of Google LLC.</p>
 </div></footer>
 </body>
@@ -203,6 +204,54 @@ const privacy = page({
 
 fs.writeFileSync(path.join(DOCS, 'index.html'), landing);
 fs.writeFileSync(path.join(DOCS, 'privacy.html'), privacy);
+
+/* ------------------------------------------------------------------ blog */
+// Sources: ../marketing/blog/*.md with front-matter. Drafts are rendered with
+// <meta name="robots" content="noindex"> and left out of the sitemap.
+const BLOG_SRC = path.resolve(ROOT, '..', 'marketing', 'blog');
+const posts = fs
+  .readdirSync(BLOG_SRC)
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => {
+    const raw = fs.readFileSync(path.join(BLOG_SRC, f), 'utf8');
+    const m = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(raw);
+    if (!m) throw new Error('missing front-matter in ' + f);
+    const meta = Object.fromEntries(
+      m[1].split('\n').map((l) => {
+        const i = l.indexOf(':');
+        return [l.slice(0, i).trim(), l.slice(i + 1).trim()];
+      })
+    );
+    return { ...meta, draft: meta.draft === 'true', body: m[2] };
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1));
+fs.mkdirSync(path.join(DOCS, 'blog'), { recursive: true });
+BASE = '../';
+for (const post of posts) {
+  fs.writeFileSync(
+    path.join(DOCS, 'blog', post.slug + '.html'),
+    page({
+      title: post.title + ' — FocusFence',
+      description: post.description,
+      canonical: SITE_URL + 'blog/' + post.slug + '.html',
+      noindex: post.draft,
+      body: `<main class="doc"><article class="wrap narrow prose"><p class="muted small">${post.date}</p>${markdown(post.body)}</article></main>`,
+    })
+  );
+}
+fs.writeFileSync(
+  path.join(DOCS, 'blog', 'index.html'),
+  page({
+    title: 'Blog — FocusFence',
+    description: 'Guides on blocking distracting websites in Chrome, focus routines and privacy.',
+    canonical: SITE_URL + 'blog/',
+    noindex: posts.every((p) => p.draft),
+    body: `<main class="doc"><div class="wrap narrow prose"><h1>Blog</h1>${posts
+      .map((p) => `<h2><a href="${p.slug}.html">${esc(p.title)}</a></h2><p>${esc(p.description)}</p>`)
+      .join('\n')}</div></main>`,
+  })
+);
+BASE = '';
 fs.writeFileSync(path.join(DOCS, 'assets', 'site.css'), fs.readFileSync(path.join(ROOT, 'scripts/site.css')));
 fs.writeFileSync(
   path.join(DOCS, 'robots.txt'),
@@ -210,6 +259,8 @@ fs.writeFileSync(
 );
 fs.writeFileSync(
   path.join(DOCS, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${SITE_URL}</loc></url>\n<url><loc>${SITE_URL}privacy.html</loc></url>\n</urlset>\n`
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${SITE_URL}</loc></url>\n<url><loc>${SITE_URL}privacy.html</loc></url>\n` +
+    posts.filter((p) => !p.draft).map((p) => `<url><loc>${SITE_URL}blog/${p.slug}.html</loc></url>\n`).join('') +
+    `</urlset>\n`
 );
 console.log('docs written to', DOCS);
