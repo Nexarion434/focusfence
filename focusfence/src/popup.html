@@ -9,6 +9,7 @@
   </head>
   <body>
     <main class="popup" id="app" aria-busy="true">
+      <h1 class="visually-hidden">FocusFence</h1>
       <header class="top">
         <span class="logo" id="logo"><span>FocusFence</span></span>
         <span class="badge" id="plan-badge">Free</span>
@@ -19,8 +20,8 @@
       </header>
 
       <section class="status card" id="status-card">
-        <div class="status-text">
-          <h1 id="status-title">Blocking is on</h1>
+        <div class="status-text" aria-live="polite">
+          <h2 id="status-title">Blocking is on</h2>
           <p class="muted small" id="status-sub">—</p>
         </div>
         <label class="switch" title="Turn blocking on or off">
@@ -36,7 +37,7 @@
       <form class="unlock card hidden" id="unlock-form">
         <p class="small"><strong>Settings are locked.</strong> Enter your password to continue.</p>
         <div class="row">
-          <input class="input" type="password" id="unlock-password" placeholder="Password" autocomplete="current-password" />
+          <input class="input" type="password" id="unlock-password" placeholder="Password" aria-label="Password" autocomplete="current-password" />
           <button class="btn btn-primary" type="submit">Unlock</button>
         </div>
       </form>
@@ -58,13 +59,13 @@
       <section class="focus card" id="focus-card">
         <div class="focus-head">
           <div>
-            <h2>Focus session</h2>
+            <h3>Focus session</h3>
             <p class="muted small" id="focus-sub">25 min focus · 5 min break</p>
           </div>
           <span class="badge badge-pro hidden" id="focus-pro">PRO</span>
         </div>
         <div class="focus-body">
-          <div class="timer" id="focus-timer">25:00</div>
+          <div class="timer" id="focus-timer" role="timer" aria-label="Focus time">25:00</div>
           <button class="btn btn-primary" id="focus-start">Start focus</button>
           <button class="btn hidden" id="focus-stop">Stop</button>
         </div>

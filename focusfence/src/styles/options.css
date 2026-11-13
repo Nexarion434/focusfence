@@ -116,7 +116,7 @@ body.is-pro .nav .pro-tag {
   justify-content: space-between;
   gap: 24px;
 }
-.panel-head h1 {
+.panel-head h2 {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 4px;
@@ -176,6 +176,7 @@ body.is-pro .nav .pro-tag {
   border-radius: var(--radius);
   background: var(--pro-soft);
   color: var(--pro);
+  /* (pro on pro-soft = 5.6:1) */
   font-weight: 560;
   margin-bottom: -24px;
 }
@@ -217,7 +218,7 @@ body.is-pro .nav .pro-tag {
   align-items: center;
   gap: 6px;
 }
-.seg button[aria-checked='true'] {
+.seg button[aria-pressed='true'] {
   background: var(--surface);
   color: var(--ink);
   box-shadow: var(--shadow-sm);
@@ -315,7 +316,7 @@ body.is-pro .seg .badge {
   align-items: center;
 }
 .entry .remove {
-  color: var(--faint);
+  color: var(--muted);
 }
 .entry .remove:hover {
   color: var(--danger);
@@ -757,4 +758,13 @@ body.is-pro .plans {
 }
 .about {
   max-width: 560px;
+}
+
+/* keyboard focus for the visually-hidden file input lands on its label */
+#import-file:focus-visible + .import-label {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.nav a[aria-current='true'] {
+  background: var(--surface);
 }

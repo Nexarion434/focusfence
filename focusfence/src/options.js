@@ -58,8 +58,18 @@
     const s = state;
     document.body.classList.toggle('is-pro', s.isPro);
     document.body.classList.toggle('is-strict', s.strict.active);
-    document.querySelectorAll('.panel[data-pro]').forEach((p) => p.classList.toggle('pro-locked', !s.isPro));
-    $('lock-overlay').classList.toggle('hidden', !(s.hasPassword && s.locked));
+    document.querySelectorAll('.panel[data-pro]').forEach((p) => {
+      p.classList.toggle('pro-locked', !s.isPro);
+      // Locked Pro panels are dimmed for the eye and removed from the keyboard/AT tree.
+      for (const child of p.querySelectorAll(':scope > :not(.panel-head):not(.pro-gate), :scope > .panel-head .master')) {
+        child.inert = !s.isPro;
+      }
+    });
+    const locked = s.hasPassword && s.locked;
+    const wasLocked = !$('lock-overlay').classList.contains('hidden');
+    $('lock-overlay').classList.toggle('hidden', !locked);
+    $('layout').inert = locked; // modal: nothing behind the dialog is reachable
+    if (locked && !wasLocked) setTimeout(() => $('lock-password').focus(), 30);
 
     // sidebar plan card
     $('side-plan-title').textContent = s.isPro ? 'FocusFence Pro' : 'Free plan';
@@ -195,6 +205,7 @@
             type: 'button',
             class: 'day',
             title: DAY_TITLES[d],
+            'aria-label': DAY_TITLES[d],
             'aria-pressed': w.days.includes(d) ? 'true' : 'false',
             text: DAY_NAMES[d],
             disabled: s.strict.active,
@@ -226,7 +237,7 @@
       wrap.appendChild(
         el(
           'div',
-          { class: 'window' },
+          { class: 'window', role: 'listitem' },
           days,
           el('div', { class: 'times' }, mkTime('start'), el('span', { class: 'muted', text: '–' }), mkTime('end')),
           crosses ? el('span', { class: 'badge', text: 'overnight' }) : null,
@@ -327,6 +338,11 @@
     $('stat-saved').textContent = C.formatMinutes(st.minutesSaved);
     const chart = $('chart');
     chart.textContent = '';
+    chart.setAttribute(
+      'aria-label',
+      'Blocked attempts per day, last 7 days: ' +
+        st.byDay.map((d) => new Date(d.day + 'T12:00:00').toLocaleDateString([], { weekday: 'long' }) + ' ' + d.count).join(', ')
+    );
     const max = Math.max(1, ...st.byDay.map((d) => d.count));
     st.byDay.forEach((d, i) => {
       const date = new Date(d.day + 'T12:00:00');
@@ -363,6 +379,12 @@
     $('price-monthly').textContent = s.prices.monthly.split('/')[0];
     $('price-yearly').textContent = s.prices.yearly.split('/')[0];
     $('dev-panel').classList.toggle('hidden', !s.dev);
+    const lic = s.license || {};
+    $('license-note').hidden = !(lic.lastError && !s.dev);
+    $('license-note').textContent = lic.lastError
+      ? "Couldn't reach ExtensionPay to verify your plan (offline?). Using the last known status" +
+        (lic.checkedAt ? ' from ' + new Date(lic.checkedAt).toLocaleDateString() : '') + '.'
+      : '';
     $('source-link').href = s.sourceUrl;
     $('privacy-link').href = s.privacyUrl;
     $('dev-pro').checked = s.devPro;
@@ -417,7 +439,7 @@
     const b = e.target.closest('button[data-type]');
     if (!b) return;
     addType = b.dataset.type;
-    document.querySelectorAll('#type-seg button').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
+    document.querySelectorAll('#type-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     $('add-input').placeholder = HINTS[addType][0];
     $('add-hint').textContent = HINTS[addType][1];
     $('add-input').focus();
@@ -603,7 +625,12 @@
     (items) => {
       for (const it of items) {
         if (it.isIntersecting) {
-          links.forEach((l) => l.classList.toggle('active', l.dataset.nav === it.target.id));
+          links.forEach((l) => {
+            const on = l.dataset.nav === it.target.id;
+            l.classList.toggle('active', on);
+            if (on) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
         }
       }
     },

@@ -29,7 +29,7 @@ body {
   background: var(--accent-soft);
   box-shadow: none;
 }
-.status h1 {
+.status h2 {
   font-size: 16px;
   font-weight: 680;
   color: var(--accent-strong);
@@ -41,13 +41,13 @@ body {
 .status.off {
   background: var(--bg-2);
 }
-.status.off h1 {
+.status.off h2 {
   color: var(--ink-2);
 }
 .status.strict {
   background: var(--pro-soft);
 }
-.status.strict h1 {
+.status.strict h2 {
   color: var(--pro);
 }
 .unlock {
@@ -106,7 +106,7 @@ body {
   justify-content: space-between;
   align-items: flex-start;
 }
-.focus h2 {
+.focus h3 {
   font-size: 14px;
   font-weight: 650;
 }
@@ -128,7 +128,7 @@ body {
   color: var(--accent);
 }
 .focus.locked .timer {
-  color: var(--faint);
+  color: var(--muted);
 }
 .foot {
   display: flex;

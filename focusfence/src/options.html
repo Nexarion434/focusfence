@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="styles/options.css" />
   </head>
   <body>
-    <div class="layout">
+    <div class="layout" id="layout">
       <aside class="side">
         <div class="side-brand"><span class="logo" id="logo"><span>FocusFence</span></span></div>
-        <nav class="nav" id="nav">
+        <nav class="nav" id="nav" aria-label="Settings sections">
           <a href="#blocklist" data-nav="blocklist">
             <svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z" /><path d="M5 12h14M12 5v14" /></svg>Blocklist</a>
           <a href="#schedule" data-nav="schedule">
@@ -39,7 +39,8 @@
       </aside>
 
       <main class="main" id="main">
-        <div class="welcome card hidden" id="welcome">
+        <h1 class="visually-hidden">FocusFence settings</h1>
+        <div class="welcome card hidden" id="welcome" role="note">
           <div>
             <h2>Welcome to FocusFence 👋</h2>
             <p class="muted">Add the sites that steal your attention. Chrome will ask once per site to let FocusFence show its calm block page instead of an error screen.</p>
@@ -47,7 +48,7 @@
           <button class="btn btn-ghost btn-sm" id="welcome-close">Got it</button>
         </div>
 
-        <div class="strict-banner hidden" id="strict-banner">
+        <div class="strict-banner hidden" id="strict-banner" role="status">
           <svg viewBox="0 0 24 24" width="18" height="18"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
           <span id="strict-banner-text">Strict mode is on. Your blocklist can only grow.</span>
           <a href="#strict" class="small">Manage</a>
@@ -57,7 +58,7 @@
         <section class="panel" id="blocklist">
           <header class="panel-head">
             <div>
-              <h1>Blocklist</h1>
+              <h2>Blocklist</h2>
               <p class="muted">Blocking a domain also blocks its subdomains — <code>reddit.com</code> covers <code>old.reddit.com</code> and <code>m.reddit.com</code>.</p>
             </div>
             <div class="master">
@@ -67,13 +68,13 @@
           </header>
 
           <form class="add-row card" id="add-form" autocomplete="off">
-            <div class="seg" role="radiogroup" aria-label="Rule type" id="type-seg">
-              <button type="button" role="radio" aria-checked="true" data-type="domain">Website</button>
-              <button type="button" role="radio" aria-checked="false" data-type="path">Path <span class="badge badge-pro">PRO</span></button>
-              <button type="button" role="radio" aria-checked="false" data-type="keyword">Keyword <span class="badge badge-pro">PRO</span></button>
+            <div class="seg" role="group" aria-label="Rule type" id="type-seg">
+              <button type="button" aria-pressed="true" data-type="domain">Website</button>
+              <button type="button" aria-pressed="false" data-type="path">Path <span class="badge badge-pro">PRO</span></button>
+              <button type="button" aria-pressed="false" data-type="keyword">Keyword <span class="badge badge-pro">PRO</span></button>
             </div>
             <div class="add-input-row">
-              <input class="input" id="add-input" placeholder="reddit.com" aria-label="Website, path or keyword" />
+              <input class="input" id="add-input" placeholder="reddit.com" aria-label="Website, path or keyword" aria-describedby="add-hint" />
               <button class="btn btn-primary" type="submit" id="add-submit">Add to blocklist</button>
             </div>
             <p class="muted small" id="add-hint">Blocks the whole site, including every subdomain.</p>
@@ -100,7 +101,7 @@
         <section class="panel" id="schedule" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Schedule</h1>
+              <h2>Schedule</h2>
               <p class="muted">Only block during the hours you want to focus. Outside these windows, blocking pauses automatically.</p>
             </div>
             <div class="master">
@@ -109,7 +110,7 @@
             </div>
           </header>
           <div class="card pad">
-            <div id="windows" class="windows"></div>
+            <div id="windows" class="windows" role="list" aria-label="Time ranges"></div>
             <div class="actions">
               <button class="btn btn-sm" id="window-add" type="button">+ Add time range</button>
               <span class="spacer"></span>
@@ -123,7 +124,7 @@
         <section class="panel" id="focus" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Focus sessions</h1>
+              <h2>Focus sessions</h2>
               <p class="muted">Pomodoro-style rounds. During focus, everything on your blocklist is blocked — even outside your schedule.</p>
             </div>
           </header>
@@ -137,7 +138,7 @@
               <button class="btn btn-sm hidden" id="pomo-stop" type="button">Stop session</button>
             </div>
             <div class="focus-live hidden" id="pomo-live">
-              <div class="focus-clock" id="pomo-clock">25:00</div>
+              <div class="focus-clock" id="pomo-clock" role="timer" aria-label="Time left">25:00</div>
               <div class="muted small" id="pomo-phase">Focus · round 1 of 4</div>
             </div>
           </div>
@@ -147,7 +148,7 @@
         <section class="panel" id="strict" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Strict mode</h1>
+              <h2>Strict mode</h2>
               <p class="muted">For when willpower runs out. While strict mode is on, blocking can't be turned off, sites can't be removed and the schedule can't be changed. Ending early takes a 10-minute cooling-off period and a typing challenge.</p>
             </div>
           </header>
@@ -185,7 +186,7 @@
               <button class="btn btn-sm" id="strict-request" type="button">Request unlock</button>
             </div>
             <div id="strict-waiting" class="hidden">
-              <p>Cooling off… <strong id="strict-countdown">10:00</strong></p>
+              <p>Cooling off… <strong id="strict-countdown" role="timer">10:00</strong></p>
               <p class="muted small">Still want to unlock? Take a breath. You can cancel anytime.</p>
               <button class="btn btn-sm" id="strict-cancel" type="button">Cancel unlock</button>
             </div>
@@ -193,7 +194,7 @@
               <p class="small">Type this exactly to end strict mode:</p>
               <p class="challenge" id="strict-phrase"></p>
               <div class="row">
-                <input class="input" id="strict-typed" placeholder="Type the sentence above" spellcheck="false" />
+                <input class="input" id="strict-typed" placeholder="Type the sentence above" spellcheck="false" autocomplete="off" aria-label="Type the sentence shown above" aria-describedby="strict-phrase" />
                 <button class="btn btn-danger" type="submit">End strict mode</button>
               </div>
               <button class="btn btn-ghost btn-sm" id="strict-cancel-2" type="button">Keep strict mode</button>
@@ -213,14 +214,14 @@
         <section class="panel" id="blockpage" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Block page</h1>
+              <h2>Block page</h2>
               <p class="muted">Write a note to your future self. It replaces the rotating quotes on the block page.</p>
             </div>
           </header>
           <div class="card pad">
-            <textarea class="input" id="message" rows="3" maxlength="280" placeholder="e.g. You promised yourself the thesis chapter first."></textarea>
+            <textarea class="input" id="message" rows="3" maxlength="280" aria-label="Block page message" aria-describedby="message-count" placeholder="e.g. You promised yourself the thesis chapter first."></textarea>
             <div class="actions">
-              <span class="muted small" id="message-count">0 / 280</span>
+              <span class="muted small" id="message-count" aria-live="polite">0 / 280</span>
               <span class="spacer"></span>
               <a class="btn btn-sm" id="message-preview" target="_blank" href="blocked.html#https://reddit.com/">Preview</a>
               <button class="btn btn-primary btn-sm" id="message-save" type="button">Save message</button>
@@ -232,14 +233,14 @@
         <section class="panel" id="security" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Password lock</h1>
+              <h2>Password lock</h2>
               <p class="muted">Require a password to turn blocking off, remove sites or change settings. Ideal if someone else holds the key. Passwords are hashed (PBKDF2) and never leave this device.</p>
             </div>
           </header>
           <div class="card pad">
             <form class="row" id="password-form" autocomplete="off">
-              <input class="input" type="password" id="password-new" placeholder="New password" autocomplete="new-password" />
-              <input class="input" type="password" id="password-confirm" placeholder="Confirm password" autocomplete="new-password" />
+              <input class="input" type="password" id="password-new" placeholder="New password" aria-label="New password" autocomplete="new-password" />
+              <input class="input" type="password" id="password-confirm" placeholder="Confirm password" aria-label="Confirm password" autocomplete="new-password" />
               <button class="btn btn-primary" type="submit" id="password-save">Set password</button>
             </form>
             <div class="actions" id="password-actions">
@@ -255,7 +256,7 @@
         <section class="panel" id="stats" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Stats</h1>
+              <h2>Stats</h2>
               <p class="muted">Blocked attempts over the last 7 days. Counted on this device only.</p>
             </div>
           </header>
@@ -265,7 +266,7 @@
             <div class="card pad stat"><div class="stat-num" id="stat-saved">0 min</div><div class="muted small">≈ time reclaimed (5 min / visit)</div></div>
           </div>
           <div class="card pad">
-            <div class="chart" id="chart" aria-label="Blocked attempts per day"></div>
+            <div class="chart" id="chart" role="img" aria-label="Blocked attempts per day"></div>
             <h3 class="sub">Top sites</h3>
             <ul class="top-sites" id="top-sites"></ul>
             <div class="actions"><span class="spacer"></span><button class="btn btn-sm btn-ghost" id="stats-clear" type="button">Clear stats</button></div>
@@ -276,14 +277,14 @@
         <section class="panel" id="backup" data-pro>
           <header class="panel-head">
             <div>
-              <h1>Backup</h1>
+              <h2>Backup</h2>
               <p class="muted">Export your blocklist, schedule and preferences as JSON, or import them on another computer. Passwords and stats are never exported.</p>
             </div>
           </header>
           <div class="card pad actions-row">
             <button class="btn" id="export-btn" type="button">Export settings</button>
-            <label class="btn" for="import-file">Import settings…</label>
             <input type="file" id="import-file" accept="application/json,.json" class="visually-hidden" />
+            <label class="btn import-label" for="import-file">Import settings…</label>
           </div>
         </section>
 
@@ -291,7 +292,7 @@
         <section class="panel" id="plan">
           <header class="panel-head">
             <div>
-              <h1 id="plan-title">FocusFence Pro</h1>
+              <h2 id="plan-title">FocusFence Pro</h2>
               <p class="muted" id="plan-sub">Everything in Free, plus the tools that make focus stick.</p>
             </div>
           </header>
@@ -317,6 +318,7 @@
             <li>Export / import settings</li>
             <li>Private: no account, no tracking</li>
           </ul>
+          <p class="notice small" id="license-note" role="status" hidden></p>
           <p class="muted small plan-foot">Payments are handled securely by ExtensionPay (Stripe). <a href="#" id="restore-link">Already paid? Restore purchase</a></p>
           <p class="muted small about" id="about">
             FocusFence is free software, licensed under the
@@ -336,12 +338,12 @@
       </main>
     </div>
 
-    <div class="lock-overlay hidden" id="lock-overlay">
+    <div class="lock-overlay hidden" id="lock-overlay" role="dialog" aria-modal="true" aria-labelledby="lock-title">
       <form class="card lock-card" id="lock-form">
         <div class="lock-logo" id="lock-logo"></div>
-        <h2>Settings are locked</h2>
+        <h2 id="lock-title">Settings are locked</h2>
         <p class="muted">Enter your FocusFence password to make changes.</p>
-        <input class="input" type="password" id="lock-password" placeholder="Password" autocomplete="current-password" />
+        <input class="input" type="password" id="lock-password" placeholder="Password" aria-label="Password" autocomplete="current-password" />
         <button class="btn btn-primary btn-block" type="submit">Unlock</button>
       </form>
     </div>
