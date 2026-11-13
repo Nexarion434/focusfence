@@ -4,13 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FocusFence — Website-Blocker &amp; Fokus-Timer für Chrome</title>
-<meta name="description" content="Ablenkende Websites in Chrome blockieren. YouTube Shorts sperren, YouTube behalten, Fokuszeiten planen, Pomodoro-Sitzungen starten und sich mit dem Strikt-Modus selbst aussperren. Privat: Nichts verlässt Ihr Gerät.">
+<meta name="description" content="Ablenkende Websites in Chrome blockieren. YouTube Shorts sperren, YouTube behalten, Fokuszeiten planen, Pomodoro-Sitzungen starten und sich mit dem strikten Modus selbst aussperren. Privat: Nichts verlässt Ihr Gerät.">
 <link rel="canonical" href="https://focusfence.dev/de/">
 <link rel="alternate" hreflang="en" href="https://focusfence.dev/">
 <link rel="alternate" hreflang="fr" href="https://focusfence.dev/fr/">
 <link rel="alternate" hreflang="es" href="https://focusfence.dev/es/">
 <link rel="alternate" hreflang="de" href="https://focusfence.dev/de/">
 <link rel="alternate" hreflang="x-default" href="https://focusfence.dev/">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#08090a">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://focusfence.dev/de/">
 <meta property="og:site_name" content="FocusFence">
@@ -19,91 +21,1783 @@
 <meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:title" content="FocusFence — Website-Blocker &amp; Fokus-Timer für Chrome">
-<meta property="og:description" content="Ablenkende Websites in Chrome blockieren. YouTube Shorts sperren, YouTube behalten, Fokuszeiten planen, Pomodoro-Sitzungen starten und sich mit dem Strikt-Modus selbst aussperren. Privat: Nichts verlässt Ihr Gerät.">
-<meta property="og:image" content="https://focusfence.dev/assets/de/social.png">
-<meta property="og:image:width" content="440">
-<meta property="og:image:height" content="280">
+<meta property="og:description" content="Ablenkende Websites in Chrome blockieren. YouTube Shorts sperren, YouTube behalten, Fokuszeiten planen, Pomodoro-Sitzungen starten und sich mit dem strikten Modus selbst aussperren. Privat: Nichts verlässt Ihr Gerät.">
+<meta property="og:image" content="https://focusfence.dev/assets/de/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FocusFence, der Website-Blocker für Chrome: Zäunen Sie endlose Feeds ein.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="../assets/favicon.png">
-<link rel="stylesheet" href="../assets/site.css">
-<script src="../assets/lang.js" defer></script>
+<meta name="twitter:image" content="https://focusfence.dev/assets/de/og.png">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
+   Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/inter.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  /* surfaces */
+  --bg: #08090a;
+  --bg-2: #0b0d0c;
+  --panel: rgba(255, 255, 255, 0.025);
+  --panel-2: rgba(255, 255, 255, 0.045);
+  --screen: #141917; /* the extension's own dark background: product images sit on it seamlessly */
+  --line: rgba(255, 255, 255, 0.075);
+  --line-2: rgba(255, 255, 255, 0.11);
+  --line-3: rgba(255, 255, 255, 0.18);
+  /* text */
+  --text: #f3f5f4;
+  --text-2: #c9d0cc;
+  --muted: #8e9893;
+  /* brand */
+  --green: #3a9a5b; /* field green, the logo tile */
+  --accent: #6cc58a;
+  --cta: #5dbe7e;
+  --cta-hover: #73cb91;
+  --cta-ink: #04130a;
+  --glow: rgba(58, 154, 91, 0.22);
+  --pro: #d9a74b;
+  --pro-bg: rgba(217, 167, 75, 0.12);
+  /* type */
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  /* layout */
+  --wrap: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --sec: clamp(88px, 11vw, 160px);
+  --r-sm: 8px;
+  --r: 14px;
+  --r-lg: 18px;
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 0.7s;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+  interpolate-size: allow-keywords;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font: 400 16px/1.6 var(--sans);
+  font-feature-settings: 'cv11', 'ss01';
+  font-optical-sizing: auto;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+h1,
+h2,
+h3 {
+  color: var(--text);
+  font-weight: 590;
+  overflow-wrap: break-word;
+}
+strong {
+  color: var(--text-2);
+  font-weight: 560;
+}
+a {
+  color: inherit;
+}
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--text-2);
+  background: var(--panel-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+::selection {
+  background: rgba(108, 197, 138, 0.3);
+  color: var(--text);
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 560;
+  text-decoration: none;
+}
+.skip:focus {
+  top: 12px;
+}
+.wrap {
+  width: min(var(--wrap), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+.i {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dim {
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ header */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(8, 9, 10, 0.7);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  backdrop-filter: saturate(1.6) blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.top.is-stuck {
+  border-bottom-color: var(--line);
+  background: rgba(8, 9, 10, 0.82);
+}
+.top-in {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 15.5px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.brand svg {
+  border-radius: 6px;
+}
+.links {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.links a {
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.links a:hover {
+  color: var(--text);
+}
+.langs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.langs a {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: var(--muted);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color 0.15s, background-color 0.15s;
+}
+.langs a:hover {
+  color: var(--text);
+}
+.langs a[aria-current='page'] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.09);
+}
+.top-cta {
+  margin-left: 4px;
+}
+
+/* ------------------------------------------------------------------ buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 560;
+  letter-spacing: -0.012em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.btn-sm {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 13.5px;
+}
+.btn-primary {
+  background: var(--cta);
+  color: var(--cta-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(93, 190, 126, 0.5), 0 10px 30px -10px rgba(93, 190, 126, 0.55);
+}
+.btn-primary:hover {
+  background: var(--cta-hover);
+}
+.btn-primary .i-arrow {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: transform 0.2s var(--ease);
+}
+.btn-primary:hover .i-arrow {
+  transform: translateX(2px);
+}
+.btn-ghost {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+/* Before the store listing exists: a status, not a fake button. */
+.btn-soon {
+  gap: 10px;
+  padding: 0 18px 0 16px;
+  color: var(--text-2);
+  background: rgba(58, 154, 91, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(108, 197, 138, 0.28);
+  cursor: default;
+}
+.pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pulse::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------- hero */
+.hero {
+  position: relative;
+  padding-top: clamp(44px, 6vw, 88px);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.hero::before {
+  /* the light behind the fence */
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 34%;
+  width: min(1500px, 140vw);
+  height: 900px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--glow), rgba(58, 154, 91, 0.06) 55%, transparent);
+  pointer-events: none;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 14px 0 12px;
+  border-radius: 999px;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(58, 154, 91, 0.22), 0 0 12px 2px rgba(58, 154, 91, 0.6);
+}
+.display {
+  margin-top: 24px;
+  max-width: 13em;
+  font-size: clamp(44px, 4vw + 22px, 80px);
+  font-weight: 620;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.display em {
+  font-style: normal;
+  color: var(--muted);
+}
+.hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px 64px;
+  align-items: end;
+  margin-top: 32px;
+}
+.lead {
+  max-width: 31em;
+  text-wrap: pretty;
+  font-size: clamp(17px, 0.3vw + 15.5px, 19px);
+  line-height: 1.55;
+  letter-spacing: -0.012em;
+}
+.hero-actions {
+  display: grid;
+  justify-items: end;
+  gap: 18px;
+}
+.hero-actions .cta,
+.hero-actions .ticks {
+  justify-content: flex-end;
+  margin-top: 0;
+}
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+.ticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 22px;
+  font-size: 13.5px;
+}
+.ticks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ticks .i {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+  color: var(--accent);
+}
+
+/* product stage */
+.stage {
+  position: relative;
+  margin-top: clamp(48px, 5vw, 72px);
+  padding-inline: var(--gutter);
+}
+.stage::after {
+  /* floor: the window settles into the page */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 22%;
+  background: linear-gradient(to bottom, transparent, var(--bg) 92%);
+  pointer-events: none;
+}
+.win-wrap {
+  position: relative;
+  width: min(1280px, 100%);
+  margin-inline: auto;
+}
+.win {
+  position: relative;
+  width: min(1280px, 100%);
+  margin-inline: auto;
+  border-radius: var(--r-lg);
+  background: var(--screen);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.1) inset, 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 100px -20px rgba(58, 154, 91, 0.18);
+}
+.win-bar {
+  position: relative;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 14px 0 16px;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: #0e1211;
+  border-bottom: 1px solid var(--line);
+}
+.win-dots {
+  display: flex;
+  gap: 7px;
+}
+.win-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.11);
+}
+.win-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 14px 0 10px;
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 12.5px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.win-tab span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.win-tab svg {
+  flex: none;
+  border-radius: 3px;
+}
+.win-ext {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.win-ext svg {
+  border-radius: 4px;
+}
+.win-body {
+  overflow: hidden;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.win-img {
+  width: 100%;
+}
+.win-popup {
+  position: absolute;
+  z-index: 1;
+  top: 48px;
+  right: 10px;
+  width: 28.125%; /* 360 / 1280: the popup at the same scale as the page */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.13), 0 24px 70px -10px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.win-popup img {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------- sections */
+.sec {
+  position: relative;
+  padding-block: var(--sec);
+}
+
+.sec + .sec::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(var(--wrap), 100% - 2 * var(--gutter));
+  transform: translateX(-50%);
+  border-top: 1px solid var(--line);
+}
+.sec-intro {
+  padding-top: clamp(40px, 6vw, 72px);
+}
+.statement {
+  max-width: 25em;
+  font-size: clamp(26px, 1.8vw + 14px, 40px);
+  font-weight: 560;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: clamp(56px, 7vw, 104px);
+  border-top: 1px solid var(--line);
+  counter-reset: step;
+}
+.step {
+  padding: 28px 40px 0 0;
+}
+.step + .step {
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.step-n {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.step h3 {
+  margin-top: 20px;
+  font-size: 17px;
+  letter-spacing: -0.014em;
+}
+.step p {
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px 72px;
+  align-items: end;
+}
+.sec-head-solo {
+  grid-template-columns: 1fr;
+}
+.sec-head-center {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+}
+.sec-head-center .sec-lead {
+  max-width: 32em;
+}
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  color: var(--text-2);
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.picket {
+  width: 7px;
+  height: 11px;
+  background: var(--green);
+  clip-path: polygon(0 3.5px, 3.5px 0, 7px 3.5px, 7px 100%, 0 100%);
+}
+.h2 {
+  font-size: clamp(32px, 1.9vw + 20px, 48px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+}
+.sec-lead {
+  max-width: 30em;
+  font-size: clamp(16px, 0.25vw + 15px, 18px);
+  line-height: 1.6;
+}
+
+/* framed product shot */
+.shot {
+  position: relative;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+.shot::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  height: 26%;
+  background: linear-gradient(to bottom, transparent, var(--bg) 88%);
+  pointer-events: none;
+}
+.shot .win {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+}
+.feats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 72px;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+.feat h3,
+.card h3,
+.details h3,
+.points h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 17px;
+  letter-spacing: -0.014em;
+  line-height: 1.35;
+}
+.feat p,
+.card p {
+  margin-top: 8px;
+  font-size: 15px;
+}
+.pro {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 6px;
+  color: var(--pro);
+  background: var(--pro-bg);
+  font: 600 10.5px/1 var(--sans);
+  letter-spacing: 0.06em;
+}
+.kicker .pro {
+  margin-left: 2px;
+}
+
+/* bento of real UI crops */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015) 60%);
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+.card::after,
+.plan::after {
+  /* pointer light (scripts/site.js sets --mx/--my on fine pointers) */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -200%), rgba(255, 255, 255, 0.045), transparent 60%);
+  pointer-events: none;
+}
+.card-text {
+  padding: 30px 32px 0;
+  max-width: 36em;
+}
+.screen {
+  display: grid;
+  place-items: center;
+  margin: 28px 0 0;
+  padding: 28px;
+  background: var(--screen);
+  border-top: 1px solid var(--line);
+}
+.card .screen {
+  margin-top: auto;
+  flex: 1;
+}
+.card-text + .screen {
+  margin-top: 28px;
+}
+.card-schedule {
+  grid-column: span 7;
+}
+.card-timer {
+  grid-column: span 5;
+}
+.card-strict {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: stretch;
+}
+.card-strict .card-text {
+  align-self: center;
+  padding: 36px 40px;
+}
+.card-strict .screen {
+  margin: 0;
+  border-top: 0;
+  border-left: 1px solid var(--line);
+}
+.screen img {
+  border-radius: 12px;
+}
+
+/* stats panel */
+.screen-stats {
+  width: min(100%, 960px);
+  margin: clamp(48px, 6vw, 80px) auto 0;
+  padding: clamp(12px, 3vw, 40px);
+  border-radius: var(--r-lg);
+  border-top: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+}
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(64px, 8vw, 112px);
+  border-top: 1px solid var(--line);
+}
+.details li {
+  padding: 32px 36px 36px 0;
+  border-bottom: 1px solid var(--line);
+}
+.details li:not(:nth-child(3n + 1)) {
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.details li:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+.details .i,
+.points .i {
+  width: 22px;
+  height: 22px;
+  color: var(--text-2);
+  stroke-width: 1.5;
+}
+.details h3 {
+  margin-top: 20px;
+  font-size: 15.5px;
+}
+.details p {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* privacy */
+.privacy-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px 72px;
+  margin-top: clamp(48px, 6vw, 80px);
+  align-items: start;
+}
+.points {
+  display: grid;
+  gap: 36px;
+}
+.points li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 18px;
+}
+.points .i {
+  margin-top: 2px;
+}
+.points p {
+  margin-top: 6px;
+  font-size: 15px;
+}
+.manifest {
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+.manifest figcaption {
+  padding: 16px 22px;
+  color: var(--text-2);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+.manifest dl div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 16px;
+  padding: 13px 22px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.manifest dt {
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.manifest dt code {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  font-size: inherit;
+}
+.manifest-net {
+  display: flex;
+  gap: 10px;
+  padding: 16px 22px;
+  color: var(--text-2);
+  font-size: 14px;
+  background: rgba(58, 154, 91, 0.06);
+}
+.manifest-net::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* pricing */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+.plan {
+  position: relative;
+  padding: 32px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+.plan h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 560;
+  color: var(--text-2);
+}
+.plan-best {
+  background: linear-gradient(180deg, rgba(58, 154, 91, 0.12), rgba(58, 154, 91, 0.03) 55%, rgba(255, 255, 255, 0.012));
+  box-shadow: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
+}
+.save {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: var(--cta-ink);
+  background: var(--accent);
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 22px;
+}
+.amt {
+  color: var(--text);
+  font-size: clamp(40px, 2vw + 26px, 52px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.per {
+  font-size: 15px;
+}
+.plan-note {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.checks {
+  display: grid;
+  gap: 11px;
+  margin-top: 26px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.checks li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 12px;
+  color: var(--text-2);
+}
+.checks .i {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  stroke-width: 2.2;
+  color: var(--accent);
+}
+.plans-foot {
+  margin-top: 32px;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  font-size: 14px;
+}
+.plans-foot p:first-child {
+  color: var(--text-2);
+}
+
+/* faq */
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: 40px 72px;
+  align-items: start;
+}
+.faq-head {
+  position: sticky;
+  top: 112px;
+}
+.faq-head p {
+  margin-top: 20px;
+  max-width: 22em;
+  font-size: 15px;
+}
+.faq-head a,
+.points a,
+.faq-a a,
+.plans-foot a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+.faq-head a:hover,
+.faq-a a:hover {
+  color: var(--text);
+  text-decoration-color: currentColor;
+}
+.faq-list {
+  border-top: 1px solid var(--line);
+}
+.faq-list details {
+  border-bottom: 1px solid var(--line);
+}
+.faq-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0;
+  color: var(--text);
+  font-size: 16.5px;
+  font-weight: 540;
+  letter-spacing: -0.014em;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.faq-list summary:hover .faq-i {
+  color: var(--text);
+}
+.faq-i {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  transition: transform 0.3s var(--ease), color 0.2s;
+}
+details[open] .faq-i {
+  transform: rotate(45deg);
+}
+.faq-a p {
+  padding: 0 48px 24px 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+@supports (interpolate-size: allow-keywords) {
+  .faq-list details::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 0.35s var(--ease), content-visibility 0.35s allow-discrete;
+  }
+  .faq-list details[open]::details-content {
+    height: auto;
+  }
+}
+
+/* final call */
+.final {
+  position: relative;
+  padding: clamp(96px, 10vw, 152px) 0 0;
+  overflow: hidden;
+  text-align: center;
+  isolation: isolate;
+}
+.final::before {
+  /* the light behind the fence */
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  bottom: -260px;
+  width: min(1300px, 160vw);
+  height: 640px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(58, 154, 91, 0.34), rgba(58, 154, 91, 0.08) 58%, transparent);
+}
+.final-in {
+  display: grid;
+  justify-items: center;
+}
+.final-mark svg {
+  border-radius: 14px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
+}
+.final-h {
+  margin-top: 36px;
+  font-size: clamp(38px, 3.6vw + 18px, 72px);
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.final .cta {
+  justify-content: center;
+  margin-top: 40px;
+}
+.final .ticks {
+  justify-content: center;
+}
+.fence {
+  width: 100%;
+  height: 180px;
+  margin-top: clamp(64px, 8vw, 104px);
+  margin-bottom: -1px;
+  fill: #0a0d0b;
+  stroke: rgba(108, 197, 138, 0.18);
+  stroke-width: 1;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+}
+.fence .rail {
+  stroke: rgba(108, 197, 138, 0.1);
+}
+.fence .pickets {
+  stroke: none;
+}
+
+/* footer */
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 64px 0 48px;
+  font-size: 13.5px;
+  background: var(--bg-2);
+}
+.foot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: 40px;
+}
+.foot-brand p {
+  margin-top: 16px;
+  max-width: 22em;
+}
+.foot-h {
+  color: var(--text);
+  font-weight: 560;
+}
+.foot-col ul {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.foot-col a {
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.foot-col a:hover {
+  color: var(--text);
+}
+.foot-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 32px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.foot-base a {
+  color: var(--text-2);
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line-3);
+}
+
+/* ------------------------------------------------- privacy policy, blog */
+.doc {
+  padding: clamp(56px, 8vw, 112px) 0 clamp(80px, 10vw, 140px);
+}
+.prose {
+  max-width: 700px;
+  color: var(--text-2);
+  font-size: 16.5px;
+  line-height: 1.75;
+}
+.prose h1 {
+  font-size: clamp(36px, 2.6vw + 22px, 56px);
+  font-weight: 620;
+  line-height: 1.04;
+  letter-spacing: -0.042em;
+  text-wrap: balance;
+  margin-bottom: 28px;
+}
+.prose h2 {
+  margin: 56px 0 14px;
+  font-size: 24px;
+  letter-spacing: -0.026em;
+  line-height: 1.25;
+}
+.prose h3 {
+  margin: 36px 0 10px;
+  font-size: 18px;
+  letter-spacing: -0.016em;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 18px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 22px;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 6px 0;
+  padding-left: 4px;
+}
+.prose li::marker {
+  color: var(--muted);
+}
+.prose a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgba(108, 197, 138, 0.55);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+.prose strong {
+  color: var(--text);
+}
+.prose em {
+  color: var(--text);
+}
+.table {
+  overflow-x: auto;
+  margin: 20px 0 28px;
+  border-radius: var(--r);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+tr:last-child td {
+  border-bottom: 0;
+}
+th {
+  color: var(--text);
+  font-weight: 560;
+  background: rgba(255, 255, 255, 0.03);
+}
+.doc-meta {
+  display: flex;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.doc-meta a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.doc-meta a:hover {
+  color: var(--text);
+}
+.doc-lead {
+  font-size: 19px;
+  color: var(--muted);
+}
+.prose .posts {
+  margin-top: 48px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.prose .posts li {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+.prose .posts a {
+  display: grid;
+  gap: 6px;
+  padding: 28px 0;
+  text-decoration: none;
+}
+.posts time {
+  color: var(--muted);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.post-t {
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 590;
+  letter-spacing: -0.022em;
+  line-height: 1.3;
+}
+.post-d {
+  color: var(--muted);
+  font-size: 15.5px;
+}
+.posts a:hover .post-t {
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ motion */
+/* hidden at once, revealed with a short rise (scripts/site.js adds .motion and .in) */
+.motion [data-reveal]:not(.in) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.motion [data-reveal].in {
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+/* No endless animation: the status dot pings three times, then rests. */
+@media (prefers-reduced-motion: no-preference) {
+  .pulse::after {
+    animation: ping 2.4s var(--ease) 0.6s 3 both;
+  }
+}
+@keyframes ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* -------------------------------------------------------------- responsive */
+@media (max-width: 1024px) {
+  .hero-row,
+  .sec-head,
+  .privacy-grid,
+  .faq {
+    grid-template-columns: 1fr;
+  }
+  .hero-actions {
+    justify-items: start;
+  }
+  .hero-actions .cta,
+  .hero-actions .ticks {
+    justify-content: flex-start;
+  }
+  .sec-head {
+    gap: 20px;
+  }
+  .faq-head {
+    position: static;
+  }
+  .card-schedule,
+  .card-timer {
+    grid-column: span 12;
+  }
+  .card-strict {
+    grid-template-columns: 1fr;
+  }
+  .card-strict .card-text {
+    padding: 30px 32px 0;
+  }
+  .card-strict .screen {
+    margin-top: 28px;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .details li:not(:nth-child(3n + 1)) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .details li:nth-child(even) {
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+  }
+  .details li:nth-last-child(-n + 3) {
+    border-bottom: 1px solid var(--line);
+  }
+  .details li:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .foot-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .foot-brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 860px) {
+  .plans {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+  .steps,
+  .feats {
+    grid-template-columns: 1fr;
+  }
+  .step,
+  .step + .step {
+    padding: 24px 0;
+    border-left: 0;
+  }
+  .step + .step {
+    border-top: 1px solid var(--line);
+  }
+}
+@media (max-width: 720px) {
+  .links {
+    display: none;
+  }
+  .langs {
+    margin-left: auto;
+  }
+  .top-cta {
+    display: none;
+  }
+  /* the window keeps a readable scale and is cropped at the sides; the popup sits below it */
+  .stage {
+    padding: 0;
+    overflow: hidden;
+  }
+  .stage::after {
+    display: none;
+  }
+  .win-wrap {
+    width: 680px;
+    margin-left: calc(50% - 340px);
+  }
+  .win-hero {
+    background: none;
+    box-shadow: none;
+  }
+  .win-hero .win-bar {
+    border-radius: 0;
+    background: transparent;
+    border-bottom: 0;
+  }
+  .win-hero .win-bar {
+    justify-content: center;
+  }
+  .win-hero .win-dots,
+  .win-hero .win-ext {
+    display: none;
+  }
+  .win-hero .win-body {
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  }
+  .win-popup {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(300px, 80vw);
+    margin: -56px auto 8px;
+    border-radius: 12px;
+  }
+  /* UI crops keep a legible scale and fade out at the right edge */
+  .card .screen,
+  .screen-stats {
+    justify-items: start;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+    mask-image: linear-gradient(to right, #000 82%, transparent);
+  }
+  .card-schedule .screen img,
+  .card-strict .screen img {
+    width: 420px;
+    max-width: none;
+  }
+  .screen-stats img {
+    width: 580px;
+    max-width: none;
+  }
+  .card-timer .screen {
+    -webkit-mask-image: none;
+    mask-image: none;
+    justify-items: center;
+  }
+  .shot {
+    margin-inline: calc(-1 * var(--gutter));
+    overflow: hidden;
+  }
+  .shot .win {
+    width: 760px;
+    margin-left: var(--gutter);
+  }
+  .details {
+    grid-template-columns: 1fr;
+  }
+  .details li,
+  .details li:nth-child(even) {
+    padding: 28px 0;
+    border-left: 0;
+  }
+  .details li:nth-last-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .details li:last-child {
+    border-bottom: 0;
+  }
+  .card-text {
+    padding: 26px 24px 0;
+  }
+  .card-strict .card-text {
+    padding: 26px 24px 0;
+  }
+  .screen {
+    padding: 20px;
+  }
+  .plan {
+    padding: 28px 24px;
+  }
+  .foot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .manifest dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .faq-a p {
+    padding-right: 0;
+  }
+}
+@media (max-width: 480px) {
+  .cta .btn {
+    width: 100%;
+  }
+  /* smaller pickets on phones: the same fence, seen from further away */
+  .fence {
+    width: 160%;
+    max-width: none;
+    margin-left: -30%;
+    margin-top: 40px;
+    margin-bottom: -55px;
+    transform: scale(0.625);
+    transform-origin: 50% 0;
+  }
+  .ticks {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-soon {
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
+    padding-block: 10px;
+  }
+}
+@media (max-width: 400px) {
+  .btn {
+    font-size: 14px;
+  }
+  .btn-soon {
+    padding-inline: 14px;
+  }
+}
+@media print {
+  .top,
+  .stage,
+  .fence {
+    display: none;
+  }
+}
+</style>
+<script src="../assets/site.js" defer></script>
 </head>
 <body>
-<header class="nav"><div class="wrap nav-in">
-  <a class="brand" href="../de/"><svg width="32" height="32" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a>
-  <div class="nav-right">
-    <nav><a href="../de/#features">Funktionen</a><a href="../de/#pricing">Preise</a><a href="../blog/" hreflang="en">Blog</a><a href="../de/privacy.html">Datenschutz</a></nav>
-    <nav class="langs" aria-label="Sprache"><a href="../" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/" hreflang="fr" lang="fr" data-set-lang="fr"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/" hreflang="de" lang="de" data-set-lang="de" aria-current="page"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
-  </div>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+<header class="top"><div class="wrap top-in">
+  <a class="brand" href="../de/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a>
+  <nav class="links" aria-label="Hauptnavigation"><a href="../de/#features">Funktionen</a><a href="../de/#pricing">Preise</a><a href="../blog/" hreflang="en">Blog</a><a href="../de/privacy.html">Datenschutz</a></nav>
+  <nav class="langs" aria-label="Sprache"><a href="../" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/" hreflang="fr" lang="fr" data-set-lang="fr"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/" hreflang="de" lang="de" data-set-lang="de" aria-current="page"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
 </div></header>
 
-<main>
-<section class="hero"><div class="wrap hero-in">
-  <div class="hero-copy">
-    <p class="eyebrow">Website-Blocker für Chrome</p>
-    <h1>Zäunen Sie <em>endlose Feeds</em> ein.</h1>
-    <p class="lead">FocusFence sperrt mit einem Klick die Websites, die Ihnen die Aufmerksamkeit rauben. Ganz Reddit sperren oder nur YouTube Shorts. Fokuszeiten festlegen. Und wenn die Willenskraft nachlässt: Strikt-Modus an.</p>
-    <div class="cta"><span class="btn btn-primary is-soon" aria-disabled="true">Bald im Chrome Web Store</span><a class="btn" href="#features">Funktionen ansehen</a></div>
-    <p class="small muted">Für unbegrenzt viele Websites dauerhaft kostenlos · Kein Konto · Kein Tracking</p>
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-copy">
+    <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Website-Blocker für Chrome</p>
+    <h1 class="display">Zäunen Sie <em>endlose Feeds</em> ein.</h1>
+    <div class="hero-row">
+      <p class="lead">FocusFence sperrt mit einem Klick die Websites, die Ihnen die Aufmerksamkeit rauben. Ganz Reddit sperren oder nur YouTube Shorts. Fokuszeiten festlegen. Und wenn die Willenskraft nachlässt: strikter Modus an.</p>
+      <div class="hero-actions"><div class="cta"><span class="btn btn-soon"><span class="pulse" aria-hidden="true"></span>Bald im Chrome Web Store</span><a class="btn btn-ghost" href="#features">Funktionen ansehen</a></div><ul class="ticks"><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Für unbegrenzt viele Websites dauerhaft kostenlos</li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Kein Konto</li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Kein Tracking</li></ul></div>
+    </div>
   </div>
-  <div class="hero-shot"><img src="../assets/de/popup.png" width="360" height="455" alt="FocusFence-Fenster mit laufender Fokus-Sitzung und der Schaltfläche „Seite blockieren“"></div>
-</div></section>
-
-<section class="band"><div class="wrap">
-  <img class="wide" src="../assets/de/block-page.png" width="1280" height="800" loading="lazy" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem motivierenden Zitat und den heutigen Sperrungen">
-</div></section>
-
-<section id="features"><div class="wrap">
-  <h2>Alles, was Sie für den Fokus brauchen. Nichts, was Sie nicht brauchen.</h2>
-  <div class="grid3">
-    <div class="feat"><h3>Website mit einem Klick sperren</h3><p>Fenster öffnen und auf <strong>Seite blockieren</strong> klicken. Wer reddit.com sperrt, sperrt auch old.reddit.com, m.reddit.com und alle anderen Subdomains.</p></div>
-    <div class="feat"><h3>Nur den schlechten Teil sperren <span class="pro">PRO</span></h3><p>Sperren Sie <code>youtube.com/shorts</code> und behalten Sie den Rest von YouTube für Tutorials und Vorträge. Auch Shorts, die Sie innerhalb von YouTube anklicken, werden gesperrt. Stichwort-Regeln sperren jede Adresse, die ein bestimmtes Wort enthält.</p></div>
-    <div class="feat"><h3>Zeitpläne <span class="pro">PRO</span></h3><p>Nur während der Arbeitszeit sperren, an den Tagen Ihrer Wahl. Auch Zeiträume über Mitternacht funktionieren, z. B. 22:00–06:00 für besseren Schlaf.</p></div>
-    <div class="feat"><h3>Pomodoro-Sitzungen <span class="pro">PRO</span></h3><p>Getaktete Fokusrunden und Pausen. Während Sie sich konzentrieren, ist Ihre ganze Liste gesperrt. Der Countdown erscheint auf dem Symbol in der Symbolleiste.</p></div>
-    <div class="feat"><h3>Strikt-Modus <span class="pro">PRO</span></h3><p>Solange der Strikt-Modus läuft, lässt sich die Sperre nicht abschalten und keine Website entfernen. Wer früher aufhören will, wartet 10 Minuten und tippt einen Text ab.</p></div>
-    <div class="feat"><h3>Statistik, Passwortschutz &amp; mehr <span class="pro">PRO</span></h3><p>Sehen Sie gesperrte Aufrufe pro Website und Tag. Schützen Sie die Einstellungen mit einem Passwort, schreiben Sie Ihre eigene Sperrnachricht, exportieren und importieren Sie Ihre Einrichtung.</p></div>
+  <div class="stage">
+    <div class="win-wrap">
+      <div class="win win-hero">
+        <div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>reddit.com ist blockiert · FocusFence</span></span><span class="win-ext"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg></span></div>
+        <div class="win-body"><img class="win-img" src="../assets/de/block-page-1x.webp" srcset="../assets/de/block-page-1x.webp 1280w, ../assets/de/block-page.webp 2560w" sizes="(max-width: 720px) 680px, min(1280px, calc(100vw - 48px))" width="1280" height="800" decoding="async" fetchpriority="high" alt="Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit einem Zitat, der verbleibenden Zeit der Fokus-Sitzung und den heutigen Sperrungen"></div>
+      </div>
+      <div class="win-popup"><img src="../assets/de/popup.webp" width="360" height="455" decoding="async" alt="FocusFence-Fenster mit laufender Fokus-Sitzung und der Schaltfläche „Seite blockieren“"></div>
+    </div>
   </div>
-  <div class="shots">
-    <img src="../assets/de/schedule.png" width="1280" height="800" loading="lazy" alt="Einstellungen für Zeitplan, Fokus-Sitzung und Strikt-Modus">
-    <img src="../assets/de/stats.png" width="1280" height="800" loading="lazy" alt="Statistik: gesperrte Aufrufe pro Tag und meistgesperrte Websites">
+</section>
+
+<section class="sec sec-intro" aria-labelledby="intro-h">
+  <div class="wrap">
+    <h2 class="statement" id="intro-h" data-reveal>Ein ruhiger, privater Website-Blocker für Chrome. <span class="dim">Sperren Sie eine ganze Website oder nur ihren schlimmsten Teil. FocusFence liest nie Ihre Seiten, und Ihre Liste bleibt auf Ihrem Computer.</span></h2>
+    <ol class="steps" data-reveal>
+      <li class="step"><span class="step-n">01</span><h3>Bis zu drei Websites wählen</h3><p>Bei der Installation fragt FocusFence nach den Websites, die Sie am meisten ablenken. Beginnen Sie mit drei und fügen Sie jederzeit weitere hinzu: Kostenlos hat kein Limit.</p></li>
+      <li class="step"><span class="step-n">02</span><h3>Sperrseite erlauben</h3><p>Chrome fragt nach Zugriff auf die Websites, die Sie sperren, damit FocusFence seine ruhige Sperrseite zeigen kann. Lehnen Sie ab, bleiben sie trotzdem gesperrt.</p></li>
+      <li class="step"><span class="step-n">03</span><h3>Zurück an die Arbeit</h3><p>Wenn Sie das nächste Mal zu einem Feed greifen, landen Sie auf einer ruhigen Seite mit dem heutigen Zähler. Jede weitere Website sperren Sie mit einem Klick im Fenster.</p></li>
+    </ol>
   </div>
-</div></section>
+</section>
 
-<section class="privacy-band"><div class="wrap grid3">
-  <div><h3>Ihre Daten bleiben auf Ihrem Gerät</h3><p>Sperrliste, Einstellungen und Statistik liegen im lokalen Speicher von Chrome. Kein Konto, keine Analyse, keine Werbung.</p></div>
-  <div><h3>FocusFence liest Ihre Seiten nicht</h3><p>Gesperrt wird über die in Chrome eingebaute Regel-Engine (declarativeNetRequest). FocusFence sieht nie den Inhalt der Seiten, die Sie besuchen.</p></div>
-  <div><h3>Minimale Berechtigungen</h3><p>FocusFence fragt den Zugriff Website für Website an, nur für Websites, die Sie sperren. Lehnen Sie ab, bleibt die Website trotzdem gesperrt.</p></div>
-</div></section>
-
-<section id="pricing"><div class="wrap">
-  <h2>Einfache Preise</h2>
-  <div class="prices">
-    <div class="price"><h3>Kostenlos</h3><div class="amt">0 €</div><ul class="checks"><li>Unbegrenzt viele gesperrte Websites</li><li>Inklusive Subdomains</li><li>Sperren mit einem Klick im Fenster</li><li>Ein/Aus-Schalter</li><li>Ruhige Sperrseite</li></ul></div>
-    <div class="price"><h3>Pro monatlich</h3><div class="amt">2,99 €<span>/Monat</span></div><ul class="checks"><li>Alles aus Kostenlos</li><li>Zeitpläne</li><li>Sperren nach Pfad und Stichwort</li><li>Pomodoro-Sitzungen</li><li>Strikt-Modus</li><li>Passwortschutz, Statistik, eigene Nachricht, Sicherung</li></ul></div>
-    <div class="price featured"><h3>Pro jährlich <span class="save">44 % sparen</span></h3><div class="amt">19,99 €<span>/Jahr</span></div><ul class="checks"><li>Alles aus Pro monatlich</li><li>12 Monate für weniger als den Preis von 7</li></ul></div>
+<section class="sec" id="features" aria-labelledby="block-h">
+  <div class="wrap">
+    <header class="sec-head" data-reveal>
+      <div><p class="kicker"><span class="picket" aria-hidden="true"></span>Sperren</p><h2 id="block-h" class="h2">Ganze Website sperren. <span class="dim">Oder nur den schlechten Teil.</span></h2></div>
+      <p class="sec-lead">Sperren Sie im Fenster direkt auf der Website, oder stellen Sie Ihre Liste in den Einstellungen zusammen: ganze Websites, einzelne Pfade und Stichwörter.</p>
+    </header>
+    <div class="shot" data-reveal>
+      <div class="win">
+        <div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence-Einstellungen</span></span></div>
+        <div class="win-body"><img class="win-img" src="../assets/de/blocklist-1x.webp" srcset="../assets/de/blocklist-1x.webp 1280w, ../assets/de/blocklist.webp 2560w" sizes="(max-width: 720px) 760px, min(1200px, calc(100vw - 48px))" width="1280" height="800" loading="lazy" decoding="async" alt="FocusFence-Einstellungen: eine Sperrliste mit Websites, dem Pfad youtube.com/shorts und einem Stichwort"></div>
+      </div>
+    </div>
+    <div class="feats" data-reveal>
+      <div class="feat"><h3>Website mit einem Klick sperren</h3><p>Fenster öffnen und auf <strong>Seite blockieren</strong> klicken. Wer reddit.com sperrt, sperrt auch old.reddit.com, m.reddit.com und alle anderen Subdomains.</p></div>
+      <div class="feat"><h3>Nur den schlechten Teil sperren<span class="pro">PRO</span></h3><p>Sperren Sie <code>youtube.com/shorts</code> und behalten Sie den Rest von YouTube für Tutorials und Vorträge. Auch Shorts, die Sie innerhalb von YouTube anklicken, werden gesperrt. Stichwort-Regeln sperren jede Adresse, die ein bestimmtes Wort enthält.</p></div>
+    </div>
   </div>
-  <p class="small muted center">Zahlungen werden von ExtensionPay (Stripe) abgewickelt. Preise in Euro im Euroraum; anderswo 2,99 $/Monat oder 19,99 $/Jahr.</p>
-</div></section>
+</section>
 
-<section id="faq"><div class="wrap narrow">
-  <h2>Fragen</h2>
-  <details><summary>Kann ich YouTube Shorts sperren und YouTube weiter nutzen?</summary><p>Ja, mit Pro. Fügen Sie <code>youtube.com/shorts</code> als Pfad-Regel hinzu. youtube.com, Videos und die Suche funktionieren weiter. Links zu Shorts und die Navigation zu Shorts innerhalb von YouTube werden gesperrt.</p></details>
-  <details><summary>Sperrt reddit.com auch old.reddit.com?</summary><p>Ja. Eine Domain-Regel gilt für alle Subdomains, in Kostenlos und Pro.</p></details>
-  <details><summary>Warum fragt Chrome nach einer Berechtigung, wenn ich eine Website hinzufüge?</summary><p>Chrome erlaubt einer Erweiterung nur auf Websites, auf die sie Zugriff hat, ihre eigene Sperrseite anzuzeigen. FocusFence fragt nur nach dieser einen Website. Lehnen Sie ab, bleibt die Website gesperrt, Sie sehen dann aber die Fehlerseite von Chrome statt der Sperrseite von FocusFence.</p></details>
-  <details><summary>Lässt sich der Strikt-Modus umgehen?</summary><p>Ehrliche Antwort: Chrome erlaubt immer, eine Erweiterung zu deaktivieren oder zu entfernen, und FocusFence kann die Erweiterungsseite nicht sperren. Eine zeitlich begrenzte Strikt-Sitzung wird <strong>pausiert</strong>, solange FocusFence aus ist, ihre Zeit läuft also nicht im Hintergrund ab. Inkognito-Fenster sind nur abgedeckt, wenn Sie FocusFence im Inkognito-Modus zulassen, und FocusFence warnt Sie, wenn das nicht der Fall ist. Andere Browser und Geräte sind nicht abgedeckt.</p></details>
-  <details><summary>Welche Daten erheben Sie?</summary><p>Keine. Siehe die <a href="../de/privacy.html">Datenschutzerklärung</a>. Der einzige Netzwerkverkehr ist die Lizenzprüfung durch ExtensionPay, und auch die erst, nachdem Sie sich für Pro entschieden haben.</p></details>
-  <details><summary>Ist FocusFence Open Source?</summary><p>Ja, unter der GNU AGPL v3. <a href="https://github.com/Nexarion434/focusfence">Zum Quellcode</a>.</p></details>
-</div></section>
+<section class="sec" id="focus" aria-labelledby="focus-h">
+  <div class="wrap">
+    <header class="sec-head" data-reveal>
+      <div><p class="kicker"><span class="picket" aria-hidden="true"></span>Fokus<span class="pro">PRO</span></p><h2 id="focus-h" class="h2">Nach Zeitplan sperren. <span class="dim">Oder sich selbst aussperren.</span></h2></div>
+      <p class="sec-lead">Pro bringt die Zeit ins Spiel: nur zu den Stunden Ihrer Wahl sperren, in Pomodoro-Runden arbeiten und vor einer Deadline den strikten Modus einschalten.</p>
+    </header>
+    <div class="bento">
+      <article class="card card-schedule" data-reveal>
+        <div class="card-text"><h3>Zeitpläne</h3><p>Nur während der Arbeitszeit sperren, an den Tagen Ihrer Wahl. Auch Zeiträume über Mitternacht funktionieren, z. B. 22:00–06:00 für besseren Schlaf.</p></div>
+        <div class="screen"><img src="../assets/de/schedule.webp" width="550" height="306" loading="lazy" decoding="async" alt="Zeitplan: Montag bis Freitag, zwei Zeiträume rund um die Mittagspause"></div>
+      </article>
+      <article class="card card-timer" data-reveal>
+        <div class="card-text"><h3>Pomodoro-Sitzungen</h3><p>Getaktete Fokusrunden und Pausen. Während Sie sich konzentrieren, ist Ihre ganze Liste gesperrt. Der Countdown erscheint auf dem Symbol in der Symbolleiste.</p></div>
+        <div class="screen"><img src="../assets/de/focus.webp" width="334" height="116" loading="lazy" decoding="async" alt="Eine laufende Fokus-Sitzung im Fenster: noch 18:42, Runde 1 von 4"></div>
+      </article>
+      <article class="card card-strict" data-reveal>
+        <div class="card-text"><h3>Strikter Modus</h3><p>Solange der strikte Modus läuft, lässt sich die Sperre nicht abschalten und keine Website entfernen. Wer früher aufhören will, wartet 10 Minuten und tippt einen Text ab.</p></div>
+        <div class="screen"><img src="../assets/de/strict.webp" width="550" height="140" loading="lazy" decoding="async" alt="Der strikte Modus ist an und bleibt an, bis Sie ihn entsperren; Entsperren kostet 10 Minuten Wartezeit und eine Tipp-Aufgabe"></div>
+      </article>
+    </div>
+  </div>
+</section>
 
-<section class="final"><div class="wrap center">
-  <h2>Holen Sie sich Ihren Fokus zurück.</h2>
-  <div class="cta center"><span class="btn btn-primary is-soon" aria-disabled="true">Bald im Chrome Web Store</span></div>
-</div></section>
+<section class="sec" id="stats" aria-labelledby="stats-h">
+  <div class="wrap">
+    <header class="sec-head" data-reveal>
+      <div><p class="kicker"><span class="picket" aria-hidden="true"></span>Statistik<span class="pro">PRO</span></p><h2 id="stats-h" class="h2">Sehen Sie, was Sie lockt. <span class="dim">Nur auf diesem Gerät gezählt.</span></h2></div>
+      <p class="sec-lead">Gesperrte Aufrufe pro Tag und pro Website, über die letzten sieben Tage. Die Zahlen bleiben in Chrome auf Ihrem Computer und werden nirgendwohin gesendet.</p>
+    </header>
+    <div class="screen screen-stats" data-reveal><img src="../assets/de/stats.webp" width="852" height="632" loading="lazy" decoding="async" alt="Statistik: gesperrte Aufrufe pro Tag in den letzten 7 Tagen und die meistgesperrten Websites"></div>
+    <ul class="details" data-reveal>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg><h3>Passwortschutz<span class="pro">PRO</span></h3><p>Verlangen Sie ein Passwort, um die Sperre abzuschalten, Websites zu entfernen oder Einstellungen zu ändern. Ideal, wenn jemand anderes den Schlüssel hat.</p></li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><h3>Ihre eigene Nachricht<span class="pro">PRO</span></h3><p>Schreiben Sie Ihrem zukünftigen Ich eine Notiz. Sie ersetzt die wechselnden Zitate auf der Sperrseite.</p></li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><h3>Export und Import<span class="pro">PRO</span></h3><p>Sichern Sie Sperrliste, Zeitplan und Einstellungen als JSON-Datei und laden Sie sie auf einem anderen Computer.</p></li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg><h3>Hell und dunkel</h3><p>Jeder Bildschirm von FocusFence folgt dem Design Ihres Systems.</p></li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.5 3.5 5.4 3.5 8.5s-1.1 6-3.5 8.5c-2.4-2.5-3.5-5.4-3.5-8.5s1.1-6 3.5-8.5z"/></svg><h3>Englisch, Französisch, Spanisch, Deutsch</h3><p>FocusFence spricht die Sprache Ihres Chrome.</p></li>
+      <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.6"/><path d="M4.5 4.5l15 15"/></svg><h3>Inkognito-Hinweis</h3><p>FocusFence sagt Ihnen, wenn private Fenster nicht abgedeckt sind, und wie Sie es dort zulassen.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="privacy" aria-labelledby="privacy-h">
+  <div class="wrap">
+    <header class="sec-head sec-head-solo" data-reveal><div><p class="kicker"><span class="picket" aria-hidden="true"></span>Datenschutz</p><h2 id="privacy-h" class="h2">Privat, von Grund auf. <span class="dim">Kein Konto. Keine Analyse. Keine Werbung.</span></h2></div></header>
+    <div class="privacy-grid">
+      <ul class="points" data-reveal>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11.5" rx="1.5"/><path d="M8.5 20h7M12 16.5V20"/></svg><div><h3>Ihre Daten bleiben auf Ihrem Gerät</h3><p>Sperrliste, Einstellungen und Statistik liegen im lokalen Speicher von Chrome. Kein Konto, keine Analyse, keine Werbung.</p></div></li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><path d="M4.5 4.5l15 15"/></svg><div><h3>FocusFence liest Ihre Seiten nicht</h3><p>Gesperrt wird über die in Chrome eingebaute Regel-Engine (declarativeNetRequest). FocusFence sieht nie den Inhalt der Seiten, die Sie besuchen.</p></div></li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><h3>Minimale Berechtigungen</h3><p>FocusFence fragt den Zugriff Website für Website an, nur für Websites, die Sie sperren. Lehnen Sie ab, bleibt die Website trotzdem gesperrt.</p></div></li>
+      </ul>
+      <figure class="manifest" data-reveal>
+        <figcaption>Was FocusFence von Chrome verlangt</figcaption>
+        <dl>
+          <div><dt><code>storage</code></dt><dd>Ihre Liste, Einstellungen und Statistik, auf diesem Gerät</dd></div>
+          <div><dt><code>declarativeNetRequest</code></dt><dd>Chrome selbst sperrt die Websites auf Ihrer Liste</dd></div>
+          <div><dt><code>alarms</code></dt><dd>Zeitpläne, Fokus-Timer und strikter Modus</dd></div>
+          <div><dt><code>activeTab</code></dt><dd>Die Adresse des aktuellen Tabs, nur wenn Sie das Fenster öffnen</dd></div>
+          <div><dt><code>scripting</code></dt><dd>Pfad-Regeln wie youtube.com/shorts, auf erlaubten Websites</dd></div>
+          <div><dt>Website-Zugriff</dt><dd>Optional, Website für Website angefragt</dd></div>
+        </dl>
+        <p class="manifest-net">Netzwerk: nichts, bis Sie sich für Pro entscheiden. Dann prüft ExtensionPay Ihre Lizenz.</p>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="pricing" aria-labelledby="pricing-h">
+  <div class="wrap">
+    <header class="sec-head sec-head-center" data-reveal><h2 class="h2" id="pricing-h">Einfache Preise</h2><p class="sec-lead">Kostenlos deckt unbegrenzt viele Websites ab, dauerhaft. Pro bringt die Werkzeuge, mit denen der Fokus hält.</p></header>
+    <div class="plans" data-reveal>
+      <article class="plan">
+        <h3>Kostenlos</h3>
+        <p class="price"><span class="amt">0 €</span></p>
+        <p class="plan-note">Dauerhaft</p>
+        <ul class="checks"><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Unbegrenzt viele gesperrte Websites</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Inklusive Subdomains</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Sperren mit einem Klick im Fenster</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Ein/Aus-Schalter</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Ruhige Sperrseite</span></li></ul>
+      </article>
+      <article class="plan">
+        <h3>Pro monatlich</h3>
+        <p class="price"><span class="amt">2,99 €</span><span class="per">/Monat</span></p>
+        <p class="plan-note">Monatliche Abrechnung</p>
+        <ul class="checks"><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Alles aus Kostenlos</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Zeitpläne</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Sperren nach Pfad und Stichwort</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Pomodoro-Sitzungen</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Strikter Modus</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Passwortschutz, Statistik, eigene Nachricht, Sicherung</span></li></ul>
+      </article>
+      <article class="plan plan-best">
+        <h3>Pro jährlich <span class="save">44 % sparen</span></h3>
+        <p class="price"><span class="amt">19,99 €</span><span class="per">/Jahr</span></p>
+        <p class="plan-note">Jährliche Abrechnung</p>
+        <ul class="checks"><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Alles aus Pro monatlich</span></li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>12 Monate für weniger als den Preis von 7</span></li></ul>
+      </article>
+    </div>
+    <div class="plans-foot" data-reveal><p>Jederzeit in FocusFence upgraden, unter Einstellungen › Tarif.</p><p>Zahlungen werden von ExtensionPay (Stripe) abgewickelt. Preise in Euro im Euroraum; anderswo 2,99 $/Monat oder 19,99 $/Jahr.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="faq-h">
+  <div class="wrap faq">
+    <div class="faq-head" data-reveal><h2 class="h2" id="faq-h">Fragen</h2><p>Noch etwas auf dem Herzen? Schreiben Sie an <a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a>.</p></div>
+    <div class="faq-list" data-reveal>
+      <details><summary><span>Kann ich YouTube Shorts sperren und YouTube weiter nutzen?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Ja, mit Pro. Fügen Sie <code>youtube.com/shorts</code> als Pfad-Regel hinzu. youtube.com, Videos und die Suche funktionieren weiter. Links zu Shorts und die Navigation zu Shorts innerhalb von YouTube werden gesperrt.</p></div></details>
+      <details><summary><span>Sperrt reddit.com auch old.reddit.com?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Ja. Eine Domain-Regel gilt für alle Subdomains, in Kostenlos und Pro.</p></div></details>
+      <details><summary><span>Warum fragt Chrome nach einer Berechtigung, wenn ich eine Website hinzufüge?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Chrome erlaubt einer Erweiterung nur auf Websites, auf die sie Zugriff hat, ihre eigene Sperrseite anzuzeigen. FocusFence fragt nur nach dieser einen Website. Lehnen Sie ab, bleibt die Website gesperrt, Sie sehen dann aber die Fehlerseite von Chrome statt der Sperrseite von FocusFence.</p></div></details>
+      <details><summary><span>Lässt sich der strikte Modus umgehen?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Ehrliche Antwort: Chrome erlaubt immer, eine Erweiterung zu deaktivieren oder zu entfernen, und FocusFence kann die Erweiterungsseite nicht sperren. Eine zeitlich begrenzte strikte Sitzung wird <strong>pausiert</strong>, solange FocusFence aus ist, ihre Zeit läuft also nicht im Hintergrund ab. Inkognito-Fenster sind nur abgedeckt, wenn Sie FocusFence im Inkognito-Modus zulassen, und FocusFence warnt Sie, wenn das nicht der Fall ist. Andere Browser und Geräte sind nicht abgedeckt.</p></div></details>
+      <details><summary><span>Welche Daten erheben Sie?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Keine. Siehe die <a href="../de/privacy.html">Datenschutzerklärung</a>. Der einzige Netzwerkverkehr ist die Lizenzprüfung durch ExtensionPay, und auch die erst, nachdem Sie sich für Pro entschieden haben.</p></div></details>
+      <details><summary><span>Ist FocusFence Open Source?</span><svg class="i faq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-a"><p>Ja, unter der GNU AGPL v3. <a href="https://github.com/Nexarion434/focusfence">Zum Quellcode</a>.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<section class="final" aria-labelledby="final-h">
+  <div class="wrap final-in" data-reveal>
+    <div class="final-mark" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg></div>
+    <h2 class="final-h" id="final-h">Holen Sie sich Ihren Fokus zurück.</h2>
+    <div class="cta"><span class="btn btn-soon"><span class="pulse" aria-hidden="true"></span>Bald im Chrome Web Store</span></div>
+    <ul class="ticks"><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Für unbegrenzt viele Websites dauerhaft kostenlos</li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Kein Konto</li><li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Kein Tracking</li></ul>
+  </div>
+  <svg class="fence" aria-hidden="true" focusable="false"><defs><pattern id="pickets" x="50%" width="44" height="180" patternUnits="userSpaceOnUse"><path d="M10.5 180V36l12-12 12 12v144z"/></pattern></defs><rect class="rail" y="88" width="100%" height="10"/><rect class="rail" y="146" width="100%" height="10"/><rect class="pickets" width="100%" height="180" fill="url(#pickets)"/></svg>
+</section>
 </main>
-<footer class="foot"><div class="wrap foot-in">
-  <div class="brand"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></div>
-  <p>Freie Software unter der <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="https://github.com/Nexarion434/focusfence">Quellcode</a> · <a href="../de/privacy.html">Datenschutzerklärung</a> · <a href="../blog/" hreflang="en">Blog (auf Englisch)</a></p>
-  <p class="muted">Nicht mit Google verbunden. Chrome ist eine Marke von Google LLC.</p>
+<footer class="foot"><div class="wrap">
+  <div class="foot-grid">
+    <div class="foot-brand"><a class="brand" href="../de/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>Ein ruhiger, privater Website-Blocker für Chrome.</p></div>
+    <div class="foot-col"><p class="foot-h">Produkt</p><ul><li><a href="../de/#features">Funktionen</a></li><li><a href="../de/#pricing">Preise</a></li><li><a href="../de/#faq">Fragen</a></li></ul></div>
+    <div class="foot-col"><p class="foot-h">Ressourcen</p><ul><li><a href="../blog/" hreflang="en">Blog (auf Englisch)</a></li><li><a href="https://github.com/Nexarion434/focusfence">Quellcode</a></li><li><a href="../de/privacy.html">Datenschutzerklärung</a></li></ul></div>
+    <div class="foot-col"><p class="foot-h">Kontakt</p><ul><li><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></li></ul></div>
+  </div>
+  <div class="foot-base"><p>Freie Software unter der <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a></p><p>Nicht mit Google verbunden. Chrome ist eine Marke von Google LLC.</p></div>
 </div></footer>
 </body>
 </html>

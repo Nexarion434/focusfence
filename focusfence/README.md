@@ -94,6 +94,7 @@ FF_CHROME_LIBS=/path/to/libs npm test
 npm run build            # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=false)
 npm run cws:check        # build + Chrome Web Store pre-submission checks on the zip
 npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
+npm run screenshots:site # website images: 2x WebP captures of the real UI + 1200x630 Open Graph image, en, fr, es, de
 npm run i18n             # regenerate src/_locales from scripts/i18n/strings.mjs
 npm run docs             # regenerate ../docs (website)
 npm run icons            # src/icons/*.png from the Picket F logo (LOGO_SVG in src/lib/ui.js, the single source)
@@ -126,8 +127,9 @@ The UI, manifest name/description and store listings are available in **English 
 - **Languages:** English at the root (also `x-default`), French, Spanish and German under `docs/fr/`, `docs/es/`, `docs/de/`: landing page plus `privacy.html` each.
   - Landing text: `scripts/site-strings.mjs`.
   - Privacy: `store/privacy-policy.md` plus `privacy-policy.<lang>.md`. The translations use `{{CONTACT}}`, filled from the English Contact line, so the address is entered once.
-  - Screenshots come from `screenshots/<lang>/`.
-  - Every page has a language switcher, `hreflang`/canonical tags, localized `og:*` tags and the localized promo tile as `og:image`. The sitemap lists every language with alternates.
+  - Product images and the Open Graph image come from `screenshots/site/<lang>/` (`npm run screenshots:site`): real captures of the extension in its dark theme at 2x, encoded to WebP in Chromium, plus a 1200×630 `og.png` per language.
+  - Every page has a language switcher, `hreflang`/canonical tags, localized `og:*` tags and the localized Open Graph image. The sitemap lists every language with alternates.
+- **Design:** dark, Linear-inspired (notes, palette, type scale and critique log in `../design/landing-v2/BRIEF.md`). Styles live in `scripts/site.css` and are inlined into every page; `scripts/site.js` (deferred, ~1 KB) remembers the language choice and adds subtle scroll motion, skipped under `prefers-reduced-motion`. One self-hosted font (Inter with the optical-size axis, from `@fontsource-variable/inter`), no framework, no CDN, no tracker.
 - **First-visit redirect** (root `index.html` only): a visitor whose `navigator.languages` puts fr/es/de before English is sent to that language. A click in the switcher is saved in `localStorage` (`ff-lang`) and always wins. Arriving at the root from another page of the site never redirects.
 - **Blog:** `blog/` is English-only, rendered from `../marketing/blog/*.md`. Posts with `draft: true` get `noindex` and stay out of the sitemap.
 

@@ -59,8 +59,9 @@ test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal sc
     const problems = [];
     const localized = SITE_LANGS.flatMap((l) => [(l === 'en' ? '' : l + '/') + 'index.html', (l === 'en' ? '' : l + '/') + 'privacy.html']);
     for (const rel of [...localized, 'blog/index.html', 'blog/block-youtube-shorts-chrome.html']) {
-      for (const width of [1280, 390]) {
-        const context = await browser.newContext({ viewport: { width, height: 800 } });
+      for (const width of [1280, 390, 360]) {
+        // reduced motion: every block is in its final, visible state (no scroll reveal), so axe checks it all
+        const context = await browser.newContext({ viewport: { width, height: 800 }, colorScheme: 'dark', reducedMotion: 'reduce' });
         const page = await context.newPage();
         await page.goto('file://' + path.join(DOCS, rel));
         if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) problems.push(`${rel}@${width}: horizontal scroll`);
@@ -72,6 +73,43 @@ test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal sc
       }
     }
     expect(problems).toEqual([]);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('motion is optional: blocks reveal on scroll, and nothing stays hidden without JS or with reduced motion', async () => {
+  const env = { ...process.env };
+  if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
+  const browser = await chromium.launch({ env });
+  const hidden = (page) =>
+    page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((el) => getComputedStyle(el).opacity !== '1').length);
+  try {
+    const url = 'file://' + path.join(DOCS, 'index.html');
+    // motion allowed: below-the-fold blocks start hidden, and all are shown once scrolled into view
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'no-preference' });
+    const page = await ctx.newPage();
+    await page.goto(url);
+    expect(await page.evaluate(() => document.documentElement.classList.contains('motion'))).toBe(true);
+    expect(await hidden(page)).toBeGreaterThan(0);
+    await page.evaluate(async () => {
+      for (let y = 0; y <= document.documentElement.scrollHeight; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+    });
+    // every block has been revealed, and the transitions settle on fully opaque blocks
+    await page.waitForFunction(() => document.querySelectorAll('[data-reveal]:not(.in)').length === 0, null, { timeout: 5000 });
+    await page.waitForFunction(() => [...document.querySelectorAll('[data-reveal]')].every((el) => getComputedStyle(el).opacity === '1'), null, { timeout: 5000 });
+    await ctx.close();
+    // reduced motion, and no JavaScript at all: everything is visible from the start
+    for (const opts of [{ reducedMotion: 'reduce' }, { javaScriptEnabled: false }]) {
+      const c = await browser.newContext({ viewport: { width: 1280, height: 800 }, ...opts });
+      const p = await c.newPage();
+      await p.goto(url);
+      expect(await hidden(p), JSON.stringify(opts)).toBe(0);
+      await c.close();
+    }
   } finally {
     await browser.close();
   }
@@ -117,10 +155,17 @@ test('landing + privacy exist in en/fr/es/de with lang, canonical, reciprocal hr
         expect(title, rel).not.toBe(/<title>([^<]+)<\/title>/.exec(en)[1]);
         expect(desc, rel).not.toBe(/<meta name="description" content="([^"]+)">/.exec(en)[1]);
       }
-      // og:image is the localized promo tile, and exists
+      // og:image is the localized 1200x630 Open Graph image, and exists with the declared size
       const og = /<meta property="og:image" content="([^"]+)">/.exec(html)[1];
-      expect(og, rel).toBe(`${SITE_URL}assets/${lang}/social.png`);
-      expect(fs.existsSync(path.join(DOCS, og.slice(SITE_URL.length))), og).toBe(true);
+      expect(og, rel).toBe(`${SITE_URL}assets/${lang}/og.png`);
+      const ogFile = path.join(DOCS, og.slice(SITE_URL.length));
+      expect(fs.existsSync(ogFile), og).toBe(true);
+      const ogBuf = fs.readFileSync(ogFile);
+      expect([ogBuf.readUInt32BE(16), ogBuf.readUInt32BE(20)], og).toEqual([1200, 630]);
+      expect(html, rel).toContain('<meta property="og:image:width" content="1200">');
+      expect(html, rel).toContain('<meta property="og:image:height" content="630">');
+      expect(html, rel).toContain(`<meta name="twitter:image" content="${og}">`);
+      expect(/<meta property="og:image:alt" content="([^"]+)">/.exec(html), rel).toBeTruthy();
       expect(desc.length, rel + ' description').toBeLessThanOrEqual(300);
       expect(html, rel).not.toContain('{{');
       expect(html, rel).not.toMatch(/\{(source|privacy|license)\}/);
@@ -128,22 +173,47 @@ test('landing + privacy exist in en/fr/es/de with lang, canonical, reciprocal hr
   }
 });
 
-test('landing pages use the localized screenshots, and every referenced local file exists', () => {
+// srcset="a.webp 1280w, b.webp 2560w" -> ['a.webp', 'b.webp']
+const srcsets = (html) => all(/ srcset="([^"]+)"/g, html).flatMap((v) => v.split(',').map((c) => c.trim().split(/\s+/)[0]));
+const webpSize = (file) => {
+  const b = fs.readFileSync(file);
+  expect(b.toString('ascii', 8, 12), file).toBe('WEBP');
+  const chunk = b.toString('ascii', 12, 16);
+  if (chunk === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (chunk === 'VP8L') return [1 + (b.readUInt32LE(21) & 0x3fff), 1 + ((b.readUInt32LE(21) >> 14) & 0x3fff)];
+  return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+};
+
+test('landing pages show the real, localized product UI: 2x WebP captures with matching sizes', () => {
+  const SHOTS = ['block-page', 'popup', 'blocklist', 'schedule', 'focus', 'strict', 'stats'];
   for (const lang of SITE_LANGS) {
     const rel = dirOf(lang) + 'index.html';
     const html = read('docs', rel);
-    const imgs = all(/<img[^>]* src="([^"]+)"/g, html);
-    expect(imgs.length, rel).toBe(4);
-    for (const src of imgs) expect(src, rel).toContain(`assets/${lang}/`);
-    // the popup screenshot really is the localized one (button label in that language)
+    const imgs = [...html.matchAll(/<img[^>]* src="([^"]+)"[^>]* width="(\d+)" height="(\d+)"[^>]* alt="([^"]+)">/g)];
+    expect(imgs.length, rel).toBe(SHOTS.length);
+    for (const [, src, w, h, alt] of imgs) {
+      expect(src, rel).toContain(`assets/${lang}/`);
+      expect(alt.length, src).toBeGreaterThan(20);
+      // width/height are the CSS size: half the 2x capture (no layout shift, crisp on HiDPI)
+      const [W, H] = webpSize(path.join(DOCS, path.dirname(rel), src.replace('-1x.webp', '.webp')));
+      expect([W / 2, H / 2], src).toEqual([+w, +h]);
+    }
+    for (const name of SHOTS) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
+    for (const src of srcsets(html)) expect(src, rel).toContain(`assets/${lang}/`);
+    // the hero is never lazy, everything below it is
+    expect(html, rel).toMatch(/<img class="win-img" src="[^"]+block-page-1x\.webp"[^>]*fetchpriority="high"/);
+    expect((html.match(/loading="lazy"/g) || []).length, rel).toBe(SHOTS.length - 2);
+    // the popup capture really is the localized one (button label in that language), copied as is
     expect(html, rel).toContain(S.blockSite[lang]);
-    const popup = fs.readFileSync(path.join(DOCS, 'assets', lang, 'popup.png'));
-    const source = fs.readFileSync(path.join(ROOT, lang === 'en' ? 'screenshots/popup.png' : `screenshots/${lang}/popup.png`));
-    expect(popup.equals(source), lang).toBe(true);
+    const popup = fs.readFileSync(path.join(DOCS, 'assets', lang, 'popup.webp'));
+    expect(popup.equals(fs.readFileSync(path.join(ROOT, `screenshots/site/${lang}/popup.webp`))), lang).toBe(true);
   }
+});
+
+test('every referenced local file exists (src, href and srcset)', () => {
   for (const rel of allHtml()) {
     const html = read('docs', rel);
-    for (const ref of all(/(?:src|href)="([^"#:]+)(?:#[^"]*)?"/g, html)) {
+    for (const ref of [...all(/(?:src|href)="([^"#:]+)(?:#[^"]*)?"/g, html), ...srcsets(html)]) {
       if (!ref) continue;
       const target = path.join(DOCS, path.dirname(rel), ref);
       const ok = fs.existsSync(target) && (fs.statSync(target).isFile() || fs.existsSync(path.join(target, 'index.html')));
@@ -177,7 +247,7 @@ test('every page has a language switcher with all 4 languages, the current one m
       const file = path.basename(rel);
       for (const [, href, hl] of links) expect(path.normalize(path.join(path.dirname(rel), href, href.endsWith('/') ? 'index.html' : '')), rel).toBe(path.normalize(dirOf(hl) + (file === 'index.html' ? 'index.html' : file)).replace(/index\.html\/index\.html$/, 'index.html'));
     }
-    expect(html, rel).toContain('assets/lang.js');
+    expect(html, rel).toContain('assets/site.js');
   }
   // the first-visit redirect lives on the root landing page only
   for (const rel of pages) expect(read('docs', rel).includes('location.replace'), rel).toBe(rel === 'index.html');
@@ -211,7 +281,7 @@ test('privacy translations: same structure as English and the same contact place
 
 test('site strings: every language has the same keys and shapes as English, and is actually translated', () => {
   const keys = Object.keys(SITE.en).sort();
-  const same = { navBlog: 1, faqH2: 1 }; // identical in some languages on purpose
+  const same = { navBlog: 1, faqH2: 1, footContact: 1 }; // identical in some languages on purpose
   for (const lang of ['fr', 'es', 'de']) {
     expect(Object.keys(SITE[lang]).sort(), lang).toEqual(keys);
     for (const k of keys) {
