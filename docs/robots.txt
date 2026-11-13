@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nexarion434.github.io/focusfence/sitemap.xml
