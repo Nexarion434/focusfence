@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, el, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
+  const { send, toast, logo, el, icon, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
   const { t, plural, rich, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
   // Localized day names from Intl (2026-11-15 is a Sunday).
@@ -19,19 +19,23 @@
   let pomoDirty = false;
   let messageDirty = false;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(24));
+  $('logo').insertAdjacentHTML('afterbegin', logo(22));
   $('lock-logo').innerHTML = logo(48);
-  $('empty-logo').innerHTML = logo(40);
+  // Empty blocklist: an empty fence (five pickets, the logo's 45° tips, two rails).
+  const pickets = [6, 30, 54, 78, 102].map((x) => `M${x} 50V14l6-6 6 6v36z`).join('');
+  const rails = [6, 30, 54, 78].map((x) => `M${x + 12} 24h12M${x + 12} 40h12`).join('');
+  $('empty-logo').innerHTML = `<svg viewBox="0 0 120 52"><path d="${pickets}"/><path d="${rails}"/></svg>`;
 
-  // Pro gate overlays
+  // Pro gates: an inline bar under each Pro section's heading (the section stays visible, softened).
   document.querySelectorAll('.panel[data-pro]').forEach((panel) => {
     const gate = el(
       'div',
       { class: 'pro-gate' },
+      el('span', { class: 'gate-icon', html: icon('lock') }),
       el('span', { text: t('proGate') }),
       el('a', { class: 'btn btn-pro btn-sm', href: '#plan', text: t('upgrade') })
     );
-    panel.appendChild(gate);
+    panel.querySelector('.panel-head').after(gate);
   });
 
   /* ------------------------------------------------------------ helpers */
@@ -131,7 +135,7 @@
       const avatar = e.type === 'keyword' ? el('span', { class: 'avatar kw', text: '#' }) : siteAvatar(e.host);
       const meta = el('div', { class: 'entry-meta' });
       const typeLabel = e.type === 'domain' ? t('entryDomain') : e.type === 'path' ? t('entryPath') : t('entryKeyword');
-      meta.appendChild(el('span', { class: 'muted small', text: typeLabel }));
+      meta.appendChild(el('span', { text: typeLabel }));
       if (inactive) meta.appendChild(el('span', { class: 'badge badge-pro', text: t('entryInactive') }));
       else if (!hasAccess) {
         meta.appendChild(
@@ -151,7 +155,7 @@
           disabled: s.strict.active,
           onclick: () => act(() => send('removeEntry', { id: e.id }), t('toastRemoved', e.label)),
         },
-        el('span', { html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' })
+        el('span', { class: 'remove-icon', html: icon('x') })
       );
       list.appendChild(
         el(
@@ -179,7 +183,7 @@
     const chips = $('suggestions');
     chips.textContent = '';
     for (const sug of SUGGESTIONS) {
-      chips.appendChild(el('button', { class: 'chip', type: 'button', text: '+ ' + sug, onclick: () => addEntry(sug, 'domain') }));
+      chips.appendChild(el('button', { class: 'chip', type: 'button', onclick: () => addEntry(sug, 'domain') }, el('span', { class: 'chip-icon', html: icon('plus') }), sug));
     }
   }
 
@@ -279,8 +283,16 @@
     $('pomo-live').classList.toggle('hidden', !p);
     $('pomo-start').classList.toggle('hidden', !!p);
     $('pomo-stop').classList.toggle('hidden', !p);
+    const rounds = $('pomo-rounds');
+    rounds.textContent = '';
     if (p) {
       $('pomo-phase').textContent = t('focusRound', p.phase === 'focus' ? t('phaseFocus') : t('phaseBreak'), p.cycle, p.totalCycles);
+      $('pomo-live').classList.toggle('break', p.phase !== 'focus');
+      // one picket per round: done, current (lit), still to come
+      for (let i = 1; i <= p.totalCycles; i++) {
+        const done = i < p.cycle || (i === p.cycle && p.phase !== 'focus');
+        rounds.appendChild(el('span', { class: 'picket' + (done ? ' done' : i === p.cycle ? ' now' : '') }));
+      }
     }
     tick();
   }
@@ -395,6 +407,9 @@
     if (p) {
       const left = p.endsAt - now;
       $('pomo-clock').textContent = fmtCountdown(left);
+      const length = (p.phase === 'focus' ? p.focusMin : p.breakMin) * 60000;
+      const done = length > 0 ? Math.min(1, Math.max(0, 1 - left / length)) : 0;
+      $('pomo-progress').firstElementChild.style.width = (done * 100).toFixed(2) + '%';
       if (left <= 0) refresh();
     }
     const u = state.strict.unlock;

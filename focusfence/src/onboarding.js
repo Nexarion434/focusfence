@@ -13,7 +13,7 @@
   const options = [...SUGGESTIONS];
   let step = 1;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(32));
+  $('logo').insertAdjacentHTML('afterbegin', logo(24));
 
   function renderChoices() {
     const wrap = $('choices');
@@ -30,6 +30,8 @@
       wrap.appendChild(b);
     }
     $('counter').textContent = t('obSelectedCount', selected.size);
+    // one picket lights up per picked site (decorative; the counter text says the same)
+    document.querySelectorAll('#pickets i').forEach((p, i) => p.classList.toggle('on', i < selected.size));
     $('block-selected').disabled = selected.size === 0;
   }
 

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="styles/blocked.css" />
   </head>
   <body>
-    <div class="bg" aria-hidden="true"></div>
+    <div class="bg" aria-hidden="true"><div class="halo"></div><div class="floor"></div><div class="fence"></div></div>
     <main class="wrap">
       <div class="mark" id="mark"></div>
       <p class="eyebrow">FocusFence</p>
-      <h1><span id="site" data-i18n="thisSite">This site</span><span data-i18n="isFencedOff"> is fenced off</span></h1>
+      <h1><span id="site" data-i18n="thisSite">This site</span><span class="fenced" data-i18n="isFencedOff"> is fenced off</span></h1>
       <blockquote class="message" id="message">Starve your distractions, feed your focus.</blockquote>
 
       <div class="session hidden" id="session" role="timer">
@@ -26,10 +26,10 @@
       </div>
 
       <div class="buttons">
-        <button class="btn btn-primary" id="back" data-i18n="backToWork">Back to work</button>
-        <a class="btn btn-ghost" href="options.html" target="_blank" id="settings" data-i18n="settings">Settings</a>
+        <button class="btn btn-primary btn-lg" id="back" data-i18n="backToWork">Back to work</button>
+        <a class="btn btn-ghost btn-lg" href="options.html" target="_blank" id="settings" data-i18n="settings">Settings</a>
       </div>
-      <p class="url muted small" id="url"></p>
+      <p class="url" id="url"></p>
     </main>
     <script src="lib/i18n.js"></script>
     <script src="lib/core.js"></script>

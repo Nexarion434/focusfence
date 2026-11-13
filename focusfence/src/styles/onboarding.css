@@ -1,185 +1,339 @@
+/* First-run tour: three steps in one calm dialog. */
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(900px 520px at 0% 0%, var(--accent-soft), transparent 62%),
-    radial-gradient(800px 500px at 100% 0%, var(--pro-soft), transparent 60%),
-    var(--bg);
+}
+.bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(900px 420px at 50% -120px, rgba(58, 154, 91, 0.1), transparent 70%);
+}
+@media (prefers-color-scheme: dark) {
+  .bg {
+    background: radial-gradient(900px 420px at 50% -120px, rgba(58, 154, 91, 0.16), transparent 70%);
+  }
 }
 .ob {
-  width: min(680px, calc(100% - 32px));
+  position: relative;
+  width: min(640px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 48px 0 64px;
+  padding: max(56px, 11vh) 0 64px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
+
+/* ---------- header: logo + progress ---------- */
 .ob-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 17px;
+  gap: 16px;
+  padding: 0 4px;
+  font-size: 16px;
+}
+.progress-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .step-label {
-  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 .dots {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .dots li {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 22px;
+  height: 4px;
+  border-radius: 999px;
   background: var(--line-2);
+  transition: background-color 0.3s ease;
 }
 .dots li.on {
-  background: var(--accent);
+  background: var(--accent-solid);
 }
+
+/* ---------- the dialog ---------- */
 .step {
-  padding: 32px;
+  padding: 36px 40px 28px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: var(--shadow);
+  gap: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), var(--edge);
+  animation: step-in 0.32s var(--ease);
 }
 .step[hidden] {
   display: none;
 }
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
 .step h1 {
   font-size: 28px;
-  font-weight: 740;
+  line-height: 1.12;
+  font-weight: 620;
   letter-spacing: -0.03em;
 }
-.lead {
-  font-size: 16px;
-  color: var(--ink-2);
+.step h1:focus {
+  outline: none;
 }
+.step h1:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.lead {
+  margin-top: -8px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ---------- site choices ---------- */
 .choices {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 .choice {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  height: 44px;
-  padding: 0 14px 0 8px;
-  border-radius: 12px;
-  border: 1.5px solid var(--line-2);
+  gap: 9px;
+  height: 40px;
+  padding: 0 14px 0 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-2);
   background: var(--surface);
-  font-weight: 560;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: var(--ink);
   cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--fast) ease,
+    background-color var(--fast) ease,
+    box-shadow var(--fast) ease;
 }
-.choice .avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: inline-grid;
-  place-items: center;
-  color: #fff;
-  font-weight: 700;
-  font-size: 13px;
+.choice:hover {
+  border-color: var(--line-3);
+  background: var(--surface-2);
 }
 .choice[aria-pressed='true'] {
   border-color: var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: var(--accent-softer);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+  padding-right: 34px;
 }
+/* drawn check (no glyph from a fallback font) */
 .choice[aria-pressed='true']::after {
-  content: '✓';
-  font-weight: 700;
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 10px;
+  height: 5px;
+  margin-top: -4px;
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+  animation: tick 0.18s var(--ease);
+}
+@keyframes tick {
+  from {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0.6);
+  }
 }
 .custom {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 .custom .input {
   flex: 1;
 }
+
+/* ---------- tally: three pickets light up as sites are picked ---------- */
+.tally {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pickets {
+  display: inline-flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+.pickets i {
+  width: 8px;
+  height: 14px;
+  background: var(--line-2);
+  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
+  transition: background-color 0.2s ease;
+}
+.pickets i.on {
+  background: var(--signal);
+}
 .counter {
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 550;
   color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
 }
 .note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: var(--warn-soft);
+  color: var(--ink-2);
 }
 .note[hidden] {
   display: none;
 }
+.fine {
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ---------- actions ---------- */
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 6px;
   flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px -40px -28px;
+  padding: 14px 40px 16px;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.actions .btn {
+  height: 34px;
 }
 .row-btns {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
+
+/* ---------- step 2: Incognito ---------- */
 .status-box {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--warn-soft);
-  font-weight: 600;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-weight: 550;
+  font-size: 13.5px;
 }
 .status-box .status-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 20%, transparent);
   flex: none;
 }
-.status-box.ok {
-  background: var(--accent-soft);
-}
 .status-box.ok .status-dot {
-  background: var(--accent);
+  background: var(--signal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 22%, transparent);
 }
+.how {
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.how em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- step 3: Free vs Pro ---------- */
 .tiers {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
 }
 .tier {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 18px;
+  padding: 18px 18px 20px;
   background: var(--surface-2);
 }
-.tier.pro {
-  border-color: var(--pro);
-}
 .tier h2 {
-  font-size: 17px;
-  margin-bottom: 6px;
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.tier h2 .picket {
+  width: 7px;
+  height: 11px;
+  clip-path: polygon(0 3.5px, 3.5px 0, 7px 3.5px, 7px 100%, 0 100%);
+  color: var(--signal);
 }
 .tier p {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.tier.pro {
+  border-color: var(--pro-line);
+  background:
+    radial-gradient(320px 160px at 100% 0, var(--pro-soft), transparent 75%),
+    var(--surface);
+  box-shadow: 0 0 0 1px var(--pro-line), var(--shadow-sm);
+}
+.tier.pro h2 .picket {
+  color: var(--pro-solid);
+}
+.tier.pro p {
   color: var(--ink-2);
 }
-.price {
-  margin-top: 10px !important;
-  font-weight: 700;
-  color: var(--ink) !important;
+.tier .price {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pro-line);
+  font-weight: 600;
+  color: var(--ink);
 }
+
 @media (max-width: 560px) {
+  .ob {
+    padding-top: 28px;
+  }
   .tiers {
     grid-template-columns: 1fr;
   }
   .step {
-    padding: 22px;
+    padding: 24px 20px 20px;
+  }
+  .step h1 {
+    font-size: 24px;
+  }
+  .actions {
+    margin: 6px -20px -20px;
+    padding: 12px 20px 14px;
   }
 }

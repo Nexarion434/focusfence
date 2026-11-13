@@ -22,7 +22,7 @@
     host = '';
   }
 
-  $('mark').innerHTML = logo(64);
+  $('mark').innerHTML = logo(56);
   $('site').textContent = host || t('thisSite');
   $('url').textContent = original;
   $('url').title = original;

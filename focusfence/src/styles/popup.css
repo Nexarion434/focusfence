@@ -1,60 +1,187 @@
+/* Toolbar popup: one surface, hairline sections. 360 px wide, height follows content (< 600 px). */
+html,
+body {
+  background: var(--surface);
+}
 body {
   width: 360px;
-  min-height: 200px;
+  min-height: 160px;
+  overflow-x: hidden;
 }
 .popup {
-  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-.top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 2px 2px 4px;
-}
-.top .logo {
-  font-size: 15.5px;
 }
 .spacer {
   flex: 1;
 }
-.status {
+.zone {
+  padding: 16px;
+  position: relative;
+}
+.zone + .zone {
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- header ---------- */
+.top {
   display: flex;
   align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+}
+.top .logo {
+  font-size: 14px;
+}
+.top .icon-btn {
+  color: var(--muted);
+}
+.top .icon-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- status: the lamp, the state, the switch ---------- */
+.zone-fence {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  padding: 14px 16px;
-  border-color: transparent;
-  background: var(--accent-soft);
-  box-shadow: none;
+  overflow: hidden;
 }
-.status h2 {
-  font-size: 16px;
-  font-weight: 680;
-  color: var(--accent-strong);
+.status {
+  --lamp: var(--signal);
+  --lamp-stroke: var(--signal);
+  --lamp-glow: var(--glow);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 2px 0 4px;
 }
-.status .status-text {
+/* the light behind the lamp (dark theme: light reads as light; on white it would read as a stain) */
+.status::before {
+  content: '';
+  position: absolute;
+  left: -78px;
+  top: -70px;
+  width: 168px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--lamp-glow), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+@media (prefers-color-scheme: dark) {
+  .status::before {
+    opacity: 1;
+  }
+}
+.status > * {
+  position: relative;
+}
+.lamp {
+  width: 11px;
+  height: 18px;
+  flex: none;
+  margin: 1px 2px 0 1px;
+  fill: var(--lamp);
+  stroke: var(--lamp-stroke);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px var(--lamp-glow));
+  transition: fill 0.25s ease, stroke 0.25s ease;
+}
+.status-text {
   flex: 1;
   min-width: 0;
 }
-.status.off {
-  background: var(--bg-2);
+.status h2 {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
 }
-.status.off h2 {
+#status-sub {
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 17px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.status .switch {
+  margin-top: 0;
+}
+.status.is-off {
+  --lamp: transparent;
+  --lamp-stroke: var(--faint);
+  --lamp-glow: transparent;
+}
+.status.is-off .lamp {
+  filter: none;
+}
+.status.is-empty {
+  --lamp: transparent;
+  --lamp-glow: transparent;
+}
+.status.is-empty .lamp {
+  filter: none;
+}
+.status.is-strict {
+  --lamp: var(--pro-solid);
+  --lamp-stroke: var(--pro-solid);
+  --lamp-glow: var(--pro-glow);
+}
+
+/* ---------- notes ---------- */
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
   color: var(--ink-2);
 }
-.status.strict {
-  background: var(--pro-soft);
+.note[hidden] {
+  display: none;
 }
-.status.strict h2 {
-  color: var(--pro);
+.note .icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--warn);
 }
+
+/* ---------- password unlock ---------- */
 .unlock {
-  padding: 12px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+.unlock p {
+  display: flex;
   gap: 8px;
+  align-items: flex-start;
+  color: var(--ink-2);
+}
+.unlock p .icon {
+  margin-top: 1px;
+  color: var(--muted);
+}
+.unlock strong {
+  font-weight: 600;
+  color: var(--ink);
 }
 .row {
   display: flex;
@@ -62,95 +189,202 @@ body {
 }
 .row .input {
   flex: 1;
+  height: 32px;
 }
+
+/* ---------- current tab ---------- */
 .current {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 10px 12px;
-}
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  display: inline-grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 14px;
-  color: #fff;
-  background: var(--faint);
-  flex: none;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 8px 8px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
 }
 .current-text {
   flex: 1;
   min-width: 0;
 }
 .current-host {
+  font-size: 13.5px;
   font-weight: 600;
+  letter-spacing: -0.006em;
+  line-height: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.current-note {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.current .btn {
+  flex: none;
+}
+/* browser pages can't be blocked: the note says so, no dead button */
+.current.is-browser .btn {
+  display: none;
+}
+/* already on the list: a confirmed state, not a greyed-out button */
+.current .btn.is-blocked,
+.current .btn.is-blocked:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent);
+  box-shadow: none;
+  cursor: default;
+  padding-left: 9px;
+}
+.current .btn.is-blocked::before {
+  content: '';
+  width: 8px;
+  height: 4px;
+  margin: -3px 2px 0 0;
+  border-left: 1.7px solid currentColor;
+  border-bottom: 1.7px solid currentColor;
+  transform: rotate(-45deg);
+}
+#current-avatar:empty,
+#current-avatar.empty {
+  background: var(--bg-2);
+  color: var(--muted);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+@media (prefers-color-scheme: dark) {
+  .current {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+/* ---------- add ---------- */
 .add {
   display: flex;
   gap: 8px;
 }
 .add .input {
   flex: 1;
+  height: 32px;
+  font-size: 13px;
 }
+
+/* ---------- focus session ---------- */
 .focus {
-  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .focus-head {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
+  min-height: 18px;
 }
-.focus h3 {
-  font-size: 14px;
-  font-weight: 650;
+.focus-head .mono-label {
+  flex: 1;
+  font-weight: 500;
+}
+.focus-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+.rounds {
+  display: inline-flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+.rounds:empty {
+  display: none;
+}
+.rounds .picket {
+  width: 6px;
+  height: 10px;
+  clip-path: polygon(0 3px, 3px 0, 6px 3px, 6px 100%, 0 100%);
+  color: var(--bg-2);
+  box-shadow: none;
+}
+.rounds .picket.done {
+  color: var(--signal);
+  opacity: 0.55;
+}
+.rounds .picket.now {
+  color: var(--signal);
 }
 .focus-body {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+}
+.focus-main {
+  flex: 1;
+  min-width: 0;
 }
 .timer {
-  flex: 1;
-  font-size: 28px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.focus.running .timer {
-  color: var(--accent);
-}
-.focus.locked .timer {
+.focus-sub {
+  font-size: 12.5px;
+  line-height: 17px;
   color: var(--muted);
+  text-wrap: pretty;
 }
+/* Not running (Pro idle, or the Free teaser): no static timer, just what a session does */
+.focus:not(.running) .timer {
+  display: none;
+}
+.focus:not(.running) .focus-sub {
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 18px;
+}
+.focus.running .focus-head {
+  display: none;
+}
+.focus .progress {
+  margin-top: 6px;
+}
+.focus.break .progress > span {
+  background: var(--faint);
+}
+
+/* ---------- footer ---------- */
 .foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  padding: 2px 4px 0;
+  gap: 12px;
+  min-height: 40px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 12px;
+  line-height: 16px;
+}
+.foot .stats {
+  color: var(--muted);
+}
+.foot .stats b {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 .foot a {
   white-space: nowrap;
+  font-weight: 550;
+  color: var(--accent);
 }
-.nowrap {
-  white-space: nowrap;
-}
-
-.warn {
-  margin: -2px 2px 0;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: var(--warn-soft);
-  color: var(--ink-2);
-}
-.warn[hidden] {
-  display: none;
+@media (prefers-color-scheme: dark) {
+  .foot {
+    background: #0d100f;
+  }
 }

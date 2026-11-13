@@ -68,17 +68,29 @@
     }
   }
 
-  function siteColor(label) {
+  /** Stable hue for a site name; the monogram's colours come from it in CSS (see .avatar). */
+  function siteHue(label) {
     let h = 0;
     for (const ch of String(label)) h = (h * 31 + ch.charCodeAt(0)) % 360;
-    return 'hsl(' + h + ' 32% 46%)';
+    return h;
   }
 
   function siteAvatar(label) {
     const letter = (String(label).replace(/^www\./, '')[0] || '?').toUpperCase();
-    const a = el('span', { class: 'avatar', text: letter });
-    a.style.background = siteColor(label);
+    const a = el('span', { class: 'avatar', text: letter, 'aria-hidden': 'true' });
+    a.style.setProperty('--h', String(siteHue(label)));
     return a;
+  }
+
+  // In-house icon set: 24-unit grid, 1.7 px rounded strokes (styled by .icon in base.css).
+  // Icons in static markup are inlined in the HTML; these are the ones built from script.
+  const ICONS = {
+    x: '<path d="M7.5 7.5l9 9M16.5 7.5l-9 9"/>',
+    plus: '<path d="M12 6.5v11M6.5 12h11"/>',
+    lock: '<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  };
+  function icon(name, cls) {
+    return '<svg class="icon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
   }
 
   function fmtCountdown(ms) {
@@ -104,5 +116,5 @@
     return (err && err.message) || i18n('errGeneric', 'Something went wrong.');
   }
 
-  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage };
+  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fmtCountdown, fmtTime, errorMessage };
 })(self);
