@@ -1,0 +1,188 @@
+# FocusFence landing page v2: brief, decisions and critique log
+
+Status: **proposal on branch `design/landing-v2`** (PR against `feat/focusfence-v1`, to be retargeted to `main`). Nothing outside the website was changed, apart from an opt-in `--site` mode in the screenshot script.
+
+Reference: [linear.app](https://linear.app), studied on 2026-11-13 with desktop (1440 px) and mobile (390 px) captures and its computed styles. We borrow its level of craft, not its assets, copy or brand.
+
+## 1. What the reference does, and what we take from it
+
+| Linear does | Measured on linear.app | FocusFence takes |
+|---|---|---|
+| Near-black canvas, never pure black | body `rgb(8, 9, 10)`; panels a few steps lighter; 1 px borders at ~8 % white | Same canvas `#08090A`. Panels are lit with translucent white; product screens sit on the extension's own dark background `#141917` |
+| One typeface, finely tuned | Inter Variable; headings weight 510, tracking −0.022em, line-height 1.0 | Inter with the **optical-size axis** (Inter Display shapes at large sizes), one self-hosted 73 KB file, headings 590–620 with tighter tracking (our lines are shorter) |
+| Two-tone headings | first sentence `#f7f8f8`, the rest `#8a8f98` | Every section heading. In the hero, *the endless feeds* is the dimmed half: the distraction is literally fenced off |
+| Quiet body text | 15 px, `#8a8f98`, line-height 1.6 | 15–16 px muted body, 17–19 px lead |
+| The product, shown huge and framed, with light behind it | app window ~1320 px wide, inner 1 px gradient edge, soft light pooling underneath | The real block page in a browser window with the real popup hanging from the toolbar icon, a green light behind it, and a floor fade |
+| Monospace micro labels | `FIG 0.1`, uppercase, ~11 px | Section kickers, step numbers, the permissions card |
+| Feature rows: heading left, paragraph right, visual below | 48 px heading left, 20 px paragraph right | Same grid for Block, Focus and Stats |
+| Hairline section breaks, generous vertical space | 1 px lines, 150–200 px between blocks | Same rhythm (`clamp(88px, 11vw, 160px)`) |
+| Pills, restrained colour | brand indigo almost never used | Green only for the logo, the primary action, focus states, ticks and the light |
+
+Deliberately **not** taken: customer logos, testimonials, user counts or press (we have none and must not invent any), isometric illustrations, a mega-menu.
+
+## 2. Direction: "lights out, fence up"
+
+FocusFence sells the absence of noise. The page feels like the product does when it works: dark, quiet, nothing pulling at you, one calm green light. Every section has one idea, one real visual and a lot of air. Real screenshots do the showing (never mock-ups), and type does the telling.
+
+Signature details:
+
+- **The picket.** The logo's 45° picket tip is the only ornament: a 7×11 px picket in front of each kicker, and a picket fence silhouetted against green light at the end of the page (same 45° tip, rise = half the width).
+- **Dimmed distractions.** In two-tone headings the distracting thing is set in the muted grey.
+- **One moment, told twice.** The hero window and the popup show the same focus session at the same second (18:42 left, 5 blocked today, 89 this week), and so do the stats further down.
+
+## 3. Palette (dark only, on purpose)
+
+The site is dark on every OS, like Linear: the brand lives in the dark, and one theme lets every screenshot, glow and contrast pair be tuned once. `color-scheme: dark` and `theme-color` keep scrollbars, form controls and mobile browser chrome dark. All colours are tokens in `scripts/site.css`, so a light theme stays a single block of overrides if it is ever wanted.
+
+| Token | Value | Use | Contrast |
+|---|---|---|---|
+| `--bg` | `#08090A` | page | |
+| `--bg-2` | `#0B0D0C` | footer | |
+| `--screen` | `#141917` | behind product crops (the extension's own dark background, so crops sit seamlessly) | |
+| `--line` / `-2` / `-3` | white 7.5 / 11 / 18 % | hairlines, card edges | |
+| `--text` | `#F3F5F4` | headings | 18.2 : 1 |
+| `--text-2` | `#C9D0CC` | emphasis, list items | 12.7 : 1 (11.3 on `--screen`) |
+| `--muted` | `#8E9893` | body, nav, dimmed half of headings | 6.7 : 1 (6.0 on `--screen`) |
+| `--green` | `#3A9A5B` | field green: logo tile, glows, kicker pickets (never small text) | |
+| `--accent` | `#6CC58A` | ticks, step numbers, focus ring | 9.5 : 1 |
+| `--cta` | `#5DBE7E` with `#04130A` text | primary button | 8.3 : 1 |
+| `--pro` | `#D9A74B` on 12 % amber | PRO badges (same amber as in the extension) | 8.0 : 1 |
+
+White on field green is only 3.5 : 1, so the logo green never carries small text. The button uses a lighter tint with dark ink.
+
+## 4. Type scale
+
+Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv11` and `ss01` (as in the extension). Mono is the system stack, used only for short labels, so no second font is downloaded.
+
+| Role | Size (360 → 1440 px) | Weight | Tracking | Line height |
+|---|---|---|---|---|
+| Display (h1) | 44 → 80 px | 620 | −0.045em | 0.98 |
+| Closing line | 38 → 72 px | 620 | −0.045em | 1.0 |
+| Section (h2) | 32 → 48 px | 600 | −0.038em | 1.04 |
+| Statement | 26 → 40 px | 560 | −0.03em | 1.16 |
+| Card title (h3) | 17 px | 590 | −0.014em | 1.35 |
+| Lead | 17 → 19 px | 400 | −0.012em | 1.55 |
+| Body | 15–16 px | 400 | −0.006em | 1.6 |
+| Nav, small | 13.5 px | 500 | 0 | |
+| Mono kicker | 12 px, uppercase | 500 | +0.1em | 1 |
+
+`text-wrap: balance` on headings and `pretty` on the lead and statement avoid orphans in all four languages.
+
+## 5. Layout
+
+- Content 1200 px; product windows up to 1280 px; prose 700 px. Gutters `clamp(20px, 4vw, 40px)`.
+- Radii 8 (controls), 14 (tables), 18 (windows, cards). Pills for buttons and badges.
+- Breakpoints: 1024 (two-column heads and grids stack, bento cards go full width), 860 (steps and plans stack), 720 (section links move to the footer; product windows keep a legible scale and are cropped instead of shrunk), 480 (full-width buttons, stacked ticks, smaller fence), 400 (tighter buttons). Checked at 360, 390, 768, 1024, 1280 and 1440 px: no horizontal scroll.
+
+## 6. Page plan (as built)
+
+1. **Header:** logo and wordmark; Features, Pricing, Blog, Privacy; mono EN/FR/ES/DE switcher; "Add to Chrome" pill once `STORE_URL` is set. Translucent, blurred, hairline after scrolling.
+2. **Hero:** kicker pill, two-tone H1 on one line (two in Spanish), then a split row with the lead on the left and the actions plus three ticks on the right. Until the store link exists, the primary action is an honest status ("Coming soon to the Chrome Web Store", a dot that pings three times), not a dead button. Below it, the browser window (tab title taken from the extension's own strings, toolbar icon) with the real block page, and the real popup hanging from the icon at the same scale. On phones the window is cropped around the block page and the popup sits under it.
+3. **Statement + three steps** (from onboarding): pick up to three sites, allow the block page, get back to work.
+4. **Block** (`#features`): the real Settings → Blocklist window (website, path and keyword rules), then the two block features.
+5. **Focus:** bento of three cards with real UI crops at 1:1: schedule ranges, the popup's focus timer and strict mode switched on.
+6. **Stats:** the real stats panel, large, then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check).
+7. **Privacy:** two-tone statement, three points, and a mono card listing what FocusFence actually asks Chrome for, plus the single network exception (ExtensionPay, only after upgrading).
+8. **Pricing:** Free / Pro monthly / Pro yearly (lit card, "Save 44%"), localized prices, how to upgrade, payment note.
+9. **FAQ:** heading and contact line left (sticky on desktop), accordion right.
+10. **Closing:** logo in its light, "Get your focus back.", the action, the picket fence against the green light.
+11. **Footer:** brand line, Product / Resources / Contact (contact@focusfence.dev), license and trademark notes.
+
+## 7. Product imagery
+
+`npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`:
+
+- 2x captures in the dark theme, encoded to WebP by Chromium's own canvas encoder (no image tooling needed): block page and blocklist (1x and 2x, `srcset`), popup, focus timer, schedule, strict mode, stats. 40 KB for the 2560×1600 hero.
+- The feature crops come from a 900 px window, so the cards are compact and shown at 1:1.
+- Countdowns are captured at exactly 18:42 (the script waits for that tick), and the stats are captured after the block-page visit, so every number agrees across images.
+- `og.png` (1200×630) per language, composed from the same captures: logo, localized kicker and two-tone headline (auto-fitted), ticks, window and popup.
+
+## 8. Motion
+
+Subtle and optional; nothing is hidden without JavaScript, and `prefers-reduced-motion` turns all of it off.
+
+- Blocks below the fold rise 16 px and fade in once (IntersectionObserver, 0.7 s ease-out). The observer starts after `load` and never reads layout, so it costs nothing on the critical path. The hero never animates (it holds the LCP).
+- A soft light follows the pointer across cards and plans (fine pointers only).
+- FAQ answers open with a height transition where the browser supports it.
+- No endless animation: the status dot pings three times and rests.
+
+## 9. Quality bar (measured)
+
+- **Lighthouse** (v12.6, local static server with gzip, mobile preset unless noted):
+
+  | Page | Perf | A11y | Best practices | SEO |
+  |---|---|---|---|---|
+  | `/` | 96–100 | 100 | 100 | 100 |
+  | `/fr/` `/es/` `/de/` | 97–100 | 100 | 100 | 100 |
+  | `/privacy.html` | 99–100 | 100 | 100 | 100 |
+  | all of the above, desktop preset | 100 | 100 | 100 | 100 |
+  | `/blog/*` | 100 | 100 | 100 | 66: drafts carry `noindex` by design until published |
+
+  LCP 1.5–2.0 s, TBT 10–110 ms, CLS 0 on mobile. Runs vary on this shared server; the ranges are from repeated runs.
+- **Accessibility:** axe (WCAG 2 A/AA) passes on every page at 1280 px, with no horizontal scroll at 1280, 390 and 360 px (`tests/docs.spec.mjs`). Skip link, landmarks, labelled navs, focus-visible rings, real `<details>` for the FAQ, alt text on every product image.
+- **Weight:** about 250 KB on a first visit on a phone. That covers HTML with inline CSS (14 KB gzipped), the font (73 KB), the hero (18 KB at 1x, 41 KB at 2x), the popup (33 KB) and the next lazy screenshot. All of a language's product images together come to about 300 KB.
+
+## 10. Critique log
+
+Each pass: full-page screenshots at 1440 and 390 px for en, fr, es and de, compared against the linear.app captures. The final screenshots are in `screenshots/`.
+
+**Pass 1** (first build):
+1. The product started 720 px down a 900 px screen; Linear shows it from ~530 px.
+2. The hero copy was crammed left, with an empty right half.
+3. The Focus crops were tiny (schedule at 0.4 scale on phones), and the strict-mode crop was a thin strip of 9 px text.
+4. The stats sat in a narrow split: a three-line heading with a ragged break, chart labels around 7 px.
+5. The settings capture said "Focus session" on its toggle (a session was running), which made no sense next to a blocklist.
+6. The two timers disagreed (18:43 / 18:42), and so did the counts (4 vs 5 blocked today).
+7. On phones, the hero crop cut the tab title and showed a sliver of the popup at the edge, which looked broken.
+8. The closing fence read as a barcode.
+
+Fixes:
+- **Hero:** a split row (lead left, actions right), so the window starts at ~475 px; a mobile composition with the popup under the window.
+- **Crops:** captured from a 900 px window, so the cards are compact and shown at 1:1; on phones they keep a legible scale and fade at the edge.
+- **Stats:** the standard section head plus a large centred panel.
+- **Captures:** ordered so that every count and timer agrees (and the toggle reads "Blocking on"), with the script waiting for the exact tick.
+- **Fence:** redrawn as a silhouette against light.
+
+**Pass 2:**
+1. A stray hairline ran across the fence (the pattern rect inherited the stroke).
+2. The statement broke into four lines with an orphan; it was shortened in all four languages.
+3. The H2s were sized down to 48 px (Linear's size).
+4. On phones, the hero window kept a hard bottom edge under its fade, and the ticks wrapped unevenly.
+5. The OG popup covered the block page's headline; it was moved onto the empty side, and the headline auto-fits per language.
+
+**Pass 3** (all languages, plus privacy and blog):
+1. German used "Strikt-Modus" while the product and store listing say "strikter Modus"; the site copy was aligned with the screenshots.
+2. Some leads ended in orphans; the lead is now `text-wrap: pretty`.
+3. The blog index showed stray bullets.
+4. On phones the popup covered the block page's buttons; it now sits in normal flow under the window, with no magic numbers.
+
+**Pass 4** (performance):
+1. Mobile Lighthouse scored 87–94, with up to 530 ms TBT. Traces showed four causes:
+   - a forced layout at script start;
+   - a CSS animation that could not be composited, so it ticked on the main thread every frame;
+   - a container query on the hero window;
+   - `local()` lookups for a metric-matched fallback font.
+2. Fixes:
+   - the script reads no layout and starts after `load`;
+   - no endless animations;
+   - percentages instead of `cqw`;
+   - the fallback face was dropped (CLS stayed at 0, since the preloaded font arrives before first render).
+3. `content-visibility` was tried and removed: the gain was no longer needed, and it made anchor jumps and full-page captures unreliable.
+
+**Pass 5** (breakpoints and states):
+1. The page was checked at 360, 768, 1024 and 1280 px.
+2. At 360 px the English status pill wrapped to two lines; buttons are slightly smaller below 400 px.
+3. The fence was oversized on phones; it is now scaled down.
+4. The live-store state (`STORE_URL` set) was rendered and checked: green nav pill, primary "Add to Chrome — it's free" with an arrow, full width on phones.
+
+**Pass 6** (final, all languages): full pages and 2x first screens re-shot from the committed build. There were no new issues, and the full test suite passes (103 tests). Final images are in `screenshots/`:
+- `<lang>-desktop.png` and `<lang>-mobile.png`
+- `en`/`fr` `*-first-screen@2x.png`
+- `og-en.png` and `og-all-languages.png`
+
+## 11. Open points for the owner
+
+- New French, Spanish and German strings in `focusfence/scripts/site-strings.mjs` (statement, steps, section heads, details, permissions card, pricing notes) deserve a native proofread, like the rest of the site.
+- The German extension UI says "du" while the site says "Sie" (unchanged here; the screenshots show the product as it is).
+- When the store listing is live, set `STORE_URL` in `focusfence/scripts/docs.mjs` and run `npm run docs`: the header pill and the green buttons appear automatically.
+- A light theme can be added later as one block of token overrides, plus light captures from `--site`.
