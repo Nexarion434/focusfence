@@ -86,6 +86,75 @@ export const CANDIDATES = {
     picket(0, 4, 4, 2, mono || ink) + picket(6, 1, 4, 2, mono || ink) + picket(12, 4, 4, 2, mono || ink) + [7, 11].map((y) => rect(4, y, 2, 2, mono || ink) + rect(10, y, 2, 2, mono || ink)).join(''),
   // uniform 3-unit stroke: stem = arms
   A6: ({ ink = G } = {}) => poly([[4, 15], [4, 2.5], [5.5, 1], [7, 2.5], [7, 15]], ink) + rect(7, 4, 7, 3, ink) + rect(7, 9, 5, 3, ink),
+  // ---- round 2 (review): Gate rim / dot, Picket F on a tile, Fence line pushed further
+  // Gate + 1-unit field-green rim: the tile edge reads on dark toolbars too
+  // rim: 1 unit where the icon is small (16/32 px), thinner when large so it doesn't look like a sticker border
+  B6: ({ rim = '#3A9A5B', tile = '#1F5A4C', ink = '#A9D6C8', dot = '#F2B84B', r = 2, size = 16, mono } = {}) => {
+    const w = size <= 32 ? 1 : size <= 48 ? 2 / 3 : 0.5;
+    const pk = (x, f) => poly([[x, 13], [x, 4.5], [x + 1.5, 3], [x + 3, 4.5], [x + 3, 13]], f);
+    return mono
+      ? knock(rect(0, 0, 16, 16, mono, 3.5), pk(2, '#000') + pk(11, '#000') + circle(8, 7, r, '#000'))
+      : rect(0, 0, 16, 16, rim, 3.5) + rect(w, w, 16 - 2 * w, 16 - 2 * w, tile, 3.5 - w) + pk(2, ink) + pk(11, ink) + circle(8, 7, r, dot);
+  },
+  B7: (o = {}) => CANDIDATES.B6({ rim: '#5FB08C', ...o }),
+  B8: (o = {}) => CANDIDATES.B6({ tile: '#276B5B', ...o }),
+  B9: (o = {}) => CANDIDATES.B6({ r: 2.5, ...o }),
+  // Picket F as ONE outline (no separate arms), white on a field-green tile
+  A7: ({ tile = '#3A9A5B', ink = '#FFFFFF', mono, cut = false } = {}) => {
+    const top = cut ? [[7, 5], [12, 5], [13, 6], [12, 7]] : [[7, 5], [12, 5], [12, 7]];
+    const f = poly([[4, 14], [4, 3.5], [5.5, 2], [7, 3.5], ...top, [7, 7], [7, 9], [11, 9], [11, 11], [7, 11], [7, 14]], mono ? '#000' : ink);
+    return mono ? knock(rect(0, 0, 16, 16, mono, 3.5), f) : rect(0, 0, 16, 16, tile, 3.5) + f;
+  },
+  A8: (o = {}) => CANDIDATES.A7({ cut: true, ...o }),
+  // heavier arms (3 units) for balance with the 3-unit stem
+  A9: ({ tile = '#3A9A5B', ink = '#FFFFFF', mono } = {}) => {
+    const f = poly([[4, 14], [4, 3.5], [5.5, 2], [7, 3.5], [7, 4], [12, 4], [12, 7], [7, 7], [7, 8.5], [11, 8.5], [11, 11.5], [7, 11.5], [7, 14]], mono ? '#000' : ink);
+    return mono ? knock(rect(0, 0, 16, 16, mono, 3.5), f) : rect(0, 0, 16, 16, tile, 3.5) + f;
+  },
+  // Fence in perspective: pickets shrink toward a focal point on the right
+  C13: ({ ink = '#3A9A5B', mono } = {}) => {
+    const c = mono || ink;
+    const pk = (x, w, top, bot) => poly([[x, bot], [x, top + w / 2], [x + w / 2, top], [x + w, top + w / 2], [x + w, bot]], c);
+    return pk(0, 3, 1, 15) + pk(4, 3, 2.5, 13.5) + pk(8, 3, 4, 12) + pk(12, 3, 5.5, 10.5) +
+      poly([[3, 5], [12, 7], [12, 8.5], [3, 7]], c) + poly([[3, 10], [12, 9.5], [12, 10.5], [3, 12]], c).replace(/,/g, ',');
+  },
+  // Gate palette: tile, mint fence across the lower half, lantern sun rising behind the centre
+  C15: ({ tile = '#1F5A4C', ink = '#A9D6C8', sun = '#F2B84B', rim = '#3A9A5B', mono } = {}) => {
+    const fence = (f) => [2, 6, 10].map((x) => poly([[x, 14], [x, 8.5], [x + 2, 6.5], [x + 4, 8.5], [x + 4, 14]], f)).join('');
+    if (mono) return knock(rect(0, 0, 16, 16, mono, 3.5), knock(circle(8, 6, 3.5, '#000'), [2, 6, 10].map((x) => poly([[x - 1, 15], [x - 1, 8.5], [x + 2, 5.5], [x + 5, 8.5], [x + 5, 15]], '#000')).join('')) + fence('#000'));
+    return rect(0, 0, 16, 16, rim, 3.5) + rect(1, 1, 14, 14, tile, 2.5) +
+      knock(circle(8, 6, 3.5, sun), [2, 6, 10].map((x) => poly([[x - 1, 15], [x - 1, 8.5], [x + 2, 5.5], [x + 5, 8.5], [x + 5, 15]], '#000')).join('')) + fence(ink);
+  },
+  // centre picket taller and wider: the fence "focuses" on the middle
+  C16: ({ tile = '#1F5A4C', ink = '#A9D6C8', rim = '#3A9A5B', mono } = {}) => {
+    const f = (c) => poly([[2, 14], [2, 7], [3.5, 5.5], [5, 7], [5, 14]], c) + poly([[6, 14], [6, 4], [8, 2], [10, 4], [10, 14]], c) + poly([[11, 14], [11, 7], [12.5, 5.5], [14, 7], [14, 14]], c);
+    return mono ? knock(rect(0, 0, 16, 16, mono, 3.5), f('#000')) : rect(0, 0, 16, 16, rim, 3.5) + rect(1, 1, 14, 14, tile, 2.5) + f(ink);
+  },
+  B10: (o = {}) => CANDIDATES.B6({ rim: '#5FB08C', r: 2.25, ...o }),
+  // knothole: the fence with a hole in the middle picket you look through
+  C23: ({ ink = '#3A9A5B', light = '#F2B84B', hr = 1.5, mono } = {}) => {
+    const body = [0, 6, 12].map((x) => picket(x, 1, 4, 2, mono || ink)).join('') + [5, 11].map((y) => rect(4, y, 2, 2, mono || ink) + rect(10, y, 2, 2, mono || ink)).join('');
+    return knock(body, circle(8, 9, hr, '#000')) + (mono ? '' : circle(8, 9, hr - 0.01, light));
+  },
+  C24: ({ tile = '#1F5A4C', ink = '#A9D6C8', light = '#F2B84B', rim = '#5FB08C', mono } = {}) => {
+    const fence = (c) => [2, 6.5, 11].map((x) => poly([[x, 14], [x, 4.5], [x + 1.5, 3], [x + 3, 4.5], [x + 3, 14]], c)).join('') + [6, 10.5].map((y) => rect(5, y, 1.5, 1.5, c) + rect(9.5, y, 1.5, 1.5, c)).join('');
+    if (mono) return knock(rect(0, 0, 16, 16, mono, 3.5), knock(fence('#000'), circle(8, 8.5, 1, '#fff')).replace(/<mask/, '<mask') );
+    return rect(0, 0, 16, 16, rim, 3.5) + rect(1, 1, 14, 14, tile, 2.5) + knock(fence(ink), circle(8, 8.5, 1, '#000')) + circle(8, 8.5, 0.99, light);
+  },
+  // C10 silhouette, the two enclosed gaps glowing: light through the fence
+  C25: ({ ink = '#3A9A5B', light = '#F2B84B', mono } = {}) =>
+    [0, 6, 12].map((x) => picket(x, 1, 4, 2, mono || ink)).join('') + [5, 11].map((y) => rect(4, y, 2, 2, mono || ink) + rect(10, y, 2, 2, mono || ink)).join('') + (mono ? '' : rect(4, 7, 2, 4, light) + rect(10, 7, 2, 4, light)),
+  // knothole, one low rail: the lit hole is the only enclosed opening
+  C26: ({ ink = '#3A9A5B', light = '#F2B84B', mono } = {}) => {
+    const body = [0, 6, 12].map((x) => picket(x, 1, 4, 2, mono || ink)).join('') + rect(4, 10, 2, 3, mono || ink) + rect(10, 10, 2, 3, mono || ink);
+    return knock(body, circle(8, 6.5, 1.5, '#000')) + (mono ? '' : circle(8, 6.5, 1.49, light));
+  },
+  // knothole, rails touching (no gap between rail and picket bottoms), wider centre picket
+  C27: ({ ink = '#3A9A5B', light = '#F2B84B', mono } = {}) => {
+    const c = mono || ink;
+    const body = picket(0, 3, 4, 2, c) + poly([[5, 15], [5, 3.5], [8, 0.5], [11, 3.5], [11, 15]], c) + picket(12, 3, 4, 2, c) + rect(4, 10, 1, 3, c) + rect(11, 10, 1, 3, c);
+    return knock(body, circle(8, 7, 1.75, '#000')) + (mono ? '' : circle(8, 7, 1.74, light));
+  },
 };
 
 // ---------------------------------------------------------------- directions
@@ -93,35 +162,38 @@ export const CANDIDATES = {
 // #282A2C), so a single icon file works in light and dark Chrome.
 export const FIELD = '#3A9A5B';
 
+export const GLOW = '#FFEDB8'; // warmest cream ≥ 3:1 on field green
+export const RIM = '#5FB08C'; // Gate rim: ≥ 4.6:1 on dark toolbars
+
 export const DIRECTIONS = [
   {
     n: 1,
     slug: 'picket-f',
     name: 'Picket F',
-    tagline: 'A monogram: the F of FocusFence, its stem cut like a fence picket.',
-    mark: (o = {}) => CANDIDATES.A5({ ink: FIELD, ...o }),
-    word: { focus: COLORS.ink, fence: FIELD, focusDark: COLORS.paper, fenceDark: FIELD },
-    promo: { bg: COLORS.paper, mark: (o) => CANDIDATES.A5({ ink: FIELD, ...o }) },
-    contrast: [['Mark on light toolbar', FIELD, '#FFFFFF'], ['Mark on dark toolbar', FIELD, '#35363A'], ['Mark on GM3 dark', FIELD, '#282A2C']],
+    tagline: 'A monogram drawn as one outline: the F of FocusFence, its stem a fence picket, white on a field-green tile.',
+    mark: (o = {}) => CANDIDATES.A7(o),
+    word: { focus: COLORS.ink, fence: COLORS.pine, focusDark: COLORS.paper, fenceDark: FIELD },
+    promo: { bg: COLORS.paper, mark: (o) => CANDIDATES.A7(o) },
+    contrast: [['Tile on light toolbar', FIELD, '#FFFFFF'], ['Tile on dark toolbar', FIELD, '#35363A'], ['Tile on GM3 dark', FIELD, '#282A2C'], ['F on tile', '#FFFFFF', FIELD]],
   },
   {
     n: 2,
     slug: 'gate',
     name: 'Gate',
     tagline: 'Two pickets frame a warm dot: the fence keeps the noise out, the one thing you chose stays in view.',
-    mark: (o = {}) => CANDIDATES.B5(o),
+    mark: (o = {}) => CANDIDATES.B10(o),
     word: { focus: COLORS.ink, fence: COLORS.pine, focusDark: COLORS.paper, fenceDark: COLORS.mint },
-    promo: { bg: COLORS.pine, dark: true, mark: (o) => CANDIDATES.B5(o) },
-    contrast: [['Tile on light toolbar', COLORS.pine, '#FFFFFF'], ['Tile on dark toolbar', COLORS.pine, '#35363A'], ['Pickets on tile', COLORS.mint, COLORS.pine], ['Dot on tile', '#F2B84B', COLORS.pine]],
+    promo: { bg: COLORS.pine, dark: true, mark: (o) => CANDIDATES.B10(o) },
+    contrast: [['Tile on light toolbar', COLORS.pine, '#FFFFFF'], ['Rim on dark toolbar', RIM, '#35363A'], ['Rim on GM3 dark', RIM, '#282A2C'], ['Pickets on tile', COLORS.mint, COLORS.pine], ['Dot on tile', '#F2B84B', COLORS.pine]],
   },
   {
     n: 3,
-    slug: 'fence-line',
-    name: 'Fence line',
-    tagline: 'The fence itself, drawn as one bold silhouette: three pickets, two rails, nothing else.',
-    mark: (o = {}) => CANDIDATES.C10({ ink: FIELD, ...o }),
-    word: { focus: COLORS.ink, fence: FIELD, focusDark: COLORS.paper, fenceDark: FIELD },
-    promo: { bg: COLORS.ink, dark: true, mark: (o) => CANDIDATES.C10({ ink: FIELD, ...o }) },
-    contrast: [['Mark on light toolbar', FIELD, '#FFFFFF'], ['Mark on dark toolbar', FIELD, '#35363A'], ['Mark on GM3 dark', FIELD, '#282A2C']],
+    slug: 'knothole',
+    name: 'Knothole',
+    tagline: 'A fence with one knothole that glows: you look through it at the one thing that matters.',
+    mark: (o = {}) => CANDIDATES.C26({ light: GLOW, ...o }),
+    word: { focus: COLORS.ink, fence: COLORS.pine, focusDark: COLORS.paper, fenceDark: FIELD },
+    promo: { bg: COLORS.ink, dark: true, mark: (o) => CANDIDATES.C26({ light: GLOW, ...o }) },
+    contrast: [['Mark on light toolbar', FIELD, '#FFFFFF'], ['Mark on dark toolbar', FIELD, '#35363A'], ['Mark on GM3 dark', FIELD, '#282A2C'], ['Knothole glow on mark', GLOW, FIELD]],
   },
 ];

@@ -65,7 +65,7 @@ function boardHtml(d, png, mono) {
     <div style="font:400 17px Inter;color:#3B4842">${d.tagline}</div>
   </header>
   <div style="display:grid;grid-template-rows:672px 180px;gap:20px">
-    ${panel(COLORS.paper, `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px"><img src="${dataUri(svgDoc(d.mark(), 16).replace('width="16" height="16"', 'width="300" height="300"'))}" width="300" height="300">${wordmark(d, false, 46)}</div>`, 'height:100%')}
+    ${panel(COLORS.paper, `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px"><img src="${dataUri(svgDoc(d.mark({ size: 512 }), 16).replace('width="16" height="16"', 'width="300" height="300"'))}" width="300" height="300">${wordmark(d, false, 46)}</div>`, 'height:100%')}
     ${panel('#ffffff', label('Mono') + `<div style="display:flex;gap:18px;align-items:center">` +
       [['#000', '#fff'], ['#fff', '#111']].map(([ink, bg]) => `<div style="background:${bg};padding:14px;border-radius:12px;display:flex;gap:16px;align-items:center;border:1px solid #e3e1d9"><img src="${dataUri(svgDoc(mono(ink), 16).replace('width="16" height="16"', 'width="72" height="72"'))}" width="72" height="72"><img src="${dataUri(svgDoc(mono(ink), 32))}" width="32" height="32"><img src="${dataUri(svgDoc(mono(ink), 16))}" width="16" height="16"></div>`).join('') + `</div>`)}
   </div>
@@ -91,7 +91,7 @@ function boardHtml(d, png, mono) {
           <div style="width:30px;height:16px;border-radius:8px;background:#0B57D0;position:relative"><div style="position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#fff"></div></div>
         </div>`)}
       ${panel('#ffffff', label('Small promo tile 440×280') + `<div style="width:440px;height:280px;transform:scale(.97);transform-origin:0 0;border-radius:6px;background:${d.promo.bg};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;border:1px solid #e3e1d9">
-        <img src="${dataUri(svgDoc(d.promo.mark(), 16).replace('width="16" height="16"', 'width="96" height="96"'))}" width="96" height="96">
+        <img src="${dataUri(svgDoc(d.promo.mark({ size: 96 }), 16).replace('width="16" height="16"', 'width="96" height="96"'))}" width="96" height="96">
         ${wordmark(d, promoDark, 38)}
         <div style="font:500 15px Inter;color:${promoDark ? '#C9D0CC' : '#3B4842'}">Block distractions. Keep your focus.</div></div>`)}
     </div>
@@ -107,14 +107,14 @@ export async function buildBoards(only) {
       fs.mkdirSync(dir, { recursive: true });
       const png = {};
       for (const s of [16, 32, 48, 128]) {
-        const svg = svgDoc(d.mark(), s);
+        const svg = svgDoc(d.mark({ size: s }), s);
         fs.writeFileSync(path.join(dir, `icon-${s}.svg`), svg + '\n');
         const buf = await rasterize(page, svg, s);
         fs.writeFileSync(path.join(dir, `icon-${s}.png`), buf);
         png[s] = b64(buf);
       }
       const mono = (ink) => d.mark({ ink, mono: ink });
-      fs.writeFileSync(path.join(dir, 'mark.svg'), svgDoc(d.mark(), 16).replace('width="16" height="16"', 'width="512" height="512"') + '\n');
+      fs.writeFileSync(path.join(dir, 'mark.svg'), svgDoc(d.mark({ size: 512 }), 16).replace('width="16" height="16"', 'width="512" height="512"') + '\n');
       fs.writeFileSync(path.join(dir, 'mark-mono.svg'), svgDoc(mono('#000'), 16).replace('width="16" height="16"', 'width="512" height="512"') + '\n');
       await page.setViewportSize({ width: 1600, height: 1000 });
       await page.setContent(boardHtml(d, png, mono));
