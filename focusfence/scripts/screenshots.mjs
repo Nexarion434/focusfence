@@ -20,10 +20,6 @@ const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 fs.mkdirSync(OUT, { recursive: true });
 console.log('language:', LANG, '->', OUT);
 const DARK = process.argv.includes('--dark');
-// --site --src <dir>: capture the website images from another copy of the extension's source
-// (for example the redesigned UI on another branch before it is merged). Default: ./src
-const argSrc = process.argv.indexOf('--src');
-const SITE_SRC = argSrc > 0 ? path.resolve(process.argv[argSrc + 1]) : undefined;
 const MIN = 60 * 1000;
 
 const LOGO = fs
@@ -226,7 +222,6 @@ async function captureTheme(theme, SITE_OUT, written) {
     proxyPort: net.port,
     colorScheme: theme,
     deviceScaleFactor: 2,
-    ...(SITE_SRC ? { srcDir: SITE_SRC } : {}),
     ...(LANG === 'en' ? {} : { lang: LANG }),
     mutate(mf, dir) {
       mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'");
