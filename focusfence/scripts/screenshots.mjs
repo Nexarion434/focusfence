@@ -164,9 +164,9 @@ async function seed(send, page) {
 }
 
 /* ------------------------------------------------------------------ website
- * --site: crisp 2x captures of the real UI for the website (docs/), in the dark
- * theme the site uses, encoded to WebP in the browser (no image tooling needed),
- * plus the localized 1200x630 Open Graph image.
+ * --site: crisp 2x captures of the real UI for the website (docs/), in the dark and
+ * light themes (the site follows the visitor's theme), encoded to WebP in the browser
+ * (no image tooling needed), plus the localized 1200x630 Open Graph image.
  * Output: screenshots/site/<lang>/ (read by scripts/docs.mjs).
  */
 function ogHtml(T) {
@@ -208,16 +208,19 @@ function ogHtml(T) {
 </body></html>`;
 }
 
-async function captureSite() {
-  const SITE_OUT = path.join(ROOT, 'screenshots', 'site', LANG);
-  fs.rmSync(SITE_OUT, { recursive: true, force: true });
-  fs.mkdirSync(SITE_OUT, { recursive: true });
+/**
+ * One theme of the website images. The extension follows the system theme, so the
+ * same seeded demo state is captured once in dark and once in light.
+ * Dark files keep their plain names (name.webp); light ones get a suffix (name-light.webp).
+ */
+async function captureTheme(theme, SITE_OUT, written) {
   const { SITE } = await import('./site-strings.mjs');
   const OG_FONT = path.join(ROOT, 'node_modules/@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2');
+  const sfx = theme === 'light' ? '-light' : '';
   const net = await startFakeInternet();
   const ext = await launchExtension({
     proxyPort: net.port,
-    colorScheme: 'dark',
+    colorScheme: theme,
     deviceScaleFactor: 2,
     ...(LANG === 'en' ? {} : { lang: LANG }),
     mutate(mf, dir) {
@@ -226,34 +229,39 @@ async function captureSite() {
     },
   });
   const { context, base, extDir } = ext;
-  const written = [];
   // WebP encoding in a blank page: Chromium's canvas encoder, optional downscale.
   const encoder = await context.newPage();
-  const webp = async (png, file, { scale = 1, quality = 0.88 } = {}) => {
+  // crop: a region in CSS px of a 2x capture (so a crop comes from the very same frame)
+  const webp = async (png, name, { scale = 1, quality = 0.88, crop = null } = {}) => {
+    const file = name.replace(/(-1x)?\.webp$/, `${sfx}$1.webp`);
     const b64 = await encoder.evaluate(
-      async ([src, k, q]) => {
+      async ([src, k, q, r]) => {
         const img = new Image();
         img.src = src;
         await img.decode();
+        const [sx, sy, sw, sh] = r ? [r.x * 2, r.y * 2, r.width * 2, r.height * 2].map(Math.round) : [0, 0, img.naturalWidth, img.naturalHeight];
         const c = document.createElement('canvas');
-        c.width = Math.round(img.naturalWidth * k);
-        c.height = Math.round(img.naturalHeight * k);
+        c.width = Math.round(sw * k);
+        c.height = Math.round(sh * k);
         const g = c.getContext('2d');
         g.imageSmoothingQuality = 'high';
-        g.drawImage(img, 0, 0, c.width, c.height);
+        g.drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
         return c.toDataURL('image/webp', q).split(',')[1];
       },
-      ['data:image/png;base64,' + png.toString('base64'), scale, quality]
+      ['data:image/png;base64,' + png.toString('base64'), scale, quality, crop]
     );
     fs.writeFileSync(path.join(SITE_OUT, file), Buffer.from(b64, 'base64'));
     written.push(file);
   };
-  const clipOf = async (page, selector, pad) => {
+  const clipOf = async (page, selector, padX, padY = padX) => {
     const r = await page.locator(selector).first().evaluate((el) => {
       const b = el.getBoundingClientRect();
       return { x: b.x, y: b.y, width: b.width, height: b.height };
     });
-    return { x: Math.max(0, r.x - pad), y: Math.max(0, r.y - pad), width: r.width + pad * 2, height: r.height + pad * 2 };
+    // whole CSS pixels, so every 2x crop has even dimensions (exact 1x width/height attributes)
+    const x = Math.max(0, Math.floor(r.x - padX));
+    const y = Math.max(0, Math.floor(r.y - padY));
+    return { x, y, width: Math.ceil(r.x + r.width + padX) - x, height: Math.ceil(r.y + r.height + padY) - y };
   };
   try {
     const api = await context.newPage();
@@ -276,21 +284,27 @@ async function captureSite() {
     const LEFT = (18 * 60 + 42) * 1000;
     const waitFor = (pg, sel, text) =>
       pg.waitForFunction(([s, t]) => (document.querySelector(s)?.textContent || '').includes(t), [sel, text], { polling: 50, timeout: 10000 });
-    // block page (hero), 1280x800 CSS px; this visit is today's 5th blocked attempt
+    // block page, 1280x800 CSS px (this visit is today's 5th blocked attempt), and a crop of its content
     await setLeft(LEFT + 2500);
     const blocked = await context.newPage();
     await blocked.setViewportSize({ width: 1280, height: 800 });
     await blocked.goto('https://www.reddit.com/r/all/');
+    // the page fills itself in asynchronously (random quote, counts, session): once that is done,
+    // pin the quote so every language and theme shows the same one
+    await waitFor(blocked, '#session-text', ':');
     await blocked.evaluate(() => {
       document.getElementById('message').textContent = self.FFCore.quote(1);
     });
     await blocked.waitForTimeout(600); // entrance animation
     await waitFor(blocked, '#session-text', '18:42');
+    // measured once the page is complete (the session line is shown), same frame as the capture
+    const cardRect = await clipOf(blocked, 'main.wrap', 64, 44);
     const blockPng = await blocked.screenshot();
     await blocked.close();
     await webp(blockPng, 'block-page.webp');
     await webp(blockPng, 'block-page-1x.webp', { scale: 0.5 });
-    fs.writeFileSync(path.join(extDir, 'og-block.png'), blockPng);
+    await webp(blockPng, 'block-card.webp', { crop: cardRect });
+    if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-block.png'), blockPng);
     // popup (360 CSS px wide) and its focus-session card
     await setLeft(LEFT + 2500);
     const popup = await context.newPage();
@@ -305,7 +319,7 @@ async function captureSite() {
     await popup.close();
     await webp(popupPng, 'popup.webp');
     await webp(focusPng, 'focus.webp');
-    fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
+    if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
     await send('stopPomodoro');
 
     // ---- settings at 1280 px: the blocklist (full window) and the stats panel
@@ -336,28 +350,37 @@ async function captureSite() {
     await opt.waitForTimeout(300);
     await webp(await opt.screenshot({ clip: await clipOf(opt, '#strict-on', 1) }), 'strict.webp');
 
-    // ---- Open Graph image, 1200x630 (PNG: the most widely supported format for link previews)
-    fs.writeFileSync(path.join(extDir, 'og.html'), ogHtml(SITE[LANG]));
-    const og = await context.newPage();
-    await og.setViewportSize({ width: 1200, height: 630 });
-    await og.goto(base + 'og.html');
-    await og.evaluate(() => document.fonts.ready);
-    // Translations differ in length: shrink the headline until it clears the bottom list.
-    await og.evaluate(() => {
-      const h1 = document.querySelector('h1');
-      const limit = document.querySelector('.foot').getBoundingClientRect().top - 36;
-      let size = 68;
-      while (h1.getBoundingClientRect().bottom > limit && size > 44) h1.style.fontSize = --size + 'px';
-    });
-    await og.waitForTimeout(400);
-    const ogPng = await og.screenshot({ scale: 'css' });
-    fs.writeFileSync(path.join(SITE_OUT, 'og.png'), ogPng);
-    written.push('og.png');
-    console.log('site images written to', SITE_OUT, '\n ', written.join(' '));
+    // ---- Open Graph image, 1200x630, from the dark captures (PNG: the most widely supported format for link previews)
+    if (theme === 'dark') {
+      fs.writeFileSync(path.join(extDir, 'og.html'), ogHtml(SITE[LANG]));
+      const og = await context.newPage();
+      await og.setViewportSize({ width: 1200, height: 630 });
+      await og.goto(base + 'og.html');
+      await og.evaluate(() => document.fonts.ready);
+      // Translations differ in length: shrink the headline until it clears the bottom list.
+      await og.evaluate(() => {
+        const h1 = document.querySelector('h1');
+        const limit = document.querySelector('.foot').getBoundingClientRect().top - 36;
+        let size = 68;
+        while (h1.getBoundingClientRect().bottom > limit && size > 44) h1.style.fontSize = --size + 'px';
+      });
+      await og.waitForTimeout(400);
+      fs.writeFileSync(path.join(SITE_OUT, 'og.png'), await og.screenshot({ scale: 'css' }));
+      written.push('og.png');
+    }
   } finally {
     await ext.close();
     await net.close();
   }
+}
+
+async function captureSite() {
+  const SITE_OUT = path.join(ROOT, 'screenshots', 'site', LANG);
+  fs.rmSync(SITE_OUT, { recursive: true, force: true });
+  fs.mkdirSync(SITE_OUT, { recursive: true });
+  const written = [];
+  for (const theme of ['dark', 'light']) await captureTheme(theme, SITE_OUT, written);
+  console.log('site images written to', SITE_OUT, '\n ', written.join(' '));
 }
 
 if (process.argv.includes('--site')) {
