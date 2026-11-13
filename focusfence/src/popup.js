@@ -41,7 +41,7 @@
       lit: here ? here.id : null,
       state: fenceState(s),
       min: 5,
-      max: 9,
+      max: 7,
       progress: p && p.phase === 'focus' ? phaseProgress(p, Date.now()) : null,
     });
   }

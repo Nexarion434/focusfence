@@ -64,16 +64,18 @@ body {
   clip-path: inset(-6px -40px 0 -40px);
 }
 #fence {
-  --pw: 26px;
-  --ph: 54px;
-  --halo-h: 1.25;
+  /* chunky glass pills: the middle one 1.6 times as tall as wide */
+  --pw: 37px;
+  --ph: 59px;
+  --halo-h: 1.15;
 }
+/* the ground: a soft line that fades out well before the edges */
 .ground {
   position: relative;
   z-index: 1;
   height: 1px;
   margin: 0 -16px 10px;
-  background: linear-gradient(to right, transparent, var(--line-3) 18%, var(--line-3) 82%, transparent);
+  background: linear-gradient(to right, transparent 12%, var(--line-2) 38%, var(--line-2) 62%, transparent 88%);
 }
 .state {
   position: relative;

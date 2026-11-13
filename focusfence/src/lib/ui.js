@@ -95,22 +95,40 @@
 
   /**
    * The fence's shape for n pills (n odd), position by position: its distance from the light (d),
-   * which side of it it stands (side), its height as a share of the tallest (k: a gentle bell), how
-   * much of the light it catches (t) and how much of it shows (v: the ends fade).
+   * which side of it it stands (side), its height as a share of the tallest (k), how much of the
+   * light it catches (t) and how much of it shows (v).
+   *   k: a gentle bell. The end pills are always 0.575 of the middle one (about 1.7 times shorter),
+   *      whatever the count: with the middle pill 1.6 times as tall as wide, the ends are a little
+   *      wider than tall, like the owner's reference.
+   *   v: the ends fade, but only to about two thirds of their neighbour (they stay visible glass).
    */
   function pillProfile(n) {
     const m = (n - 1) / 2;
-    const sigma = 0.75 * (m + 1);
     return Array.from({ length: n }, (_, p) => {
       const d = Math.abs(p - m);
+      const x = m ? d / m : 0;
       return {
         d,
         side: Math.sign(p - m),
-        k: 0.3 + 0.7 * Math.exp(-((d / sigma) ** 2)),
+        k: 0.575 + 0.425 * Math.cos((Math.PI * x) / 2) ** 2,
         t: d === 0 ? 1 : Math.exp(-d / 1.25),
-        v: m >= 2 && d === m ? 0.45 : m >= 3 && d === m - 1 ? 0.75 : 1,
+        v: m >= 2 && d === m ? 0.6 : m >= 2 && d === m - 1 ? 0.92 : 1,
       };
     });
+  }
+
+  /** A decorative row of n pills, the light in the middle (the Plan's fence, the strict gate, the
+      block page's miniature, onboarding's windows): the same shape as every fence. */
+  function pillRow(node, n, { lock = false } = {}) {
+    node.textContent = '';
+    node.append(el('span', { class: 'fence-halo' }));
+    for (const pr of pillProfile(n)) {
+      const p = pill(pr, pr.d === 0 ? 'lit' : '');
+      if (lock && pr.d === 0) p.appendChild(el('b', { class: 'lock' }));
+      node.appendChild(p);
+    }
+    node.append(el('span', { class: 'fence-pool' }));
+    return node;
   }
 
   /** One pill, shaped by its place in the profile (values set through the CSSOM: the CSP allows no inline styles). */
@@ -205,5 +223,5 @@
     return (err && err.message) || i18n('errGeneric', 'Something went wrong.');
   }
 
-  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fence, fenceItems, pillProfile, pill, fmtCountdown, fmtTime, errorMessage };
+  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fence, fenceItems, pillProfile, pill, pillRow, fmtCountdown, fmtTime, errorMessage };
 })(self);
