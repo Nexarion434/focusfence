@@ -1,0 +1,2 @@
+# local Chromium shared libs used to run headless tests on this server
+.chromelibs/
