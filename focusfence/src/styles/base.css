@@ -603,334 +603,305 @@ textarea.input {
   }
 }
 
-/* ---------- picket: the logo's 45° tip, used as lamp, counter and ornament ---------- */
+/* ---------- picket: a small pill, used as counter and ornament (focus rounds, plan tiers) ---------- */
 .picket {
   display: inline-block;
-  width: 8px;
-  height: 13px;
+  width: 7px;
+  height: 12px;
   flex: none;
   background: currentColor;
-  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
+  border-radius: 99px 99px 1.5px 1.5px;
 }
 
-/* ---------- the picket material: one object on every page ----------
- * A body that darkens toward the ground, a tip cut in two facets (the left one catches the light),
- * a shaded right face and a 1 px edge light. A context sets the colours (--pk-0/1/2, top to foot);
- * `.lit` makes it a lantern, a picket that holds the light: your sites while the fence is up, the
- * site you just tried on the block page, the site you pick in onboarding. */
-@property --pk-0 {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #e1e7e3;
-}
-@property --pk-1 {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #d5ddd8;
-}
-@property --pk-2 {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #cbd4ce;
-}
+/* ---------- the fence: a row of glass pills, one per blocked site ----------
+ * Round 4 (the owner's abstract direction). Wide pills with a full semicircle top stand in a short,
+ * symmetrical row that steps down from the centre like a bell. They are frosted glass; the pill in
+ * the middle holds the light (the site you tried, the site on this tab, or your newest site) and
+ * lights its neighbours, less the farther they stand. Built by FFUI.fence() (and blocked.js); each
+ * pill gets, through the CSSOM: --k its height as a share of the tallest, --t how much of the light
+ * it catches (0..1), --v how much of it you see (the ends fade), --side -1 or 1 (which side of the
+ * light it stands), --i its distance from the light (for the stagger).
+ * <div class="fence" data-state="up|focus|paused|down|strict|empty"> */
 :root {
-  /* unlit: the fence while it's down, a rule that isn't blocking */
-  --unlit-0: #e1e7e3;
-  --unlit-1: #d5ddd8;
-  --unlit-2: #cbd4ce;
-  --unlit-cap: rgb(255 255 255 / 0.65);
-  --unlit-cap-r: rgb(17 21 19 / 0.06);
-  --unlit-edge: rgb(255 255 255 / 0.75);
-  --unlit-shade: rgb(17 21 19 / 0.045);
-  --pk-0: var(--unlit-0);
-  --pk-1: var(--unlit-1);
-  --pk-2: var(--unlit-2);
-  --pk-cap: var(--unlit-cap);
-  --pk-cap-r: var(--unlit-cap-r);
-  --pk-edge: var(--unlit-edge);
-  --pk-shade: var(--unlit-shade);
-  --pk-ink: #5e6763;
-  /* lit: the lantern */
-  --lit-0: #52b678;
-  --lit-1: #3a9a5b;
-  --lit-2: #2a7845;
+  /* glass: milky, pale sage, greener near the light */
+  --glass-0: rgb(255 255 255 / 0.94);
+  --glass-1: rgb(243 247 244 / 0.8);
+  --glass-tint: 112 176 134;
+  --glass-tint-a: 0.42;
+  --glass-rim: rgb(255 255 255 / 1);
+  --glass-edge: rgb(24 66 40 / 0.1);
+  --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+  --glass-blur: blur(14px) saturate(1.15);
+  /* the light: a solid, saturated green with a soft bloom */
+  --light-rgb: 30 138 69;
+  --lit-0: #33a861;
+  --lit-1: #1e8a45;
+  --lit-2: #17723a;
   --lit-ink: #ffffff;
-  --lit-cap: 0.3;
-  --lit-edge: 0.28;
-  --lit-bloom: 0.4;
-  --lit-glow: transparent;
-  /* the wall: the other pickets of the block page's fence (and its miniatures), sage at dawn */
-  --wall-0: #c3d1c8;
-  --wall-1: #d0dbd4;
-  --wall-2: #e2e9e4;
-  --wall-shade: rgb(17 21 19 / 0.05);
-  --wall-cap: rgb(255 255 255 / 0.55);
-  --wall-cap-r: rgb(17 21 19 / 0.06);
-  --wall-edge: rgb(255 255 255 / 0.75);
+  --lit-core: rgb(255 255 255 / 0.1);
+  --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+  --halo-a: 0.26;
+  --halo-h: 1.3;
+  --light: var(--light-rgb);
+  /* the light in strict mode */
+  --amber-rgb: 217 161 63;
+  /* unlit: the fence while it's down */
+  --dim-0: rgb(255 255 255 / 0.7);
+  --dim-1: rgb(236 240 237 / 0.7);
+  --ghost-line: rgb(24 66 40 / 0.18);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --unlit-0: #3b4340;
-    --unlit-1: #2e3532;
-    --unlit-2: #252b29;
-    --unlit-cap: rgb(255 255 255 / 0.09);
-    --unlit-cap-r: rgb(0 0 0 / 0.25);
-    --unlit-edge: rgb(255 255 255 / 0.07);
-    --unlit-shade: rgb(0 0 0 / 0.18);
-    --pk-ink: #a2aca7;
-    /* in the dark the lantern is a light: pale at the top, green below, a halo around it */
-    --lit-0: #c4f4d4;
-    --lit-1: #5cc583;
-    --lit-2: #2c7c48;
-    --lit-ink: #04170b;
-    --lit-cap: 0.45;
-    --lit-edge: 0.5;
-    --lit-bloom: 0.85;
-    --lit-glow: rgba(58, 154, 91, 0.5);
-    /* graphite at night */
-    --wall-0: #232927;
-    --wall-1: #151a18;
-    --wall-2: #0b0e0d;
-    --wall-shade: rgb(0 0 0 / 0.3);
-    --wall-cap: rgb(255 255 255 / 0.07);
-    --wall-cap-r: rgb(0 0 0 / 0.35);
-    --wall-edge: rgb(255 255 255 / 0.05);
+    /* glass: frosted and translucent, faintly emissive green */
+    --glass-0: rgb(205 245 222 / 0.1);
+    --glass-1: rgb(120 190 150 / 0.035);
+    --glass-tint: 63 214 122;
+    --glass-tint-a: 0.3;
+    --glass-rim: rgb(255 255 255 / 0.4);
+    --glass-edge: rgb(255 255 255 / 0.07);
+    --glass-shade: 0 0 0 transparent;
+    --glass-blur: blur(16px) saturate(1.4);
+    /* the light: bright emerald, glowing from inside */
+    --light-rgb: 63 214 122;
+    --lit-0: #66e396;
+    --lit-1: #3fd67a;
+    --lit-2: #1e9f55;
+    --lit-ink: #ffffff;
+    --lit-core: rgb(225 255 236 / 0.5);
+    --lit-bloom: 0 0 26px rgb(63 214 122 / 0.75), 0 0 70px rgb(63 214 122 / 0.35);
+    --halo-a: 0.55;
+    --halo-h: 1.65;
+    --light: var(--light-rgb);
+    --amber-rgb: 230 178 82;
+    --dim-0: rgb(255 255 255 / 0.06);
+    --dim-1: rgb(255 255 255 / 0.02);
+    --ghost-line: rgb(255 255 255 / 0.2);
   }
 }
-.pk {
-  /* an empty slot is the picket's outline, open at the ground (see .slot-outline) */
-  --s: 1.25px;
-  --pk-ring: polygon(
-    evenodd,
-    0 calc(var(--w, 16px) / 2),
-    50% 0,
-    100% calc(var(--w, 16px) / 2),
-    100% 100%,
-    0 100%,
-    0 calc(var(--w, 16px) / 2),
-    var(--s) calc(var(--w, 16px) / 2 + var(--s) * 0.4142),
-    var(--s) 100%,
-    calc(100% - var(--s)) 100%,
-    calc(100% - var(--s)) calc(var(--w, 16px) / 2 + var(--s) * 0.4142),
-    50% calc(var(--s) * 1.4142),
-    var(--s) calc(var(--w, 16px) / 2 + var(--s) * 0.4142)
-  );
-  --pk-layers:
-    linear-gradient(90deg, var(--pk-cap) 50%, var(--pk-cap-r) 50%) 0 0 / 100% calc(var(--w, 16px) / 2) no-repeat,
-    linear-gradient(90deg, var(--pk-edge) 1px, transparent 1px) 0 calc(var(--w, 16px) / 2) / 100% 100% no-repeat,
-    linear-gradient(90deg, transparent 50%, var(--pk-shade) 50%) 0 calc(var(--w, 16px) / 2) / 100% 100% no-repeat,
-    linear-gradient(180deg, var(--pk-0), var(--pk-1) 42%, var(--pk-2));
-  clip-path: polygon(0 calc(var(--w, 16px) / 2), 50% 0, 100% calc(var(--w, 16px) / 2), 100% 100%, 0 100%);
-  background: var(--pk-layers);
-  color: var(--pk-ink);
-  /* the initial sits under the tip, so it still shows when the fence is lowered */
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  font-weight: 650;
-  line-height: 1;
-  user-select: none;
-}
-.pk.lit {
-  --pk-0: var(--lit-0);
-  --pk-1: var(--lit-1);
-  --pk-2: var(--lit-2);
-  --pk-cap: rgb(255 255 255 / var(--lit-cap));
-  --pk-cap-r: rgb(0 0 0 / 0.08);
-  --pk-edge: rgb(255 255 255 / var(--lit-edge));
-  --pk-shade: rgb(0 0 0 / 0.08);
-  --pk-ink: var(--lit-ink);
-}
-.pk.wall-pk {
-  --pk-0: var(--wall-0);
-  --pk-1: var(--wall-1);
-  --pk-2: var(--wall-2);
-  --pk-cap: var(--wall-cap);
-  --pk-cap-r: var(--wall-cap-r);
-  --pk-edge: var(--wall-edge);
-  --pk-shade: var(--wall-shade);
-}
-@media (prefers-color-scheme: light) {
-  /* white initials on the green, as in the logo; a hairline shadow keeps them crisp */
-  .pk.lit,
-  .fence[data-state='up'] .pk,
-  .fence[data-state='focus'] .pk {
-    text-shadow: 0 1px 1px rgb(0 0 0 / 0.22);
-  }
-}
-
-/* ---------- the fence: the signature. One picket per blocked site; its posture is the state ----------
- * <div class="fence" data-state="up|focus|paused|down|strict|empty"> built by FFUI.fence().
- * Up, the pickets are lit; down, they're unlit and sunk into the ground; paused, half sunk and dim;
- * strict, amber; empty, pale slots waiting for a site. Two thin rails run behind them. */
 .fence {
-  --w: 16px;
-  --h: 50px;
-  --gap: 10px;
-  --rail: color-mix(in srgb, var(--signal) 30%, transparent);
-  --rail-fill: var(--lit-1);
-  /* how far the fence is sunk into the ground, as a share of its height */
+  /* pill width, tallest pill, gap (the reference: 110 px pills, 10 px apart) */
+  --pw: 26px;
+  --ph: 56px;
+  --gap: calc(var(--pw) * 0.09);
   --drop: 0;
-  --fence-glow: transparent;
   position: relative;
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
   align-items: flex-end;
   gap: var(--gap);
-  height: var(--h);
-  padding: 0 3px;
-  filter: drop-shadow(0 0 8px var(--fence-glow));
-  transition: filter 0.4s ease;
 }
-.fence[data-state='up'],
-.fence[data-state='focus'] {
-  --pk-0: var(--lit-0);
-  --pk-1: var(--lit-1);
-  --pk-2: var(--lit-2);
-  --pk-cap: rgb(255 255 255 / var(--lit-cap));
-  --pk-cap-r: rgb(0 0 0 / 0.08);
-  --pk-edge: rgb(255 255 255 / var(--lit-edge));
-  --pk-shade: rgb(0 0 0 / 0.08);
-  --pk-ink: var(--lit-ink);
-  --fence-glow: var(--lit-glow);
-}
-.fence .rail {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: max(2px, calc(var(--h) * 0.045));
-  border-radius: 2px;
-  background: var(--rail);
-  transform: translateY(calc(var(--h) * var(--drop)));
-  transition:
-    transform 0.5s var(--spring) 0.05s,
-    background-color 0.3s ease;
-  overflow: hidden;
-}
-.fence .rail-a {
-  bottom: 30%;
-}
-.fence .rail-b {
-  bottom: 68%;
-}
-/* during a focus session the lower rail fills as the round goes by */
-.fence .rail-a i {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: var(--progress, 0%);
-  background: var(--rail-fill);
-  transition: width 0.8s linear;
-}
-.fence .pk {
+.pill {
+  --k: 1;
+  /* the JS sets the base values (--t0, --v0); postures and roles override the effective ones */
+  --t: var(--t0, 0);
+  --v: var(--v0, 1);
+  --side: 0;
   position: relative;
   z-index: 1;
   flex: none;
-  width: var(--w);
-  height: var(--h);
-  padding-top: calc(var(--w) / 2 + var(--w) * 0.16);
-  font-size: calc(var(--w) * 0.6);
-  transform: translateY(calc(var(--h) * var(--drop)));
+  width: var(--pw);
+  height: calc(var(--ph) * var(--k));
+  /* a full semicircle on top, standing square on the ground */
+  border-radius: calc(var(--pw) / 2) calc(var(--pw) / 2) 0 0;
+  background:
+    /* the light, on the side that faces it */
+    linear-gradient(calc(var(--side) * 90deg), rgb(var(--light) / calc(var(--t) * 0.5)), transparent 62%),
+    /* greener the nearer the light */
+    linear-gradient(rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a))), rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a) * 0.45))),
+    linear-gradient(var(--glass-0), var(--glass-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 0 calc(var(--pw) * 0.3) rgb(var(--light) / calc(0.04 + var(--t) * 0.3)),
+    var(--glass-shade);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  opacity: var(--v);
+  transform: translateY(calc(var(--drop, 0) * 100%));
   transition:
-    transform 0.52s var(--spring) calc(var(--i, 0) * 26ms),
-    --pk-0 0.4s ease,
-    --pk-1 0.4s ease,
-    --pk-2 0.4s ease,
-    color 0.3s ease;
+    transform 0.55s var(--spring) calc(var(--i, 0) * 30ms),
+    opacity 0.4s ease;
 }
-/* a Pro rule kept after Pro lapsed: it stands in the fence, but holds no light */
-.fence .pk.off {
-  --pk-0: var(--unlit-0);
-  --pk-1: var(--unlit-1);
-  --pk-2: var(--unlit-2);
-  --pk-cap: var(--unlit-cap);
-  --pk-cap-r: var(--unlit-cap-r);
-  --pk-edge: var(--unlit-edge);
-  --pk-shade: var(--unlit-shade);
-  --pk-ink: var(--muted);
-  text-shadow: none;
+/* a spare pill: the fence is never shorter than five, but the spare ones are fainter */
+.pill.pad {
+  --v: calc(var(--v0, 1) * 0.55);
 }
-.fence .pk.enter {
-  animation: pk-rise 0.6s var(--spring) both;
+/* a Pro rule kept after Pro lapsed: it stands in the fence, but catches no light */
+.pill.off {
+  --t: 0;
 }
-@keyframes pk-rise {
+/* the pill that holds the light */
+.pill.lit {
+  z-index: 2;
+  background:
+    /* during a focus session, the light rises inside it as the round goes by */
+    linear-gradient(to top, rgb(255 255 255 / 0.16) var(--progress, 0%), transparent var(--progress, 0%)),
+    radial-gradient(60% 46% at 50% 62%, var(--lit-core), transparent),
+    linear-gradient(var(--lit-0), var(--lit-1) 42%, var(--lit-2));
+  box-shadow:
+    inset 0 1.5px 0 rgb(255 255 255 / 0.45),
+    inset 0 0 calc(var(--pw) * 0.35) rgb(255 255 255 / 0.22),
+    inset 0 -14px 22px -14px rgb(0 40 18 / 0.35),
+    var(--lit-bloom);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* the site's initial: small, centred near the top */
+.pill-letter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--pw) * 0.3);
+  text-align: center;
+  font-size: max(9px, calc(var(--pw) * 0.24));
+  font-weight: 650;
+  line-height: 1;
+  color: var(--lit-ink);
+  text-shadow: 0 1px 2px rgb(0 40 18 / 0.35);
+  user-select: none;
+}
+/* a lock on a lit pill: strict mode's gate, the Pro pill in onboarding */
+.pill .lock {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--pw) * 0.5);
+  width: 12px;
+  height: 9.5px;
+  margin-left: -6px;
+  border-radius: 2px;
+  background: var(--pro-ink);
+}
+.pill .lock::before {
+  content: '';
+  position: absolute;
+  left: 2.5px;
+  top: -5.5px;
+  width: 7px;
+  height: 6.5px;
+  border: 1.6px solid var(--pro-ink);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+/* the light's halo, rising behind the lit pill, and its pool on the ground */
+.fence-halo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  width: calc(var(--pw) * 4.6);
+  height: calc(var(--ph) * var(--halo-h));
+  margin-left: calc(var(--pw) * -2.3);
+  border-radius: 50%;
+  background:
+    radial-gradient(21% 62% at 50% 64%, rgb(var(--light) / var(--halo-a)), transparent),
+    radial-gradient(46% 38% at 50% 86%, rgb(var(--light) / calc(var(--halo-a) * 0.8)), transparent);
+  filter: blur(calc(var(--pw) * 0.2));
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  animation: halo-in 1.8s var(--ease) both;
+}
+@keyframes halo-in {
+  /* the light breathes in, once */
   from {
-    transform: translateY(105%);
+    opacity: 0;
+    transform: scale(0.8) translateY(6%);
   }
 }
-/* the sites beyond the last picket: a count beside the fence, clear of its rails */
-.fence .more {
+.fence-pool {
   position: absolute;
-  left: 100%;
-  top: calc(var(--h) * 0.5 - 8px);
-  margin-left: 7px;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
-  color: var(--muted);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  transform: translateY(calc(var(--h) * var(--drop) * 0.5));
-  transition: transform 0.5s var(--spring);
+  left: 50%;
+  bottom: calc(var(--pw) * -0.16);
+  z-index: 3;
+  width: calc(var(--pw) * 3.6);
+  height: calc(var(--pw) * 0.34);
+  margin-left: calc(var(--pw) * -1.8);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--light) / calc(var(--halo-a) * 1.3)), transparent);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }
-.fence[data-state='paused'] {
-  --pk-0: #b9d2c1;
-  --pk-1: #a3c3ae;
-  --pk-2: #92b59e;
-  --pk-ink: #24402e;
-  --rail: var(--line-2);
-  --drop: 0.34;
+.pill.enter {
+  animation: pill-rise 0.7s var(--spring) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
 }
-.fence[data-state='down'] {
-  --rail: var(--line-2);
-  --drop: 0.52;
+@keyframes pill-rise {
+  from {
+    transform: translateY(102%);
+  }
+}
+
+/* postures: the light is the state */
+.fence[data-state='focus'] {
+  --halo-a: 0.36;
 }
 .fence[data-state='strict'] {
-  --pk-0: #ecbf68;
-  --pk-1: var(--pro-solid);
-  --pk-2: #b8842a;
-  --pk-cap: rgb(255 255 255 / 0.32);
-  --pk-cap-r: rgb(0 0 0 / 0.07);
-  --pk-edge: rgb(255 255 255 / 0.32);
-  --pk-shade: rgb(0 0 0 / 0.07);
-  --pk-ink: var(--pro-ink);
-  --rail: color-mix(in srgb, var(--pro-solid) 40%, transparent);
-  --rail-fill: var(--pro-solid);
+  --light: var(--amber-rgb);
 }
-.fence[data-state='empty'] {
-  --rail: var(--line);
+.fence[data-state='strict'] .pill.lit {
+  --lit-0: #f2c56e;
+  --lit-1: #d9a13f;
+  --lit-2: #b5832b;
+  --lit-ink: var(--pro-ink);
+  --lit-core: rgb(255 248 230 / 0.25);
+  --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
 }
-/* an empty slot: the picket's outline, open at the ground, waiting for a site */
-.fence[data-state='empty'] .pk,
-.pk.slot-outline {
-  clip-path: var(--pk-ring);
-  background: var(--line-3);
+.fence[data-state='strict'] .pill-letter {
   text-shadow: none;
 }
-@media (prefers-color-scheme: light) {
-  .fence[data-state='strict'] .pk,
-  .fence[data-state='paused'] .pk {
-    text-shadow: none;
-  }
+/* paused (outside the schedule) and down (blocking off): no light; the pills sink */
+.fence[data-state='paused'] {
+  --drop: 0.22;
+}
+.fence[data-state='down'] {
+  --drop: 0.42;
+}
+.fence[data-state='paused'] .pill,
+.fence[data-state='down'] .pill {
+  --t: 0;
+}
+.fence[data-state='paused'] .pill.lit,
+.fence[data-state='down'] .pill.lit {
+  background: linear-gradient(var(--dim-0), var(--dim-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    var(--glass-shade);
+}
+.fence[data-state='paused'] .pill.lit {
+  background: linear-gradient(rgb(var(--light-rgb) / 0.3), rgb(var(--light-rgb) / 0.14));
+}
+.fence[data-state='paused'] .pill-letter,
+.fence[data-state='down'] .pill-letter {
+  color: var(--muted);
+  text-shadow: none;
+}
+.fence[data-state='paused'] .fence-halo,
+.fence[data-state='paused'] .fence-pool,
+.fence[data-state='down'] .fence-halo,
+.fence[data-state='down'] .fence-pool,
+.fence[data-state='empty'] .fence-halo,
+.fence[data-state='empty'] .fence-pool {
+  opacity: 0;
+}
+/* empty: outlines waiting for a site */
+.pill.ghost,
+.fence[data-state='empty'] .pill {
+  --t: 0;
+  --v: 1;
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--ghost-line);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 @media (prefers-color-scheme: dark) {
-  .fence {
-    --rail: color-mix(in srgb, var(--signal) 40%, transparent);
-  }
   .fence[data-state='focus'] {
-    --fence-glow: rgba(58, 154, 91, 0.75);
+    --halo-a: 0.65;
   }
-  .fence[data-state='paused'] {
-    --pk-0: #6f8f7b;
-    --pk-1: #4f6b5a;
-    --pk-2: #3c5446;
-    --pk-ink: #e3efe7;
-  }
-  .fence[data-state='strict'] {
-    --pk-0: #f6dfaa;
-    --pk-1: #d9a74b;
-    --pk-2: #a87a26;
-    --pk-cap: rgb(255 255 255 / 0.4);
-    --pk-edge: rgb(255 255 255 / 0.4);
-    --fence-glow: rgba(217, 167, 75, 0.45);
+  .fence[data-state='strict'] .pill.lit {
+    --lit-0: #f7d58f;
+    --lit-1: #e6b252;
+    --lit-2: #b88227;
+    --lit-bloom: 0 0 24px rgb(230 178 82 / 0.7), 0 0 64px rgb(230 178 82 / 0.32);
   }
 }
 

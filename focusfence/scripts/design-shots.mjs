@@ -229,7 +229,8 @@ const MAIN = [
 
   // ---- block page
   ['block', async (h, theme, name) => {
-    await h.reset({ pro: false });
+    // a fence of nine sites, as in the reference composition
+    await h.reset({ pro: false, entries: [...ENTRIES, ['instagram.com', 'domain'], ['tiktok.com', 'domain'], ['netflix.com', 'domain'], ['twitch.tv', 'domain'], ['linkedin.com', 'domain']] });
     const p = await h.page(theme, 'https://www.reddit.com/r/all/', { width: 1280, height: 800 });
     await p.evaluate(() => (document.getElementById('message').textContent = self.FFCore.quote(1)));
     await h.settle(p); // the wall rises in a wave, then the lantern lights up

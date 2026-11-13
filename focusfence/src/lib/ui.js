@@ -94,32 +94,81 @@
   }
 
   /**
-   * The fence: one picket per entry. Re-rendering with the same entries only changes the posture
-   * (data-state), so CSS animates it; a new entry's picket rises. Decorative (aria-hidden): the
-   * surrounding text always says the same thing in words.
+   * The fence's shape for n pills (n odd), position by position: its distance from the light (d),
+   * which side of it it stands (side), its height as a share of the tallest (k: a gentle bell), how
+   * much of the light it catches (t) and how much of it shows (v: the ends fade).
+   */
+  function pillProfile(n) {
+    const m = (n - 1) / 2;
+    const sigma = 0.75 * (m + 1);
+    return Array.from({ length: n }, (_, p) => {
+      const d = Math.abs(p - m);
+      return {
+        d,
+        side: Math.sign(p - m),
+        k: 0.3 + 0.7 * Math.exp(-((d / sigma) ** 2)),
+        t: d === 0 ? 1 : Math.exp(-d / 1.25),
+        v: m >= 2 && d === m ? 0.45 : m >= 3 && d === m - 1 ? 0.75 : 1,
+      };
+    });
+  }
+
+  /** One pill, shaped by its place in the profile (values set through the CSSOM: the CSP allows no inline styles). */
+  function pill(prof, cls, letter) {
+    const p = el('span', { class: 'pill' + (cls ? ' ' + cls : '') }, letter ? el('b', { class: 'pill-letter', text: letter }) : null);
+    p.style.setProperty('--k', prof.k.toFixed(3));
+    p.style.setProperty('--t0', prof.t.toFixed(3));
+    p.style.setProperty('--v0', prof.v.toFixed(2));
+    p.style.setProperty('--side', String(prof.side));
+    p.style.setProperty('--i', String(prof.d));
+    return p;
+  }
+
+  /**
+   * The fence: a short row of glass pills, one per entry, the light in the middle. The lit pill is
+   * the `lit` entry (default: the first), the others stand on either side in list order. The row is
+   * never shorter than `min` (spare pills are fainter) nor longer than `max` (the ends fade), and
+   * always odd, so it stays symmetrical. Re-rendering the same entries only changes the posture
+   * (data-state), so CSS animates it; a new entry's pill rises, and with `rise` every pill rises on
+   * the first render. Decorative (aria-hidden): the surrounding text says the same in words.
    *   items: [{ key, label, letter, off }]   state: up|focus|paused|down|strict|empty
    */
-  function fence(node, { items = [], state = 'up', max = 14, progress = null, ghosts = 3 } = {}) {
-    const list = items.length ? items : Array.from({ length: ghosts }, (_, i) => ({ key: 'ghost' + i, label: '', letter: '' }));
-    const shown = list.length > max ? list.slice(0, max - 1) : list;
-    const sig = shown.map((x) => x.key + (x.off ? '~' : '')).join('|') + '#' + list.length;
+  function fence(node, { items = [], state = 'up', lit = null, min = 5, max = 9, progress = null, rise = false } = {}) {
+    const real = items.length;
+    let n = Math.min(max, Math.max(min, real));
+    if (n % 2 === 0) n += n < max ? 1 : -1;
+    const m = (n - 1) / 2;
+    const at = Math.max(0, items.findIndex((x) => x.key === lit));
+    const ordered = real ? [items[at], ...items.slice(0, at), ...items.slice(at + 1)] : [];
+    const slots = new Array(n).fill(null);
+    ordered.slice(0, n).forEach((it, j) => (slots[m + Math.ceil(j / 2) * (j % 2 ? -1 : 1)] = it));
+    const sig = n + ':' + slots.map((x) => (x ? x.key + (x.off ? '~' : '') : '_')).join('|');
     node.setAttribute('aria-hidden', 'true');
     node.classList.add('fence');
-    node.dataset.state = items.length ? state : 'empty';
+    node.dataset.state = real ? state : 'empty';
+    node.style.setProperty('--n', String(n)); // a page may size the pills from their number
     node.style.setProperty('--progress', progress === null ? '0%' : Math.round(progress * 1000) / 10 + '%');
     if (node.dataset.sig === sig) return node;
-    const before = new Set([...node.querySelectorAll('.pk')].map((p) => p.dataset.key));
+    const before = new Set([...node.querySelectorAll('.pill')].map((p) => p.dataset.key).filter(Boolean));
     const first = !node.dataset.sig;
     node.dataset.sig = sig;
     node.textContent = '';
-    node.append(el('span', { class: 'rail rail-a' }, el('i')), el('span', { class: 'rail rail-b' }));
-    shown.forEach((it, i) => {
-      const fresh = !first && !before.has(it.key) && items.length;
-      const pk = el('span', { class: 'pk' + (it.off ? ' off' : '') + (fresh ? ' enter' : ''), title: it.label || null, dataset: { key: it.key } }, it.letter || '');
-      pk.style.setProperty('--i', String(i));
+    if (real) node.append(el('span', { class: 'fence-halo' }));
+    const prof = pillProfile(n);
+    slots.forEach((it, p) => {
+      const pr = prof[p];
+      const fresh = !!it && (first ? rise : !before.has(it.key));
+      const cls = [!real ? 'ghost' : it ? '' : 'pad', it && pr.d === 0 ? 'lit' : '', it && it.off ? 'off' : '', fresh ? 'enter' : '']
+        .filter(Boolean)
+        .join(' ');
+      const pk = pill(pr, cls, it && pr.d === 0 ? it.letter : '');
+      if (it) {
+        pk.dataset.key = it.key;
+        if (it.label) pk.title = it.label;
+      }
       node.appendChild(pk);
     });
-    if (list.length > shown.length) node.appendChild(el('span', { class: 'more', text: '+' + (list.length - shown.length) }));
+    if (real) node.append(el('span', { class: 'fence-pool' }));
     return node;
   }
 
@@ -156,5 +205,5 @@
     return (err && err.message) || i18n('errGeneric', 'Something went wrong.');
   }
 
-  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fence, fenceItems, fmtCountdown, fmtTime, errorMessage };
+  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fence, fenceItems, pillProfile, pill, fmtCountdown, fmtTime, errorMessage };
 })(self);

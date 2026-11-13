@@ -29,17 +29,21 @@
     return length > 0 ? Math.min(1, Math.max(0, 1 - (p.endsAt - now) / length)) : 0;
   }
 
+  /** The fence: one pill per blocked site. The lit one is the site on this tab when it's on the
+      list, otherwise your newest site. */
   function drawFence() {
     const s = state;
     const p = s.pomodoro;
+    const host = tab && tab.url && /^https?:/.test(tab.url) ? C.hostFromInput(tab.url) : null;
+    const here = host && s.settings.entries.find((e) => e.type === 'domain' && C.hostMatches(host, e.host));
     fence($('fence'), {
       items: fenceItems(s.settings.entries, s.isPro, C.isProEntry),
+      lit: here ? here.id : null,
       state: fenceState(s),
-      max: 11,
+      min: 5,
+      max: 9,
       progress: p && p.phase === 'focus' ? phaseProgress(p, Date.now()) : null,
     });
-    // the ground's shadow (or pool of light) is as wide as the fence
-    $('status-card').style.setProperty('--fence-w', $('fence').offsetWidth + 'px');
   }
 
   async function getTargetTab() {

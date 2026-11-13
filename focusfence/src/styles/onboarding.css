@@ -272,7 +272,6 @@ body {
 .tier h2 .picket {
   width: 7px;
   height: 11px;
-  clip-path: polygon(0 3.5px, 3.5px 0, 7px 3.5px, 7px 100%, 0 100%);
   color: var(--signal);
 }
 .tier p {
@@ -304,12 +303,11 @@ body {
 
 /* ---------- the stage: the block page's scene, where you build your fence ---------- */
 .stage {
-  --sky-top: #fbfcfb;
-  --sky-low: #edf4ef;
-  --horizon: rgba(58, 154, 91, 0.12);
-  --floor-0: #e3ebe5;
-  --floor-1: #f4f7f5;
-  --ground-line: rgb(17 21 19 / 0.1);
+  --paper: #f7f8f5;
+  --horizon: rgb(30 138 69 / 0.08);
+  --floor-0: #eef1ec;
+  --floor-1: #f7f8f5;
+  --ground-line: rgb(24 66 40 / 0.1);
   --floor-h: 64px;
   position: relative;
   height: 460px;
@@ -319,17 +317,19 @@ body {
   box-shadow: var(--shadow), var(--edge);
   background:
     linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), var(--floor-0) calc(100% - var(--floor-h)), var(--floor-1)),
-    radial-gradient(70% 50% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent 72%),
-    linear-gradient(to bottom, var(--sky-top) 30%, var(--sky-low));
+    radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    var(--paper);
 }
 @media (prefers-color-scheme: dark) {
   .stage {
-    --sky-top: #030504;
-    --sky-low: #08100c;
-    --horizon: rgba(58, 154, 91, 0.3);
-    --floor-0: #080b0a;
-    --floor-1: #030404;
-    --ground-line: rgb(255 255 255 / 0.07);
+    --horizon: rgb(63 214 122 / 0.12);
+    --floor-0: #020c06;
+    --floor-1: #000;
+    --ground-line: rgb(63 214 122 / 0.14);
+    background:
+      linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), var(--floor-0) calc(100% - var(--floor-h)), var(--floor-1)),
+      radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+      linear-gradient(to top, #041309 0%, #020a05 40%, #000 80%);
   }
 }
 .stage-fence {
@@ -341,97 +341,29 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  padding-bottom: 22px;
   transition: opacity 0.35s ease, transform 0.45s var(--ease);
 }
-.slots {
-  --pk-w: 16px;
-  --pk-h: 150px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 22px;
-  height: 236px;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+/* your fence in the making: seven pills, the three in the middle are yours */
+.ob-row {
+  --pw: 44px;
+  --ph: 206px;
 }
-/* rails, behind the pickets; your lit pickets light the stretch around them */
-.slots::before,
-.slots::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background:
-    linear-gradient(90deg, transparent 22%, rgb(58 154 91 / 0.35) 50%, transparent 78%),
-    var(--wall-1);
+.ob-pills {
+  display: contents;
 }
-.slots::before {
-  bottom: calc(var(--pk-h) * 0.3);
+/* no site picked yet: no light */
+.ob-row:not(.is-lit) .fence-halo,
+.ob-row:not(.is-lit) .fence-pool {
+  opacity: 0;
 }
-.slots::after {
-  bottom: calc(var(--pk-h) * 0.68);
-}
-.slot {
-  position: relative;
-  z-index: 1;
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-/* the wall's pickets on either side, receding */
-.slot .pk {
-  --w: var(--pk-w);
-  width: var(--w);
-  height: var(--pk-h);
-  opacity: calc(1 - var(--d, 0) * 0.2);
-}
-/* your three slots: an outline until you pick a site, then it rises lit, with its initial */
-.slot.mine .pk {
-  --w: 26px;
-  --s: 1.5px;
-  height: 186px;
-  padding-top: calc(var(--w) / 2 + 10px);
-  font-size: 16px;
-  opacity: 1;
-}
-.slot.mine .pk.slot-outline {
-  background: color-mix(in srgb, var(--signal) 45%, var(--line-3));
-}
-.slot.mine.on .pk {
-  animation: slot-rise 0.65s var(--spring) both;
-}
-@keyframes slot-rise {
-  from {
-    transform: translateY(70%);
-  }
-}
-.slot.mine.on,
-.slot.pro-gate {
-  /* the lantern's halo */
-  filter: drop-shadow(0 0 14px var(--slot-glow, rgb(58 154 91 / 0.28)));
-}
-.slot.pro-gate {
-  --slot-glow: rgb(217 161 63 / 0.3);
-}
-@media (prefers-color-scheme: dark) {
-  .slot.mine.on {
-    --slot-glow: rgb(58 154 91 / 0.6);
-  }
-  .slot.pro-gate {
-    --slot-glow: rgb(217 167 75 / 0.5);
-  }
-}
-.slot.pro-gate .pk {
-  --w: 24px;
-  --lit-0: #f0c871;
-  --lit-1: var(--pro-solid);
+/* the Pro pill (step 3): amber, with a lock */
+.pill.pro {
+  --lit-0: #f2c56e;
+  --lit-1: #d9a13f;
   --lit-2: #b5832b;
-  --lit-ink: var(--pro-ink);
-  height: 176px;
-  opacity: 1;
+  --lit-core: rgb(255 248 230 / 0.25);
+  --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
 }
 .stage-ground {
   height: 1px;
@@ -440,7 +372,7 @@ body {
 /* the sites in your fence, named on the ground */
 .picked {
   min-height: 18px;
-  margin: 14px 24px 0;
+  margin: 16px 24px 0;
   text-align: center;
   font-size: 12.5px;
   font-weight: 550;
@@ -451,37 +383,6 @@ body {
 }
 .stage[data-step='3'] .picked {
   visibility: hidden;
-}
-.stage-fence {
-  padding-bottom: 22px;
-}
-/* the Pro picket carries a lock */
-.slot.pro-gate .pk {
-  position: relative;
-}
-.slot.pro-gate .pk b {
-  position: absolute;
-  left: 50%;
-  top: 34px;
-  width: 12px;
-  height: 9.5px;
-  margin-left: -6px;
-  border-radius: 2px;
-  background: var(--pro-ink);
-}
-.slot.pro-gate .pk b::before {
-  content: '';
-  position: absolute;
-  left: 2.5px;
-  top: -5.5px;
-  width: 7px;
-  height: 6.5px;
-  border: 1.6px solid var(--pro-ink);
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
-}
-.stage[data-step='3'] .slot.mine.on .pk {
-  animation: none;
 }
 
 /* step 2: a normal window and an Incognito one; the second is fenced only if allowed */
@@ -565,24 +466,43 @@ body {
   right: 8px;
 }
 .win-fence {
+  --pw: 24px;
+  --ph: 76px;
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 12px;
 }
-.win-fence .pk {
-  --w: 16px;
-  width: var(--w);
-  height: 70px;
+/* the shape of a five-pill fence (FFUI.pillProfile(5)); no inline styles, the CSP forbids them */
+.win-fence i:nth-of-type(1),
+.win-fence i:nth-of-type(5) {
+  --k: 0.618;
+  --t0: 0.202;
+  --v0: 0.45;
 }
-/* not allowed in Incognito: that window's fence is only an outline */
-.stage:not(.incog-ok) .win.incog .win-fence .pk {
-  clip-path: var(--pk-ring);
-  background: rgb(255 255 255 / 0.3);
+.win-fence i:nth-of-type(2),
+.win-fence i:nth-of-type(4) {
+  --k: 0.874;
+  --t0: 0.449;
+}
+.win-fence i:nth-of-type(-n + 2) {
+  --side: -1;
+}
+.win-fence i:nth-of-type(n + 4) {
+  --side: 1;
+}
+/* not allowed in Incognito: that window's fence is only outlines, and holds no light */
+.stage:not(.incog-ok) .win.incog .pill {
+  --t: 0;
+  --v: 1;
+  background: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.stage:not(.incog-ok) .win.incog .fence-halo,
+.stage:not(.incog-ok) .win.incog .fence-pool {
+  opacity: 0;
 }
 
 /* ---------- narrow windows: the stage sits above the step ---------- */
@@ -602,24 +522,9 @@ body {
   .stage {
     --floor-h: 40px;
   }
-  .slots {
-    --pk-w: 13px;
-    --pk-h: 96px;
-    gap: 16px;
-    height: 156px;
-  }
-  .slot.mine .pk {
-    --w: 22px;
-    height: 124px;
-    padding-top: calc(var(--w) / 2 + 8px);
-    font-size: 14px;
-  }
-  .slot.pro-gate .pk {
-    --w: 20px;
-    height: 116px;
-  }
-  .slot.pro-gate .pk b {
-    top: 26px;
+  .ob-row {
+    --pw: 30px;
+    --ph: 124px;
   }
   .stage-fence {
     padding-bottom: 12px;
@@ -631,8 +536,9 @@ body {
     width: 130px;
     height: 150px;
   }
-  .win-fence .pk {
-    height: 50px;
+  .win-fence {
+    --pw: 19px;
+    --ph: 58px;
   }
 }
 @media (max-width: 560px) {

@@ -255,64 +255,29 @@ body.is-pro #side-plan-btn {
   padding: 14px 16px;
 }
 
-/* ---------- Blocklist: the fence, drawn large ---------- */
+/* ---------- Blocklist: your fence, drawn large ---------- */
 .hero {
   position: relative;
   margin: 4px -32px 6px;
-  padding: 18px 32px 0;
-}
-.hero::before {
-  /* dark only: light pooled behind the fence (on white, light reads as a stain) */
-  content: '';
-  position: absolute;
-  left: -60px;
-  bottom: -70px;
-  width: 520px;
-  height: 200px;
-  border-radius: 50%;
-  background: none;
-  pointer-events: none;
-}
-.hero.is-off::before {
-  opacity: 0;
-}
-.hero.is-strict {
-  --hero-tint: var(--pro-solid);
+  padding: 10px 32px 0;
 }
 .hero-fence {
   position: relative;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-end;
-  height: 90px;
-  overflow: hidden;
+  height: 126px;
+  /* the pills sink below the ground when blocking is off; the light may rise freely */
+  clip-path: inset(-200px -200px 0 -200px);
 }
 #hero-fence {
-  --w: 22px;
-  --h: 70px;
-  --gap: 14px;
-  padding-left: 0;
+  --pw: 40px;
+  --ph: 104px;
 }
 .hero-ground {
-  --pool: rgb(17 21 19 / 0.14);
   position: relative;
   height: 1px;
-  background: linear-gradient(to right, var(--line-3), var(--line-3) 70%, transparent);
-}
-/* the fence stands on the ground: a soft contact shadow in light, a pool of its light in dark
-   (--fence-w is the fence's measured width, set by options.js) */
-.hero-ground::after {
-  content: '';
-  position: absolute;
-  left: -16px;
-  top: -5px;
-  width: calc(var(--fence-w, 200px) + 32px);
-  height: 11px;
-  background: radial-gradient(closest-side, var(--pool), transparent);
-  transition: opacity 0.4s ease;
-}
-.hero.is-off .hero-ground {
-  --pool: rgb(17 21 19 / 0.07);
+  background: linear-gradient(to right, transparent, var(--line-3) 20%, var(--line-3) 80%, transparent);
 }
 .count {
   flex: none;
@@ -321,35 +286,6 @@ body.is-pro #side-plan-btn {
   font-weight: 550;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-}
-@media (prefers-color-scheme: dark) {
-  .hero::before {
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--hero-tint, var(--signal)) 30%, transparent), transparent);
-  }
-  .hero-ground {
-    --pool: color-mix(in srgb, var(--hero-tint, var(--signal)) 55%, transparent);
-  }
-  .hero.is-off .hero-ground {
-    --pool: rgb(255 255 255 / 0.05);
-  }
-  .hero-ground::after {
-    top: -8px;
-    height: 17px;
-  }
-}
-/* light: the ground under the fence carries a faint wash in the state's colour */
-.hero-fence::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 40px;
-  background: linear-gradient(to top, color-mix(in srgb, var(--hero-tint, var(--signal)) 6%, transparent), transparent);
-  pointer-events: none;
-}
-.hero.is-off .hero-fence::after {
-  opacity: 0;
 }
 
 /* composer */
@@ -553,11 +489,10 @@ body.is-pro .seg .badge {
   min-height: 196px;
   padding: 26px 20px 84px;
   text-align: center;
-  /* the block page's scene, small: dawn sky, the ground, the lantern's pool of light */
+  /* the block page's scene, small: paper, a ground line, the light's bloom */
   background:
-    radial-gradient(70px 12px at 50% calc(100% - 22px), rgb(58 154 91 / 0.28), transparent),
-    linear-gradient(to bottom, transparent calc(100% - 22px), var(--line-2) calc(100% - 22px), var(--line-2) calc(100% - 21px), #e6ede8 calc(100% - 21px), #f3f6f4),
-    linear-gradient(to bottom, #fbfcfb 40%, #edf4ef);
+    linear-gradient(to bottom, transparent calc(100% - 22px), var(--line-2) calc(100% - 22px), var(--line-2) calc(100% - 21px), #eef1ec calc(100% - 21px), #f7f8f5),
+    #f7f8f5;
   border-right: 1px solid var(--line);
   overflow: hidden;
 }
@@ -582,65 +517,36 @@ body.is-pro .seg .badge {
   overflow: hidden;
 }
 .wp-fence {
+  --pw: 15px;
+  --ph: 42px;
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: 22px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  transform: translateX(-50%);
 }
-.wp-fence .pk {
-  --w: 7px;
-  position: relative;
-  z-index: 1;
-  width: var(--w);
-  height: 40px;
-  opacity: calc(1 - var(--d, 0) * 0.17);
+/* the shape of a seven-pill fence (FFUI.pillProfile(7)); no inline styles, the CSP forbids them */
+.wp-fence i:nth-of-type(1),
+.wp-fence i:nth-of-type(7) {
+  --k: 0.557;
+  --t0: 0.091;
+  --v0: 0.45;
 }
-.wp-fence .pk:not(.lit) {
-  --pk-0: var(--wall-0);
-  --pk-1: var(--wall-1);
-  --pk-2: var(--wall-2);
-  --pk-cap: var(--wall-cap);
-  --pk-cap-r: var(--wall-cap-r);
-  --pk-edge: var(--wall-edge);
-  --pk-shade: var(--wall-shade);
+.wp-fence i:nth-of-type(2),
+.wp-fence i:nth-of-type(6) {
+  --k: 0.749;
+  --t0: 0.202;
+  --v0: 0.75;
 }
-/* distance from the lantern (no inline styles: the extension's CSP forbids them) */
-.wp-fence .pk:nth-child(4),
-.wp-fence .pk:nth-child(6) {
-  --d: 1;
+.wp-fence i:nth-of-type(3),
+.wp-fence i:nth-of-type(5) {
+  --k: 0.927;
+  --t0: 0.449;
 }
-.wp-fence .pk:nth-child(3),
-.wp-fence .pk:nth-child(7) {
-  --d: 2;
+.wp-fence i:nth-of-type(-n + 3) {
+  --side: -1;
 }
-.wp-fence .pk:nth-child(2),
-.wp-fence .pk:nth-child(8) {
-  --d: 3;
-}
-.wp-fence .pk:nth-child(1),
-.wp-fence .pk:nth-child(9) {
-  --d: 4;
-}
-.wp-fence .pk.lit {
-  --w: 11px;
-  z-index: 3;
-  height: 56px;
-}
-.wp-bloom {
-  position: absolute;
-  left: 50%;
-  bottom: 2px;
-  z-index: 2;
-  width: 16px;
-  height: 50px;
-  margin-left: -8px;
-  border-radius: 99px;
-  background: var(--lit-1);
-  filter: blur(9px);
-  opacity: var(--lit-bloom);
+.wp-fence i:nth-of-type(n + 5) {
+  --side: 1;
 }
 .wall-form {
   display: flex;
@@ -661,10 +567,8 @@ body.is-pro .seg .badge {
 @media (prefers-color-scheme: dark) {
   .wall-preview {
     background:
-      radial-gradient(80px 14px at 50% calc(100% - 22px), rgb(76 184 115 / 0.5), transparent),
-      linear-gradient(to bottom, transparent calc(100% - 22px), rgb(255 255 255 / 0.06) calc(100% - 22px), rgb(255 255 255 / 0.06) calc(100% - 21px), #080b0a calc(100% - 21px), #030404),
-      radial-gradient(60% 70% at 50% 100%, rgb(58 154 91 / 0.3), transparent 70%),
-      linear-gradient(to bottom, #030504 40%, #08100c);
+      linear-gradient(to bottom, transparent calc(100% - 22px), rgb(63 214 122 / 0.14) calc(100% - 22px), rgb(63 214 122 / 0.14) calc(100% - 21px), #020c06 calc(100% - 21px), #000),
+      linear-gradient(to top, #041309 0%, #020a05 40%, #000 80%);
   }
 }
 
@@ -688,7 +592,6 @@ body.is-pro .seg .badge {
 .focus-preview .rounds .picket {
   width: 8px;
   height: 13px;
-  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
   color: var(--line-3);
 }
 .focus-live {
@@ -720,7 +623,6 @@ body.is-pro .seg .badge {
 .focus-live .rounds .picket {
   width: 8px;
   height: 13px;
-  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
   color: var(--bg-2);
 }
 .focus-live .rounds .picket.done {
@@ -877,65 +779,42 @@ body.is-pro .seg .badge {
   gap: 28px;
   padding: 22px 22px;
 }
+/* the strict-mode gate: five pills, the middle one an amber light with a lock */
 .gate-art {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
+  --pw: 22px;
+  --ph: 76px;
   flex: none;
-  height: 76px;
+  width: max-content;
+  height: 78px;
   padding: 0 6px;
-  position: relative;
-}
-.gate-art::before,
-.gate-art::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 4px;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--pro-solid) 45%, transparent);
-}
-.gate-art::before {
-  bottom: 22%;
 }
 .gate-art::after {
-  bottom: 58%;
-}
-.gate-art i {
-  position: relative;
-  z-index: 1;
-  width: 14px;
-  height: 62px;
-  background: color-mix(in srgb, var(--pro-solid) 70%, var(--surface));
-  clip-path: polygon(0 7px, 7px 0, 14px 7px, 14px 100%, 0 100%);
-}
-.gate-art i.gate {
-  width: 26px;
-  height: 76px;
-  background: var(--pro-solid);
-  clip-path: polygon(0 13px, 13px 0, 26px 13px, 26px 100%, 0 100%);
-}
-.gate-art i.gate b {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  width: 12px;
-  height: 10px;
-  margin-left: -6px;
-  border-radius: 2px;
-  background: var(--pro-ink);
-}
-.gate-art i.gate b::before {
+  /* the ground under it */
   content: '';
   position: absolute;
-  left: 2.5px;
-  top: -6px;
-  width: 7px;
-  height: 7px;
-  border: 1.6px solid var(--pro-ink);
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
+  left: -10px;
+  right: -10px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--pro-line) 25%, var(--pro-line) 75%, transparent);
+}
+/* the shape of a five-pill fence (FFUI.pillProfile(5)); no inline styles, the CSP forbids them */
+.gate-art i:nth-of-type(1),
+.gate-art i:nth-of-type(5) {
+  --k: 0.618;
+  --t0: 0.202;
+  --v0: 0.45;
+}
+.gate-art i:nth-of-type(2),
+.gate-art i:nth-of-type(4) {
+  --k: 0.874;
+  --t0: 0.449;
+}
+.gate-art i:nth-of-type(-n + 2) {
+  --side: -1;
+}
+.gate-art i:nth-of-type(n + 4) {
+  --side: 1;
 }
 .strict-start {
   display: flex;
@@ -1105,26 +984,12 @@ body.is-pro .seg .badge {
   justify-content: flex-end;
   align-items: center;
 }
-/* bars are pickets: the day's count, with the logo's tip */
+/* bars are pills: the day's count; today holds the light */
 .bar-fill {
-  --w: 24px;
-  --pk-0: #d3eadb;
-  --pk-1: #bfe0ca;
-  --pk-2: #aed5bb;
-  --pk-cap: rgb(255 255 255 / 0.5);
-  --pk-edge: rgb(255 255 255 / 0.6);
-  width: var(--w);
+  --pw: 24px;
+  --t0: 0.42;
   min-height: 16px;
   transition: height 0.5s var(--ease);
-}
-@media (prefers-color-scheme: dark) {
-  .bar-fill {
-    --pk-0: #3a6a4b;
-    --pk-1: #2c533a;
-    --pk-2: #22412e;
-    --pk-cap: rgb(255 255 255 / 0.1);
-    --pk-edge: rgb(255 255 255 / 0.08);
-  }
 }
 .bar-count {
   font-size: 11.5px;
@@ -1197,68 +1062,58 @@ body.is-pro .seg .badge {
   text-align: center;
   padding: 8px 0 6px;
 }
-/* the plan's fence: one lantern among unlit pickets, amber for the Pro offer, green once you have it */
+/* the plan's fence: five pills, the light amber for the Pro offer, green once you have it */
 .plan-fence {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 10px;
+  --pw: 22px;
+  --ph: 66px;
+  --light: var(--amber-rgb);
   width: max-content;
   height: 70px;
-  margin: 0 auto 18px;
+  margin: 0 auto 20px;
 }
 .plan-fence::after {
   /* the ground under it */
   content: '';
   position: absolute;
-  left: -20px;
-  right: -20px;
+  left: -24px;
+  right: -24px;
   bottom: 0;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--line-3) 25%, var(--line-3) 75%, transparent);
 }
-.plan-fence .pk {
-  --w: 12px;
-  position: relative;
-  z-index: 1;
-  width: var(--w);
-  height: 46px;
-  opacity: calc(1 - var(--d, 0) * 0.2);
+.plan-fence i:nth-of-type(1),
+.plan-fence i:nth-of-type(5) {
+  --k: 0.618;
+  --t0: 0.202;
+  --v0: 0.45;
 }
-.plan-fence .pk:nth-child(3),
-.plan-fence .pk:nth-child(5) {
-  --d: 1;
+.plan-fence i:nth-of-type(2),
+.plan-fence i:nth-of-type(4) {
+  --k: 0.874;
+  --t0: 0.449;
 }
-.plan-fence .pk:nth-child(2),
-.plan-fence .pk:nth-child(6) {
-  --d: 2;
+.plan-fence i:nth-of-type(-n + 2) {
+  --side: -1;
 }
-.plan-fence .pk:nth-child(1),
-.plan-fence .pk:nth-child(7) {
-  --d: 3;
+.plan-fence i:nth-of-type(n + 4) {
+  --side: 1;
 }
-.plan-fence .pk.lit {
-  --w: 18px;
-  --lit-0: #f0c871;
-  --lit-1: var(--pro-solid);
+.plan-fence .pill.lit {
+  --lit-0: #f2c56e;
+  --lit-1: #d9a13f;
   --lit-2: #b5832b;
-  --lit-ink: var(--pro-ink);
-  z-index: 3;
-  height: 68px;
+  --lit-core: rgb(255 248 230 / 0.25);
+  --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
 }
-.plan-bloom {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  z-index: 2;
-  width: 24px;
-  height: 62px;
-  margin-left: -12px;
-  border-radius: 99px;
-  background: var(--pro-solid);
-  filter: blur(12px);
-  opacity: calc(var(--lit-bloom) * 0.8);
+body.is-pro .plan-fence {
+  --light: var(--light-rgb);
+}
+body.is-pro .plan-fence .pill.lit {
+  --lit-0: inherit;
+  --lit-1: inherit;
+  --lit-2: inherit;
+  --lit-core: inherit;
+  --lit-bloom: inherit;
 }
 .plan-hero h2 {
   font-size: 32px;
@@ -1381,15 +1236,7 @@ body.is-pro .plans,
 body.is-pro .price-note {
   display: none;
 }
-body.is-pro .plan-fence .pk.lit {
-  --lit-0: inherit;
-  --lit-1: inherit;
-  --lit-2: inherit;
-  --lit-ink: inherit;
-}
-body.is-pro .plan-bloom {
-  background: var(--lit-1);
-}
+
 .plan-foot {
   display: flex;
   flex-direction: column;

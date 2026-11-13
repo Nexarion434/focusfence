@@ -38,20 +38,17 @@ body {
   height: 18px;
 }
 
-/* ---------- the stage ---------- */
+/* ---------- the stage: your fence, a compact row of glass pills ---------- */
 .stage {
   --stage-tint: var(--signal);
-  --pool: rgb(17 21 19 / 0.15);
   position: relative;
-  padding: 4px 16px 12px;
-  overflow: hidden;
+  padding: 2px 16px 12px;
   /* light: a faint wash rising from the ground, in the colour of the state */
-  background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 7%, var(--surface)) 0%, var(--surface) 62%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 6%, var(--surface)) 0%, var(--surface) 62%);
   transition: background-color 0.4s ease;
 }
 .stage.is-off {
   --stage-tint: transparent;
-  --pool: rgb(17 21 19 / 0.08);
 }
 .stage.is-strict {
   --stage-tint: var(--pro-solid);
@@ -62,13 +59,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 60px;
-  overflow: hidden;
+  /* the pills sink below the ground when blocking is off; the light stays inside the stage */
+  height: 62px;
+  clip-path: inset(-6px -40px 0 -40px);
 }
 #fence {
-  --w: 16px;
-  --h: 48px;
-  --gap: 10px;
+  --pw: 26px;
+  --ph: 54px;
+  --halo-h: 1.25;
 }
 .ground {
   position: relative;
@@ -76,19 +74,6 @@ body {
   height: 1px;
   margin: 0 -16px 10px;
   background: linear-gradient(to right, transparent, var(--line-3) 18%, var(--line-3) 82%, transparent);
-}
-/* the fence stands on the ground: a soft contact shadow in light, a pool of its light in dark
-   (--fence-w is the fence's measured width, set by popup.js) */
-.ground::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -4px;
-  width: calc(var(--fence-w, 160px) + 36px);
-  height: 9px;
-  transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--pool), transparent);
-  transition: opacity 0.4s ease;
 }
 .state {
   position: relative;
@@ -115,34 +100,12 @@ body {
   text-wrap: pretty;
 }
 @media (prefers-color-scheme: dark) {
-  /* dark: light pools behind the fence instead of a wash */
+  /* dark: near-black with a deep green tint at the ground, like the block page */
   .stage {
-    background: var(--surface);
-  }
-  .stage {
-    --pool: color-mix(in srgb, var(--stage-tint) 55%, transparent);
+    background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 9%, #0b0e0d) 0%, var(--surface) 70%);
   }
   .stage.is-off {
-    --pool: rgb(255 255 255 / 0.05);
-  }
-  .stage::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 300px;
-    height: 112px;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--stage-tint) 30%, transparent), transparent);
-    transition: opacity 0.4s ease;
-  }
-  .stage.is-off::before {
-    opacity: 0;
-  }
-  .ground::after {
-    top: -7px;
-    height: 15px;
+    background: var(--surface);
   }
 }
 
@@ -374,7 +337,6 @@ body {
 .rounds .picket {
   width: 6px;
   height: 10px;
-  clip-path: polygon(0 3px, 3px 0, 6px 3px, 6px 100%, 0 100%);
   color: var(--bg-2);
 }
 .rounds .picket.done {
