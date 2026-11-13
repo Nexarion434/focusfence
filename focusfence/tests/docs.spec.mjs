@@ -52,6 +52,7 @@ test('marketing drafts are marked unpublished and respect platform limits', () =
 });
 
 test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal scroll', async () => {
+  test.slow(); // dozens of page loads in a real browser
   const env = { ...process.env };
   if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
   const browser = await chromium.launch({ env });
@@ -196,14 +197,29 @@ const webpSize = (file) => {
   return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
 };
 
+// Every product capture on a page, in order: an <img>, or a <picture> whose <source> serves a
+// capture made for phones. The theme class (th-d / th-l) is on the <img> or on its <picture>.
+const captures = (html) => {
+  const out = [];
+  let pic = null;
+  for (const m of html.matchAll(/<picture class="([^"]*)">|<\/picture>|<(img|source)\b([^>]*)>/g)) {
+    if (m[1] !== undefined) pic = { cls: m[1], sources: [] };
+    else if (m[0] === '</picture>') pic = null;
+    else {
+      const a = Object.fromEntries([...m[3].matchAll(/([\w-]+)="([^"]*)"/g)].map(([, k, v]) => [k, v]));
+      if (m[2] === 'source') pic.sources.push({ src: a.srcset, w: +a.width, h: +a.height, media: a.media });
+      else out.push({ cls: pic ? pic.cls : a.class || '', src: a.src, w: +a.width, h: +a.height, alt: a.alt, lazy: a.loading === 'lazy', narrow: pic ? pic.sources : [] });
+    }
+  }
+  return out;
+};
+
 test('landing pages show the real, localized product UI in both themes: 2x WebP captures with matching sizes', () => {
   const SHOTS = ['blocklist', 'popup', 'block-card', 'block-page', 'schedule', 'focus', 'strict', 'stats'];
   for (const lang of SITE_LANGS) {
     const rel = dirOf(lang) + 'index.html';
     const html = read('docs', rel);
-    const imgs = [...html.matchAll(/<img class="([^"]*)" src="([^"]+)"[^>]* width="(\d+)" height="(\d+)"[^>]* alt="([^"]+)">/g)].map(
-      ([, cls, src, w, h, alt]) => ({ cls, src, w: +w, h: +h, alt })
-    );
+    const imgs = captures(html);
     expect(imgs.length, rel).toBe(SHOTS.length * 2);
     const dark = imgs.filter((i) => /\bth-d\b/.test(i.cls));
     const light = imgs.filter((i) => /\bth-l\b/.test(i.cls));
@@ -213,19 +229,29 @@ test('landing pages show the real, localized product UI in both themes: 2x WebP 
       // each dark capture is followed by the light capture of the same screen
       expect(l.src, rel).toBe(d.src.replace(/(-1x)?\.webp$/, '-light$1.webp'));
       expect([l.w, l.h, l.alt], d.src).toEqual([d.w, d.h, d.alt]);
+      expect(l.narrow.map((n) => n.src), d.src).toEqual(d.narrow.map((n) => n.src.replace(/\.webp$/, '-light.webp')));
     });
-    for (const { src, w, h, alt } of imgs) {
-      expect(src, rel).toContain(`assets/${lang}/`);
-      expect(alt.length, src).toBeGreaterThan(20);
+    const sized = (src, w, h) => {
       // width/height are the CSS size: half the 2x capture (no layout shift, crisp on HiDPI)
       const [W, H] = webpSize(path.join(DOCS, path.dirname(rel), src.replace('-1x.webp', '.webp')));
       expect([W / 2, H / 2], src).toEqual([w, h]);
+    };
+    for (const { src, w, h, alt, lazy, narrow } of imgs) {
+      expect(src, rel).toContain(`assets/${lang}/`);
+      expect(alt.length, src).toBeGreaterThan(20);
+      // only one theme is ever downloaded: every product image is lazy, and the hero image of the
+      // visitor's theme is preloaded by the inline theme script
+      expect(lazy, src).toBe(true);
+      sized(src, w, h);
+      for (const n of narrow) {
+        expect(n.media, src).toBe('(max-width: 720px)');
+        sized(n.src, n.w, n.h);
+      }
     }
-    for (const name of SHOTS) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
+    // phones get the extension's own narrow stats layout and the block page's card, shown whole
+    expect(dark.flatMap((d) => d.narrow.map((n) => path.basename(n.src))), rel).toEqual(['block-card.webp', 'stats-m.webp']);
+    for (const name of [...SHOTS, 'stats-m']) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
     for (const src of srcsets(html)) expect(src, rel).toContain(`assets/${lang}/`);
-    // only one theme is ever downloaded: every product image is lazy, and the hero image of the
-    // visitor's theme is preloaded by the inline theme script
-    expect((html.match(/loading="lazy"/g) || []).length, rel).toBe(SHOTS.length * 2);
     expect(html, rel).toContain(`assets/${lang}/blocklist-1x.webp 1280w`);
     expect(html, rel).toContain(`assets/${lang}/blocklist-light-1x.webp 1280w`);
     // the popup captures really are the localized ones (button label in that language), copied as is
@@ -234,6 +260,108 @@ test('landing pages show the real, localized product UI in both themes: 2x WebP 
       const copy = fs.readFileSync(path.join(DOCS, 'assets', lang, f));
       expect(copy.equals(fs.readFileSync(path.join(ROOT, `screenshots/site/${lang}/${f}`))), `${lang} ${f}`).toBe(true);
     }
+  }
+});
+
+test('pricing: the yearly comparison and the saving are computed from the real prices', () => {
+  const n = (price) => Number(/(\d+)[.,](\d\d)/.exec(price).slice(1).join('.'));
+  for (const lang of SITE_LANGS) {
+    const T = SITE[lang];
+    const html = read('docs', dirOf(lang) + 'index.html');
+    const [m, y] = [n(T.priceMonthly), n(T.priceYearly)];
+    expect([m, y], lang).toEqual([2.99, 19.99]); // the same figures in dollars and in euros
+    const cmp = /<div class="compare">([\s\S]*?)<\/div>/.exec(html)[1];
+    const vals = all(/<span class="cmp-v">([^<]+)<\/span>/g, cmp);
+    // a year of Pro both ways, written like the language's own prices
+    expect(vals, lang).toEqual([T.priceMonthly.replace(/2([.,])99/, '35$188'), T.priceYearly]);
+    expect(n(vals[0]), lang).toBeCloseTo(12 * m, 2);
+    expect(cmp, lang).toContain(`width: ${((100 * y) / (12 * m)).toFixed(1)}%`);
+    // "Save 44%" and "12 months for less than the price of 7"
+    expect(T.save, lang).toContain(String(Math.round(100 * (1 - y / (12 * m)))));
+    expect([6 * m < y, y < 7 * m], lang).toEqual([true, true]);
+    expect(T.yearlyItems[1], lang).toMatch(/12\D+7/);
+  }
+});
+
+test('the hero explains the product in the first screen: settings, popup and block page, at 1440x900 and 390x844', async () => {
+  const env = { ...process.env };
+  if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
+  const browser = await chromium.launch({ env });
+  try {
+    const problems = [];
+    for (const lang of SITE_LANGS) {
+      for (const [width, height] of [[1440, 900], [390, 844]]) {
+        const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+        const page = await context.newPage();
+        await page.goto('file://' + path.join(DOCS, dirOf(lang), 'index.html'));
+        const boxes = await page.evaluate(() =>
+          Object.fromEntries(
+            ['.win-hero', '.win-popup', '.win-card'].map((s) => {
+              const r = document.querySelector(s).getBoundingClientRect();
+              return [s, { left: r.left, top: r.top, right: r.right, bottom: r.bottom }];
+            })
+          )
+        );
+        const at = `${lang}@${width}x${height}`;
+        // the popup (with its timer and footer counts) and the block page are whole on screen
+        for (const s of ['.win-popup', '.win-card']) {
+          const b = boxes[s];
+          if (b.left < 0 || b.top < 0 || b.right > width || b.bottom > height) problems.push(`${at}: ${s} ${JSON.stringify(b)}`);
+        }
+        // the settings window is mostly on screen (on phones it runs off the right edge by design)
+        const b = boxes['.win-hero'];
+        const shown = (Math.min(b.right, width) - Math.max(b.left, 0)) * (Math.min(b.bottom, height) - Math.max(b.top, 0));
+        if (b.top < 0 || shown < 0.55 * (b.right - b.left) * (b.bottom - b.top)) problems.push(`${at}: settings ${JSON.stringify(b)}`);
+        await context.close();
+      }
+    }
+    expect(problems).toEqual([]);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('on phones every product capture is shown whole (no crop), using the captures made for phones', async () => {
+  test.slow(); // dozens of page loads in a real browser
+  const env = { ...process.env };
+  if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
+  const browser = await chromium.launch({ env });
+  try {
+    const problems = [];
+    for (const lang of SITE_LANGS) {
+      for (const colorScheme of ['dark', 'light']) {
+        const context = await browser.newContext({ viewport: { width: 390, height: 844 }, colorScheme, reducedMotion: 'reduce' });
+        const page = await context.newPage();
+        await page.goto('file://' + path.join(DOCS, dirOf(lang), 'index.html'));
+        const report = await page.evaluate(async () => {
+          const out = [];
+          // the images of the page's theme (the others are display: none), outside the hero
+          // (where the settings window runs off the edge on purpose)
+          const imgs = [...document.querySelectorAll('main img')].filter((i) => i.offsetParent !== null && !i.closest('.win-hero'));
+          for (const img of imgs) {
+            img.loading = 'eager';
+            await img.decode().catch(() => {});
+            const r = img.getBoundingClientRect();
+            for (let el = img.parentElement; el && el !== document.body; el = el.parentElement) {
+              const cs = getComputedStyle(el);
+              if (cs.overflowX === 'visible' && cs.overflowY === 'visible' && cs.maskImage === 'none') continue;
+              const c = el.getBoundingClientRect();
+              if (r.left < c.left - 0.5 || r.right > c.right + 0.5 || r.top < c.top - 0.5 || r.bottom > c.bottom + 0.5 || cs.maskImage !== 'none')
+                out.push(`${img.currentSrc.split('/').pop()} clipped by ${el.className}`);
+            }
+            if (r.right > innerWidth + 0.5 || r.left < -0.5) out.push(`${img.currentSrc.split('/').pop()} off screen`);
+          }
+          return { out, srcs: imgs.map((i) => i.currentSrc.split('/').pop()) };
+        });
+        for (const p of report.out) problems.push(`${lang} ${colorScheme}: ${p}`);
+        const t = colorScheme === 'light' ? '-light' : '';
+        for (const f of [`block-card${t}.webp`, `stats-m${t}.webp`]) if (report.srcs.filter((s) => s === f).length < 1) problems.push(`${lang}: ${f} not used`);
+        await context.close();
+      }
+    }
+    expect(problems).toEqual([]);
+  } finally {
+    await browser.close();
   }
 });
 

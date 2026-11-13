@@ -37,7 +37,7 @@ copy(FONT, 'inter.woff2');
 copy('src/icons/icon128.png', 'icon128.png');
 copy('src/icons/icon32.png', 'favicon.png');
 // Localized product images (npm run screenshots:site): screenshots/site/<lang>/.
-const THEMED = ['block-page.webp', 'block-page-1x.webp', 'block-card.webp', 'popup.webp', 'blocklist.webp', 'blocklist-1x.webp', 'schedule.webp', 'focus.webp', 'strict.webp', 'stats.webp'];
+const THEMED = ['block-page.webp', 'block-page-1x.webp', 'block-card.webp', 'popup.webp', 'blocklist.webp', 'blocklist-1x.webp', 'schedule.webp', 'focus.webp', 'strict.webp', 'stats.webp', 'stats-m.webp'];
 const SHOTS = [...THEMED, ...THEMED.map((f) => f.replace(/(-1x)?\.webp$/, '-light$1.webp')), 'og.png'];
 for (const lang of SITE_LANGS) {
   for (const file of SHOTS) {
@@ -190,6 +190,10 @@ const ICON = {
 };
 const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name]}</svg>`;
 const PRO = '<span class="pro">PRO</span>';
+// Prices as written in each language ('$2.99', '2,99 €', '2,99 US$'): the amount, and an amount
+// formatted the same way. The yearly card compares a year of each plan from these figures.
+const amount = (price) => Number(/(\d+)[.,](\d\d)/.exec(price).slice(1).join('.'));
+const priceLike = (price, value) => price.replace(/(\d+)[.,](\d\d)/, (m) => value.toFixed(2).replace('.', m.includes(',') ? ',' : '.'));
 
 /**
  * @param o.lang        page language
@@ -300,10 +304,20 @@ function landing(lang) {
     );
   };
   /** The same capture in both themes: CSS shows the one matching the page theme, and lazy
-   * loading means the other one is never downloaded. */
+   * loading means the other one is never downloaded. `narrow` names a capture made for phones
+   * (the extension's own narrow layout, or a tighter crop), served below 720px by <picture>. */
   const shot = (file, alt, opts = {}) =>
-    img(file, alt, { ...opts, lazy: true, cls: `${opts.cls ? opts.cls + ' ' : ''}th-d` }) +
-    img(file.replace('.webp', '-light.webp'), alt, { ...opts, lazy: true, cls: `${opts.cls ? opts.cls + ' ' : ''}th-l` });
+    ['', '-light']
+      .map((theme) => {
+        const th = theme ? 'th-l' : 'th-d';
+        const f = file.replace('.webp', `${theme}.webp`);
+        if (!opts.narrow) return img(f, alt, { ...opts, cls: `${opts.cls ? opts.cls + ' ' : ''}${th}` });
+        const n = opts.narrow.replace('.webp', `${theme}.webp`);
+        const [w, h] = size(n);
+        if (w % 2 || h % 2) throw new Error(`${n}: a 2x capture needs even dimensions, got ${w}x${h}`);
+        return `<picture class="${th}"><source media="(max-width: 720px)" srcset="${A}${n}" width="${w / 2}" height="${h / 2}">${img(f, alt, opts)}</picture>`;
+      })
+      .join('');
   const winBar = (title, ext) =>
     `<div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab">${LOGO(14)}<span>${esc(title)}</span></span>${
       ext ? `<span class="win-ext">${LOGO(16)}</span>` : ''
@@ -321,7 +335,8 @@ function landing(lang) {
   const DETAIL_ICONS = ['shield', 'page', 'backup', 'theme', 'globe', 'incognito'];
   const DETAIL_PRO = [true, true, true, false, false, false];
   const POINT_ICONS = ['device', 'eyeoff', 'lock'];
-  const heroSizes = '(max-width: 720px) 700px, min(1280px, calc(100vw - 48px))';
+  // the settings window is 54/80 of the hero cluster (37.5em of 21.875em on phones), see site.css
+  const heroSizes = '(max-width: 720px) 600px, min(864px, calc((100vw - 80px) * 0.675))';
   const blockedTitle = S.blockedDocTitleHost[lang].replace('$1', 'reddit.com');
   const pre = (name) => `${A}${name}-1x.webp 1280w, ${A}${name}.webp 2560w`;
 
@@ -369,7 +384,7 @@ ${T.steps.map(([h, p], i) => `      <li class="step"><span class="step-n">0${i +
     <div class="shot" data-reveal>
       <div class="win">
         ${winBar(blockedTitle)}
-        <div class="win-body">${shot('block-page.webp', T.altBlock, { cls: 'win-img', srcset: true, sizes: '(max-width: 720px) 760px, min(1200px, calc(100vw - 48px))' })}</div>
+        <div class="win-body">${shot('block-page.webp', T.altBlock, { cls: 'win-img', srcset: true, sizes: 'min(1200px, calc(100vw - 48px))', narrow: 'block-card.webp' })}</div>
       </div>
     </div>
     <div class="feats" data-reveal>
@@ -407,7 +422,7 @@ ${T.blockFeatures.map(([h, p], i) => `      <div class="feat"><h3>${h}${i ? PRO 
       <div>${kicker(T.statsKicker, true)}${h2(T.statsH2).replace('<h2 ', '<h2 id="stats-h" ')}</div>
       <p class="sec-lead">${T.statsLead}</p>
     </header>
-    <div class="screen screen-stats" data-reveal>${shot('stats.webp', T.altStats)}</div>
+    <div class="screen screen-stats" data-reveal>${shot('stats.webp', T.altStats, { narrow: 'stats-m.webp' })}</div>
     <ul class="details" data-reveal>
 ${T.details.map(([h, p], i) => `      <li>${icon(DETAIL_ICONS[i])}<h3>${h}${DETAIL_PRO[i] ? PRO : ''}</h3><p>${p}</p></li>`).join('\n')}
     </ul>
@@ -453,6 +468,13 @@ ${T.perms.map(([k, v]) => `          <div><dt>${/^[A-Za-z]+$/.test(k) ? `<code>$
         <p class="price"><span class="amt">${T.priceYearly}</span><span class="per">${T.perYear}</span></p>
         <p class="plan-note">${T.yearlyNote}</p>
         ${checks(T.yearlyItems)}
+        <div class="compare">
+          <p class="compare-h">${T.compareH}</p>
+          <ul>
+            <li><span>12 × ${T.planMonthly}</span><span class="cmp-v">${priceLike(T.priceMonthly, 12 * amount(T.priceMonthly))}</span><span class="cmp-bar" aria-hidden="true"><i style="width: 100%"></i></span></li>
+            <li class="cmp-best"><span>${T.planYearly}</span><span class="cmp-v">${T.priceYearly}</span><span class="cmp-bar" aria-hidden="true"><i style="width: ${((100 * amount(T.priceYearly)) / (12 * amount(T.priceMonthly))).toFixed(1)}%"></i></span></li>
+          </ul>
+        </div>
       </article>
     </div>
     <div class="plans-foot" data-reveal><p>${T.proHow}</p><p>${T.paymentsNote}</p></div>

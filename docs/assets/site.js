@@ -48,13 +48,15 @@
     var want = resolved(pref);
     var waits = [];
     if (want !== resolved(root.getAttribute('data-theme') || 'system')) {
-      var imgs = document.querySelectorAll(want === 'light' ? 'img.th-l' : 'img.th-d');
-      for (var i = 0; i < imgs.length; i++) {
-        var twin = want === 'light' ? imgs[i].previousElementSibling : imgs[i].nextElementSibling;
+      // each capture is an <img> or a <picture> (phone crop), right next to its twin
+      var els = document.querySelectorAll(want === 'light' ? '.th-l' : '.th-d');
+      for (var i = 0; i < els.length; i++) {
+        var twin = want === 'light' ? els[i].previousElementSibling : els[i].nextElementSibling;
         var r = twin && twin.getBoundingClientRect();
-        if (r && r.bottom > -innerHeight / 2 && r.top < innerHeight * 1.5) {
-          imgs[i].loading = 'eager';
-          if (imgs[i].decode) waits.push(imgs[i].decode().catch(function () {}));
+        var im = els[i].tagName === 'IMG' ? els[i] : els[i].querySelector('img');
+        if (im && r && r.width && r.bottom > -innerHeight / 2 && r.top < innerHeight * 1.5) {
+          im.loading = 'eager';
+          if (im.decode) waits.push(im.decode().catch(function () {}));
         }
       }
     }
