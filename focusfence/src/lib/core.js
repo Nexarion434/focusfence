@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 FocusFence contributors. See LICENSE and THIRD_PARTY_NOTICES.txt.
 /*
  * FocusFence core logic.
  * Pure functions shared by the service worker, the extension pages and the
@@ -452,6 +454,30 @@
     return { phase: 'challenge', readyAt };
   }
 
+  const STRICT_GAP_TOLERANCE_MS = 3 * MINUTE;
+
+  /**
+   * Timed strict mode only counts time while FocusFence is actually running.
+   * The worker records a heartbeat every minute; if it was not running for a
+   * while (extension disabled, browser closed, computer asleep), the end time is
+   * pushed back by that gap so switching FocusFence off cannot "run out the clock".
+   * Returns { strict, pausedMs }.
+   */
+  function applyStrictHeartbeat(strict, now) {
+    if (!strict || !strict.active) return { strict, pausedMs: 0 };
+    const next = Object.assign({}, strict);
+    const last = next.heartbeatAt || next.startedAt || now;
+    const gap = now - last;
+    let pausedMs = 0;
+    if (next.endsAt && gap > STRICT_GAP_TOLERANCE_MS && now < next.endsAt + gap) {
+      pausedMs = gap - MINUTE; // one regular tick interval counts as running time
+      next.endsAt += pausedMs;
+      next.pausedMs = (next.pausedMs || 0) + pausedMs;
+    }
+    next.heartbeatAt = now;
+    return { strict: next, pausedMs };
+  }
+
   const api = {
     MINUTE,
     STRICT_UNLOCK_DELAY_MS,
@@ -486,6 +512,7 @@
     validatePomodoro,
     makeChallenge,
     strictUnlockState,
+    applyStrictHeartbeat,
   };
 
   root.FFCore = api;

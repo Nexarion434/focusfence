@@ -276,6 +276,62 @@ test.describe('Pro: strict mode', () => {
   });
 });
 
+test.describe('Strict mode bypass mitigations', () => {
+  test('timed strict mode pauses while the extension was not running', async ({ api, ext }) => {
+    await api.send('setDevPro', { on: true });
+    await api.send('startStrict', { hours: 1 });
+    // pretend the worker was gone (extension disabled) for 45 minutes with 5 minutes left
+    const before = await api.page.evaluate(async () => {
+      const { strict } = await chrome.storage.local.get('strict');
+      strict.heartbeatAt = Date.now() - 45 * 60e3;
+      strict.endsAt = Date.now() + 5 * 60e3;
+      await chrome.storage.local.set({ strict });
+      return strict.endsAt;
+    });
+    await ext.sw.evaluate(() => self.queueSync());
+    const st = await api.send('getState');
+    expect(st.strict.active).toBe(true);
+    expect(st.strict.endsAt - before).toBeGreaterThan(43 * 60e3);
+    expect(st.strict.pausedMs).toBeGreaterThan(43 * 60e3);
+    const page = await ext.context.newPage();
+    await page.goto(ext.base + 'options.html#strict');
+    await expect(page.locator('#strict-paused')).toContainText('Paused for 44 min');
+    await page.close();
+  });
+
+  test('warns when FocusFence is not allowed in Incognito', async ({ api, ext }) => {
+    await api.send('setDevPro', { on: true });
+    await api.send('addEntry', { raw: 'reddit.com', kind: 'domain' });
+    const page = await ext.context.newPage();
+    await page.goto(ext.base + 'options.html#strict');
+    await expect(page.locator('#incognito-warning')).toBeVisible();
+    await expect(page.locator('details.limits summary')).toHaveText("What strict mode can't prevent");
+    await page.close();
+
+    const popup = await ext.context.newPage();
+    await popup.goto(ext.base + 'popup.html');
+    await expect(popup.locator('#incognito-note')).toBeHidden();
+    await api.send('startStrict', { hours: 0 });
+    await popup.reload();
+    await expect(popup.locator('#incognito-note')).toBeVisible();
+    await popup.close();
+  });
+});
+
+test.describe('Licensing', () => {
+  test('options page links license, notices and source', async ({ ext }) => {
+    const page = await ext.context.newPage();
+    await page.goto(ext.base + 'options.html#plan');
+    await expect(page.locator('#source-link')).toHaveAttribute('href', /^https:\/\/github\.com\//);
+    const [lic, notices] = await page.evaluate(() =>
+      Promise.all(['LICENSE', 'THIRD_PARTY_NOTICES.txt'].map((f) => fetch(f).then((r) => r.text())))
+    );
+    expect(lic).toContain('GNU AFFERO GENERAL PUBLIC LICENSE');
+    expect(notices).toContain('ExtPay');
+    await page.close();
+  });
+});
+
 test.describe('Pro: focus sessions, password lock, block message, backup', () => {
   test('a focus session blocks even while blocking is switched off', async ({ api, ext }) => {
     await api.send('setDevPro', { on: true });

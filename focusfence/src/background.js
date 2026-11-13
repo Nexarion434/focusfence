@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 FocusFence contributors. See LICENSE and THIRD_PARTY_NOTICES.txt.
 /* FocusFence service worker (classic script so ExtPay's bundle can be importScripts-ed). */
 'use strict';
 
@@ -218,6 +220,12 @@ async function syncNow() {
   const isPro = isProFrom(st);
   const now = Date.now();
 
+  // strict-mode clock pauses while FocusFence was not running (disabled / asleep)
+  if (st.strict.active) {
+    const hb = C.applyStrictHeartbeat(st.strict, now);
+    st.strict = hb.strict;
+    await chrome.storage.local.set({ strict: st.strict });
+  }
   // expire timers that ended while the worker was asleep
   if (st.strict.active && st.strict.endsAt && st.strict.endsAt <= now) {
     st.strict = { active: false };
@@ -317,6 +325,8 @@ async function getState() {
   return {
     dev: CONFIG.DEV,
     prices: CONFIG.PRICES,
+    sourceUrl: CONFIG.SOURCE_URL,
+    privacyUrl: CONFIG.PRIVACY_URL,
     isPro,
     license: st.license,
     devPro: !!st.devPro,
@@ -329,6 +339,7 @@ async function getState() {
       active: !!st.strict.active,
       endsAt: st.strict.endsAt || null,
       startedAt: st.strict.startedAt || null,
+      pausedMs: st.strict.pausedMs || 0,
       unlock,
     },
     access: access.map,
@@ -449,6 +460,8 @@ const handlers = {
       endsAt: h ? now + h * 60 * C.MINUTE : null,
       unlockRequestedAt: null,
       challenge: null,
+      heartbeatAt: now,
+      pausedMs: 0,
     };
     const settings = Object.assign({}, st.settings, { enabled: true });
     await chrome.storage.local.set({ strict, settings });

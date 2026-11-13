@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 FocusFence contributors. See LICENSE and THIRD_PARTY_NOTICES.txt.
 'use strict';
 (function () {
   const C = self.FFCore;
@@ -66,6 +68,14 @@
     toggle.parentElement.title = s.strict.active ? 'Strict mode is on — blocking cannot be turned off' : 'Turn blocking on or off';
 
     renderCurrent();
+    if (s.strict.active) {
+      chrome.extension
+        .isAllowedIncognitoAccess()
+        .then((ok) => ($('incognito-note').hidden = ok))
+        .catch(() => {});
+    } else {
+      $('incognito-note').hidden = true;
+    }
 
     // focus
     const card = $('focus-card');
@@ -218,6 +228,11 @@
   });
   $('focus-stop').addEventListener('click', () => guarded(() => send('stopPomodoro')));
   $('open-options').addEventListener('click', () => openOptions(''));
+  $('incognito-fix').addEventListener('click', (e) => {
+    e.preventDefault();
+    chrome.tabs.create({ url: 'chrome://extensions/?id=' + chrome.runtime.id });
+    window.close();
+  });
   $('open-options-2').addEventListener('click', (e) => {
     e.preventDefault();
     openOptions('');

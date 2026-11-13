@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 FocusFence contributors. See LICENSE and THIRD_PARTY_NOTICES.txt.
 /*
  * FocusFence SPA guard. Registered only on hosts that have a path rule
  * (e.g. youtube.com/shorts) and only after the user granted access to that host.

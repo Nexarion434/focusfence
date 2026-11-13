@@ -137,3 +137,21 @@ test.describe('stats, import/export, strict helpers', () => {
     expect(C.makeChallenge().split(' ')).toHaveLength(8);
   });
 });
+
+test.describe('strict mode clock', () => {
+  test('pauses while FocusFence was not running', () => {
+    const now = Date.now();
+    const strict = { active: true, startedAt: now - 60 * 60e3, endsAt: now + 30 * 60e3, heartbeatAt: now - 40 * 60e3 };
+    const { strict: next, pausedMs } = C.applyStrictHeartbeat(strict, now);
+    expect(pausedMs).toBe(39 * 60e3);
+    expect(next.endsAt).toBe(strict.endsAt + 39 * 60e3);
+    expect(next.heartbeatAt).toBe(now);
+  });
+  test('normal ticks do not move the end time; untimed sessions are untouched', () => {
+    const now = Date.now();
+    const t = C.applyStrictHeartbeat({ active: true, endsAt: now + 1e6, heartbeatAt: now - 60e3 }, now);
+    expect(t.pausedMs).toBe(0);
+    const u = C.applyStrictHeartbeat({ active: true, endsAt: null, heartbeatAt: now - 3600e3 }, now);
+    expect(u.strict.endsAt).toBeNull();
+  });
+});

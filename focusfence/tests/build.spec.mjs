@@ -10,6 +10,17 @@ test('store build: DEV flag off, no Simulate Pro, Free blocking works', async ({
   const zip = path.join(ROOT, 'dist/focusfence-1.0.0.zip');
   expect(fs.existsSync(zip)).toBe(true);
   expect(fs.readFileSync(path.join(ROOT, 'dist/focusfence/config.js'), 'utf8')).toMatch(/DEV: false/);
+  // AGPL compliance: license texts + notices ship in the package, ExtPay is unmodified from npm
+  for (const f of ['LICENSE', 'THIRD_PARTY_NOTICES.txt', 'licenses/Inter-OFL-1.1.txt', 'licenses/webextension-polyfill-MPL-2.0.txt']) {
+    expect(fs.existsSync(path.join(ROOT, 'dist/focusfence', f)), f).toBe(true);
+  }
+  expect(
+    fs.readFileSync(path.join(ROOT, 'dist/focusfence/vendor/ExtPay.js')).equals(
+      fs.readFileSync(path.join(ROOT, 'node_modules/extpay/dist/ExtPay.js'))
+    )
+  ).toBe(true);
+  const zipText = fs.readFileSync(zip).toString('latin1');
+  for (const f of ['LICENSE', 'THIRD_PARTY_NOTICES.txt', 'vendor/ExtPay.js']) expect(zipText).toContain(f);
 
   const ext = await launchExtension({ proxyPort: net.port, srcDir: path.join(ROOT, 'dist/focusfence') });
   try {

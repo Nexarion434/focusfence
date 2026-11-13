@@ -1,0 +1,30 @@
+FocusFence — third-party notices
+================================
+
+FocusFence is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. See LICENSE. The complete source code is included in this package
+(nothing is minified or compiled) and is also available at:
+https://github.com/Nexarion434/focusfence
+
+This package includes the following third-party components:
+
+1. ExtPay / ExtensionPay client library 3.1.2 — vendor/ExtPay.js
+   https://github.com/Glench/ExtPay
+   Author: ExtensionPay.com (per package.json).
+   License: AGPL-3.0-or-later (as declared in the package's package.json and
+   source header; the npm package's LICENSE file reads "LGPL-3.0". FocusFence
+   is distributed under AGPL-3.0-or-later, which satisfies either license).
+   Included unmodified, byte-for-byte as published on npm (extpay@3.1.2,
+   dist/ExtPay.js).
+
+2. webextension-polyfill 0.7.0 (bundled inside vendor/ExtPay.js)
+   https://github.com/mozilla/webextension-polyfill
+   License: Mozilla Public License 2.0 — see licenses/webextension-polyfill-MPL-2.0.txt
+   Source code: https://github.com/mozilla/webextension-polyfill
+
+3. Inter typeface (variable, Latin subset) — fonts/inter-var-latin.woff2
+   https://github.com/rsms/inter
+   Copyright 2016 The Inter Project Authors.
+   License: SIL Open Font License 1.1 — see licenses/Inter-OFL-1.1.txt

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 FocusFence contributors. See LICENSE and THIRD_PARTY_NOTICES.txt.
 'use strict';
 (function () {
   const C = self.FFCore;
@@ -84,6 +86,7 @@
     renderPassword();
     renderStats();
     renderPlan();
+    renderIncognito();
   }
 
   function renderMaster() {
@@ -285,7 +288,23 @@
     $('strict-waiting').classList.toggle('hidden', phase !== 'waiting');
     $('strict-challenge').classList.toggle('hidden', phase !== 'challenge');
     if (phase === 'challenge') $('strict-phrase').textContent = s.strict.unlock.challenge;
+    const paused = Math.round((s.strict.pausedMs || 0) / 60000);
+    $('strict-paused').hidden = !paused;
+    $('strict-paused').textContent = paused
+      ? 'Paused for ' + C.formatMinutes(paused) + ' while FocusFence was not running — the end time moved accordingly.'
+      : '';
     tick();
+  }
+
+  async function renderIncognito() {
+    let allowed = true;
+    try {
+      allowed = await chrome.extension.isAllowedIncognitoAccess();
+    } catch (e) {
+      allowed = true;
+    }
+    $('incognito-warning').hidden = allowed;
+    return allowed;
   }
 
   function renderMessage() {
@@ -344,6 +363,8 @@
     $('price-monthly').textContent = s.prices.monthly.split('/')[0];
     $('price-yearly').textContent = s.prices.yearly.split('/')[0];
     $('dev-panel').classList.toggle('hidden', !s.dev);
+    $('source-link').href = s.sourceUrl;
+    $('privacy-link').href = s.privacyUrl;
     $('dev-pro').checked = s.devPro;
   }
 
@@ -465,7 +486,10 @@
   $('strict-start').addEventListener('click', () => {
     const hours = Number($('strict-hours').value);
     const label = hours ? hours + (hours === 1 ? ' hour' : ' hours') : 'until you unlock it';
-    if (!confirm('Start strict mode for ' + label + '?\n\nYou will not be able to turn blocking off or remove sites. Ending early takes a 10-minute wait and a typing challenge.')) return;
+    const incognitoNote = $('incognito-warning').hidden
+      ? ''
+      : '\n\nNote: Incognito windows are not covered until you allow FocusFence in Incognito.';
+    if (!confirm('Start strict mode for ' + label + '?\n\nYou will not be able to turn blocking off or remove sites. Ending early takes a 10-minute wait and a typing challenge. The timer pauses while FocusFence is disabled.' + incognitoNote)) return;
     act(() => send('startStrict', { hours }), 'Strict mode is on');
   });
   $('strict-request').addEventListener('click', () => act(() => send('requestStrictUnlock'), 'Unlock requested — 10 minute cooling-off started'));
@@ -487,6 +511,10 @@
       toast('Strict mode ended');
     }
   });
+
+  $('incognito-open').addEventListener('click', () =>
+    chrome.tabs.create({ url: 'chrome://extensions/?id=' + chrome.runtime.id })
+  );
 
   $('message').addEventListener('input', () => {
     messageDirty = true;

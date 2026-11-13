@@ -136,3 +136,14 @@ body {
   align-items: center;
   padding: 2px 4px 0;
 }
+
+.warn {
+  margin: -2px 2px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--warn-soft);
+  color: var(--ink-2);
+}
+.warn[hidden] {
+  display: none;
+}

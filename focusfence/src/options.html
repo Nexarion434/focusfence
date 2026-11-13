@@ -151,6 +151,14 @@
               <p class="muted">For when willpower runs out. While strict mode is on, blocking can't be turned off, sites can't be removed and the schedule can't be changed. Ending early takes a 10-minute cooling-off period and a typing challenge.</p>
             </div>
           </header>
+          <div class="notice" id="incognito-warning" hidden>
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 3 2 20h20L12 3z" /><path d="M12 10v4M12 17.5v.5" /></svg>
+            <div>
+              <strong>Incognito windows are not blocked</strong>
+              <p class="small">FocusFence isn't allowed in Incognito, so a private window skips your blocklist — even in strict mode. Turn on <em>Allow in Incognito</em> in FocusFence's extension details.</p>
+            </div>
+            <button class="btn btn-sm" id="incognito-open" type="button">Open extension details</button>
+          </div>
           <div class="card pad" id="strict-off">
             <div class="strict-start">
               <label class="field"><span>Duration</span>
@@ -171,6 +179,7 @@
               <span class="badge badge-pro">STRICT MODE ON</span>
               <span id="strict-until" class="muted"></span>
             </div>
+            <p class="muted small" id="strict-paused" hidden></p>
             <div id="strict-locked">
               <p class="muted small">Need out? Request an unlock. You'll have to wait 10 minutes, then type a sentence exactly.</p>
               <button class="btn btn-sm" id="strict-request" type="button">Request unlock</button>
@@ -190,6 +199,14 @@
               <button class="btn btn-ghost btn-sm" id="strict-cancel-2" type="button">Keep strict mode</button>
             </form>
           </div>
+          <details class="limits">
+            <summary>What strict mode can't prevent</summary>
+            <ul class="small muted">
+              <li>Chrome lets you disable or remove any extension from <code>chrome://extensions</code>. FocusFence can't block that page. A timed strict session <strong>pauses</strong> while FocusFence is off, so its time can't run out in the background.</li>
+              <li>Incognito windows are only covered if you allow FocusFence in Incognito (see above).</li>
+              <li>Other browsers, other Chrome profiles and other devices aren't covered.</li>
+            </ul>
+          </details>
         </section>
 
         <!-- BLOCK PAGE -->
@@ -301,6 +318,13 @@
             <li>Private: no account, no tracking</li>
           </ul>
           <p class="muted small plan-foot">Payments are handled securely by ExtensionPay (Stripe). <a href="#" id="restore-link">Already paid? Restore purchase</a></p>
+          <p class="muted small about" id="about">
+            FocusFence is free software, licensed under the
+            <a href="LICENSE" target="_blank">GNU AGPL v3 or later</a>.
+            <a href="#" id="source-link" target="_blank" rel="noopener">Source code</a> ·
+            <a href="THIRD_PARTY_NOTICES.txt" target="_blank">Third-party notices</a> ·
+            <a href="#" id="privacy-link" target="_blank" rel="noopener">Privacy policy</a>
+          </p>
           <div class="dev card pad hidden" id="dev-panel">
             <div>
               <strong>Developer build</strong>

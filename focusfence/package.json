@@ -8,11 +8,12 @@
     "icons": "node scripts/icons.mjs",
     "vendor": "cp node_modules/extpay/dist/ExtPay.js src/vendor/ExtPay.js",
     "build": "node scripts/build.mjs",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "docs": "node scripts/docs.mjs"
   },
   "keywords": [],
   "author": "",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "extpay": "^3.1.2"
   },
@@ -22,5 +23,9 @@
     "playwright": "^1.65.0"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nexarion434/focusfence"
+  }
 }
