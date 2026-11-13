@@ -930,7 +930,7 @@
     "message": "Suggested sites"
   },
   "obCustomPlaceholder": {
-    "message": "Or type another site, e.g. news.example.com"
+    "message": "Another site, e.g. news.example.com"
   },
   "obCustomAria": {
     "message": "Another site to block"

@@ -2,12 +2,11 @@
 body {
   min-height: 100vh;
 }
+/* Inline code is set in mono, with no chip: a chip's side padding read as a space before
+   punctuation ("m.reddit.com ."). */
 code {
   font-family: var(--mono);
-  font-size: 0.86em;
-  background: var(--bg-2);
-  padding: 1px 5px;
-  border-radius: 5px;
+  font-size: 0.9em;
   color: var(--ink-2);
   white-space: nowrap;
 }

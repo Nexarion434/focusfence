@@ -336,4 +336,15 @@ body {
     margin: 6px -20px -20px;
     padding: 12px 20px 14px;
   }
+  /* the field gets the whole width (placeholders and typed sites are never clipped) */
+  .custom {
+    flex-direction: column;
+  }
+  /* in a column, flex: 1 would mean a zero-height basis: keep the field's own height */
+  .custom .input {
+    flex: none;
+  }
+  .custom .btn {
+    width: 100%;
+  }
 }

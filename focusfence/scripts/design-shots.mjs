@@ -383,6 +383,13 @@ const MAIN = [
     await h.shot(p, name);
     await p.close();
   }],
+  ['onboarding-small-typed', async (h, theme, name) => {
+    await h.reset({ pro: false, entries: [], stats: false });
+    const p = await h.page(theme, h.base + 'onboarding.html', { width: 390, height: 844 });
+    await p.locator('#custom-input').fill('news.ycombinator.com');
+    await h.shot(p, name, { fullPage: true });
+    await p.close();
+  }],
   ['onboarding-small', async (h, theme, name) => {
     await h.reset({ pro: false, entries: [], stats: false });
     const p = await h.page(theme, h.base + 'onboarding.html', { width: 390, height: 844 });
