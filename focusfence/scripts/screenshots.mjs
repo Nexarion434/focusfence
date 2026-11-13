@@ -39,7 +39,7 @@ function frameHtml({ title, body, popupQuery, popupHeight }) {
   p.lead{font-size:20px;color:var(--ink-2);max-width:520px;line-height:1.5}
   ul{list-style:none;padding:0;margin:30px 0 0;display:flex;flex-direction:column;gap:12px;font-size:16.5px;color:var(--ink-2)}
   li{display:flex;gap:12px;align-items:center}
-  li::before{content:'';width:20px;height:20px;border-radius:6px;background:var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%232E7D6B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;flex:none}
+  li::before{content:'';width:20px;height:20px;border-radius:6px;background:var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%23287743' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;flex:none}
   .device{justify-self:start;width:392px;border-radius:18px;background:var(--surface);box-shadow:0 2px 6px rgba(28,38,34,.06),0 40px 80px rgba(28,38,34,.18);overflow:hidden;border:1px solid var(--line)}
   .chrome{height:40px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--bg-2);border-bottom:1px solid var(--line)}
   .chrome i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
@@ -221,6 +221,7 @@ try {
   await opt.evaluate(() => document.getElementById('plan').scrollIntoView({ block: 'end' }));
   await opt.waitForTimeout(300);
   await opt.screenshot({ path: path.join(OUT, `options-plan${suffix}.png`) });
+  await opt.evaluate(() => window.scrollTo(0, 0)); // the sticky sidebar follows the scroll position
   await opt.screenshot({ path: path.join(OUT, `options-full${suffix}.png`), fullPage: true });
 
   // ---- popup (with a running focus session)
