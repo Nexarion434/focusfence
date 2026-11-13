@@ -4,9 +4,12 @@
 (function () {
   const C = self.FFCore;
   const { send, toast, logo, el, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
+  const { t, plural, rich, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
-  const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  const DAY_TITLES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // Localized day names from Intl (2026-11-15 is a Sunday).
+  const dayDate = (d) => new Date(2026, 10, 15 + d, 12);
+  const DAY_NAMES = [0, 1, 2, 3, 4, 5, 6].map((d) => fmt.weekday(dayDate(d), 'narrow'));
+  const DAY_TITLES = [0, 1, 2, 3, 4, 5, 6].map((d) => fmt.weekday(dayDate(d), 'long'));
   const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
   const SUGGESTIONS = ['reddit.com', 'youtube.com', 'x.com', 'instagram.com', 'facebook.com', 'tiktok.com', 'news.ycombinator.com'];
 
@@ -25,8 +28,8 @@
     const gate = el(
       'div',
       { class: 'pro-gate' },
-      el('span', { text: 'Available with FocusFence Pro' }),
-      el('a', { class: 'btn btn-pro btn-sm', href: '#plan', text: 'Upgrade' })
+      el('span', { text: t('proGate') }),
+      el('a', { class: 'btn btn-pro btn-sm', href: '#plan', text: t('upgrade') })
     );
     panel.appendChild(gate);
   });
@@ -72,19 +75,19 @@
     if (locked && !wasLocked) setTimeout(() => $('lock-password').focus(), 30);
 
     // sidebar plan card
-    $('side-plan-title').textContent = s.isPro ? 'FocusFence Pro' : 'Free plan';
-    $('side-plan-badge').textContent = s.isPro ? 'PRO' : 'FREE';
+    $('side-plan-title').textContent = s.isPro ? t('sidePlanPro') : t('sidePlanFree');
+    $('side-plan-badge').textContent = s.isPro ? t('planPro') : t('planFree');
     $('side-plan-badge').className = 'badge ' + (s.isPro ? 'badge-pro' : '');
-    $('side-plan-text').textContent = s.isPro
-      ? 'Thanks for supporting FocusFence. All features unlocked.'
-      : 'Unlimited sites. Upgrade for schedules, focus sessions and strict mode.';
-    $('side-plan-btn').textContent = s.isPro ? 'Manage plan' : 'See Pro';
+    $('side-plan-text').textContent = s.isPro ? t('sidePlanProText') : t('sidePlanFreeText');
+    $('side-plan-btn').textContent = s.isPro ? t('managePlan') : t('seePro');
     $('side-plan-btn').className = 'btn btn-sm btn-block ' + (s.isPro ? '' : 'btn-pro');
 
     // strict banner
     $('strict-banner').classList.toggle('hidden', !s.strict.active);
     $('strict-banner-text').textContent = s.strict.active
-      ? 'Strict mode is on' + (s.strict.endsAt ? ' until ' + fmtTime(s.strict.endsAt) : '') + '. Your blocklist can only grow.'
+      ? s.strict.endsAt
+        ? t('strictBannerUntil', fmtTime(s.strict.endsAt))
+        : t('strictBannerOn')
       : '';
 
     renderMaster();
@@ -101,16 +104,16 @@
 
   function renderMaster() {
     const s = state;
-    const t = $('master-toggle');
-    t.checked = s.settings.enabled || s.strict.active;
-    t.disabled = s.strict.active;
+    const master = $('master-toggle');
+    master.checked = s.settings.enabled || s.strict.active;
+    master.disabled = s.strict.active;
     const r = s.status.reason;
     $('master-label').textContent =
-      r === 'strict' ? 'Strict mode' :
-      r === 'focus' ? 'Focus session' :
-      r === 'off' ? 'Blocking off' :
-      r === 'outside-schedule' ? 'Paused (schedule)' :
-      'Blocking on';
+      r === 'strict' ? t('statusStrict') :
+      r === 'focus' ? t('statusFocus') :
+      r === 'off' ? t('masterOff') :
+      r === 'outside-schedule' ? t('masterPaused') :
+      t('masterOn');
   }
 
   function renderEntries() {
@@ -127,15 +130,15 @@
       if (!hasAccess && !inactive && e.type !== 'keyword') missing++;
       const avatar = e.type === 'keyword' ? el('span', { class: 'avatar kw', text: '#' }) : siteAvatar(e.host);
       const meta = el('div', { class: 'entry-meta' });
-      const typeLabel = e.type === 'domain' ? 'Website + subdomains' : e.type === 'path' ? 'Path' : 'Keyword in URL';
+      const typeLabel = e.type === 'domain' ? t('entryDomain') : e.type === 'path' ? t('entryPath') : t('entryKeyword');
       meta.appendChild(el('span', { class: 'muted small', text: typeLabel }));
-      if (inactive) meta.appendChild(el('span', { class: 'badge badge-pro', text: 'PRO · inactive' }));
+      if (inactive) meta.appendChild(el('span', { class: 'badge badge-pro', text: t('entryInactive') }));
       else if (!hasAccess) {
         meta.appendChild(
           el('span', {
             class: 'badge badge-warn',
-            text: 'Error page',
-            title: "FocusFence can't show its block page here yet. Chrome's error page is shown instead.",
+            text: t('entryErrorPage'),
+            title: t('entryErrorPageTitle'),
           })
         );
       }
@@ -143,10 +146,10 @@
         'button',
         {
           class: 'btn btn-ghost icon-btn remove',
-          title: s.strict.active ? 'Strict mode: sites cannot be removed' : 'Remove',
-          'aria-label': 'Remove ' + e.label,
+          title: s.strict.active ? t('removeStrictTitle') : t('remove'),
+          'aria-label': t('removeAria', e.label),
           disabled: s.strict.active,
-          onclick: () => act(() => send('removeEntry', { id: e.id }), 'Removed ' + e.label),
+          onclick: () => act(() => send('removeEntry', { id: e.id }), t('toastRemoved', e.label)),
         },
         el('span', { html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' })
       );
@@ -165,14 +168,11 @@
     const banner = $('access-banner');
     banner.classList.toggle('hidden', !missing && !kwMissing);
     if (missing) {
-      $('access-title').textContent = 'Show the FocusFence block page';
-      $('access-text').textContent =
-        (missing === 1 ? '1 site is' : missing + ' sites are') +
-        " blocked with Chrome's error page because FocusFence hasn't been given access yet. Allow access to see the calm block page and count stats.";
+      $('access-title').textContent = t('accessTitle');
+      $('access-text').textContent = plural(missing, 'accessText');
     } else if (kwMissing) {
-      $('access-title').textContent = 'Keyword rules use Chrome’s error page';
-      $('access-text').textContent =
-        'Keywords can appear on any site, so showing the block page for them needs access to all sites. Optional — blocking works either way.';
+      $('access-title').textContent = t('accessKwTitle');
+      $('access-text').textContent = t('accessKwText');
     }
 
     // suggestions
@@ -195,10 +195,10 @@
     const wrap = $('windows');
     wrap.textContent = '';
     if (!model.windows.length) {
-      wrap.appendChild(el('p', { class: 'muted small windows-empty', text: 'No time ranges yet. Add one, e.g. weekdays 09:00 – 17:00.' }));
+      wrap.appendChild(el('p', { class: 'muted small windows-empty', text: t('windowsEmpty') }));
     }
     model.windows.forEach((w, idx) => {
-      const days = el('div', { class: 'days', role: 'group', 'aria-label': 'Days' });
+      const days = el('div', { class: 'days', role: 'group', 'aria-label': t('daysAria') });
       for (const d of DAY_ORDER) {
         days.appendChild(
           el('button', {
@@ -225,7 +225,7 @@
           type: 'time',
           value: w[key],
           disabled: s.strict.active,
-          'aria-label': key === 'start' ? 'Start time' : 'End time',
+          'aria-label': key === 'start' ? t('startTime') : t('endTime'),
           onchange: (ev) => {
             const m = scheduleModel();
             m.windows[idx][key] = ev.target.value;
@@ -240,12 +240,12 @@
           { class: 'window', role: 'listitem' },
           days,
           el('div', { class: 'times' }, mkTime('start'), el('span', { class: 'muted', text: '–' }), mkTime('end')),
-          crosses ? el('span', { class: 'badge', text: 'overnight' }) : null,
+          crosses ? el('span', { class: 'badge', text: t('overnight') }) : null,
           el('span', { class: 'spacer' }),
           el('button', {
             type: 'button',
             class: 'btn btn-ghost btn-sm',
-            text: 'Remove',
+            text: t('remove'),
             disabled: s.strict.active,
             onclick: () => {
               const m = scheduleModel();
@@ -261,9 +261,9 @@
     $('schedule-save').disabled = s.strict.active;
     const st = s.status.reason;
     $('schedule-state').textContent = scheduleDraft
-      ? 'Unsaved changes'
+      ? t('unsaved')
       : s.settings.schedule.enabled && s.settings.schedule.windows.length
-        ? st === 'schedule' ? 'Active now' : st === 'outside-schedule' ? 'Paused right now' : ''
+        ? st === 'schedule' ? t('activeNow') : st === 'outside-schedule' ? t('pausedNow') : ''
         : '';
   }
 
@@ -280,7 +280,7 @@
     $('pomo-start').classList.toggle('hidden', !!p);
     $('pomo-stop').classList.toggle('hidden', !p);
     if (p) {
-      $('pomo-phase').textContent = (p.phase === 'focus' ? 'Focus' : 'Break') + ' · round ' + p.cycle + ' of ' + p.totalCycles;
+      $('pomo-phase').textContent = t('focusRound', p.phase === 'focus' ? t('phaseFocus') : t('phaseBreak'), p.cycle, p.totalCycles);
     }
     tick();
   }
@@ -292,8 +292,8 @@
     $('strict-on').classList.toggle('hidden', !on);
     if (!on) return;
     $('strict-until').textContent = s.strict.endsAt
-      ? 'Ends automatically at ' + new Date(s.strict.endsAt).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' })
-      : 'Stays on until you unlock it';
+      ? t('strictEndsAt', fmt.dateTime(s.strict.endsAt))
+      : t('strictStaysOn');
     const phase = s.strict.unlock.phase;
     $('strict-locked').classList.toggle('hidden', phase !== 'locked');
     $('strict-waiting').classList.toggle('hidden', phase !== 'waiting');
@@ -302,7 +302,7 @@
     const paused = Math.round((s.strict.pausedMs || 0) / 60000);
     $('strict-paused').hidden = !paused;
     $('strict-paused').textContent = paused
-      ? 'Paused for ' + C.formatMinutes(paused) + ' while FocusFence was not running — the end time moved accordingly.'
+      ? t('strictPaused', C.formatMinutes(paused))
       : '';
     tick();
   }
@@ -325,8 +325,8 @@
 
   function renderPassword() {
     const s = state;
-    $('password-state').textContent = s.hasPassword ? 'Password is set. Unlocked for this session.' : 'No password set.';
-    $('password-save').textContent = s.hasPassword ? 'Change password' : 'Set password';
+    $('password-state').textContent = s.hasPassword ? t('passwordSet') : t('passwordNone');
+    $('password-save').textContent = s.hasPassword ? t('changePassword') : t('setPassword');
     $('password-lock').classList.toggle('hidden', !s.hasPassword);
     $('password-remove').classList.toggle('hidden', !s.hasPassword);
   }
@@ -340,8 +340,7 @@
     chart.textContent = '';
     chart.setAttribute(
       'aria-label',
-      'Blocked attempts per day, last 7 days: ' +
-        st.byDay.map((d) => new Date(d.day + 'T12:00:00').toLocaleDateString([], { weekday: 'long' }) + ' ' + d.count).join(', ')
+      t('chartAria', st.byDay.map((d) => fmt.weekday(new Date(d.day + 'T12:00:00')) + ' ' + d.count).join(', '))
     );
     const max = Math.max(1, ...st.byDay.map((d) => d.count));
     st.byDay.forEach((d, i) => {
@@ -351,17 +350,17 @@
       chart.appendChild(
         el(
           'div',
-          { class: 'bar' + (i === st.byDay.length - 1 ? ' today' : ''), title: d.count + ' blocked' },
+          { class: 'bar' + (i === st.byDay.length - 1 ? ' today' : ''), title: t('barTitle', d.count) },
           el('span', { class: 'bar-count', text: String(d.count) }),
           fill,
-          el('span', { class: 'bar-label', text: i === st.byDay.length - 1 ? 'Today' : date.toLocaleDateString([], { weekday: 'short' }) })
+          el('span', { class: 'bar-label', text: i === st.byDay.length - 1 ? t('today') : fmt.weekday(date, 'short') })
         )
       );
     });
     const top = $('top-sites');
     top.textContent = '';
     const sites = Object.entries(st.bySite).sort((a, b) => b[1] - a[1]).slice(0, 6);
-    if (!sites.length) top.appendChild(el('li', { class: 'muted small', text: 'No blocked visits yet. That is a good sign.' }));
+    if (!sites.length) top.appendChild(el('li', { class: 'muted small', text: t('topSitesNone') }));
     const topMax = sites.length ? sites[0][1] : 1;
     for (const [site, n] of sites) {
       const bar = el('span');
@@ -372,18 +371,17 @@
 
   function renderPlan() {
     const s = state;
-    $('plan-title').textContent = s.isPro ? 'You have FocusFence Pro' : 'FocusFence Pro';
-    $('plan-sub').textContent = s.isPro
-      ? 'All Pro features are unlocked on this browser.' + (s.devPro ? ' (simulated in DEV build)' : '')
-      : 'Everything in Free, plus the tools that make focus stick.';
-    $('price-monthly').textContent = s.prices.monthly.split('/')[0];
-    $('price-yearly').textContent = s.prices.yearly.split('/')[0];
+    $('plan-title').textContent = s.isPro ? t('planTitlePro') : t('sidePlanPro');
+    $('plan-sub').textContent = s.isPro ? (s.devPro ? t('planSubProDev') : t('planSubPro')) : t('planSub');
+    $('price-monthly').textContent = fmt.price(s.prices.monthly, s.prices.currency);
+    $('price-yearly').textContent = fmt.price(s.prices.yearly, s.prices.currency);
     $('dev-panel').classList.toggle('hidden', !s.dev);
     const lic = s.license || {};
     $('license-note').hidden = !(lic.lastError && !s.dev);
     $('license-note').textContent = lic.lastError
-      ? "Couldn't reach ExtensionPay to verify your plan (offline?). Using the last known status" +
-        (lic.checkedAt ? ' from ' + new Date(lic.checkedAt).toLocaleDateString() : '') + '.'
+      ? lic.checkedAt
+        ? t('licenseNoteDate', fmt.date(lic.checkedAt))
+        : t('licenseNote')
       : '';
     $('source-link').href = s.sourceUrl;
     $('privacy-link').href = s.privacyUrl;
@@ -417,9 +415,9 @@
   async function addEntry(raw, type) {
     try {
       const res = await send('addEntry', { raw, kind: type });
-      if (res.duplicate) toast(res.entry.label + ' is already on your list');
+      if (res.duplicate) toast(t('toastAlreadyOnList', res.entry.label));
       else {
-        toast('Added ' + res.entry.label);
+        toast(t('toastAdded', res.entry.label));
         if (res.entry.type !== 'keyword') requestAccess(res.origins);
       }
       $('add-input').value = '';
@@ -431,9 +429,9 @@
   }
 
   const HINTS = {
-    domain: ['reddit.com', 'Blocks the whole site, including every subdomain.'],
-    path: ['youtube.com/shorts', 'Blocks only that section. youtube.com stays reachable; youtube.com/shorts/… is blocked.'],
-    keyword: ['poker', 'Blocks any page whose address contains this word.'],
+    domain: ['reddit.com', t('hintDomain')],
+    path: ['youtube.com/shorts', t('hintPath')],
+    keyword: ['poker', t('hintKeyword')],
   };
   $('type-seg').addEventListener('click', (e) => {
     const b = e.target.closest('button[data-type]');
@@ -462,7 +460,7 @@
     }
     const list = origins.size ? [...origins] : needAll ? [C.ALL_SITES_ORIGIN] : [];
     const ok = await requestAccess(list);
-    toast(ok ? 'Access granted — the block page is on' : 'No changes made');
+    toast(ok ? t('toastAccessGranted') : t('toastNoChanges'));
     await refresh();
   });
 
@@ -483,7 +481,7 @@
   });
   async function saveSchedule() {
     const draft = scheduleModel();
-    const r = await act(() => send('setSchedule', { schedule: draft }), 'Schedule saved');
+    const r = await act(() => send('setSchedule', { schedule: draft }), t('toastScheduleSaved'));
     if (r) scheduleDraft = null;
     renderSchedule();
   }
@@ -497,31 +495,29 @@
     return r;
   }
   $('pomo-save').addEventListener('click', async () => {
-    if (await savePomo()) toast('Focus settings saved');
+    if (await savePomo()) toast(t('toastFocusSaved'));
   });
   $('pomo-start').addEventListener('click', async () => {
     if (pomoDirty && !(await savePomo())) return;
-    act(() => send('startPomodoro'), 'Focus session started');
+    act(() => send('startPomodoro'), t('toastFocusStarted'));
   });
-  $('pomo-stop').addEventListener('click', () => act(() => send('stopPomodoro'), 'Session stopped'));
+  $('pomo-stop').addEventListener('click', () => act(() => send('stopPomodoro'), t('toastSessionStopped')));
 
   $('strict-start').addEventListener('click', () => {
     const hours = Number($('strict-hours').value);
-    const label = hours ? hours + (hours === 1 ? ' hour' : ' hours') : 'until you unlock it';
-    const incognitoNote = $('incognito-warning').hidden
-      ? ''
-      : '\n\nNote: Incognito windows are not covered until you allow FocusFence in Incognito.';
-    if (!confirm('Start strict mode for ' + label + '?\n\nYou will not be able to turn blocking off or remove sites. Ending early takes a 10-minute wait and a typing challenge. The timer pauses while FocusFence is disabled.' + incognitoNote)) return;
-    act(() => send('startStrict', { hours }), 'Strict mode is on');
+    const label = hours ? plural(hours, 'dur') : t('durForeverLower');
+    const incognitoNote = $('incognito-warning').hidden ? '' : '\n\n' + t('confirmStrictIncognito');
+    if (!confirm(t('confirmStrict', label) + incognitoNote)) return;
+    act(() => send('startStrict', { hours }), t('toastStrictOn'));
   });
-  $('strict-request').addEventListener('click', () => act(() => send('requestStrictUnlock'), 'Unlock requested — 10 minute cooling-off started'));
-  $('strict-cancel').addEventListener('click', () => act(() => send('cancelStrictUnlock'), 'Good call. Strict mode stays on.'));
-  $('strict-cancel-2').addEventListener('click', () => act(() => send('cancelStrictUnlock'), 'Good call. Strict mode stays on.'));
+  $('strict-request').addEventListener('click', () => act(() => send('requestStrictUnlock'), t('toastUnlockRequested')));
+  $('strict-cancel').addEventListener('click', () => act(() => send('cancelStrictUnlock'), t('toastGoodCall')));
+  $('strict-cancel-2').addEventListener('click', () => act(() => send('cancelStrictUnlock'), t('toastGoodCall')));
   const typed = $('strict-typed');
   ['paste', 'drop'].forEach((ev) =>
     typed.addEventListener(ev, (e) => {
       e.preventDefault();
-      toast('Type it out — pasting is disabled.', 'error');
+      toast(t('toastNoPaste'), 'error');
     })
   );
   $('strict-phrase').addEventListener('copy', (e) => e.preventDefault());
@@ -530,7 +526,7 @@
     const r = await act(() => send('completeStrictUnlock', { typed: typed.value }));
     if (r) {
       typed.value = '';
-      toast('Strict mode ended');
+      toast(t('toastStrictEnded'));
     }
   });
 
@@ -543,7 +539,7 @@
     $('message-count').textContent = $('message').value.length + ' / 280';
   });
   $('message-save').addEventListener('click', async () => {
-    const r = await act(() => send('setBlockMessage', { message: $('message').value }), 'Message saved');
+    const r = await act(() => send('setBlockMessage', { message: $('message').value }), t('toastMessageSaved'));
     if (r) messageDirty = false;
   });
 
@@ -551,8 +547,8 @@
     e.preventDefault();
     const a = $('password-new').value;
     const b = $('password-confirm').value;
-    if (a !== b) return toast('Passwords do not match', 'error');
-    const r = await act(() => send('setPassword', { password: a }), 'Password saved');
+    if (a !== b) return toast(t('toastPwMismatch'), 'error');
+    const r = await act(() => send('setPassword', { password: a }), t('toastPwSaved'));
     if (r) {
       $('password-new').value = '';
       $('password-confirm').value = '';
@@ -560,14 +556,14 @@
   });
   $('password-lock').addEventListener('click', () => act(() => send('lockNow')));
   $('password-remove').addEventListener('click', () => {
-    if (confirm('Remove the password lock?')) act(() => send('removePassword'), 'Password removed');
+    if (confirm(t('confirmRemovePw'))) act(() => send('removePassword'), t('toastPwRemoved'));
   });
   $('lock-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     try {
       await send('unlock', { password: $('lock-password').value });
       $('lock-password').value = '';
-      toast('Unlocked for 15 minutes');
+      toast(t('toastUnlocked15'));
     } catch (err) {
       toast(errorMessage(err), 'error');
     }
@@ -575,7 +571,7 @@
   });
 
   $('stats-clear').addEventListener('click', () => {
-    if (confirm('Clear all stats?')) act(() => send('clearStats'), 'Stats cleared');
+    if (confirm(t('confirmClearStats'))) act(() => send('clearStats'), t('toastStatsCleared'));
   });
 
   $('export-btn').addEventListener('click', async () => {
@@ -589,17 +585,17 @@
       URL.revokeObjectURL(a.href);
       a.remove();
     }, 1000);
-    toast('Settings exported');
+    toast(t('toastExported'));
   });
   $('import-file').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     e.target.value = '';
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) return toast('That file is too large.', 'error');
+    if (file.size > 2 * 1024 * 1024) return toast(t('errFileTooLarge'), 'error');
     const text = await file.text();
-    if (!confirm('Replace your current blocklist and settings with the contents of ' + file.name + '?')) return;
+    if (!confirm(t('confirmImport', file.name))) return;
     const r = await act(() => send('importSettings', { data: text }));
-    if (r) toast('Imported ' + r.count + ' rules');
+    if (r) toast(t('toastImported', r.count));
   });
 
   document.querySelectorAll('[data-plan]').forEach((b) =>
@@ -610,14 +606,15 @@
     act(() => send('openLogin'));
   });
   $('dev-pro').addEventListener('change', (e) =>
-    act(() => send('setDevPro', { on: e.target.checked }), e.target.checked ? 'Pro simulated' : 'Back to Free')
+    act(() => send('setDevPro', { on: e.target.checked }), e.target.checked ? t('toastProSimulated') : t('toastBackToFree'))
   );
 
-  $('welcome-close').addEventListener('click', () => {
-    $('welcome').classList.add('hidden');
-    history.replaceState(null, '', location.pathname);
-  });
-  if (location.hash === '#welcome') $('welcome').classList.remove('hidden');
+
+  // duration options with localized plurals
+  for (const opt of $('strict-hours').options) {
+    const h = Number(opt.value);
+    if (h) opt.textContent = plural(h, 'dur');
+  }
 
   // nav highlighting
   const links = [...document.querySelectorAll('#nav a')];

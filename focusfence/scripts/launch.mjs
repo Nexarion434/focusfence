@@ -106,7 +106,7 @@ export function prepareExtension({ grantAll = true, mutate, srcDir = SRC } = {})
   return dir;
 }
 
-export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme, srcDir } = {}) {
+export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme, srcDir, lang } = {}) {
   const extDir = prepareExtension({ grantAll, mutate, srcDir });
   const args = [
     `--disable-extensions-except=${extDir}`,
@@ -120,6 +120,12 @@ export async function launchExtension({ grantAll = true, proxyPort, viewport, mu
   if (process.env.FF_CHROME_LIBS) {
     env.LD_LIBRARY_PATH = [process.env.FF_CHROME_LIBS, process.env.LD_LIBRARY_PATH].filter(Boolean).join(':');
   }
+  if (lang) {
+    // Chrome's UI language (what chrome.i18n uses) comes from --lang / LANGUAGE on Linux.
+    args.push('--lang=' + lang);
+    env.LANGUAGE = lang;
+    env.LANG = lang.replace('-', '_') + '.UTF-8';
+  }
   const context = await chromium.launchPersistentContext('', {
     channel: 'chromium',
     headless: true,
@@ -127,6 +133,7 @@ export async function launchExtension({ grantAll = true, proxyPort, viewport, mu
     env,
     viewport: viewport || { width: 1280, height: 800 },
     colorScheme: colorScheme || 'light',
+    ...(lang ? { locale: lang } : {}),
   });
   let [sw] = context.serviceWorkers();
   if (!sw) sw = await context.waitForEvent('serviceworker');

@@ -48,6 +48,26 @@
     'juniper', 'pebble', 'saddle', 'timber', 'velvet', 'whistle', 'zephyr',
   ];
 
+  /* ------------------------------------------------------------- i18n */
+  // Uses chrome.i18n when available (extension), English fallbacks otherwise (Node tests).
+  let translate =
+    typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage
+      ? (key, subs) => chrome.i18n.getMessage(key, subs.map(String))
+      : null;
+  function setTranslator(fn) {
+    translate = fn;
+  }
+  function T(key, fallback, ...subs) {
+    if (translate) {
+      const m = translate(key, subs);
+      if (m) return m;
+    }
+    return fallback.replace(/\$(\d)/g, (_, i) => String(subs[Number(i) - 1]));
+  }
+  function quote(i) {
+    return T('quote' + (i + 1), QUOTES[i]);
+  }
+
   function deepClone(v) {
     return JSON.parse(JSON.stringify(v));
   }
@@ -88,7 +108,7 @@
    */
   function parseEntry(raw, type) {
     const text = String(raw || '').trim();
-    if (!text) throw new Error('Enter a website, path or keyword.');
+    if (!text) throw new Error(T('errEnterSite', 'Enter a website, path or keyword.'));
     let t = type || 'auto';
 
     if (t === 'auto') {
@@ -107,16 +127,16 @@
 
     if (t === 'keyword') {
       const kw = text.replace(/^keyword:/i, '').trim().toLowerCase();
-      if (kw.length < 3) throw new Error('Keywords need at least 3 characters.');
-      if (kw.length > 64) throw new Error('Keywords can be at most 64 characters.');
+      if (kw.length < 3) throw new Error(T('errKeywordShort', 'Keywords need at least 3 characters.'));
+      if (kw.length > 64) throw new Error(T('errKeywordLong', 'Keywords can be at most 64 characters.'));
       if (!/^[\p{L}\p{N} _.\-]+$/u.test(kw)) {
-        throw new Error('Keywords may only contain letters, digits, spaces, "-", "_" and ".".');
+        throw new Error(T('errKeywordChars', 'Keywords may only contain letters, digits, spaces, "-", "_" and ".".'));
       }
       return { type: 'keyword', keyword: kw, label: kw };
     }
 
     const host = hostFromInput(text);
-    if (!host) throw new Error('That does not look like a valid website (e.g. reddit.com).');
+    if (!host) throw new Error(T('errInvalidSite', 'That does not look like a valid website (e.g. reddit.com).'));
 
     if (t === 'domain') return { type: 'domain', host, label: host };
 
@@ -125,18 +145,18 @@
       const parsedUrl = new URL(withScheme);
       if (parsedUrl.search || parsedUrl.hash) {
         // e.g. youtube.com/watch?v=abc would otherwise silently block every video
-        throw new Error('Path rules match the path only. Remove the "?…" part, or use a keyword rule.');
+        throw new Error(T('errPathQuery', 'Path rules match the path only. Remove the "?…" part, or use a keyword rule.'));
       }
       let path = parsedUrl.pathname || '/';
       path = path.replace(/\/{2,}/g, '/');
       if (path.length > 1) path = path.replace(/\/$/, '');
       if (path === '/' || path === '') {
-        throw new Error('Add a path after the domain, e.g. youtube.com/shorts.');
+        throw new Error(T('errPathMissing', 'Add a path after the domain, e.g. youtube.com/shorts.'));
       }
-      if (path.length > MAX_PATH_LENGTH) throw new Error('That path is too long.');
+      if (path.length > MAX_PATH_LENGTH) throw new Error(T('errPathLong', 'That path is too long.'));
       return { type: 'path', host, path, label: host + path };
     }
-    throw new Error('Unknown rule type.');
+    throw new Error(T('errUnknownType', 'Unknown rule type.'));
   }
 
   function entryKey(e) {
@@ -217,14 +237,14 @@
   }
 
   function validateWindow(w) {
-    if (!w || typeof w !== 'object' || !Array.isArray(w.days)) return 'Pick at least one day.';
+    if (!w || typeof w !== 'object' || !Array.isArray(w.days)) return T('errPickDay', 'Pick at least one day.');
     const days = cleanDays(w.days);
-    if (!days.length) return 'Pick at least one day.';
-    if (typeof w.start !== 'string' || typeof w.end !== 'string') return 'Use a 24-hour time like 09:00.';
+    if (!days.length) return T('errPickDay', 'Pick at least one day.');
+    if (typeof w.start !== 'string' || typeof w.end !== 'string') return T('errTimeFormat', 'Use a 24-hour time like 09:00.');
     const s = parseHM(w.start);
     const e = parseHM(w.end);
-    if (s === null || e === null) return 'Use a 24-hour time like 09:00.';
-    if (s === e) return 'Start and end time must differ.';
+    if (s === null || e === null) return T('errTimeFormat', 'Use a 24-hour time like 09:00.');
+    if (s === e) return T('errTimeSame', 'Start and end time must differ.');
     return null;
   }
 
@@ -379,10 +399,10 @@
   }
 
   function formatMinutes(min) {
-    if (min < 60) return min + ' min';
+    if (min < 60) return T('unitMin', '$1 min', min);
     const h = Math.floor(min / 60);
     const m = min % 60;
-    return m ? h + 'h ' + m + 'm' : h + 'h';
+    return m ? T('unitHourMin', '$1h $2m', h, m) : T('unitHour', '$1h', h);
   }
 
   /* ------------------------------------------------------- import / export */
@@ -411,7 +431,7 @@
   /** Validate an imported JSON object. Returns a full settings object or throws. */
   function validateImport(obj, current) {
     if (!obj || typeof obj !== 'object' || obj.app !== 'FocusFence' || !obj.settings) {
-      throw new Error('This file is not a FocusFence export.');
+      throw new Error(T('errNotExport', 'This file is not a FocusFence export.'));
     }
     const src = obj.settings;
     const out = Object.assign(deepClone(DEFAULT_SETTINGS), deepClone(current || {}));
@@ -571,6 +591,9 @@
     makeChallenge,
     strictUnlockState,
     applyStrictHeartbeat,
+    setTranslator,
+    T,
+    quote,
     hostCovered,
     advancePomodoroTo,
     cleanDays,

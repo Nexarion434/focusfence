@@ -4,6 +4,7 @@
 (function () {
   const C = self.FFCore;
   const { send, logo, fmtCountdown } = self.FFUI;
+  const { t } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
 
   // The original URL arrives after '#', put there by the redirect rule.
@@ -22,10 +23,10 @@
   }
 
   $('mark').innerHTML = logo(64);
-  $('site').textContent = host || 'This site';
+  $('site').textContent = host || t('thisSite');
   $('url').textContent = original;
   $('url').title = original;
-  document.title = (host ? host + ' is blocked' : 'Blocked') + ' · FocusFence';
+  document.title = host ? t('blockedDocTitleHost', host) : t('blockedDocTitle');
 
   let pomodoro = null;
 
@@ -43,8 +44,11 @@
       return;
     }
     $('session').classList.remove('hidden');
-    $('session-text').textContent =
-      (pomodoro.phase === 'focus' ? 'Focus session' : 'Break') + ' · ' + fmtCountdown(left) + ' left';
+    $('session-text').textContent = t(
+      'sessionLeft',
+      pomodoro.phase === 'focus' ? t('statusFocus') : t('phaseBreak'),
+      fmtCountdown(left)
+    );
   }
 
   async function init() {
@@ -52,7 +56,7 @@
     const entry = C.findMatchingEntry(state.settings.entries, hash, state.isPro);
     if (entry && entry.type !== 'domain') $('site').textContent = entry.label;
     const custom = state.isPro && state.settings.blockMessage;
-    $('message').textContent = custom || C.QUOTES[Math.floor(Math.random() * C.QUOTES.length)];
+    $('message').textContent = custom || C.quote(Math.floor(Math.random() * C.QUOTES.length));
     pomodoro = state.pomodoro;
     tick();
     setInterval(tick, 1000);

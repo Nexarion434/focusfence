@@ -9,7 +9,9 @@
     "vendor": "cp node_modules/extpay/dist/ExtPay.js src/vendor/ExtPay.js",
     "build": "node scripts/build.mjs",
     "screenshots": "node scripts/screenshots.mjs",
-    "docs": "node scripts/docs.mjs"
+    "docs": "node scripts/docs.mjs",
+    "i18n": "node scripts/i18n/build.mjs",
+    "i18n:check": "node scripts/i18n/build.mjs --check"
   },
   "keywords": [],
   "author": "",

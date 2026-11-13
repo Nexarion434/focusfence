@@ -1,0 +1,1007 @@
+{
+  "extName": {
+    "message": "FocusFence – Bloqueador de webs y temporizador Pomodoro"
+  },
+  "extShortName": {
+    "message": "FocusFence"
+  },
+  "extDescription": {
+    "message": "Bloquea las webs que te distraen con un clic, o solo YouTube Shorts. Horarios, temporizador Pomodoro y modo estricto. 100 % privado."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "titleFocus": {
+    "message": "FocusFence: sesión de concentración"
+  },
+  "titleBreak": {
+    "message": "FocusFence: descanso"
+  },
+  "titleOff": {
+    "message": "FocusFence: bloqueo desactivado"
+  },
+  "titleOutside": {
+    "message": "FocusFence: fuera del horario"
+  },
+  "titleStrict": {
+    "message": "FocusFence: modo estricto"
+  },
+  "titleOn": {
+    "message": "FocusFence: bloqueo activado"
+  },
+  "errProRequired": {
+    "message": "Esta función es de FocusFence Pro."
+  },
+  "errStrict": {
+    "message": "El modo estricto está activo. Desbloquéalo primero (espera de 10 minutos + reto de escritura)."
+  },
+  "errLocked": {
+    "message": "Los ajustes están protegidos con contraseña. Desbloquéalos primero."
+  },
+  "errNetwork": {
+    "message": "No se pudo conectar con el servicio de pago (ExtensionPay). Revisa tu conexión e inténtalo de nuevo."
+  },
+  "errDevPayments": {
+    "message": "Los pagos están desactivados en la versión DEV. Usa «Simular Pro»."
+  },
+  "errDevOnly": {
+    "message": "Solo disponible en versiones de desarrollo."
+  },
+  "errEnterSite": {
+    "message": "Escribe una web, una ruta o una palabra clave."
+  },
+  "errPatternLimit": {
+    "message": "Puedes tener hasta $1 reglas de ruta y palabra clave."
+  },
+  "errInvalidSchedule": {
+    "message": "Horario no válido."
+  },
+  "errScheduleMax": {
+    "message": "Como máximo $1 franjas horarias."
+  },
+  "errPomodoro": {
+    "message": "Concentración 1–180 min, descanso 1–60 min, 1–12 rondas."
+  },
+  "errStrictDuration": {
+    "message": "Elige una de las duraciones de la lista."
+  },
+  "errStrictWait": {
+    "message": "El periodo de espera de 10 minutos aún no ha terminado."
+  },
+  "errChallenge": {
+    "message": "El texto no coincide. Escríbelo exactamente como se muestra."
+  },
+  "errPasswordLength": {
+    "message": "Usa entre 4 y 256 caracteres."
+  },
+  "errBadPassword": {
+    "message": "Contraseña incorrecta."
+  },
+  "errThrottled": {
+    "message": "Demasiados intentos fallidos. Vuelve a intentarlo en $1 s."
+  },
+  "errFileTooLarge": {
+    "message": "El archivo es demasiado grande."
+  },
+  "errNotJson": {
+    "message": "El archivo no es un JSON válido."
+  },
+  "errGeneric": {
+    "message": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "errNoResponse": {
+    "message": "FocusFence no responde."
+  },
+  "errKeywordShort": {
+    "message": "Las palabras clave necesitan al menos 3 caracteres."
+  },
+  "errKeywordLong": {
+    "message": "Las palabras clave tienen como máximo 64 caracteres."
+  },
+  "errKeywordChars": {
+    "message": "Las palabras clave solo pueden contener letras, números, espacios, «-», «_» y «.»."
+  },
+  "errInvalidSite": {
+    "message": "No parece una web válida (p. ej. reddit.com)."
+  },
+  "errPathQuery": {
+    "message": "Las reglas de ruta solo usan la ruta. Quita la parte «?…» o usa una palabra clave."
+  },
+  "errPathMissing": {
+    "message": "Añade una ruta después del dominio, p. ej. youtube.com/shorts."
+  },
+  "errPathLong": {
+    "message": "Esa ruta es demasiado larga."
+  },
+  "errUnknownType": {
+    "message": "Tipo de regla desconocido."
+  },
+  "errPickDay": {
+    "message": "Elige al menos un día."
+  },
+  "errTimeFormat": {
+    "message": "Usa una hora en formato 24 h, p. ej. 09:00."
+  },
+  "errTimeSame": {
+    "message": "La hora de inicio y la de fin deben ser distintas."
+  },
+  "errNotExport": {
+    "message": "Este archivo no es una exportación de FocusFence."
+  },
+  "unitMin": {
+    "message": "$1 min"
+  },
+  "unitHour": {
+    "message": "$1 h"
+  },
+  "unitHourMin": {
+    "message": "$1 h $2 min"
+  },
+  "quote1": {
+    "message": "El guerrero exitoso es una persona corriente con una concentración de láser. — Bruce Lee"
+  },
+  "quote2": {
+    "message": "Deja sin alimento tus distracciones y alimenta tu concentración."
+  },
+  "quote3": {
+    "message": "Donde va la atención, fluye la energía. — Tony Robbins"
+  },
+  "quote4": {
+    "message": "Nunca llegarás a tu destino si te detienes en cada distracción."
+  },
+  "quote5": {
+    "message": "Concentra todos tus pensamientos en la tarea que tienes entre manos. — Alexander Graham Bell"
+  },
+  "quote6": {
+    "message": "No es que tengamos poco tiempo, sino que perdemos mucho. — Séneca"
+  },
+  "quote7": {
+    "message": "El trabajo profundo es el superpoder del siglo XXI. — Cal Newport"
+  },
+  "quote8": {
+    "message": "Pequeñas mejoras diarias llevan a resultados asombrosos a largo plazo."
+  },
+  "quote9": {
+    "message": "El futuro depende de lo que hagas hoy. — Gandhi"
+  },
+  "quote10": {
+    "message": "Haz primero lo difícil. El feed seguirá ahí después."
+  },
+  "planFree": {
+    "message": "GRATIS"
+  },
+  "planPro": {
+    "message": "PRO"
+  },
+  "settings": {
+    "message": "Ajustes"
+  },
+  "openSettings": {
+    "message": "Abrir ajustes"
+  },
+  "password": {
+    "message": "Contraseña"
+  },
+  "unlock": {
+    "message": "Desbloquear"
+  },
+  "add": {
+    "message": "Añadir"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "remove": {
+    "message": "Quitar"
+  },
+  "allow": {
+    "message": "Permitir"
+  },
+  "manage": {
+    "message": "Gestionar"
+  },
+  "upgrade": {
+    "message": "Mejorar"
+  },
+  "today": {
+    "message": "Hoy"
+  },
+  "blockSite": {
+    "message": "Bloquear web"
+  },
+  "blockedLabel": {
+    "message": "Bloqueada"
+  },
+  "sitesFencedOne": {
+    "message": "1 web bloqueada"
+  },
+  "sitesFencedOther": {
+    "message": "$1 webs bloqueadas"
+  },
+  "statusOn": {
+    "message": "Bloqueo activado"
+  },
+  "statusOff": {
+    "message": "Bloqueo desactivado"
+  },
+  "statusOutside": {
+    "message": "Fuera del horario"
+  },
+  "statusFocus": {
+    "message": "Sesión de concentración"
+  },
+  "statusStrict": {
+    "message": "Modo estricto"
+  },
+  "phaseFocus": {
+    "message": "Concentración"
+  },
+  "phaseFocusing": {
+    "message": "Concentrado"
+  },
+  "phaseBreak": {
+    "message": "Descanso"
+  },
+  "focusRound": {
+    "message": "$1 · ronda $2 de $3"
+  },
+  "startFocus": {
+    "message": "Empezar"
+  },
+  "blockingEnabledAria": {
+    "message": "Bloqueo activado"
+  },
+  "subStrictUntil": {
+    "message": "Bloqueado hasta las $1 · $2"
+  },
+  "subStrictForever": {
+    "message": "Bloqueado hasta que lo desbloquees · $1"
+  },
+  "subFocus": {
+    "message": "Toda tu lista está bloqueada · $1"
+  },
+  "subOff": {
+    "message": "$1 · actívalo para bloquear"
+  },
+  "subOutside": {
+    "message": "$1 · se reanuda en la próxima franja"
+  },
+  "subSchedule": {
+    "message": "Horario activo · $1"
+  },
+  "toggleTitle": {
+    "message": "Activar o desactivar el bloqueo"
+  },
+  "toggleStrictTitle": {
+    "message": "Modo estricto activo: no se puede desactivar el bloqueo"
+  },
+  "incognitoNote": {
+    "message": "Las ventanas de incógnito no están cubiertas."
+  },
+  "incognitoFix": {
+    "message": "Permitir FocusFence en incógnito"
+  },
+  "unlockTitle": {
+    "message": "Los ajustes están bloqueados."
+  },
+  "unlockText": {
+    "message": "Introduce tu contraseña para continuar."
+  },
+  "thisPage": {
+    "message": "Esta página"
+  },
+  "currentTab": {
+    "message": "Pestaña actual"
+  },
+  "browserPagesNo": {
+    "message": "Las páginas del navegador no se pueden bloquear"
+  },
+  "alreadyOnList": {
+    "message": "Ya está en tu lista"
+  },
+  "coveredBy": {
+    "message": "Cubierta por $1"
+  },
+  "addPlaceholder": {
+    "message": "Añade una web, p. ej. reddit.com"
+  },
+  "addAria": {
+    "message": "Web que bloquear"
+  },
+  "focusTimerAria": {
+    "message": "Tiempo de concentración"
+  },
+  "stop": {
+    "message": "Detener"
+  },
+  "unlockPro": {
+    "message": "Desbloquear Pro"
+  },
+  "focusCfg": {
+    "message": "$1 min de concentración · $2 min de descanso · $3 rondas"
+  },
+  "focusTeaser": {
+    "message": "Sesiones Pomodoro que bloquean toda tu lista"
+  },
+  "todayNone": {
+    "message": "Nada bloqueado hoy todavía"
+  },
+  "todayCount": {
+    "message": "$1 bloqueos hoy · ≈$2 recuperados"
+  },
+  "allSettings": {
+    "message": "Todos los ajustes →"
+  },
+  "toastAlreadyBlocked": {
+    "message": "$1 ya está bloqueada"
+  },
+  "toastBlocked": {
+    "message": "$1 bloqueada"
+  },
+  "optionsTitle": {
+    "message": "Ajustes de FocusFence"
+  },
+  "navAria": {
+    "message": "Secciones de ajustes"
+  },
+  "navBlocklist": {
+    "message": "Lista de bloqueo"
+  },
+  "navSchedule": {
+    "message": "Horario"
+  },
+  "navFocus": {
+    "message": "Sesiones de concentración"
+  },
+  "navStrict": {
+    "message": "Modo estricto"
+  },
+  "navBlockpage": {
+    "message": "Página de bloqueo"
+  },
+  "navSecurity": {
+    "message": "Contraseña"
+  },
+  "navStats": {
+    "message": "Estadísticas"
+  },
+  "navBackup": {
+    "message": "Copia de seguridad"
+  },
+  "navPlan": {
+    "message": "Plan"
+  },
+  "sidePlanFree": {
+    "message": "Plan gratuito"
+  },
+  "sidePlanPro": {
+    "message": "FocusFence Pro"
+  },
+  "sidePlanFreeText": {
+    "message": "Webs ilimitadas. Mejora para tener horarios, sesiones de concentración y modo estricto."
+  },
+  "sidePlanProText": {
+    "message": "Gracias por apoyar FocusFence. Todas las funciones desbloqueadas."
+  },
+  "seePro": {
+    "message": "Ver Pro"
+  },
+  "managePlan": {
+    "message": "Gestionar plan"
+  },
+  "proGate": {
+    "message": "Disponible con FocusFence Pro"
+  },
+  "strictBannerOn": {
+    "message": "Modo estricto activo. Tu lista solo puede crecer."
+  },
+  "strictBannerUntil": {
+    "message": "Modo estricto activo hasta las $1. Tu lista solo puede crecer."
+  },
+  "blocklistDesc": {
+    "message": "Bloquear un dominio también bloquea sus subdominios: {code}reddit.com{/code} cubre {code}old.reddit.com{/code} y {code}m.reddit.com{/code}."
+  },
+  "masterOn": {
+    "message": "Bloqueo activado"
+  },
+  "masterOff": {
+    "message": "Bloqueo desactivado"
+  },
+  "masterPaused": {
+    "message": "En pausa (horario)"
+  },
+  "ruleTypeAria": {
+    "message": "Tipo de regla"
+  },
+  "typeWebsite": {
+    "message": "Web"
+  },
+  "typePath": {
+    "message": "Ruta"
+  },
+  "typeKeyword": {
+    "message": "Palabra clave"
+  },
+  "addRuleAria": {
+    "message": "Web, ruta o palabra clave"
+  },
+  "addToBlocklist": {
+    "message": "Añadir a la lista"
+  },
+  "hintDomain": {
+    "message": "Bloquea toda la web, incluidos todos sus subdominios."
+  },
+  "hintPath": {
+    "message": "Bloquea solo esa sección. youtube.com sigue accesible; youtube.com/shorts/… se bloquea. Los parámetros (?…) no se usan."
+  },
+  "hintKeyword": {
+    "message": "Bloquea cualquier página cuya dirección contenga esta palabra."
+  },
+  "accessTitle": {
+    "message": "Mostrar la página de bloqueo de FocusFence"
+  },
+  "accessTextOne": {
+    "message": "1 web se bloquea con la página de error de Chrome porque FocusFence aún no tiene acceso. Permite el acceso para ver la página de bloqueo y contar estadísticas."
+  },
+  "accessTextOther": {
+    "message": "$1 webs se bloquean con la página de error de Chrome porque FocusFence aún no tiene acceso. Permite el acceso para ver la página de bloqueo y contar estadísticas."
+  },
+  "accessKwTitle": {
+    "message": "Las palabras clave usan la página de error de Chrome"
+  },
+  "accessKwText": {
+    "message": "Las palabras clave pueden aparecer en cualquier web, así que mostrar la página de bloqueo requiere acceso a todas. Opcional: el bloqueo funciona igual."
+  },
+  "emptyTitle": {
+    "message": "Tu lista está vacía"
+  },
+  "emptyText": {
+    "message": "Empieza por las webs que abres sin pensar: redes sociales, noticias, vídeos."
+  },
+  "entryDomain": {
+    "message": "Web + subdominios"
+  },
+  "entryPath": {
+    "message": "Ruta"
+  },
+  "entryKeyword": {
+    "message": "Palabra clave en la URL"
+  },
+  "entryInactive": {
+    "message": "PRO · inactiva"
+  },
+  "entryErrorPage": {
+    "message": "Página de error"
+  },
+  "entryErrorPageTitle": {
+    "message": "FocusFence aún no puede mostrar su página de bloqueo aquí. Se muestra la página de error de Chrome."
+  },
+  "removeStrictTitle": {
+    "message": "Modo estricto: no se pueden quitar webs"
+  },
+  "removeAria": {
+    "message": "Quitar $1"
+  },
+  "toastRemoved": {
+    "message": "$1 eliminada"
+  },
+  "toastAdded": {
+    "message": "$1 añadida"
+  },
+  "toastAlreadyOnList": {
+    "message": "$1 ya está en tu lista"
+  },
+  "toastAccessGranted": {
+    "message": "Acceso concedido: la página de bloqueo está activa"
+  },
+  "toastNoChanges": {
+    "message": "Sin cambios"
+  },
+  "scheduleDesc": {
+    "message": "Bloquea solo en las horas en que quieres concentrarte. Fuera de esas franjas, el bloqueo se pausa solo."
+  },
+  "useSchedule": {
+    "message": "Usar horario"
+  },
+  "timeRangesAria": {
+    "message": "Franjas horarias"
+  },
+  "addTimeRange": {
+    "message": "+ Añadir franja"
+  },
+  "saveSchedule": {
+    "message": "Guardar horario"
+  },
+  "windowsEmpty": {
+    "message": "Aún no hay franjas. Añade una, p. ej. entre semana 09:00 – 17:00."
+  },
+  "daysAria": {
+    "message": "Días"
+  },
+  "startTime": {
+    "message": "Hora de inicio"
+  },
+  "endTime": {
+    "message": "Hora de fin"
+  },
+  "overnight": {
+    "message": "nocturna"
+  },
+  "unsaved": {
+    "message": "Cambios sin guardar"
+  },
+  "activeNow": {
+    "message": "Activo ahora"
+  },
+  "pausedNow": {
+    "message": "En pausa ahora"
+  },
+  "toastScheduleSaved": {
+    "message": "Horario guardado"
+  },
+  "focusDesc": {
+    "message": "Rondas al estilo Pomodoro. Durante la concentración se bloquea toda tu lista, incluso fuera del horario."
+  },
+  "fieldRounds": {
+    "message": "Rondas"
+  },
+  "unitMinShort": {
+    "message": "min"
+  },
+  "stopSession": {
+    "message": "Detener sesión"
+  },
+  "timeLeft": {
+    "message": "Tiempo restante"
+  },
+  "toastFocusSaved": {
+    "message": "Ajustes de concentración guardados"
+  },
+  "toastFocusStarted": {
+    "message": "Sesión de concentración iniciada"
+  },
+  "toastSessionStopped": {
+    "message": "Sesión detenida"
+  },
+  "strictDesc": {
+    "message": "Para cuando falla la fuerza de voluntad. En modo estricto no se puede desactivar el bloqueo, quitar webs ni cambiar el horario. Salir antes requiere 10 minutos de espera y un reto de escritura."
+  },
+  "incogTitle": {
+    "message": "Las ventanas de incógnito no se bloquean"
+  },
+  "incogText": {
+    "message": "FocusFence no tiene permiso en incógnito, así que una ventana privada se salta tu lista, incluso en modo estricto. Activa {em}Permitir en incógnito{/em} en los detalles de la extensión."
+  },
+  "openExtDetails": {
+    "message": "Abrir detalles de la extensión"
+  },
+  "duration": {
+    "message": "Duración"
+  },
+  "durOne": {
+    "message": "1 hora"
+  },
+  "durOther": {
+    "message": "$1 horas"
+  },
+  "durForever": {
+    "message": "Hasta que lo desbloquee"
+  },
+  "durForeverLower": {
+    "message": "hasta que lo desbloquees"
+  },
+  "startStrict": {
+    "message": "Activar modo estricto"
+  },
+  "strictOnBadge": {
+    "message": "MODO ESTRICTO ACTIVO"
+  },
+  "strictEndsAt": {
+    "message": "Termina automáticamente: $1"
+  },
+  "strictStaysOn": {
+    "message": "Sigue activo hasta que lo desbloquees"
+  },
+  "strictPaused": {
+    "message": "En pausa durante $1 mientras FocusFence no estaba activo: la hora de fin se ha movido."
+  },
+  "strictNeedOut": {
+    "message": "¿Necesitas salir? Pide un desbloqueo. Tendrás que esperar 10 minutos y escribir una frase exacta."
+  },
+  "requestUnlock": {
+    "message": "Pedir desbloqueo"
+  },
+  "coolingOff": {
+    "message": "Tiempo de espera…"
+  },
+  "coolingText": {
+    "message": "¿Sigues queriendo desbloquear? Respira. Puedes cancelar cuando quieras."
+  },
+  "cancelUnlock": {
+    "message": "Cancelar desbloqueo"
+  },
+  "challengeIntro": {
+    "message": "Escribe esto exactamente para salir del modo estricto:"
+  },
+  "challengePlaceholder": {
+    "message": "Escribe la frase de arriba"
+  },
+  "challengeAria": {
+    "message": "Escribe la frase que se muestra arriba"
+  },
+  "endStrict": {
+    "message": "Salir del modo estricto"
+  },
+  "keepStrict": {
+    "message": "Mantener modo estricto"
+  },
+  "limitsSummary": {
+    "message": "Lo que el modo estricto no puede impedir"
+  },
+  "limit1": {
+    "message": "Chrome permite desactivar o quitar cualquier extensión desde {code}chrome://extensions{/code}, y FocusFence no puede bloquear esa página. Una sesión estricta con tiempo {strong}se pausa{/strong} mientras FocusFence está desactivado, así que el tiempo no corre en segundo plano."
+  },
+  "limit2": {
+    "message": "Las ventanas de incógnito solo están cubiertas si permites FocusFence en incógnito (ver arriba)."
+  },
+  "limit3": {
+    "message": "Otros navegadores, perfiles de Chrome y dispositivos no están cubiertos."
+  },
+  "confirmStrict": {
+    "message": "¿Activar el modo estricto durante $1?\n\nNo podrás desactivar el bloqueo ni quitar webs. Salir antes requiere 10 minutos de espera y un reto de escritura. El temporizador se pausa si FocusFence está desactivado."
+  },
+  "confirmStrictIncognito": {
+    "message": "Nota: las ventanas de incógnito no están cubiertas hasta que permitas FocusFence en incógnito."
+  },
+  "toastStrictOn": {
+    "message": "Modo estricto activado"
+  },
+  "toastUnlockRequested": {
+    "message": "Desbloqueo pedido: empieza la espera de 10 minutos"
+  },
+  "toastGoodCall": {
+    "message": "Buena decisión. El modo estricto sigue activo."
+  },
+  "toastNoPaste": {
+    "message": "Escríbelo: pegar está desactivado."
+  },
+  "toastStrictEnded": {
+    "message": "Modo estricto finalizado"
+  },
+  "blockpageDesc": {
+    "message": "Escribe una nota para tu yo del futuro. Sustituye a las citas de la página de bloqueo."
+  },
+  "messageAria": {
+    "message": "Mensaje de la página de bloqueo"
+  },
+  "messagePlaceholder": {
+    "message": "p. ej. Te prometiste terminar primero el capítulo de la tesis."
+  },
+  "preview": {
+    "message": "Vista previa"
+  },
+  "saveMessage": {
+    "message": "Guardar mensaje"
+  },
+  "toastMessageSaved": {
+    "message": "Mensaje guardado"
+  },
+  "securityDesc": {
+    "message": "Pide una contraseña para desactivar el bloqueo, quitar webs o cambiar ajustes. Ideal si otra persona guarda la llave. La contraseña se guarda cifrada (PBKDF2) y nunca sale de este dispositivo."
+  },
+  "newPassword": {
+    "message": "Nueva contraseña"
+  },
+  "confirmPassword": {
+    "message": "Confirmar contraseña"
+  },
+  "setPassword": {
+    "message": "Establecer contraseña"
+  },
+  "changePassword": {
+    "message": "Cambiar contraseña"
+  },
+  "passwordNone": {
+    "message": "No hay contraseña."
+  },
+  "passwordSet": {
+    "message": "Contraseña establecida. Desbloqueado en esta sesión."
+  },
+  "lockNow": {
+    "message": "Bloquear ahora"
+  },
+  "removePassword": {
+    "message": "Quitar contraseña"
+  },
+  "toastPwMismatch": {
+    "message": "Las contraseñas no coinciden"
+  },
+  "toastPwSaved": {
+    "message": "Contraseña guardada"
+  },
+  "confirmRemovePw": {
+    "message": "¿Quitar el bloqueo con contraseña?"
+  },
+  "toastPwRemoved": {
+    "message": "Contraseña eliminada"
+  },
+  "toastUnlocked15": {
+    "message": "Desbloqueado durante 15 minutos"
+  },
+  "lockTitle": {
+    "message": "Ajustes bloqueados"
+  },
+  "lockText": {
+    "message": "Introduce tu contraseña de FocusFence para hacer cambios."
+  },
+  "statsDesc": {
+    "message": "Intentos bloqueados en los últimos 7 días. Se cuentan solo en este dispositivo."
+  },
+  "statToday": {
+    "message": "bloqueos hoy"
+  },
+  "statWeek": {
+    "message": "esta semana"
+  },
+  "statSaved": {
+    "message": "≈ tiempo recuperado (5 min / visita)"
+  },
+  "chartAria": {
+    "message": "Intentos bloqueados por día, últimos 7 días: $1"
+  },
+  "barTitle": {
+    "message": "$1 bloqueos"
+  },
+  "topSites": {
+    "message": "Webs más bloqueadas"
+  },
+  "topSitesNone": {
+    "message": "Aún no hay visitas bloqueadas. Buena señal."
+  },
+  "clearStats": {
+    "message": "Borrar estadísticas"
+  },
+  "confirmClearStats": {
+    "message": "¿Borrar todas las estadísticas?"
+  },
+  "toastStatsCleared": {
+    "message": "Estadísticas borradas"
+  },
+  "backupDesc": {
+    "message": "Exporta tu lista, horario y preferencias en JSON, o impórtalos en otro ordenador. Las contraseñas y estadísticas nunca se exportan."
+  },
+  "exportSettings": {
+    "message": "Exportar ajustes"
+  },
+  "importSettings": {
+    "message": "Importar ajustes…"
+  },
+  "toastExported": {
+    "message": "Ajustes exportados"
+  },
+  "confirmImport": {
+    "message": "¿Sustituir tu lista y ajustes actuales por el contenido de $1?"
+  },
+  "toastImported": {
+    "message": "$1 reglas importadas"
+  },
+  "planSub": {
+    "message": "Todo lo gratuito, más las herramientas que hacen que la concentración dure."
+  },
+  "planTitlePro": {
+    "message": "Tienes FocusFence Pro"
+  },
+  "planSubPro": {
+    "message": "Todas las funciones Pro están desbloqueadas en este navegador."
+  },
+  "planSubProDev": {
+    "message": "Todas las funciones Pro están desbloqueadas en este navegador (simulado en versión DEV)."
+  },
+  "monthly": {
+    "message": "Mensual"
+  },
+  "yearly": {
+    "message": "Anual"
+  },
+  "perMonth": {
+    "message": "/mes"
+  },
+  "perYear": {
+    "message": "/año"
+  },
+  "chooseMonthly": {
+    "message": "Elegir mensual"
+  },
+  "chooseYearly": {
+    "message": "Elegir anual"
+  },
+  "save44": {
+    "message": "AHORRA 44 %"
+  },
+  "feat1": {
+    "message": "Horarios por día y hora"
+  },
+  "feat2": {
+    "message": "Bloqueo de rutas y palabras clave (p. ej. youtube.com/shorts)"
+  },
+  "feat3": {
+    "message": "Sesiones de concentración Pomodoro"
+  },
+  "feat4": {
+    "message": "Modo estricto con espera para desbloquear"
+  },
+  "feat5": {
+    "message": "Ajustes protegidos con contraseña"
+  },
+  "feat6": {
+    "message": "Estadísticas y página de bloqueo personalizada"
+  },
+  "feat7": {
+    "message": "Exportar / importar ajustes"
+  },
+  "feat8": {
+    "message": "Privado: sin cuenta ni rastreo"
+  },
+  "licenseNote": {
+    "message": "No se pudo conectar con ExtensionPay para verificar tu plan (¿sin conexión?). Se usa el último estado conocido."
+  },
+  "licenseNoteDate": {
+    "message": "No se pudo conectar con ExtensionPay para verificar tu plan (¿sin conexión?). Se usa el estado del $1."
+  },
+  "paymentsFoot": {
+    "message": "Los pagos los gestiona de forma segura ExtensionPay (Stripe)."
+  },
+  "restore": {
+    "message": "¿Ya has pagado? Restaurar compra"
+  },
+  "aboutFree": {
+    "message": "FocusFence es software libre."
+  },
+  "aboutLicense": {
+    "message": "Licencia: GNU AGPL v3 o posterior"
+  },
+  "aboutSource": {
+    "message": "Código fuente"
+  },
+  "aboutNotices": {
+    "message": "Avisos de terceros"
+  },
+  "aboutPrivacy": {
+    "message": "Política de privacidad"
+  },
+  "devTitle": {
+    "message": "Versión de desarrollo"
+  },
+  "devText": {
+    "message": "Pagos desactivados. Simula una licencia Pro en local para probar las funciones restringidas."
+  },
+  "simulatePro": {
+    "message": "Simular Pro"
+  },
+  "toastProSimulated": {
+    "message": "Pro simulado"
+  },
+  "toastBackToFree": {
+    "message": "De vuelta al plan gratuito"
+  },
+  "reopenOnboarding": {
+    "message": "Ver de nuevo la bienvenida"
+  },
+  "blockedDocTitle": {
+    "message": "Bloqueada · FocusFence"
+  },
+  "blockedDocTitleHost": {
+    "message": "$1 está bloqueada · FocusFence"
+  },
+  "thisSite": {
+    "message": "Esta web"
+  },
+  "isFencedOff": {
+    "message": " está bloqueada"
+  },
+  "sessionLeft": {
+    "message": "$1 · quedan $2"
+  },
+  "statsGroupAria": {
+    "message": "Tu concentración hoy"
+  },
+  "reclaimedToday": {
+    "message": "tiempo recuperado hoy"
+  },
+  "backToWork": {
+    "message": "Volver al trabajo"
+  },
+  "obDocTitle": {
+    "message": "Bienvenido a FocusFence"
+  },
+  "obStep": {
+    "message": "Paso $1 de $2"
+  },
+  "ob1Title": {
+    "message": "Elige 3 webs que te roban la concentración"
+  },
+  "ob1Text": {
+    "message": "Empieza poco a poco: hasta tres. Luego puedes añadir todas las que quieras; el plan gratuito no tiene límite."
+  },
+  "obSitesAria": {
+    "message": "Webs sugeridas"
+  },
+  "obCustomPlaceholder": {
+    "message": "O escribe otra web, p. ej. news.example.com"
+  },
+  "obCustomAria": {
+    "message": "Otra web que bloquear"
+  },
+  "obSelectedCount": {
+    "message": "$1 de 3 seleccionadas"
+  },
+  "obMax": {
+    "message": "Con tres basta para empezar; añade más luego en Ajustes."
+  },
+  "ob1Perm": {
+    "message": "Después, Chrome pedirá una vez permiso para mostrar la página de bloqueo en estas webs. Si dices que no, siguen bloqueadas."
+  },
+  "obBlockSelected": {
+    "message": "Bloquear estas webs"
+  },
+  "obSkip": {
+    "message": "Omitir por ahora"
+  },
+  "obAddedOne": {
+    "message": "1 web bloqueada"
+  },
+  "obAddedOther": {
+    "message": "$1 webs bloqueadas"
+  },
+  "ob2Title": {
+    "message": "Navegación privada"
+  },
+  "ob2Text": {
+    "message": "Chrome no ejecuta extensiones en ventanas de incógnito si no lo permites. Sin ese permiso, una ventana privada se salta tu lista, incluso en modo estricto."
+  },
+  "ob2StatusOn": {
+    "message": "FocusFence está permitido en incógnito. Estás cubierto."
+  },
+  "ob2StatusOff": {
+    "message": "FocusFence aún no está permitido en incógnito."
+  },
+  "ob2How": {
+    "message": "Abre los detalles de la extensión y activa {strong}Permitir en incógnito{/strong}. Opcional, pero recomendable si vas a usar el modo estricto."
+  },
+  "ob2Recheck": {
+    "message": "Comprobar de nuevo"
+  },
+  "ob3Title": {
+    "message": "Gratis para siempre. Pro cuando necesites más."
+  },
+  "ob3Free": {
+    "message": "Webs ilimitadas, subdominios incluidos, bloqueo con un clic y una página de bloqueo tranquila."
+  },
+  "ob3Pro": {
+    "message": "Horarios, bloqueo solo de YouTube Shorts, sesiones Pomodoro, modo estricto, contraseña, estadísticas y copia de seguridad."
+  },
+  "ob3Price": {
+    "message": "$1/mes o $2/año. Sin cuenta."
+  },
+  "ob3Private": {
+    "message": "Tu lista y tus estadísticas nunca salen de este dispositivo."
+  },
+  "obFree": {
+    "message": "Gratis"
+  },
+  "obPro": {
+    "message": "Pro"
+  },
+  "obSeePro": {
+    "message": "Ver planes Pro"
+  },
+  "obFinish": {
+    "message": "Empezar"
+  },
+  "obNext": {
+    "message": "Continuar"
+  },
+  "obBack": {
+    "message": "Atrás"
+  }
+}

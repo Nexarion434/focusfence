@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Blocked · FocusFence</title>
+    <title data-i18n="blockedDocTitle">Blocked · FocusFence</title>
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/blocked.css" />
   </head>
@@ -12,7 +12,7 @@
     <main class="wrap">
       <div class="mark" id="mark"></div>
       <p class="eyebrow">FocusFence</p>
-      <h1><span id="site">This site</span> is fenced off</h1>
+      <h1><span id="site" data-i18n="thisSite">This site</span><span data-i18n="isFencedOff"> is fenced off</span></h1>
       <blockquote class="message" id="message">Starve your distractions, feed your focus.</blockquote>
 
       <div class="session hidden" id="session" role="timer">
@@ -20,18 +20,19 @@
         <span id="session-text">Focus session · 18:42 left</span>
       </div>
 
-      <div class="stats" role="group" aria-label="Your focus today">
-        <div class="stat"><div class="num" id="today">1</div><div class="label">blocked today</div></div>
-        <div class="stat"><div class="num" id="saved">5 min</div><div class="label">time reclaimed today</div></div>
-        <div class="stat"><div class="num" id="week">1</div><div class="label">this week</div></div>
+      <div class="stats" role="group" aria-label="Your focus today" data-i18n-attr="aria-label:statsGroupAria">
+        <div class="stat"><div class="num" id="today">1</div><div class="label" data-i18n="statToday">blocked today</div></div>
+        <div class="stat"><div class="num" id="saved">5 min</div><div class="label" data-i18n="reclaimedToday">time reclaimed today</div></div>
+        <div class="stat"><div class="num" id="week">1</div><div class="label" data-i18n="statWeek">this week</div></div>
       </div>
 
       <div class="buttons">
-        <button class="btn btn-primary" id="back">Back to work</button>
-        <a class="btn btn-ghost" href="options.html" target="_blank" id="settings">Settings</a>
+        <button class="btn btn-primary" id="back" data-i18n="backToWork">Back to work</button>
+        <a class="btn btn-ghost" href="options.html" target="_blank" id="settings" data-i18n="settings">Settings</a>
       </div>
       <p class="url muted small" id="url"></p>
     </main>
+    <script src="lib/i18n.js"></script>
     <script src="lib/core.js"></script>
     <script src="lib/ui.js"></script>
     <script src="blocked.js"></script>

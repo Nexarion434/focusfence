@@ -4,6 +4,7 @@
 (function () {
   const C = self.FFCore;
   const { send, toast, logo, fmtCountdown, fmtTime, requestAccess, errorMessage } = self.FFUI;
+  const { t, plural } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
 
   let state = null;
@@ -33,28 +34,27 @@
   }
 
   function statusText(s) {
-    const n = s.settings.entries.length;
-    const sites = n === 1 ? '1 site fenced' : n + ' sites fenced';
+    const sites = plural(s.settings.entries.length, 'sitesFenced');
     const r = s.status.reason;
     if (s.strict.active) {
       return {
-        title: 'Strict mode',
-        sub: s.strict.endsAt ? 'Locked until ' + fmtTime(s.strict.endsAt) + ' · ' + sites : 'Locked until you unlock it · ' + sites,
+        title: t('statusStrict'),
+        sub: s.strict.endsAt ? t('subStrictUntil', fmtTime(s.strict.endsAt), sites) : t('subStrictForever', sites),
         cls: 'strict',
       };
     }
-    if (r === 'focus') return { title: 'Focus session', sub: 'Everything on your list is blocked · ' + sites, cls: '' };
-    if (r === 'off') return { title: 'Blocking is off', sub: sites + ' · turn on to block', cls: 'off' };
-    if (r === 'outside-schedule') return { title: 'Outside schedule', sub: sites + ' · resumes at next window', cls: 'off' };
-    if (r === 'schedule') return { title: 'Blocking is on', sub: 'Schedule active · ' + sites, cls: '' };
-    return { title: 'Blocking is on', sub: sites, cls: '' };
+    if (r === 'focus') return { title: t('statusFocus'), sub: t('subFocus', sites), cls: '' };
+    if (r === 'off') return { title: t('statusOff'), sub: t('subOff', sites), cls: 'off' };
+    if (r === 'outside-schedule') return { title: t('statusOutside'), sub: t('subOutside', sites), cls: 'off' };
+    if (r === 'schedule') return { title: t('statusOn'), sub: t('subSchedule', sites), cls: '' };
+    return { title: t('statusOn'), sub: sites, cls: '' };
   }
 
   function render() {
     const s = state;
     $('app').setAttribute('aria-busy', 'false');
     const badge = $('plan-badge');
-    badge.textContent = s.isPro ? 'PRO' : 'FREE';
+    badge.textContent = s.isPro ? t('planPro') : t('planFree');
     badge.className = 'badge ' + (s.isPro ? 'badge-pro' : '');
 
     const st = statusText(s);
@@ -65,7 +65,7 @@
     const toggle = $('toggle-enabled');
     toggle.checked = s.settings.enabled || s.strict.active;
     toggle.disabled = s.strict.active;
-    toggle.parentElement.title = s.strict.active ? 'Strict mode is on — blocking cannot be turned off' : 'Turn blocking on or off';
+    toggle.parentElement.title = s.strict.active ? t('toggleStrictTitle') : t('toggleTitle');
 
     renderCurrent();
     if (s.strict.active) {
@@ -85,16 +85,15 @@
     card.classList.toggle('locked', !s.isPro);
     card.classList.toggle('running', !!p);
     if (p) {
-      $('focus-sub').textContent =
-        (p.phase === 'focus' ? 'Focusing' : 'Break') + ' · round ' + p.cycle + ' of ' + p.totalCycles;
+      $('focus-sub').textContent = t('focusRound', p.phase === 'focus' ? t('phaseFocusing') : t('phaseBreak'), p.cycle, p.totalCycles);
       $('focus-start').classList.add('hidden');
       $('focus-stop').classList.remove('hidden');
     } else {
       $('focus-sub').textContent = s.isPro
-        ? cfg.focusMin + ' min focus · ' + cfg.breakMin + ' min break · ' + cfg.cycles + ' rounds'
-        : 'Pomodoro sessions that block everything on your list';
+        ? t('focusCfg', cfg.focusMin, cfg.breakMin, cfg.cycles)
+        : t('focusTeaser');
       $('focus-start').classList.remove('hidden');
-      $('focus-start').textContent = s.isPro ? 'Start focus' : 'Unlock Pro';
+      $('focus-start').textContent = s.isPro ? t('startFocus') : t('unlockPro');
       $('focus-start').className = 'btn ' + (s.isPro ? 'btn-primary' : 'btn-pro');
       $('focus-stop').classList.add('hidden');
     }
@@ -103,8 +102,8 @@
     const today = s.stats.today;
     $('today-stats').textContent =
       today === 0
-        ? 'Nothing blocked yet today'
-        : today + ' blocked today · ≈' + C.formatMinutes(s.stats.todayMinutesSaved) + ' reclaimed';
+        ? t('todayNone')
+        : t('todayCount', today, C.formatMinutes(s.stats.todayMinutesSaved));
   }
 
   function renderCurrent() {
@@ -113,12 +112,12 @@
     const btn = $('quick-add');
     const avatar = $('current-avatar');
     if (!host || !/^https?:/.test(tab.url)) {
-      $('current-host').textContent = 'This page';
-      $('current-note').textContent = "Browser pages can't be blocked";
+      $('current-host').textContent = t('thisPage');
+      $('current-note').textContent = t('browserPagesNo');
       avatar.textContent = '–';
       avatar.style.background = '';
       btn.disabled = true;
-      btn.textContent = 'Block site';
+      btn.textContent = t('blockSite');
       return;
     }
     const fresh = self.FFUI.siteAvatar(host);
@@ -127,13 +126,13 @@
     $('current-host').textContent = host;
     const already = s.settings.entries.find((e) => e.type === 'domain' && C.hostMatches(host, e.host));
     if (already) {
-      $('current-note').textContent = already.host === host ? 'Already on your blocklist' : 'Covered by ' + already.host;
+      $('current-note').textContent = already.host === host ? t('alreadyOnList') : t('coveredBy', already.host);
       btn.disabled = true;
-      btn.textContent = 'Blocked';
+      btn.textContent = t('blockedLabel');
     } else {
-      $('current-note').textContent = 'Current tab';
+      $('current-note').textContent = t('currentTab');
       btn.disabled = false;
-      btn.textContent = 'Block site';
+      btn.textContent = t('blockSite');
     }
   }
 
@@ -158,10 +157,10 @@
   async function addEntry(raw, type) {
     const res = await send('addEntry', { raw, kind: type });
     if (res.duplicate) {
-      toast(res.entry.label + ' is already blocked');
+      toast(t('toastAlreadyBlocked', res.entry.label));
       return res;
     }
-    toast('Blocked ' + res.entry.label);
+    toast(t('toastBlocked', res.entry.label));
     // Host access lets FocusFence show its block page instead of Chrome's error page.
     if (res.origins && res.entry.type !== 'keyword') requestAccess(res.origins);
     return res;

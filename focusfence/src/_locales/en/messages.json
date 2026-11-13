@@ -1,0 +1,1007 @@
+{
+  "extName": {
+    "message": "FocusFence – Website Blocker & Pomodoro Focus Timer"
+  },
+  "extShortName": {
+    "message": "FocusFence"
+  },
+  "extDescription": {
+    "message": "Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomodoro focus timer and strict mode. 100% private."
+  },
+  "badgeOff": {
+    "message": "OFF"
+  },
+  "titleFocus": {
+    "message": "FocusFence: focus session"
+  },
+  "titleBreak": {
+    "message": "FocusFence: break"
+  },
+  "titleOff": {
+    "message": "FocusFence: blocking is off"
+  },
+  "titleOutside": {
+    "message": "FocusFence: outside schedule"
+  },
+  "titleStrict": {
+    "message": "FocusFence: strict mode"
+  },
+  "titleOn": {
+    "message": "FocusFence: blocking is on"
+  },
+  "errProRequired": {
+    "message": "This is a FocusFence Pro feature."
+  },
+  "errStrict": {
+    "message": "Strict mode is on. Unlock it first (10-minute delay + typing challenge)."
+  },
+  "errLocked": {
+    "message": "Settings are password-protected. Unlock first."
+  },
+  "errNetwork": {
+    "message": "Couldn't reach the payment service (ExtensionPay). Check your connection and try again."
+  },
+  "errDevPayments": {
+    "message": "Payments are disabled in the DEV build. Use “Simulate Pro” instead."
+  },
+  "errDevOnly": {
+    "message": "Only available in development builds."
+  },
+  "errEnterSite": {
+    "message": "Enter a website, path or keyword."
+  },
+  "errPatternLimit": {
+    "message": "You can have up to $1 path and keyword rules."
+  },
+  "errInvalidSchedule": {
+    "message": "Invalid schedule."
+  },
+  "errScheduleMax": {
+    "message": "At most $1 time ranges."
+  },
+  "errPomodoro": {
+    "message": "Focus 1–180 min, break 1–60 min, 1–12 rounds."
+  },
+  "errStrictDuration": {
+    "message": "Pick one of the listed durations."
+  },
+  "errStrictWait": {
+    "message": "The 10-minute cooling-off period has not finished yet."
+  },
+  "errChallenge": {
+    "message": "The text does not match. Type it exactly as shown."
+  },
+  "errPasswordLength": {
+    "message": "Use between 4 and 256 characters."
+  },
+  "errBadPassword": {
+    "message": "Wrong password."
+  },
+  "errThrottled": {
+    "message": "Too many wrong passwords. Try again in $1 s."
+  },
+  "errFileTooLarge": {
+    "message": "That file is too large."
+  },
+  "errNotJson": {
+    "message": "The file is not valid JSON."
+  },
+  "errGeneric": {
+    "message": "Something went wrong. Please try again."
+  },
+  "errNoResponse": {
+    "message": "No response from FocusFence."
+  },
+  "errKeywordShort": {
+    "message": "Keywords need at least 3 characters."
+  },
+  "errKeywordLong": {
+    "message": "Keywords can be at most 64 characters."
+  },
+  "errKeywordChars": {
+    "message": "Keywords may only contain letters, digits, spaces, \"-\", \"_\" and \".\"."
+  },
+  "errInvalidSite": {
+    "message": "That does not look like a valid website (e.g. reddit.com)."
+  },
+  "errPathQuery": {
+    "message": "Path rules match the path only. Remove the \"?…\" part, or use a keyword rule."
+  },
+  "errPathMissing": {
+    "message": "Add a path after the domain, e.g. youtube.com/shorts."
+  },
+  "errPathLong": {
+    "message": "That path is too long."
+  },
+  "errUnknownType": {
+    "message": "Unknown rule type."
+  },
+  "errPickDay": {
+    "message": "Pick at least one day."
+  },
+  "errTimeFormat": {
+    "message": "Use a 24-hour time like 09:00."
+  },
+  "errTimeSame": {
+    "message": "Start and end time must differ."
+  },
+  "errNotExport": {
+    "message": "This file is not a FocusFence export."
+  },
+  "unitMin": {
+    "message": "$1 min"
+  },
+  "unitHour": {
+    "message": "$1h"
+  },
+  "unitHourMin": {
+    "message": "$1h $2m"
+  },
+  "quote1": {
+    "message": "The successful warrior is the average person, with laser-like focus. — Bruce Lee"
+  },
+  "quote2": {
+    "message": "Starve your distractions, feed your focus."
+  },
+  "quote3": {
+    "message": "Where focus goes, energy flows. — Tony Robbins"
+  },
+  "quote4": {
+    "message": "You will never reach your destination if you stop at every distraction."
+  },
+  "quote5": {
+    "message": "Concentrate all your thoughts upon the work at hand. — Alexander Graham Bell"
+  },
+  "quote6": {
+    "message": "It is not that we have a short time to live, but that we waste a lot of it. — Seneca"
+  },
+  "quote7": {
+    "message": "Deep work is the superpower of the 21st century. — Cal Newport"
+  },
+  "quote8": {
+    "message": "Small daily improvements are the key to staggering long-term results."
+  },
+  "quote9": {
+    "message": "The future depends on what you do today. — Mahatma Gandhi"
+  },
+  "quote10": {
+    "message": "Do the hard thing first. The feed will still be there later."
+  },
+  "planFree": {
+    "message": "FREE"
+  },
+  "planPro": {
+    "message": "PRO"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "openSettings": {
+    "message": "Open settings"
+  },
+  "password": {
+    "message": "Password"
+  },
+  "unlock": {
+    "message": "Unlock"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "remove": {
+    "message": "Remove"
+  },
+  "allow": {
+    "message": "Allow"
+  },
+  "manage": {
+    "message": "Manage"
+  },
+  "upgrade": {
+    "message": "Upgrade"
+  },
+  "today": {
+    "message": "Today"
+  },
+  "blockSite": {
+    "message": "Block site"
+  },
+  "blockedLabel": {
+    "message": "Blocked"
+  },
+  "sitesFencedOne": {
+    "message": "1 site fenced"
+  },
+  "sitesFencedOther": {
+    "message": "$1 sites fenced"
+  },
+  "statusOn": {
+    "message": "Blocking is on"
+  },
+  "statusOff": {
+    "message": "Blocking is off"
+  },
+  "statusOutside": {
+    "message": "Outside schedule"
+  },
+  "statusFocus": {
+    "message": "Focus session"
+  },
+  "statusStrict": {
+    "message": "Strict mode"
+  },
+  "phaseFocus": {
+    "message": "Focus"
+  },
+  "phaseFocusing": {
+    "message": "Focusing"
+  },
+  "phaseBreak": {
+    "message": "Break"
+  },
+  "focusRound": {
+    "message": "$1 · round $2 of $3"
+  },
+  "startFocus": {
+    "message": "Start focus"
+  },
+  "blockingEnabledAria": {
+    "message": "Blocking enabled"
+  },
+  "subStrictUntil": {
+    "message": "Locked until $1 · $2"
+  },
+  "subStrictForever": {
+    "message": "Locked until you unlock it · $1"
+  },
+  "subFocus": {
+    "message": "Everything on your list is blocked · $1"
+  },
+  "subOff": {
+    "message": "$1 · turn on to block"
+  },
+  "subOutside": {
+    "message": "$1 · resumes at next window"
+  },
+  "subSchedule": {
+    "message": "Schedule active · $1"
+  },
+  "toggleTitle": {
+    "message": "Turn blocking on or off"
+  },
+  "toggleStrictTitle": {
+    "message": "Strict mode is on — blocking cannot be turned off"
+  },
+  "incognitoNote": {
+    "message": "Incognito windows aren't covered."
+  },
+  "incognitoFix": {
+    "message": "Allow FocusFence in Incognito"
+  },
+  "unlockTitle": {
+    "message": "Settings are locked."
+  },
+  "unlockText": {
+    "message": "Enter your password to continue."
+  },
+  "thisPage": {
+    "message": "This page"
+  },
+  "currentTab": {
+    "message": "Current tab"
+  },
+  "browserPagesNo": {
+    "message": "Browser pages can't be blocked"
+  },
+  "alreadyOnList": {
+    "message": "Already on your blocklist"
+  },
+  "coveredBy": {
+    "message": "Covered by $1"
+  },
+  "addPlaceholder": {
+    "message": "Add a site, e.g. reddit.com"
+  },
+  "addAria": {
+    "message": "Website to block"
+  },
+  "focusTimerAria": {
+    "message": "Focus time"
+  },
+  "stop": {
+    "message": "Stop"
+  },
+  "unlockPro": {
+    "message": "Unlock Pro"
+  },
+  "focusCfg": {
+    "message": "$1 min focus · $2 min break · $3 rounds"
+  },
+  "focusTeaser": {
+    "message": "Pomodoro sessions that block everything on your list"
+  },
+  "todayNone": {
+    "message": "Nothing blocked yet today"
+  },
+  "todayCount": {
+    "message": "$1 blocked today · ≈$2 reclaimed"
+  },
+  "allSettings": {
+    "message": "All settings →"
+  },
+  "toastAlreadyBlocked": {
+    "message": "$1 is already blocked"
+  },
+  "toastBlocked": {
+    "message": "Blocked $1"
+  },
+  "optionsTitle": {
+    "message": "FocusFence Settings"
+  },
+  "navAria": {
+    "message": "Settings sections"
+  },
+  "navBlocklist": {
+    "message": "Blocklist"
+  },
+  "navSchedule": {
+    "message": "Schedule"
+  },
+  "navFocus": {
+    "message": "Focus sessions"
+  },
+  "navStrict": {
+    "message": "Strict mode"
+  },
+  "navBlockpage": {
+    "message": "Block page"
+  },
+  "navSecurity": {
+    "message": "Password lock"
+  },
+  "navStats": {
+    "message": "Stats"
+  },
+  "navBackup": {
+    "message": "Backup"
+  },
+  "navPlan": {
+    "message": "Plan"
+  },
+  "sidePlanFree": {
+    "message": "Free plan"
+  },
+  "sidePlanPro": {
+    "message": "FocusFence Pro"
+  },
+  "sidePlanFreeText": {
+    "message": "Unlimited sites. Upgrade for schedules, focus sessions and strict mode."
+  },
+  "sidePlanProText": {
+    "message": "Thanks for supporting FocusFence. All features unlocked."
+  },
+  "seePro": {
+    "message": "See Pro"
+  },
+  "managePlan": {
+    "message": "Manage plan"
+  },
+  "proGate": {
+    "message": "Available with FocusFence Pro"
+  },
+  "strictBannerOn": {
+    "message": "Strict mode is on. Your blocklist can only grow."
+  },
+  "strictBannerUntil": {
+    "message": "Strict mode is on until $1. Your blocklist can only grow."
+  },
+  "blocklistDesc": {
+    "message": "Blocking a domain also blocks its subdomains — {code}reddit.com{/code} covers {code}old.reddit.com{/code} and {code}m.reddit.com{/code}."
+  },
+  "masterOn": {
+    "message": "Blocking on"
+  },
+  "masterOff": {
+    "message": "Blocking off"
+  },
+  "masterPaused": {
+    "message": "Paused (schedule)"
+  },
+  "ruleTypeAria": {
+    "message": "Rule type"
+  },
+  "typeWebsite": {
+    "message": "Website"
+  },
+  "typePath": {
+    "message": "Path"
+  },
+  "typeKeyword": {
+    "message": "Keyword"
+  },
+  "addRuleAria": {
+    "message": "Website, path or keyword"
+  },
+  "addToBlocklist": {
+    "message": "Add to blocklist"
+  },
+  "hintDomain": {
+    "message": "Blocks the whole site, including every subdomain."
+  },
+  "hintPath": {
+    "message": "Blocks only that section. youtube.com stays reachable; youtube.com/shorts/… is blocked. Query strings (?…) are not used."
+  },
+  "hintKeyword": {
+    "message": "Blocks any page whose address contains this word."
+  },
+  "accessTitle": {
+    "message": "Show the FocusFence block page"
+  },
+  "accessTextOne": {
+    "message": "1 site is blocked with Chrome's error page because FocusFence hasn't been given access yet. Allow access to see the calm block page and count stats."
+  },
+  "accessTextOther": {
+    "message": "$1 sites are blocked with Chrome's error page because FocusFence hasn't been given access yet. Allow access to see the calm block page and count stats."
+  },
+  "accessKwTitle": {
+    "message": "Keyword rules use Chrome’s error page"
+  },
+  "accessKwText": {
+    "message": "Keywords can appear on any site, so showing the block page for them needs access to all sites. Optional — blocking works either way."
+  },
+  "emptyTitle": {
+    "message": "Your fence is empty"
+  },
+  "emptyText": {
+    "message": "Start with the sites you open without thinking — social feeds, news, video."
+  },
+  "entryDomain": {
+    "message": "Website + subdomains"
+  },
+  "entryPath": {
+    "message": "Path"
+  },
+  "entryKeyword": {
+    "message": "Keyword in URL"
+  },
+  "entryInactive": {
+    "message": "PRO · inactive"
+  },
+  "entryErrorPage": {
+    "message": "Error page"
+  },
+  "entryErrorPageTitle": {
+    "message": "FocusFence can't show its block page here yet. Chrome's error page is shown instead."
+  },
+  "removeStrictTitle": {
+    "message": "Strict mode: sites cannot be removed"
+  },
+  "removeAria": {
+    "message": "Remove $1"
+  },
+  "toastRemoved": {
+    "message": "Removed $1"
+  },
+  "toastAdded": {
+    "message": "Added $1"
+  },
+  "toastAlreadyOnList": {
+    "message": "$1 is already on your list"
+  },
+  "toastAccessGranted": {
+    "message": "Access granted — the block page is on"
+  },
+  "toastNoChanges": {
+    "message": "No changes made"
+  },
+  "scheduleDesc": {
+    "message": "Only block during the hours you want to focus. Outside these windows, blocking pauses automatically."
+  },
+  "useSchedule": {
+    "message": "Use schedule"
+  },
+  "timeRangesAria": {
+    "message": "Time ranges"
+  },
+  "addTimeRange": {
+    "message": "+ Add time range"
+  },
+  "saveSchedule": {
+    "message": "Save schedule"
+  },
+  "windowsEmpty": {
+    "message": "No time ranges yet. Add one, e.g. weekdays 09:00 – 17:00."
+  },
+  "daysAria": {
+    "message": "Days"
+  },
+  "startTime": {
+    "message": "Start time"
+  },
+  "endTime": {
+    "message": "End time"
+  },
+  "overnight": {
+    "message": "overnight"
+  },
+  "unsaved": {
+    "message": "Unsaved changes"
+  },
+  "activeNow": {
+    "message": "Active now"
+  },
+  "pausedNow": {
+    "message": "Paused right now"
+  },
+  "toastScheduleSaved": {
+    "message": "Schedule saved"
+  },
+  "focusDesc": {
+    "message": "Pomodoro-style rounds. During focus, everything on your blocklist is blocked — even outside your schedule."
+  },
+  "fieldRounds": {
+    "message": "Rounds"
+  },
+  "unitMinShort": {
+    "message": "min"
+  },
+  "stopSession": {
+    "message": "Stop session"
+  },
+  "timeLeft": {
+    "message": "Time left"
+  },
+  "toastFocusSaved": {
+    "message": "Focus settings saved"
+  },
+  "toastFocusStarted": {
+    "message": "Focus session started"
+  },
+  "toastSessionStopped": {
+    "message": "Session stopped"
+  },
+  "strictDesc": {
+    "message": "For when willpower runs out. While strict mode is on, blocking can't be turned off, sites can't be removed and the schedule can't be changed. Ending early takes a 10-minute cooling-off period and a typing challenge."
+  },
+  "incogTitle": {
+    "message": "Incognito windows are not blocked"
+  },
+  "incogText": {
+    "message": "FocusFence isn't allowed in Incognito, so a private window skips your blocklist — even in strict mode. Turn on {em}Allow in Incognito{/em} in FocusFence's extension details."
+  },
+  "openExtDetails": {
+    "message": "Open extension details"
+  },
+  "duration": {
+    "message": "Duration"
+  },
+  "durOne": {
+    "message": "1 hour"
+  },
+  "durOther": {
+    "message": "$1 hours"
+  },
+  "durForever": {
+    "message": "Until I unlock it"
+  },
+  "durForeverLower": {
+    "message": "until you unlock it"
+  },
+  "startStrict": {
+    "message": "Start strict mode"
+  },
+  "strictOnBadge": {
+    "message": "STRICT MODE ON"
+  },
+  "strictEndsAt": {
+    "message": "Ends automatically at $1"
+  },
+  "strictStaysOn": {
+    "message": "Stays on until you unlock it"
+  },
+  "strictPaused": {
+    "message": "Paused for $1 while FocusFence was not running — the end time moved accordingly."
+  },
+  "strictNeedOut": {
+    "message": "Need out? Request an unlock. You'll have to wait 10 minutes, then type a sentence exactly."
+  },
+  "requestUnlock": {
+    "message": "Request unlock"
+  },
+  "coolingOff": {
+    "message": "Cooling off…"
+  },
+  "coolingText": {
+    "message": "Still want to unlock? Take a breath. You can cancel anytime."
+  },
+  "cancelUnlock": {
+    "message": "Cancel unlock"
+  },
+  "challengeIntro": {
+    "message": "Type this exactly to end strict mode:"
+  },
+  "challengePlaceholder": {
+    "message": "Type the sentence above"
+  },
+  "challengeAria": {
+    "message": "Type the sentence shown above"
+  },
+  "endStrict": {
+    "message": "End strict mode"
+  },
+  "keepStrict": {
+    "message": "Keep strict mode"
+  },
+  "limitsSummary": {
+    "message": "What strict mode can't prevent"
+  },
+  "limit1": {
+    "message": "Chrome lets you disable or remove any extension from {code}chrome://extensions{/code}. FocusFence can't block that page. A timed strict session {strong}pauses{/strong} while FocusFence is off, so its time can't run out in the background."
+  },
+  "limit2": {
+    "message": "Incognito windows are only covered if you allow FocusFence in Incognito (see above)."
+  },
+  "limit3": {
+    "message": "Other browsers, other Chrome profiles and other devices aren't covered."
+  },
+  "confirmStrict": {
+    "message": "Start strict mode for $1?\n\nYou will not be able to turn blocking off or remove sites. Ending early takes a 10-minute wait and a typing challenge. The timer pauses while FocusFence is disabled."
+  },
+  "confirmStrictIncognito": {
+    "message": "Note: Incognito windows are not covered until you allow FocusFence in Incognito."
+  },
+  "toastStrictOn": {
+    "message": "Strict mode is on"
+  },
+  "toastUnlockRequested": {
+    "message": "Unlock requested — 10 minute cooling-off started"
+  },
+  "toastGoodCall": {
+    "message": "Good call. Strict mode stays on."
+  },
+  "toastNoPaste": {
+    "message": "Type it out — pasting is disabled."
+  },
+  "toastStrictEnded": {
+    "message": "Strict mode ended"
+  },
+  "blockpageDesc": {
+    "message": "Write a note to your future self. It replaces the rotating quotes on the block page."
+  },
+  "messageAria": {
+    "message": "Block page message"
+  },
+  "messagePlaceholder": {
+    "message": "e.g. You promised yourself the thesis chapter first."
+  },
+  "preview": {
+    "message": "Preview"
+  },
+  "saveMessage": {
+    "message": "Save message"
+  },
+  "toastMessageSaved": {
+    "message": "Message saved"
+  },
+  "securityDesc": {
+    "message": "Require a password to turn blocking off, remove sites or change settings. Ideal if someone else holds the key. Passwords are hashed (PBKDF2) and never leave this device."
+  },
+  "newPassword": {
+    "message": "New password"
+  },
+  "confirmPassword": {
+    "message": "Confirm password"
+  },
+  "setPassword": {
+    "message": "Set password"
+  },
+  "changePassword": {
+    "message": "Change password"
+  },
+  "passwordNone": {
+    "message": "No password set."
+  },
+  "passwordSet": {
+    "message": "Password is set. Unlocked for this session."
+  },
+  "lockNow": {
+    "message": "Lock now"
+  },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "toastPwMismatch": {
+    "message": "Passwords do not match"
+  },
+  "toastPwSaved": {
+    "message": "Password saved"
+  },
+  "confirmRemovePw": {
+    "message": "Remove the password lock?"
+  },
+  "toastPwRemoved": {
+    "message": "Password removed"
+  },
+  "toastUnlocked15": {
+    "message": "Unlocked for 15 minutes"
+  },
+  "lockTitle": {
+    "message": "Settings are locked"
+  },
+  "lockText": {
+    "message": "Enter your FocusFence password to make changes."
+  },
+  "statsDesc": {
+    "message": "Blocked attempts over the last 7 days. Counted on this device only."
+  },
+  "statToday": {
+    "message": "blocked today"
+  },
+  "statWeek": {
+    "message": "this week"
+  },
+  "statSaved": {
+    "message": "≈ time reclaimed (5 min / visit)"
+  },
+  "chartAria": {
+    "message": "Blocked attempts per day, last 7 days: $1"
+  },
+  "barTitle": {
+    "message": "$1 blocked"
+  },
+  "topSites": {
+    "message": "Top sites"
+  },
+  "topSitesNone": {
+    "message": "No blocked visits yet. That is a good sign."
+  },
+  "clearStats": {
+    "message": "Clear stats"
+  },
+  "confirmClearStats": {
+    "message": "Clear all stats?"
+  },
+  "toastStatsCleared": {
+    "message": "Stats cleared"
+  },
+  "backupDesc": {
+    "message": "Export your blocklist, schedule and preferences as JSON, or import them on another computer. Passwords and stats are never exported."
+  },
+  "exportSettings": {
+    "message": "Export settings"
+  },
+  "importSettings": {
+    "message": "Import settings…"
+  },
+  "toastExported": {
+    "message": "Settings exported"
+  },
+  "confirmImport": {
+    "message": "Replace your current blocklist and settings with the contents of $1?"
+  },
+  "toastImported": {
+    "message": "Imported $1 rules"
+  },
+  "planSub": {
+    "message": "Everything in Free, plus the tools that make focus stick."
+  },
+  "planTitlePro": {
+    "message": "You have FocusFence Pro"
+  },
+  "planSubPro": {
+    "message": "All Pro features are unlocked on this browser."
+  },
+  "planSubProDev": {
+    "message": "All Pro features are unlocked on this browser (simulated in DEV build)."
+  },
+  "monthly": {
+    "message": "Monthly"
+  },
+  "yearly": {
+    "message": "Yearly"
+  },
+  "perMonth": {
+    "message": "/month"
+  },
+  "perYear": {
+    "message": "/year"
+  },
+  "chooseMonthly": {
+    "message": "Choose monthly"
+  },
+  "chooseYearly": {
+    "message": "Choose yearly"
+  },
+  "save44": {
+    "message": "SAVE 44%"
+  },
+  "feat1": {
+    "message": "Schedules by day and time"
+  },
+  "feat2": {
+    "message": "Block paths & keywords (e.g. youtube.com/shorts)"
+  },
+  "feat3": {
+    "message": "Pomodoro focus sessions"
+  },
+  "feat4": {
+    "message": "Strict mode with cooling-off unlock"
+  },
+  "feat5": {
+    "message": "Password lock for settings"
+  },
+  "feat6": {
+    "message": "Stats & custom block page"
+  },
+  "feat7": {
+    "message": "Export / import settings"
+  },
+  "feat8": {
+    "message": "Private: no account, no tracking"
+  },
+  "licenseNote": {
+    "message": "Couldn't reach ExtensionPay to verify your plan (offline?). Using the last known status."
+  },
+  "licenseNoteDate": {
+    "message": "Couldn't reach ExtensionPay to verify your plan (offline?). Using the last known status from $1."
+  },
+  "paymentsFoot": {
+    "message": "Payments are handled securely by ExtensionPay (Stripe)."
+  },
+  "restore": {
+    "message": "Already paid? Restore purchase"
+  },
+  "aboutFree": {
+    "message": "FocusFence is free software."
+  },
+  "aboutLicense": {
+    "message": "License: GNU AGPL v3 or later"
+  },
+  "aboutSource": {
+    "message": "Source code"
+  },
+  "aboutNotices": {
+    "message": "Third-party notices"
+  },
+  "aboutPrivacy": {
+    "message": "Privacy policy"
+  },
+  "devTitle": {
+    "message": "Developer build"
+  },
+  "devText": {
+    "message": "Payments are disabled. Simulate a Pro license locally to test gated features."
+  },
+  "simulatePro": {
+    "message": "Simulate Pro"
+  },
+  "toastProSimulated": {
+    "message": "Pro simulated"
+  },
+  "toastBackToFree": {
+    "message": "Back to Free"
+  },
+  "reopenOnboarding": {
+    "message": "Show the welcome tour again"
+  },
+  "blockedDocTitle": {
+    "message": "Blocked · FocusFence"
+  },
+  "blockedDocTitleHost": {
+    "message": "$1 is blocked · FocusFence"
+  },
+  "thisSite": {
+    "message": "This site"
+  },
+  "isFencedOff": {
+    "message": " is fenced off"
+  },
+  "sessionLeft": {
+    "message": "$1 · $2 left"
+  },
+  "statsGroupAria": {
+    "message": "Your focus today"
+  },
+  "reclaimedToday": {
+    "message": "time reclaimed today"
+  },
+  "backToWork": {
+    "message": "Back to work"
+  },
+  "obDocTitle": {
+    "message": "Welcome to FocusFence"
+  },
+  "obStep": {
+    "message": "Step $1 of $2"
+  },
+  "ob1Title": {
+    "message": "Pick 3 sites that steal your focus"
+  },
+  "ob1Text": {
+    "message": "Start small: pick up to three. You can add as many as you like later — Free has no limit."
+  },
+  "obSitesAria": {
+    "message": "Suggested sites"
+  },
+  "obCustomPlaceholder": {
+    "message": "Or type another site, e.g. news.example.com"
+  },
+  "obCustomAria": {
+    "message": "Another site to block"
+  },
+  "obSelectedCount": {
+    "message": "$1 of 3 selected"
+  },
+  "obMax": {
+    "message": "Three is plenty to start — add more later in Settings."
+  },
+  "ob1Perm": {
+    "message": "Next, Chrome asks once to let FocusFence show its calm block page on these sites. If you say no, they are still blocked."
+  },
+  "obBlockSelected": {
+    "message": "Block these sites"
+  },
+  "obSkip": {
+    "message": "Skip for now"
+  },
+  "obAddedOne": {
+    "message": "1 site blocked"
+  },
+  "obAddedOther": {
+    "message": "$1 sites blocked"
+  },
+  "ob2Title": {
+    "message": "Private browsing"
+  },
+  "ob2Text": {
+    "message": "Chrome doesn't run extensions in Incognito windows unless you allow it. Without it, a private window skips your blocklist — even in strict mode."
+  },
+  "ob2StatusOn": {
+    "message": "FocusFence is allowed in Incognito. You are covered."
+  },
+  "ob2StatusOff": {
+    "message": "FocusFence is not allowed in Incognito yet."
+  },
+  "ob2How": {
+    "message": "Open the extension details and turn on {strong}Allow in Incognito{/strong}. Optional, but recommended if you plan to use strict mode."
+  },
+  "ob2Recheck": {
+    "message": "Check again"
+  },
+  "ob3Title": {
+    "message": "Free forever. Pro when you need more."
+  },
+  "ob3Free": {
+    "message": "Unlimited sites, subdomains included, one-click blocking and a calm block page."
+  },
+  "ob3Pro": {
+    "message": "Schedules, YouTube Shorts-only blocking, Pomodoro focus sessions, strict mode, password lock, stats and backup."
+  },
+  "ob3Price": {
+    "message": "$1/month or $2/year. No account needed."
+  },
+  "ob3Private": {
+    "message": "Your blocklist and stats never leave this device."
+  },
+  "obFree": {
+    "message": "Free"
+  },
+  "obPro": {
+    "message": "Pro"
+  },
+  "obSeePro": {
+    "message": "See Pro plans"
+  },
+  "obFinish": {
+    "message": "Start focusing"
+  },
+  "obNext": {
+    "message": "Continue"
+  },
+  "obBack": {
+    "message": "Back"
+  }
+}

@@ -6,6 +6,7 @@
 importScripts('config.js', 'vendor/ExtPay.js', 'lib/core.js');
 
 const C = self.FFCore;
+const M = (key, ...subs) => C.T(key, key, ...subs); // localized message (falls back to the key)
 const CONFIG = self.FF_CONFIG;
 const BLOCKED_PAGE = chrome.runtime.getURL('blocked.html');
 const SPA_SCRIPT_ID = 'ff-spa-guard';
@@ -39,10 +40,7 @@ async function saveLicense(user) {
 function paymentError(e) {
   const raw = e && e.message ? e.message : String(e);
   console.warn('[FocusFence] ExtensionPay error', raw);
-  return new FFError(
-    'NETWORK',
-    "Couldn't reach the payment service (ExtensionPay). Check your connection and try again."
-  );
+  return new FFError('NETWORK', M('errNetwork'));
 }
 
 async function refreshLicense() {
@@ -102,10 +100,10 @@ class FFError extends Error {
     this.code = code;
   }
 }
-const proRequired = () => new FFError('PRO_REQUIRED', 'This is a FocusFence Pro feature.');
+const proRequired = () => new FFError('PRO_REQUIRED', M('errProRequired'));
 const strictBlocked = () =>
-  new FFError('STRICT', 'Strict mode is on. Unlock it first (10-minute delay + typing challenge).');
-const lockedErr = () => new FFError('LOCKED', 'Settings are password-protected. Unlock first.');
+  new FFError('STRICT', M('errStrict'));
+const lockedErr = () => new FFError('LOCKED', M('errLocked'));
 
 /* ------------------------------------------------------- password lock */
 
@@ -218,15 +216,15 @@ async function updateBadge(st, status) {
     const mins = Math.max(1, Math.ceil((st.pomodoro.endsAt - now) / C.MINUTE));
     text = mins + 'm';
     color = st.pomodoro.phase === 'focus' ? '#2E7D6B' : '#7A8A84';
-    title = st.pomodoro.phase === 'focus' ? 'FocusFence: focus session' : 'FocusFence: break';
+    title = st.pomodoro.phase === 'focus' ? M('titleFocus') : M('titleBreak');
   } else if (!status.active) {
-    text = status.reason === 'off' ? 'OFF' : '';
+    text = status.reason === 'off' ? M('badgeOff') : '';
     color = '#8A938F';
-    title = status.reason === 'off' ? 'FocusFence: blocking is off' : 'FocusFence: outside schedule';
+    title = status.reason === 'off' ? M('titleOff') : M('titleOutside');
   } else if (st.strict && st.strict.active) {
-    title = 'FocusFence: strict mode';
+    title = M('titleStrict');
   } else {
-    title = 'FocusFence: blocking is on';
+    title = M('titleOn');
   }
   await chrome.action.setBadgeBackgroundColor({ color });
   await chrome.action.setBadgeText({ text });
@@ -362,7 +360,7 @@ const handlers = {
 
   async addEntry({ raw, kind }) {
     return mutateSettings(async (settings, st) => {
-      if (typeof raw !== 'string' || raw.length > 2048) throw new FFError('INVALID', 'Enter a website, path or keyword.');
+      if (typeof raw !== 'string' || raw.length > 2048) throw new FFError('INVALID', M('errEnterSite'));
       let parsed;
       try {
         parsed = C.parseEntry(raw, kind || 'auto');
@@ -371,7 +369,7 @@ const handlers = {
       }
       if (C.isProEntry(parsed) && !isProFrom(st)) throw proRequired();
       if (C.isProEntry(parsed) && settings.entries.filter(C.isProEntry).length >= C.MAX_PATTERN_ENTRIES) {
-        throw new FFError('LIMIT', 'You can have up to ' + C.MAX_PATTERN_ENTRIES + ' path and keyword rules.');
+        throw new FFError('LIMIT', M('errPatternLimit', C.MAX_PATTERN_ENTRIES));
       }
       const key = C.entryKey(parsed);
       const existing = settings.entries.find((e) => C.entryKey(e) === key);
@@ -408,10 +406,10 @@ const handlers = {
       if (st.strict.active) throw strictBlocked();
       if (!(await isUnlocked(st))) throw lockedErr();
       if (!schedule || typeof schedule !== 'object' || (schedule.windows && !Array.isArray(schedule.windows))) {
-        throw new FFError('INVALID', 'Invalid schedule.');
+        throw new FFError('INVALID', M('errInvalidSchedule'));
       }
       if ((schedule.windows || []).length > C.MAX_SCHEDULE_WINDOWS) {
-        throw new FFError('INVALID', 'At most ' + C.MAX_SCHEDULE_WINDOWS + ' time ranges.');
+        throw new FFError('INVALID', M('errScheduleMax', C.MAX_SCHEDULE_WINDOWS));
       }
       const windows = (schedule.windows || []).map((w) => {
         const err = C.validateWindow(w);
@@ -428,7 +426,7 @@ const handlers = {
       if (!isProFrom(st)) throw proRequired();
       if (!(await isUnlocked(st))) throw lockedErr();
       const p = C.validatePomodoro(pomodoro || {});
-      if (!p) throw new FFError('INVALID', 'Focus 1–180 min, break 1–60 min, 1–12 cycles.');
+      if (!p) throw new FFError('INVALID', M('errPomodoro'));
       settings.pomodoro = p;
       return { pomodoro: p };
     });
@@ -465,7 +463,7 @@ const handlers = {
     if (st.strict.active) return { strict: st.strict };
     const h = typeof hours === 'number' ? hours : typeof hours === 'string' && hours.trim() !== '' ? Number(hours) : NaN;
     // A bad value must never fall back to "until I unlock it".
-    if (!C.STRICT_HOURS.includes(h)) throw new FFError('INVALID', 'Pick one of the listed durations.');
+    if (!C.STRICT_HOURS.includes(h)) throw new FFError('INVALID', M('errStrictDuration'));
     const now = Date.now();
     const strict = {
       active: true,
@@ -506,10 +504,10 @@ const handlers = {
     if (!st.strict.active) return { done: true };
     const u = C.strictUnlockState(st.strict, Date.now());
     if (u.phase !== 'challenge') {
-      throw new FFError('STRICT_WAIT', 'The 10-minute cooling-off period has not finished yet.');
+      throw new FFError('STRICT_WAIT', M('errStrictWait'));
     }
     if (!st.strict.challenge || String(typed || '').trim() !== st.strict.challenge) {
-      throw new FFError('CHALLENGE', 'The text does not match. Type it exactly as shown.');
+      throw new FFError('CHALLENGE', M('errChallenge'));
     }
     await chrome.storage.local.set({ strict: { active: false } });
     return { done: true };
@@ -520,7 +518,7 @@ const handlers = {
     if (!isProFrom(st)) throw proRequired();
     if (!(await isUnlocked(st))) throw lockedErr();
     if (typeof password !== 'string' || password.length < 4 || password.length > 256) {
-      throw new FFError('INVALID', 'Use between 4 and 256 characters.');
+      throw new FFError('INVALID', M('errPasswordLength'));
     }
     const salt = bufToHex(crypto.getRandomValues(new Uint8Array(16)));
     const iterations = 150000;
@@ -545,7 +543,7 @@ const handlers = {
     const sess = await chrome.storage.session.get(['failedUnlocks', 'unlockBlockedUntil']);
     if ((sess.unlockBlockedUntil || 0) > now) {
       const secs = Math.ceil((sess.unlockBlockedUntil - now) / 1000);
-      throw new FFError('THROTTLED', 'Too many wrong passwords. Try again in ' + secs + ' s.');
+      throw new FFError('THROTTLED', M('errThrottled', secs));
     }
     const h = await hashPassword(String(password || '').slice(0, 1024), st.lock.salt, st.lock.iterations);
     if (!timingSafeEqual(h, st.lock.hash)) {
@@ -553,7 +551,7 @@ const handlers = {
       // after 5 misses: 30 s, then doubling up to 15 min
       const wait = failed >= 5 ? Math.min(15 * 60, 30 * 2 ** (failed - 5)) * 1000 : 0;
       await chrome.storage.session.set({ failedUnlocks: failed, unlockBlockedUntil: wait ? now + wait : 0 });
-      throw new FFError('BAD_PASSWORD', 'Wrong password.');
+      throw new FFError('BAD_PASSWORD', M('errBadPassword'));
     }
     await chrome.storage.session.set({ unlockedUntil: now + UNLOCK_SESSION_MS, failedUnlocks: 0, unlockBlockedUntil: 0 });
     return { unlocked: true };
@@ -585,12 +583,12 @@ const handlers = {
     if (st.strict.active) throw strictBlocked();
     if (!(await isUnlocked(st))) throw lockedErr();
     let obj = data;
-    if (typeof data === 'string' && data.length > 2 * 1024 * 1024) throw new FFError('INVALID', 'That file is too large.');
+    if (typeof data === 'string' && data.length > 2 * 1024 * 1024) throw new FFError('INVALID', M('errFileTooLarge'));
     if (typeof data === 'string') {
       try {
         obj = JSON.parse(data);
       } catch (e) {
-        throw new FFError('INVALID', 'The file is not valid JSON.');
+        throw new FFError('INVALID', M('errNotJson'));
       }
     }
     let settings;
@@ -652,14 +650,14 @@ const handlers = {
   },
 
   async setDevPro({ on }) {
-    if (!CONFIG.DEV) throw new FFError('DEV_ONLY', 'Only available in development builds.');
+    if (!CONFIG.DEV) throw new FFError('DEV_ONLY', M('errDevOnly'));
     await chrome.storage.local.set({ devPro: !!on });
     return { devPro: !!on };
   },
 
   async openPayment({ plan }) {
     if (CONFIG.DEV) {
-      throw new FFError('DEV_ONLY', 'Payments are disabled in the DEV build. Use “Simulate Pro” instead.');
+      throw new FFError('DEV_ONLY', M('errDevPayments'));
     }
     try {
       await extpay.openPaymentPage(plan === 'monthly' || plan === 'yearly' ? plan : undefined);
@@ -670,7 +668,7 @@ const handlers = {
   },
 
   async openLogin() {
-    if (CONFIG.DEV) throw new FFError('DEV_ONLY', 'Payments are disabled in the DEV build.');
+    if (CONFIG.DEV) throw new FFError('DEV_ONLY', M('errDevPayments'));
     try {
       await extpay.openLoginPage();
     } catch (e) {
@@ -714,7 +712,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       sendResponse({
         ok: false,
         code: known ? err.code : 'ERROR',
-        error: known ? err.message : 'Something went wrong. Please try again.',
+        error: known ? err.message : M('errGeneric'),
       });
     });
   return true;
@@ -726,7 +724,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   const { settings } = await chrome.storage.local.get('settings');
   if (!settings) await chrome.storage.local.set({ settings: C.deepClone(C.DEFAULT_SETTINGS) });
   if (details.reason === 'install' && !CONFIG.DEV) {
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html#welcome') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('onboarding.html') });
   }
   await refreshLicense();
   queueSync();

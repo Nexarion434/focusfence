@@ -1,0 +1,1007 @@
+{
+  "extName": {
+    "message": "FocusFence – Website-Blocker & Pomodoro-Fokus-Timer"
+  },
+  "extShortName": {
+    "message": "FocusFence"
+  },
+  "extDescription": {
+    "message": "Blockiere ablenkende Websites mit einem Klick – oder nur YouTube Shorts. Zeitpläne, Pomodoro-Timer und strikter Modus. 100 % privat."
+  },
+  "badgeOff": {
+    "message": "AUS"
+  },
+  "titleFocus": {
+    "message": "FocusFence: Fokus-Sitzung"
+  },
+  "titleBreak": {
+    "message": "FocusFence: Pause"
+  },
+  "titleOff": {
+    "message": "FocusFence: Blockieren ist aus"
+  },
+  "titleOutside": {
+    "message": "FocusFence: außerhalb des Zeitplans"
+  },
+  "titleStrict": {
+    "message": "FocusFence: strikter Modus"
+  },
+  "titleOn": {
+    "message": "FocusFence: Blockieren ist an"
+  },
+  "errProRequired": {
+    "message": "Diese Funktion gehört zu FocusFence Pro."
+  },
+  "errStrict": {
+    "message": "Der strikte Modus ist aktiv. Entsperre ihn zuerst (10 Minuten Wartezeit + Tipp-Aufgabe)."
+  },
+  "errLocked": {
+    "message": "Die Einstellungen sind passwortgeschützt. Bitte zuerst entsperren."
+  },
+  "errNetwork": {
+    "message": "Der Zahlungsdienst (ExtensionPay) ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut."
+  },
+  "errDevPayments": {
+    "message": "Zahlungen sind im DEV-Build deaktiviert. Nutze stattdessen „Pro simulieren“."
+  },
+  "errDevOnly": {
+    "message": "Nur in Entwicklungs-Builds verfügbar."
+  },
+  "errEnterSite": {
+    "message": "Gib eine Website, einen Pfad oder ein Stichwort ein."
+  },
+  "errPatternLimit": {
+    "message": "Du kannst bis zu $1 Pfad- und Stichwortregeln anlegen."
+  },
+  "errInvalidSchedule": {
+    "message": "Ungültiger Zeitplan."
+  },
+  "errScheduleMax": {
+    "message": "Höchstens $1 Zeitfenster."
+  },
+  "errPomodoro": {
+    "message": "Fokus 1–180 Min., Pause 1–60 Min., 1–12 Runden."
+  },
+  "errStrictDuration": {
+    "message": "Wähle eine der angebotenen Dauern."
+  },
+  "errStrictWait": {
+    "message": "Die 10-minütige Bedenkzeit ist noch nicht vorbei."
+  },
+  "errChallenge": {
+    "message": "Der Text stimmt nicht überein. Tippe ihn genau so ab."
+  },
+  "errPasswordLength": {
+    "message": "Verwende 4 bis 256 Zeichen."
+  },
+  "errBadPassword": {
+    "message": "Falsches Passwort."
+  },
+  "errThrottled": {
+    "message": "Zu viele falsche Passwörter. Versuche es in $1 s erneut."
+  },
+  "errFileTooLarge": {
+    "message": "Diese Datei ist zu groß."
+  },
+  "errNotJson": {
+    "message": "Die Datei ist kein gültiges JSON."
+  },
+  "errGeneric": {
+    "message": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "errNoResponse": {
+    "message": "Keine Antwort von FocusFence."
+  },
+  "errKeywordShort": {
+    "message": "Stichwörter brauchen mindestens 3 Zeichen."
+  },
+  "errKeywordLong": {
+    "message": "Stichwörter dürfen höchstens 64 Zeichen lang sein."
+  },
+  "errKeywordChars": {
+    "message": "Stichwörter dürfen nur Buchstaben, Ziffern, Leerzeichen, „-“, „_“ und „.“ enthalten."
+  },
+  "errInvalidSite": {
+    "message": "Das sieht nicht nach einer gültigen Website aus (z. B. reddit.com)."
+  },
+  "errPathQuery": {
+    "message": "Pfadregeln prüfen nur den Pfad. Entferne den „?…“-Teil oder nutze ein Stichwort."
+  },
+  "errPathMissing": {
+    "message": "Füge nach der Domain einen Pfad hinzu, z. B. youtube.com/shorts."
+  },
+  "errPathLong": {
+    "message": "Dieser Pfad ist zu lang."
+  },
+  "errUnknownType": {
+    "message": "Unbekannter Regeltyp."
+  },
+  "errPickDay": {
+    "message": "Wähle mindestens einen Tag."
+  },
+  "errTimeFormat": {
+    "message": "Verwende eine 24-Stunden-Zeit wie 09:00."
+  },
+  "errTimeSame": {
+    "message": "Start- und Endzeit müssen sich unterscheiden."
+  },
+  "errNotExport": {
+    "message": "Diese Datei ist kein FocusFence-Export."
+  },
+  "unitMin": {
+    "message": "$1 Min."
+  },
+  "unitHour": {
+    "message": "$1 Std."
+  },
+  "unitHourMin": {
+    "message": "$1 Std. $2 Min."
+  },
+  "quote1": {
+    "message": "Der erfolgreiche Krieger ist ein Durchschnittsmensch mit laserscharfem Fokus. — Bruce Lee"
+  },
+  "quote2": {
+    "message": "Lass deine Ablenkungen hungern und füttere deinen Fokus."
+  },
+  "quote3": {
+    "message": "Wohin der Fokus geht, fließt die Energie. — Tony Robbins"
+  },
+  "quote4": {
+    "message": "Du erreichst dein Ziel nie, wenn du bei jeder Ablenkung anhältst."
+  },
+  "quote5": {
+    "message": "Konzentriere all deine Gedanken auf die anstehende Arbeit. — Alexander Graham Bell"
+  },
+  "quote6": {
+    "message": "Es ist nicht wenig Zeit, die wir haben, sondern viel, die wir nicht nutzen. — Seneca"
+  },
+  "quote7": {
+    "message": "Deep Work ist die Superkraft des 21. Jahrhunderts. — Cal Newport"
+  },
+  "quote8": {
+    "message": "Kleine tägliche Verbesserungen sind der Schlüssel zu großen Ergebnissen."
+  },
+  "quote9": {
+    "message": "Die Zukunft hängt davon ab, was du heute tust. — Gandhi"
+  },
+  "quote10": {
+    "message": "Erledige zuerst das Schwierige. Der Feed ist später auch noch da."
+  },
+  "planFree": {
+    "message": "GRATIS"
+  },
+  "planPro": {
+    "message": "PRO"
+  },
+  "settings": {
+    "message": "Einstellungen"
+  },
+  "openSettings": {
+    "message": "Einstellungen öffnen"
+  },
+  "password": {
+    "message": "Passwort"
+  },
+  "unlock": {
+    "message": "Entsperren"
+  },
+  "add": {
+    "message": "Hinzufügen"
+  },
+  "save": {
+    "message": "Speichern"
+  },
+  "remove": {
+    "message": "Entfernen"
+  },
+  "allow": {
+    "message": "Erlauben"
+  },
+  "manage": {
+    "message": "Verwalten"
+  },
+  "upgrade": {
+    "message": "Upgrade"
+  },
+  "today": {
+    "message": "Heute"
+  },
+  "blockSite": {
+    "message": "Seite blockieren"
+  },
+  "blockedLabel": {
+    "message": "Blockiert"
+  },
+  "sitesFencedOne": {
+    "message": "1 Seite blockiert"
+  },
+  "sitesFencedOther": {
+    "message": "$1 Seiten blockiert"
+  },
+  "statusOn": {
+    "message": "Blockieren ist an"
+  },
+  "statusOff": {
+    "message": "Blockieren ist aus"
+  },
+  "statusOutside": {
+    "message": "Außerhalb des Zeitplans"
+  },
+  "statusFocus": {
+    "message": "Fokus-Sitzung"
+  },
+  "statusStrict": {
+    "message": "Strikter Modus"
+  },
+  "phaseFocus": {
+    "message": "Fokus"
+  },
+  "phaseFocusing": {
+    "message": "Fokussiert"
+  },
+  "phaseBreak": {
+    "message": "Pause"
+  },
+  "focusRound": {
+    "message": "$1 · Runde $2 von $3"
+  },
+  "startFocus": {
+    "message": "Fokus starten"
+  },
+  "blockingEnabledAria": {
+    "message": "Blockieren aktiviert"
+  },
+  "subStrictUntil": {
+    "message": "Gesperrt bis $1 · $2"
+  },
+  "subStrictForever": {
+    "message": "Gesperrt, bis du entsperrst · $1"
+  },
+  "subFocus": {
+    "message": "Alles auf deiner Liste ist blockiert · $1"
+  },
+  "subOff": {
+    "message": "$1 · zum Blockieren einschalten"
+  },
+  "subOutside": {
+    "message": "$1 · geht im nächsten Zeitfenster weiter"
+  },
+  "subSchedule": {
+    "message": "Zeitplan aktiv · $1"
+  },
+  "toggleTitle": {
+    "message": "Blockieren ein- oder ausschalten"
+  },
+  "toggleStrictTitle": {
+    "message": "Strikter Modus aktiv – Blockieren lässt sich nicht ausschalten"
+  },
+  "incognitoNote": {
+    "message": "Inkognito-Fenster sind nicht abgedeckt."
+  },
+  "incognitoFix": {
+    "message": "FocusFence im Inkognito-Modus erlauben"
+  },
+  "unlockTitle": {
+    "message": "Die Einstellungen sind gesperrt."
+  },
+  "unlockText": {
+    "message": "Gib dein Passwort ein, um fortzufahren."
+  },
+  "thisPage": {
+    "message": "Diese Seite"
+  },
+  "currentTab": {
+    "message": "Aktueller Tab"
+  },
+  "browserPagesNo": {
+    "message": "Browser-Seiten können nicht blockiert werden"
+  },
+  "alreadyOnList": {
+    "message": "Schon auf deiner Sperrliste"
+  },
+  "coveredBy": {
+    "message": "Abgedeckt durch $1"
+  },
+  "addPlaceholder": {
+    "message": "Seite hinzufügen, z. B. reddit.com"
+  },
+  "addAria": {
+    "message": "Zu blockierende Website"
+  },
+  "focusTimerAria": {
+    "message": "Fokuszeit"
+  },
+  "stop": {
+    "message": "Stopp"
+  },
+  "unlockPro": {
+    "message": "Pro freischalten"
+  },
+  "focusCfg": {
+    "message": "$1 Min. Fokus · $2 Min. Pause · $3 Runden"
+  },
+  "focusTeaser": {
+    "message": "Pomodoro-Sitzungen, die deine ganze Liste blockieren"
+  },
+  "todayNone": {
+    "message": "Heute noch nichts blockiert"
+  },
+  "todayCount": {
+    "message": "$1 heute blockiert · ≈$2 gewonnen"
+  },
+  "allSettings": {
+    "message": "Alle Einstellungen →"
+  },
+  "toastAlreadyBlocked": {
+    "message": "$1 ist bereits blockiert"
+  },
+  "toastBlocked": {
+    "message": "$1 blockiert"
+  },
+  "optionsTitle": {
+    "message": "FocusFence-Einstellungen"
+  },
+  "navAria": {
+    "message": "Einstellungsbereiche"
+  },
+  "navBlocklist": {
+    "message": "Sperrliste"
+  },
+  "navSchedule": {
+    "message": "Zeitplan"
+  },
+  "navFocus": {
+    "message": "Fokus-Sitzungen"
+  },
+  "navStrict": {
+    "message": "Strikter Modus"
+  },
+  "navBlockpage": {
+    "message": "Sperrseite"
+  },
+  "navSecurity": {
+    "message": "Passwortschutz"
+  },
+  "navStats": {
+    "message": "Statistik"
+  },
+  "navBackup": {
+    "message": "Sicherung"
+  },
+  "navPlan": {
+    "message": "Tarif"
+  },
+  "sidePlanFree": {
+    "message": "Gratis-Tarif"
+  },
+  "sidePlanPro": {
+    "message": "FocusFence Pro"
+  },
+  "sidePlanFreeText": {
+    "message": "Unbegrenzt viele Seiten. Upgrade für Zeitpläne, Fokus-Sitzungen und den strikten Modus."
+  },
+  "sidePlanProText": {
+    "message": "Danke, dass du FocusFence unterstützt. Alle Funktionen freigeschaltet."
+  },
+  "seePro": {
+    "message": "Pro ansehen"
+  },
+  "managePlan": {
+    "message": "Tarif verwalten"
+  },
+  "proGate": {
+    "message": "Mit FocusFence Pro verfügbar"
+  },
+  "strictBannerOn": {
+    "message": "Strikter Modus aktiv. Deine Sperrliste kann nur wachsen."
+  },
+  "strictBannerUntil": {
+    "message": "Strikter Modus aktiv bis $1. Deine Sperrliste kann nur wachsen."
+  },
+  "blocklistDesc": {
+    "message": "Eine Domain zu blockieren, blockiert auch ihre Subdomains – {code}reddit.com{/code} deckt {code}old.reddit.com{/code} und {code}m.reddit.com{/code} ab."
+  },
+  "masterOn": {
+    "message": "Blockieren an"
+  },
+  "masterOff": {
+    "message": "Blockieren aus"
+  },
+  "masterPaused": {
+    "message": "Pausiert (Zeitplan)"
+  },
+  "ruleTypeAria": {
+    "message": "Regeltyp"
+  },
+  "typeWebsite": {
+    "message": "Website"
+  },
+  "typePath": {
+    "message": "Pfad"
+  },
+  "typeKeyword": {
+    "message": "Stichwort"
+  },
+  "addRuleAria": {
+    "message": "Website, Pfad oder Stichwort"
+  },
+  "addToBlocklist": {
+    "message": "Zur Sperrliste hinzufügen"
+  },
+  "hintDomain": {
+    "message": "Blockiert die ganze Website inklusive aller Subdomains."
+  },
+  "hintPath": {
+    "message": "Blockiert nur diesen Bereich. youtube.com bleibt erreichbar, youtube.com/shorts/… wird blockiert. Parameter (?…) werden nicht verwendet."
+  },
+  "hintKeyword": {
+    "message": "Blockiert jede Seite, deren Adresse dieses Wort enthält."
+  },
+  "accessTitle": {
+    "message": "FocusFence-Sperrseite anzeigen"
+  },
+  "accessTextOne": {
+    "message": "1 Seite wird mit Chromes Fehlerseite blockiert, weil FocusFence noch keinen Zugriff hat. Erlaube den Zugriff, um die Sperrseite zu sehen und Statistiken zu zählen."
+  },
+  "accessTextOther": {
+    "message": "$1 Seiten werden mit Chromes Fehlerseite blockiert, weil FocusFence noch keinen Zugriff hat. Erlaube den Zugriff, um die Sperrseite zu sehen und Statistiken zu zählen."
+  },
+  "accessKwTitle": {
+    "message": "Stichwortregeln nutzen Chromes Fehlerseite"
+  },
+  "accessKwText": {
+    "message": "Stichwörter können auf jeder Seite vorkommen, daher braucht die Sperrseite Zugriff auf alle Seiten. Optional – blockiert wird so oder so."
+  },
+  "emptyTitle": {
+    "message": "Deine Sperrliste ist leer"
+  },
+  "emptyText": {
+    "message": "Fang mit den Seiten an, die du ohne nachzudenken öffnest – Social Media, News, Videos."
+  },
+  "entryDomain": {
+    "message": "Website + Subdomains"
+  },
+  "entryPath": {
+    "message": "Pfad"
+  },
+  "entryKeyword": {
+    "message": "Stichwort in der URL"
+  },
+  "entryInactive": {
+    "message": "PRO · inaktiv"
+  },
+  "entryErrorPage": {
+    "message": "Fehlerseite"
+  },
+  "entryErrorPageTitle": {
+    "message": "FocusFence kann hier noch keine Sperrseite zeigen. Stattdessen erscheint Chromes Fehlerseite."
+  },
+  "removeStrictTitle": {
+    "message": "Strikter Modus: Seiten können nicht entfernt werden"
+  },
+  "removeAria": {
+    "message": "$1 entfernen"
+  },
+  "toastRemoved": {
+    "message": "$1 entfernt"
+  },
+  "toastAdded": {
+    "message": "$1 hinzugefügt"
+  },
+  "toastAlreadyOnList": {
+    "message": "$1 ist bereits auf deiner Liste"
+  },
+  "toastAccessGranted": {
+    "message": "Zugriff erteilt – die Sperrseite ist aktiv"
+  },
+  "toastNoChanges": {
+    "message": "Keine Änderungen"
+  },
+  "scheduleDesc": {
+    "message": "Blockiere nur zu den Zeiten, in denen du dich konzentrieren willst. Außerhalb davon pausiert das Blockieren automatisch."
+  },
+  "useSchedule": {
+    "message": "Zeitplan verwenden"
+  },
+  "timeRangesAria": {
+    "message": "Zeitfenster"
+  },
+  "addTimeRange": {
+    "message": "+ Zeitfenster hinzufügen"
+  },
+  "saveSchedule": {
+    "message": "Zeitplan speichern"
+  },
+  "windowsEmpty": {
+    "message": "Noch keine Zeitfenster. Füge eins hinzu, z. B. werktags 09:00 – 17:00."
+  },
+  "daysAria": {
+    "message": "Tage"
+  },
+  "startTime": {
+    "message": "Startzeit"
+  },
+  "endTime": {
+    "message": "Endzeit"
+  },
+  "overnight": {
+    "message": "über Nacht"
+  },
+  "unsaved": {
+    "message": "Ungespeicherte Änderungen"
+  },
+  "activeNow": {
+    "message": "Jetzt aktiv"
+  },
+  "pausedNow": {
+    "message": "Gerade pausiert"
+  },
+  "toastScheduleSaved": {
+    "message": "Zeitplan gespeichert"
+  },
+  "focusDesc": {
+    "message": "Runden im Pomodoro-Stil. Während des Fokus ist alles auf deiner Sperrliste blockiert – auch außerhalb des Zeitplans."
+  },
+  "fieldRounds": {
+    "message": "Runden"
+  },
+  "unitMinShort": {
+    "message": "Min."
+  },
+  "stopSession": {
+    "message": "Sitzung beenden"
+  },
+  "timeLeft": {
+    "message": "Verbleibende Zeit"
+  },
+  "toastFocusSaved": {
+    "message": "Fokus-Einstellungen gespeichert"
+  },
+  "toastFocusStarted": {
+    "message": "Fokus-Sitzung gestartet"
+  },
+  "toastSessionStopped": {
+    "message": "Sitzung beendet"
+  },
+  "strictDesc": {
+    "message": "Für Momente, in denen die Willenskraft nachlässt. Im strikten Modus lässt sich das Blockieren nicht ausschalten, keine Seite entfernen und der Zeitplan nicht ändern. Vorzeitig beenden kostet 10 Minuten Bedenkzeit und eine Tipp-Aufgabe."
+  },
+  "incogTitle": {
+    "message": "Inkognito-Fenster werden nicht blockiert"
+  },
+  "incogText": {
+    "message": "FocusFence ist im Inkognito-Modus nicht erlaubt, ein privates Fenster umgeht also deine Sperrliste – selbst im strikten Modus. Aktiviere {em}Im Inkognitomodus zulassen{/em} in den Erweiterungsdetails."
+  },
+  "openExtDetails": {
+    "message": "Erweiterungsdetails öffnen"
+  },
+  "duration": {
+    "message": "Dauer"
+  },
+  "durOne": {
+    "message": "1 Stunde"
+  },
+  "durOther": {
+    "message": "$1 Stunden"
+  },
+  "durForever": {
+    "message": "Bis ich ihn entsperre"
+  },
+  "durForeverLower": {
+    "message": "bis du ihn entsperrst"
+  },
+  "startStrict": {
+    "message": "Strikten Modus starten"
+  },
+  "strictOnBadge": {
+    "message": "STRIKTER MODUS AN"
+  },
+  "strictEndsAt": {
+    "message": "Endet automatisch um $1"
+  },
+  "strictStaysOn": {
+    "message": "Bleibt an, bis du ihn entsperrst"
+  },
+  "strictPaused": {
+    "message": "$1 pausiert, während FocusFence nicht lief – das Ende wurde entsprechend verschoben."
+  },
+  "strictNeedOut": {
+    "message": "Musst du raus? Fordere eine Entsperrung an. Du wartest 10 Minuten und tippst dann einen Satz exakt ab."
+  },
+  "requestUnlock": {
+    "message": "Entsperrung anfordern"
+  },
+  "coolingOff": {
+    "message": "Bedenkzeit…"
+  },
+  "coolingText": {
+    "message": "Willst du immer noch entsperren? Atme durch. Du kannst jederzeit abbrechen."
+  },
+  "cancelUnlock": {
+    "message": "Entsperrung abbrechen"
+  },
+  "challengeIntro": {
+    "message": "Tippe das genau ab, um den strikten Modus zu beenden:"
+  },
+  "challengePlaceholder": {
+    "message": "Tippe den Satz oben ab"
+  },
+  "challengeAria": {
+    "message": "Tippe den oben gezeigten Satz ab"
+  },
+  "endStrict": {
+    "message": "Strikten Modus beenden"
+  },
+  "keepStrict": {
+    "message": "Strikten Modus behalten"
+  },
+  "limitsSummary": {
+    "message": "Was der strikte Modus nicht verhindern kann"
+  },
+  "limit1": {
+    "message": "Chrome erlaubt es, jede Erweiterung unter {code}chrome://extensions{/code} zu deaktivieren oder zu entfernen; diese Seite kann FocusFence nicht blockieren. Eine zeitlich begrenzte strikte Sitzung {strong}pausiert{/strong}, solange FocusFence aus ist – ihre Zeit läuft also nicht im Hintergrund ab."
+  },
+  "limit2": {
+    "message": "Inkognito-Fenster sind nur abgedeckt, wenn du FocusFence dort erlaubst (siehe oben)."
+  },
+  "limit3": {
+    "message": "Andere Browser, Chrome-Profile und Geräte sind nicht abgedeckt."
+  },
+  "confirmStrict": {
+    "message": "Strikten Modus für $1 starten?\n\nDu kannst das Blockieren nicht ausschalten und keine Seiten entfernen. Vorzeitig beenden kostet 10 Minuten Wartezeit und eine Tipp-Aufgabe. Der Timer pausiert, solange FocusFence deaktiviert ist."
+  },
+  "confirmStrictIncognito": {
+    "message": "Hinweis: Inkognito-Fenster sind erst abgedeckt, wenn du FocusFence dort erlaubst."
+  },
+  "toastStrictOn": {
+    "message": "Strikter Modus ist an"
+  },
+  "toastUnlockRequested": {
+    "message": "Entsperrung angefordert – 10 Minuten Bedenkzeit laufen"
+  },
+  "toastGoodCall": {
+    "message": "Gute Entscheidung. Der strikte Modus bleibt an."
+  },
+  "toastNoPaste": {
+    "message": "Bitte abtippen – Einfügen ist deaktiviert."
+  },
+  "toastStrictEnded": {
+    "message": "Strikter Modus beendet"
+  },
+  "blockpageDesc": {
+    "message": "Schreib deinem zukünftigen Ich eine Notiz. Sie ersetzt die Zitate auf der Sperrseite."
+  },
+  "messageAria": {
+    "message": "Nachricht der Sperrseite"
+  },
+  "messagePlaceholder": {
+    "message": "z. B. Du hast dir versprochen, zuerst das Kapitel fertigzuschreiben."
+  },
+  "preview": {
+    "message": "Vorschau"
+  },
+  "saveMessage": {
+    "message": "Nachricht speichern"
+  },
+  "toastMessageSaved": {
+    "message": "Nachricht gespeichert"
+  },
+  "securityDesc": {
+    "message": "Verlange ein Passwort, um das Blockieren auszuschalten, Seiten zu entfernen oder Einstellungen zu ändern. Ideal, wenn jemand anderes den Schlüssel hat. Passwörter werden gehasht (PBKDF2) und verlassen nie dieses Gerät."
+  },
+  "newPassword": {
+    "message": "Neues Passwort"
+  },
+  "confirmPassword": {
+    "message": "Passwort bestätigen"
+  },
+  "setPassword": {
+    "message": "Passwort festlegen"
+  },
+  "changePassword": {
+    "message": "Passwort ändern"
+  },
+  "passwordNone": {
+    "message": "Kein Passwort festgelegt."
+  },
+  "passwordSet": {
+    "message": "Passwort ist festgelegt. Für diese Sitzung entsperrt."
+  },
+  "lockNow": {
+    "message": "Jetzt sperren"
+  },
+  "removePassword": {
+    "message": "Passwort entfernen"
+  },
+  "toastPwMismatch": {
+    "message": "Die Passwörter stimmen nicht überein"
+  },
+  "toastPwSaved": {
+    "message": "Passwort gespeichert"
+  },
+  "confirmRemovePw": {
+    "message": "Passwortschutz entfernen?"
+  },
+  "toastPwRemoved": {
+    "message": "Passwort entfernt"
+  },
+  "toastUnlocked15": {
+    "message": "Für 15 Minuten entsperrt"
+  },
+  "lockTitle": {
+    "message": "Einstellungen gesperrt"
+  },
+  "lockText": {
+    "message": "Gib dein FocusFence-Passwort ein, um Änderungen vorzunehmen."
+  },
+  "statsDesc": {
+    "message": "Blockierte Versuche der letzten 7 Tage. Nur auf diesem Gerät gezählt."
+  },
+  "statToday": {
+    "message": "heute blockiert"
+  },
+  "statWeek": {
+    "message": "diese Woche"
+  },
+  "statSaved": {
+    "message": "≈ gewonnene Zeit (5 Min. / Besuch)"
+  },
+  "chartAria": {
+    "message": "Blockierte Versuche pro Tag, letzte 7 Tage: $1"
+  },
+  "barTitle": {
+    "message": "$1 blockiert"
+  },
+  "topSites": {
+    "message": "Top-Seiten"
+  },
+  "topSitesNone": {
+    "message": "Noch keine blockierten Besuche. Gutes Zeichen."
+  },
+  "clearStats": {
+    "message": "Statistik löschen"
+  },
+  "confirmClearStats": {
+    "message": "Gesamte Statistik löschen?"
+  },
+  "toastStatsCleared": {
+    "message": "Statistik gelöscht"
+  },
+  "backupDesc": {
+    "message": "Exportiere Sperrliste, Zeitplan und Einstellungen als JSON oder importiere sie auf einem anderen Computer. Passwörter und Statistiken werden nie exportiert."
+  },
+  "exportSettings": {
+    "message": "Einstellungen exportieren"
+  },
+  "importSettings": {
+    "message": "Einstellungen importieren…"
+  },
+  "toastExported": {
+    "message": "Einstellungen exportiert"
+  },
+  "confirmImport": {
+    "message": "Aktuelle Sperrliste und Einstellungen durch den Inhalt von $1 ersetzen?"
+  },
+  "toastImported": {
+    "message": "$1 Regeln importiert"
+  },
+  "planSub": {
+    "message": "Alles aus Gratis, plus die Werkzeuge, mit denen Fokus hält."
+  },
+  "planTitlePro": {
+    "message": "Du hast FocusFence Pro"
+  },
+  "planSubPro": {
+    "message": "Alle Pro-Funktionen sind in diesem Browser freigeschaltet."
+  },
+  "planSubProDev": {
+    "message": "Alle Pro-Funktionen sind in diesem Browser freigeschaltet (im DEV-Build simuliert)."
+  },
+  "monthly": {
+    "message": "Monatlich"
+  },
+  "yearly": {
+    "message": "Jährlich"
+  },
+  "perMonth": {
+    "message": "/Monat"
+  },
+  "perYear": {
+    "message": "/Jahr"
+  },
+  "chooseMonthly": {
+    "message": "Monatlich wählen"
+  },
+  "chooseYearly": {
+    "message": "Jährlich wählen"
+  },
+  "save44": {
+    "message": "44 % SPAREN"
+  },
+  "feat1": {
+    "message": "Zeitpläne nach Tag und Uhrzeit"
+  },
+  "feat2": {
+    "message": "Pfade & Stichwörter blockieren (z. B. youtube.com/shorts)"
+  },
+  "feat3": {
+    "message": "Pomodoro-Fokus-Sitzungen"
+  },
+  "feat4": {
+    "message": "Strikter Modus mit Bedenkzeit"
+  },
+  "feat5": {
+    "message": "Passwortschutz für Einstellungen"
+  },
+  "feat6": {
+    "message": "Statistik & eigene Sperrseite"
+  },
+  "feat7": {
+    "message": "Einstellungen exportieren / importieren"
+  },
+  "feat8": {
+    "message": "Privat: kein Konto, kein Tracking"
+  },
+  "licenseNote": {
+    "message": "ExtensionPay war zur Prüfung deines Tarifs nicht erreichbar (offline?). Der zuletzt bekannte Status gilt."
+  },
+  "licenseNoteDate": {
+    "message": "ExtensionPay war zur Prüfung deines Tarifs nicht erreichbar (offline?). Es gilt der Status vom $1."
+  },
+  "paymentsFoot": {
+    "message": "Zahlungen werden sicher über ExtensionPay (Stripe) abgewickelt."
+  },
+  "restore": {
+    "message": "Schon bezahlt? Kauf wiederherstellen"
+  },
+  "aboutFree": {
+    "message": "FocusFence ist freie Software."
+  },
+  "aboutLicense": {
+    "message": "Lizenz: GNU AGPL v3 oder später"
+  },
+  "aboutSource": {
+    "message": "Quellcode"
+  },
+  "aboutNotices": {
+    "message": "Hinweise zu Drittanbietern"
+  },
+  "aboutPrivacy": {
+    "message": "Datenschutzerklärung"
+  },
+  "devTitle": {
+    "message": "Entwicklungs-Build"
+  },
+  "devText": {
+    "message": "Zahlungen sind deaktiviert. Simuliere lokal eine Pro-Lizenz, um gesperrte Funktionen zu testen."
+  },
+  "simulatePro": {
+    "message": "Pro simulieren"
+  },
+  "toastProSimulated": {
+    "message": "Pro simuliert"
+  },
+  "toastBackToFree": {
+    "message": "Zurück zu Gratis"
+  },
+  "reopenOnboarding": {
+    "message": "Willkommenstour erneut anzeigen"
+  },
+  "blockedDocTitle": {
+    "message": "Blockiert · FocusFence"
+  },
+  "blockedDocTitleHost": {
+    "message": "$1 ist blockiert · FocusFence"
+  },
+  "thisSite": {
+    "message": "Diese Seite"
+  },
+  "isFencedOff": {
+    "message": " ist gesperrt"
+  },
+  "sessionLeft": {
+    "message": "$1 · noch $2"
+  },
+  "statsGroupAria": {
+    "message": "Dein Fokus heute"
+  },
+  "reclaimedToday": {
+    "message": "heute gewonnene Zeit"
+  },
+  "backToWork": {
+    "message": "Zurück an die Arbeit"
+  },
+  "obDocTitle": {
+    "message": "Willkommen bei FocusFence"
+  },
+  "obStep": {
+    "message": "Schritt $1 von $2"
+  },
+  "ob1Title": {
+    "message": "Wähle 3 Seiten, die dir den Fokus rauben"
+  },
+  "ob1Text": {
+    "message": "Fang klein an: bis zu drei. Später kannst du beliebig viele hinzufügen – Gratis hat kein Limit."
+  },
+  "obSitesAria": {
+    "message": "Vorgeschlagene Seiten"
+  },
+  "obCustomPlaceholder": {
+    "message": "Oder eine andere Seite eingeben, z. B. news.example.com"
+  },
+  "obCustomAria": {
+    "message": "Weitere zu blockierende Seite"
+  },
+  "obSelectedCount": {
+    "message": "$1 von 3 ausgewählt"
+  },
+  "obMax": {
+    "message": "Drei reichen für den Anfang – weitere später in den Einstellungen."
+  },
+  "ob1Perm": {
+    "message": "Danach fragt Chrome einmal, ob FocusFence auf diesen Seiten die Sperrseite zeigen darf. Sagst du nein, bleiben sie trotzdem blockiert."
+  },
+  "obBlockSelected": {
+    "message": "Diese Seiten blockieren"
+  },
+  "obSkip": {
+    "message": "Jetzt überspringen"
+  },
+  "obAddedOne": {
+    "message": "1 Seite blockiert"
+  },
+  "obAddedOther": {
+    "message": "$1 Seiten blockiert"
+  },
+  "ob2Title": {
+    "message": "Privates Surfen"
+  },
+  "ob2Text": {
+    "message": "Chrome führt Erweiterungen in Inkognito-Fenstern nur aus, wenn du es erlaubst. Ohne das umgeht ein privates Fenster deine Sperrliste – auch im strikten Modus."
+  },
+  "ob2StatusOn": {
+    "message": "FocusFence ist im Inkognito-Modus erlaubt. Du bist abgedeckt."
+  },
+  "ob2StatusOff": {
+    "message": "FocusFence ist im Inkognito-Modus noch nicht erlaubt."
+  },
+  "ob2How": {
+    "message": "Öffne die Erweiterungsdetails und aktiviere {strong}Im Inkognitomodus zulassen{/strong}. Optional, aber empfehlenswert, wenn du den strikten Modus nutzen willst."
+  },
+  "ob2Recheck": {
+    "message": "Erneut prüfen"
+  },
+  "ob3Title": {
+    "message": "Für immer gratis. Pro, wenn du mehr brauchst."
+  },
+  "ob3Free": {
+    "message": "Unbegrenzt viele Seiten inkl. Subdomains, Blockieren mit einem Klick und eine ruhige Sperrseite."
+  },
+  "ob3Pro": {
+    "message": "Zeitpläne, nur YouTube Shorts blockieren, Pomodoro-Sitzungen, strikter Modus, Passwortschutz, Statistik und Sicherung."
+  },
+  "ob3Price": {
+    "message": "$1/Monat oder $2/Jahr. Kein Konto nötig."
+  },
+  "ob3Private": {
+    "message": "Deine Sperrliste und Statistik verlassen nie dieses Gerät."
+  },
+  "obFree": {
+    "message": "Gratis"
+  },
+  "obPro": {
+    "message": "Pro"
+  },
+  "obSeePro": {
+    "message": "Pro-Tarife ansehen"
+  },
+  "obFinish": {
+    "message": "Los geht’s"
+  },
+  "obNext": {
+    "message": "Weiter"
+  },
+  "obBack": {
+    "message": "Zurück"
+  }
+}

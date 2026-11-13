@@ -18,7 +18,7 @@
 
   async function send(type, payload) {
     const res = await chrome.runtime.sendMessage(Object.assign({ type }, payload || {}));
-    if (!res) throw Object.assign(new Error('No response from FocusFence.'), { code: 'NO_RESPONSE' });
+    if (!res) throw Object.assign(new Error(i18n('errNoResponse', 'No response from FocusFence.')), { code: 'NO_RESPONSE' });
     if (!res.ok) throw Object.assign(new Error(res.error), { code: res.code });
     return res;
   }
@@ -92,12 +92,16 @@
     return String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
   }
 
+  function i18n(key, fallback) {
+    return root.FFI18N ? root.FFI18N.t(key) : fallback;
+  }
+
   function fmtTime(ts) {
-    return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return root.FFI18N ? root.FFI18N.fmt.time(ts) : new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   function errorMessage(err) {
-    return (err && err.message) || 'Something went wrong.';
+    return (err && err.message) || i18n('errGeneric', 'Something went wrong.');
   }
 
   root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage };

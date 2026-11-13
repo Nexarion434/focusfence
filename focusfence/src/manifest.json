@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "FocusFence – Website Blocker & Pomodoro Focus Timer",
-  "short_name": "FocusFence",
+  "default_locale": "en",
+  "name": "__MSG_extName__",
+  "short_name": "__MSG_extShortName__",
   "version": "1.0.0",
-  "description": "Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomodoro focus timer and strict mode. 100% private.",
+  "description": "__MSG_extDescription__",
   "minimum_chrome_version": "120",
   "icons": {
     "16": "icons/icon16.png",
@@ -13,7 +14,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "FocusFence",
+    "default_title": "__MSG_extShortName__",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
