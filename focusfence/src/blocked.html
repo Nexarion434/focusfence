@@ -8,11 +8,16 @@
     <link rel="stylesheet" href="styles/blocked.css" />
   </head>
   <body>
-    <div class="bg" aria-hidden="true"></div>
+    <!-- The scene: your fence, a row of glass pills on a glossy ground; the site you tried holds the light -->
+    <div class="sky" aria-hidden="true"></div>
+    <div class="floor" aria-hidden="true"></div>
+    <div class="scene-row mirror" id="mirror" aria-hidden="true"></div>
+    <div class="scene-row" id="wall" aria-hidden="true"></div>
+
+    <header class="brand"><span class="logo" id="mark"></span><span class="brand-name">FocusFence</span></header>
+
     <main class="wrap">
-      <div class="mark" id="mark"></div>
-      <p class="eyebrow">FocusFence</p>
-      <h1><span id="site" data-i18n="thisSite">This site</span><span data-i18n="isFencedOff"> is fenced off</span></h1>
+      <h1><span id="site" data-i18n="thisSite">This site</span><span class="fenced" data-i18n="isFencedOff"> is fenced off</span></h1>
       <blockquote class="message" id="message">Starve your distractions, feed your focus.</blockquote>
 
       <div class="session hidden" id="session" role="timer">
@@ -21,15 +26,16 @@
       </div>
 
       <div class="stats" role="group" aria-label="Your focus today" data-i18n-attr="aria-label:statsGroupAria">
-        <div class="stat"><div class="num" id="today">1</div><div class="label" data-i18n="statToday">blocked today</div></div>
-        <div class="stat"><div class="num" id="week">1</div><div class="label" data-i18n="statWeek">this week</div></div>
+        <span class="stat"><b class="num" id="today">1</b> <span class="label" data-i18n="statToday">blocked today</span></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="stat"><b class="num" id="week">1</b> <span class="label" data-i18n="statWeek">this week</span></span>
       </div>
 
       <div class="buttons">
-        <button class="btn btn-primary" id="back" data-i18n="backToWork">Back to work</button>
-        <a class="btn btn-ghost" href="options.html" target="_blank" id="settings" data-i18n="settings">Settings</a>
+        <button class="btn btn-primary btn-lg" id="back" data-i18n="backToWork">Back to work</button>
+        <a class="btn btn-ghost btn-lg" href="options.html" target="_blank" id="settings" data-i18n="settings">Settings</a>
       </div>
-      <p class="url muted small" id="url"></p>
+      <p class="url" id="url"></p>
     </main>
     <script src="lib/i18n.js"></script>
     <script src="lib/core.js"></script>

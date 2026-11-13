@@ -95,6 +95,7 @@ npm run build            # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=fal
 npm run cws:check        # build + Chrome Web Store pre-submission checks on the zip
 npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
 npm run screenshots:site # website images: 2x WebP captures of the real UI + 1200x630 Open Graph image, en, fr, es, de
+npm run design:shots     # design review: every screen and state, light + dark -> ../design/extension-ui/screenshots/
 npm run i18n             # regenerate src/_locales from scripts/i18n/strings.mjs
 npm run docs             # regenerate ../docs (website)
 npm run icons            # src/icons/*.png from the Picket F logo (LOGO_SVG in src/lib/ui.js, the single source)

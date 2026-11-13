@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, errorMessage, siteAvatar } = self.FFUI;
+  const { send, toast, logo, el, errorMessage, siteAvatar, pill, pillProfile } = self.FFUI;
   const { t, plural, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
   const MAX = 3;
@@ -13,7 +13,7 @@
   const options = [...SUGGESTIONS];
   let step = 1;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(32));
+  $('logo').insertAdjacentHTML('afterbegin', logo(24));
 
   function renderChoices() {
     const wrap = $('choices');
@@ -30,7 +30,40 @@
       wrap.appendChild(b);
     }
     $('counter').textContent = t('obSelectedCount', selected.size);
+    renderStage();
     $('block-selected').disabled = selected.size === 0;
+  }
+
+  /* The stage: your fence in the making. Seven pills; the three in the middle are yours, filled
+     centre first (that one holds the light), then left, then right. Spare pills stand on either
+     side. A newly picked site's pill rises (decorative; the counter says the same in words). */
+  const shownOn = new Set();
+  function renderStage() {
+    const pills = $('slots');
+    const picked = [...selected];
+    const n = 7;
+    const m = (n - 1) / 2;
+    const order = [m, m - 1, m + 1]; // where the first, second and third picks stand
+    const lit = picked.length > 0;
+    const prof = pillProfile(n);
+    pills.textContent = '';
+    for (let p = 0; p < n; p++) {
+      const k = order.indexOf(p);
+      const host = k >= 0 ? picked[k] : null;
+      let cls;
+      if (step === 3 && p === m + 2) cls = 'lit pro';
+      else if (k < 0) cls = 'pad' + (lit ? '' : ' off');
+      else if (!host) cls = 'ghost';
+      else cls = k === 0 ? 'lit' : '';
+      if (host && !shownOn.has(host)) cls += ' enter';
+      const pk = pill(prof[p], cls.trim(), k === 0 && host ? host[0].toUpperCase() : '');
+      if (step === 3 && p === m + 2) pk.appendChild(el('b', { class: 'lock' }));
+      pills.appendChild(pk);
+    }
+    for (const h of picked) shownOn.add(h);
+    for (const h of [...shownOn]) if (!selected.has(h)) shownOn.delete(h);
+    $('ob-row').classList.toggle('is-lit', lit);
+    $('picked').textContent = picked.join(' · ');
   }
 
   function toggle(host) {
@@ -47,6 +80,8 @@
 
   function go(n) {
     step = n;
+    $('ob-stage').dataset.step = String(n);
+    renderStage();
     for (const i of [1, 2, 3]) $('step-' + i).hidden = i !== n;
     document.querySelectorAll('.dots li').forEach((d, i) => d.classList.toggle('on', i < n));
     $('step-label').textContent = t('obStep', n, 3);
@@ -64,6 +99,7 @@
       ok = false;
     }
     $('incognito-status').classList.toggle('ok', ok);
+    $('ob-stage').classList.toggle('incog-ok', ok);
     $('incognito-status-text').textContent = ok ? t('ob2StatusOn') : t('ob2StatusOff');
     return ok;
   }

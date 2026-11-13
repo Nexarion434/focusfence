@@ -70,7 +70,7 @@ test('store build: ExtensionPay offline keeps the cached license and fails grace
     expect(net.hits.some((h) => h.includes('extensionpay.com'))).toBe(true);
     const st = await send('getState');
     expect(st.isPro).toBe(true);
-    await page.reload();
+    await page.goto(ext.base + 'options.html#plan'); // the license note lives under Plan
     await expect(page.locator('#license-note')).toBeVisible();
     await expect(page.locator('#license-note')).toContainText("Couldn't reach ExtensionPay");
 

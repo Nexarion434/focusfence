@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, logo, fmtCountdown } = self.FFUI;
+  const { send, logo, fence, fenceItems, fmtCountdown } = self.FFUI;
   const { t } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
 
@@ -22,8 +22,31 @@
     host = '';
   }
 
-  $('mark').innerHTML = logo(64);
+  $('mark').innerHTML = logo(20);
   $('site').textContent = host || t('thisSite');
+
+  /* The scene: your fence, one glass pill per blocked site, the site you tried in the middle
+     holding the light; the same row again, flipped by CSS, is its reflection in the ground. The
+     pills are sized by CSS from the window, so resizing needs no rebuild. */
+  function buildWall(items, lit, state) {
+    for (const node of [$('wall'), $('mirror')]) fence(node, { items, lit, state, min: 5, max: 11, rise: true });
+  }
+  const here = () => [{ key: 'here', label: host, letter: (host[0] || '·').toUpperCase() }];
+
+  /* The words come first: in a short window, or with a long note and a focus session, the fence
+     gets smaller (narrower, so shorter pills) until the words have their room above it. */
+  function fit() {
+    const wrap = document.querySelector('.wrap');
+    const kids = [...wrap.children].filter((k) => k.getBoundingClientRect().height);
+    if (!kids.length) return;
+    const cs = getComputedStyle(wrap);
+    const copy = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
+    const floor = document.querySelector('.floor').getBoundingClientRect().height;
+    const room = window.innerHeight - floor - 16 - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - copy;
+    document.body.style.setProperty('--pw-fit', Math.max(24, Math.floor(room / 2.7)) + 'px');
+  }
+  window.addEventListener('resize', fit);
+  document.fonts.ready.then(fit);
   $('url').textContent = original;
   $('url').title = original;
   document.title = host ? t('blockedDocTitleHost', host) : t('blockedDocTitle');
@@ -39,10 +62,16 @@
     if (!pomodoro) return;
     const left = pomodoro.endsAt - Date.now();
     if (left <= 0) {
-      $('session').classList.add('hidden');
+      if (!$('session').classList.contains('hidden')) {
+        $('session').classList.add('hidden');
+        fit();
+      }
       return;
     }
-    $('session').classList.remove('hidden');
+    if ($('session').classList.contains('hidden')) {
+      $('session').classList.remove('hidden');
+      fit();
+    }
     $('session-text').textContent = t(
       'sessionLeft',
       pomodoro.phase === 'focus' ? t('statusFocus') : t('phaseBreak'),
@@ -51,11 +80,20 @@
   }
 
   async function init() {
-    const state = await send('getState');
+    let state;
+    try {
+      state = await send('getState');
+    } catch (e) {
+      buildWall(here(), 'here', 'up');
+      throw e;
+    }
     const entry = C.findMatchingEntry(state.settings.entries, hash, state.isPro);
     if (entry && entry.type !== 'domain') $('site').textContent = entry.label;
+    const items = fenceItems(state.settings.entries, state.isPro, C.isProEntry);
+    buildWall(entry ? items : here().concat(items), entry ? entry.id : 'here', state.strict.active ? 'strict' : state.pomodoro ? 'focus' : 'up');
     const custom = state.isPro && state.settings.blockMessage;
     $('message').textContent = custom || C.quote(Math.floor(Math.random() * C.QUOTES.length));
+    fit();
     pomodoro = state.pomodoro;
     tick();
     setInterval(tick, 1000);
