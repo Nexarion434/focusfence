@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, el, icon, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
+  const { send, toast, logo, el, icon, fence, fenceItems, requestAccess, siteAvatar, fmtCountdown, fmtTime, errorMessage } = self.FFUI;
   const { t, plural, rich, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
   // Localized day names from Intl (2026-11-15 is a Sunday).
@@ -21,22 +21,72 @@
 
   $('logo').insertAdjacentHTML('afterbegin', logo(22));
   $('lock-logo').innerHTML = logo(48);
-  // Empty blocklist: an empty fence (five pickets, the logo's 45° tips, two rails).
-  const pickets = [6, 30, 54, 78, 102].map((x) => `M${x} 50V14l6-6 6 6v36z`).join('');
-  const rails = [6, 30, 54, 78].map((x) => `M${x + 12} 24h12M${x + 12} 40h12`).join('');
-  $('empty-logo').innerHTML = `<svg viewBox="0 0 120 52"><path d="${pickets}"/><path d="${rails}"/></svg>`;
 
-  // Pro gates: an inline bar under each Pro section's heading (the section stays visible, softened).
-  document.querySelectorAll('.panel[data-pro]').forEach((panel) => {
-    const gate = el(
-      'div',
-      { class: 'pro-gate' },
-      el('span', { class: 'gate-icon', html: icon('lock') }),
-      el('span', { text: t('proGate') }),
-      el('a', { class: 'btn btn-pro btn-sm', href: '#plan', text: t('upgrade') })
-    );
-    panel.querySelector('.panel-head').after(gate);
+  /* Pro gates. A view that is all Pro opens on an offer with the real prices; a single Pro
+     section in a Free view gets a slim bar. The controls stay visible underneath, softened. */
+  const views = [...document.querySelectorAll('.view')];
+  for (const view of views) {
+    const panels = [...view.querySelectorAll('.panel')];
+    if (panels.every((p) => p.hasAttribute('data-pro'))) {
+      view.dataset.pro = '';
+      panels[0].querySelector('.panel-head').after(
+        el(
+          'div',
+          { class: 'view-gate' },
+          el('span', { class: 'gate-lock', html: icon('lock') }),
+          el('div', { class: 'gate-copy' }, el('strong', { text: t('proGate') }), el('span', { class: 'gate-price' })),
+          el('a', { class: 'btn btn-pro', href: '#plan', text: t('seePro') })
+        )
+      );
+    } else {
+      for (const panel of panels.filter((p) => p.hasAttribute('data-pro'))) {
+        panel.querySelector('.panel-head').after(
+          el(
+            'div',
+            { class: 'pro-gate' },
+            el('span', { class: 'gate-icon', html: icon('lock') }),
+            el('span', { text: t('proGate') }),
+            el('a', { class: 'btn btn-pro btn-sm', href: '#plan', text: t('upgrade') })
+          )
+        );
+      }
+    }
+  }
+
+  /* Routing: one view at a time. Every section id still works as a link (#schedule, #security…),
+     and opens the view that holds it. */
+  const VIEW_OF = {};
+  for (const view of views) for (const p of view.querySelectorAll('.panel')) VIEW_OF[p.id] = view;
+  function route({ scroll = true, focus = false } = {}) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const view = VIEW_OF[id] || views[0];
+    for (const v of views) v.hidden = v !== view;
+    for (const a of document.querySelectorAll('#nav a')) {
+      if (VIEW_OF[a.dataset.nav] === view) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    }
+    if (scroll) {
+      const target = document.getElementById(id);
+      if (target && target !== view.querySelector('.panel')) target.scrollIntoView({ block: 'start' });
+      else window.scrollTo(0, 0);
+    }
+    if (focus) {
+      const h = view.querySelector('.panel-head h2, .plan-hero h2');
+      if (h) {
+        h.setAttribute('tabindex', '-1');
+        h.focus({ preventScroll: true });
+      }
+    }
+  }
+  let navClick = false;
+  document.getElementById('nav').addEventListener('click', () => (navClick = true));
+  window.addEventListener('hashchange', () => {
+    route({ focus: navClick });
+    navClick = false;
   });
+  route();
+  // the browser's own jump to the #fragment can land after ours: settle once the page has loaded
+  window.addEventListener('load', () => route());
 
   /* ------------------------------------------------------------ helpers */
 
@@ -65,10 +115,14 @@
     const s = state;
     document.body.classList.toggle('is-pro', s.isPro);
     document.body.classList.toggle('is-strict', s.strict.active);
+    for (const v of views) if (v.hasAttribute('data-pro')) v.classList.toggle('pro-locked', !s.isPro);
+    for (const g of document.querySelectorAll('.gate-price')) {
+      g.textContent = t('ob3Price', fmt.price(s.prices.monthly, s.prices.currency), fmt.price(s.prices.yearly, s.prices.currency));
+    }
     document.querySelectorAll('.panel[data-pro]').forEach((p) => {
       p.classList.toggle('pro-locked', !s.isPro);
       // Locked Pro panels are dimmed for the eye and removed from the keyboard/AT tree.
-      for (const child of p.querySelectorAll(':scope > :not(.panel-head):not(.pro-gate), :scope > .panel-head .master')) {
+      for (const child of p.querySelectorAll(':scope > :not(.panel-head):not(.pro-gate):not(.view-gate), :scope > .panel-head .master')) {
         child.inert = !s.isPro;
       }
     });
@@ -78,13 +132,13 @@
     $('layout').inert = locked; // modal: nothing behind the dialog is reachable
     if (locked && !wasLocked) setTimeout(() => $('lock-password').focus(), 30);
 
-    // sidebar plan card
+    // plan: the chip in the bar and the line under the Plan title
     $('side-plan-title').textContent = s.isPro ? t('sidePlanPro') : t('sidePlanFree');
     $('side-plan-badge').textContent = s.isPro ? t('planPro') : t('planFree');
     $('side-plan-badge').className = 'badge ' + (s.isPro ? 'badge-pro' : '');
     $('side-plan-text').textContent = s.isPro ? t('sidePlanProText') : t('sidePlanFreeText');
     $('side-plan-btn').textContent = s.isPro ? t('managePlan') : t('seePro');
-    $('side-plan-btn').className = 'btn btn-sm btn-block ' + (s.isPro ? '' : 'btn-pro');
+    $('side-plan-btn').className = 'btn btn-sm ' + (s.isPro ? 'btn-ghost' : 'btn-pro-soft');
 
     // strict banner
     $('strict-banner').classList.toggle('hidden', !s.strict.active);
@@ -120,12 +174,24 @@
       t('masterOn');
   }
 
+  /** The fence, drawn large: same posture as in the popup. */
+  function renderFence() {
+    const s = state;
+    const r = s.status.reason;
+    const st = s.strict.active ? 'strict' : r === 'focus' ? 'focus' : r === 'off' ? 'down' : r === 'outside-schedule' ? 'paused' : 'up';
+    fence($('hero-fence'), { items: fenceItems(s.settings.entries, s.isPro, C.isProEntry), state: st, max: 18, ghosts: 5 });
+    $('blocklist').querySelector('.hero').className = 'hero' + (st === 'down' || st === 'paused' ? ' is-off' : st === 'strict' ? ' is-strict' : '');
+    const n = s.settings.entries.length;
+    $('fence-count').textContent = n ? plural(n, 'sitesFenced') : '';
+  }
+
   function renderEntries() {
     const s = state;
     const list = $('entries');
     list.textContent = '';
     const entries = s.settings.entries;
     $('entries-empty').classList.toggle('hidden', entries.length > 0);
+    renderFence();
 
     let missing = 0;
     for (const e of entries) {
@@ -191,9 +257,39 @@
     return scheduleDraft || C.deepClone(state.settings.schedule);
   }
 
+  /** The week, drawn from the time ranges (including unsaved edits). Overnight ranges wrap. */
+  function renderWeek(model) {
+    const week = $('week');
+    week.textContent = '';
+    week.classList.toggle('off', !model.enabled);
+    for (const d of DAY_ORDER) {
+      const track = el('div', { class: 'track' });
+      for (const w of model.windows) {
+        const a = C.parseHM(w.start);
+        const b = C.parseHM(w.end);
+        const segs = [];
+        if (a < b) {
+          if (w.days.includes(d)) segs.push([a, b]);
+        } else if (a > b) {
+          if (w.days.includes(d)) segs.push([a, 1440]);
+          if (w.days.includes((d + 6) % 7)) segs.push([0, b]); // the night before spills into this day
+        }
+        for (const [x, y] of segs) {
+          const seg = el('i');
+          seg.style.left = (x / 14.4).toFixed(3) + '%';
+          seg.style.width = ((y - x) / 14.4).toFixed(3) + '%';
+          track.appendChild(seg);
+        }
+      }
+      week.append(el('span', { class: 'day-name', text: DAY_NAMES[d] }), track);
+    }
+    week.appendChild(el('div', { class: 'hours' }, ...['00', '06', '12', '18', '24'].map((h) => el('span', { text: h }))));
+  }
+
   function renderSchedule() {
     const s = state;
     const model = scheduleModel();
+    renderWeek(model);
     $('schedule-toggle').checked = model.enabled;
     $('schedule-toggle').disabled = s.strict.active;
     const wrap = $('windows');
@@ -281,6 +377,8 @@
     }
     const p = s.pomodoro;
     $('pomo-live').classList.toggle('hidden', !p);
+    $('pomo-preview').classList.toggle('hidden', !!p);
+    renderPreview();
     $('pomo-start').classList.toggle('hidden', !!p);
     $('pomo-stop').classList.toggle('hidden', !p);
     const rounds = $('pomo-rounds');
@@ -295,6 +393,16 @@
       }
     }
     tick();
+  }
+
+  /** Before a session starts: its length, big, and one picket per round (follows the fields). */
+  function renderPreview() {
+    const min = Math.min(180, Math.max(1, Number($('pomo-focus').value) || 25));
+    const rounds = Math.min(12, Math.max(1, Number($('pomo-cycles').value) || 4));
+    $('pomo-preview-clock').textContent = fmtCountdown(min * 60000);
+    const wrap = $('pomo-preview-rounds');
+    wrap.textContent = '';
+    for (let i = 0; i < rounds; i++) wrap.appendChild(el('span', { class: 'picket' }));
   }
 
   function renderStrict() {
@@ -333,6 +441,12 @@
   function renderMessage() {
     if (!messageDirty) $('message').value = state.settings.blockMessage || '';
     $('message-count').textContent = $('message').value.length + ' / 280';
+    renderWallPreview();
+  }
+
+  /** The miniature block page shows the note as it's typed (or the first quote when empty). */
+  function renderWallPreview() {
+    $('wp-message').textContent = $('message').value.trim() || C.quote(1);
   }
 
   function renderPassword() {
@@ -502,7 +616,12 @@
   }
   $('schedule-save').addEventListener('click', saveSchedule);
 
-  ['pomo-focus', 'pomo-break', 'pomo-cycles'].forEach((id) => $(id).addEventListener('input', () => (pomoDirty = true)));
+  ['pomo-focus', 'pomo-break', 'pomo-cycles'].forEach((id) =>
+    $(id).addEventListener('input', () => {
+      pomoDirty = true;
+      renderPreview();
+    })
+  );
   async function savePomo() {
     const pomodoro = { focusMin: $('pomo-focus').value, breakMin: $('pomo-break').value, cycles: $('pomo-cycles').value };
     const r = await act(() => send('setPomodoroConfig', { pomodoro }));
@@ -552,6 +671,7 @@
   $('message').addEventListener('input', () => {
     messageDirty = true;
     $('message-count').textContent = $('message').value.length + ' / 280';
+    renderWallPreview();
   });
   $('message-save').addEventListener('click', async () => {
     const r = await act(() => send('setBlockMessage', { message: $('message').value }), t('toastMessageSaved'));
@@ -630,26 +750,6 @@
     const h = Number(opt.value);
     if (h) opt.textContent = plural(h, 'dur');
   }
-
-  // nav highlighting
-  const links = [...document.querySelectorAll('#nav a')];
-  const obs = new IntersectionObserver(
-    (items) => {
-      for (const it of items) {
-        if (it.isIntersecting) {
-          links.forEach((l) => {
-            const on = l.dataset.nav === it.target.id;
-            l.classList.toggle('active', on);
-            if (on) l.setAttribute('aria-current', 'true');
-            else l.removeAttribute('aria-current');
-          });
-        }
-      }
-    },
-    { rootMargin: '-20% 0px -70% 0px' }
-  );
-  document.querySelectorAll('.panel').forEach((p) => obs.observe(p));
-  links[0].classList.add('active');
 
   chrome.storage.onChanged.addListener(() => refresh().catch(() => {}));
   setInterval(tick, 1000);

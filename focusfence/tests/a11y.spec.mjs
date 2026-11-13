@@ -13,6 +13,17 @@ async function audit(page, label) {
   return problems;
 }
 
+// Settings show one destination at a time: audit every one of them.
+async function auditOptions(p, label) {
+  const out = [];
+  for (const view of ['#blocklist', '#focus', '#strict', '#stats', '#plan']) {
+    await p.evaluate((h) => (location.hash = h), view);
+    await p.waitForTimeout(150);
+    out.push(...(await audit(p, label + view)));
+  }
+  return out;
+}
+
 async function seedPro(api) {
   await api.send('setDevPro', { on: true });
   await api.send('addEntry', { raw: 'reddit.com', kind: 'domain' });
@@ -37,7 +48,7 @@ for (const scheme of ['light', 'dark']) {
     problems.push(...(await audit(p, 'popup/free')));
     await p.close();
     p = await open(ext.base + 'options.html');
-    problems.push(...(await audit(p, 'options/free')));
+    problems.push(...(await auditOptions(p, 'options/free')));
     await p.close();
 
     // Pro + running focus session + strict mode waiting for unlock
@@ -49,7 +60,7 @@ for (const scheme of ['light', 'dark']) {
     problems.push(...(await audit(p, 'popup/pro')));
     await p.close();
     p = await open(ext.base + 'options.html');
-    problems.push(...(await audit(p, 'options/pro')));
+    problems.push(...(await auditOptions(p, 'options/pro')));
     await p.close();
 
     p = await ext.context.newPage();

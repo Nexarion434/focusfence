@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="styles/blocked.css" />
   </head>
   <body>
-    <div class="bg" aria-hidden="true"><div class="halo"></div><div class="floor"></div><div class="fence"></div></div>
+    <!-- The scene: a fence across the horizon; the picket of the site you tried is the lit one -->
+    <div class="sky" aria-hidden="true"></div>
+    <div class="wall" id="wall" aria-hidden="true"></div>
+
+    <header class="brand"><span class="logo" id="mark"></span><span class="brand-name">FocusFence</span></header>
+
     <main class="wrap">
-      <div class="mark" id="mark"></div>
-      <p class="eyebrow">FocusFence</p>
       <h1><span id="site" data-i18n="thisSite">This site</span><span class="fenced" data-i18n="isFencedOff"> is fenced off</span></h1>
       <blockquote class="message" id="message">Starve your distractions, feed your focus.</blockquote>
 
@@ -21,8 +24,9 @@
       </div>
 
       <div class="stats" role="group" aria-label="Your focus today" data-i18n-attr="aria-label:statsGroupAria">
-        <div class="stat"><div class="num" id="today">1</div><div class="label" data-i18n="statToday">blocked today</div></div>
-        <div class="stat"><div class="num" id="week">1</div><div class="label" data-i18n="statWeek">this week</div></div>
+        <span class="stat"><b class="num" id="today">1</b> <span class="label" data-i18n="statToday">blocked today</span></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="stat"><b class="num" id="week">1</b> <span class="label" data-i18n="statWeek">this week</span></span>
       </div>
 
       <div class="buttons">

@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, errorMessage, siteAvatar } = self.FFUI;
+  const { send, toast, logo, el, errorMessage, siteAvatar } = self.FFUI;
   const { t, plural, fmt } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
   const MAX = 3;
@@ -30,9 +30,32 @@
       wrap.appendChild(b);
     }
     $('counter').textContent = t('obSelectedCount', selected.size);
-    // one picket lights up per picked site (decorative; the counter text says the same)
-    document.querySelectorAll('#pickets i').forEach((p, i) => p.classList.toggle('on', i < selected.size));
+    renderStage();
     $('block-selected').disabled = selected.size === 0;
+  }
+
+  /* The stage: a fence with three slots in the middle. Each picked site rises into a slot,
+     lit, with its initial and name (decorative; the counter says the same in words). */
+  const shownOn = new Set();
+  function renderStage() {
+    const slots = $('slots');
+    slots.textContent = '';
+    const picked = [...selected];
+    const decor = () => el('div', { class: 'slot' }, el('span', { class: 'pk' }));
+    for (let i = 0; i < 3; i++) slots.appendChild(decor());
+    for (let i = 0; i < MAX; i++) {
+      const host = picked[i];
+      const slot = el('div', { class: 'slot mine' + (host ? ' on' : '') }, el('span', { class: 'pk' }, host ? host[0].toUpperCase() : ''));
+      if (host) {
+        if (shownOn.has(host)) slot.querySelector('.pk').style.animation = 'none'; // only new picks rise
+        shownOn.add(host);
+      }
+      slots.appendChild(slot);
+    }
+    if (step === 3) slots.appendChild(el('div', { class: 'slot pro-gate' }, el('span', { class: 'pk' }, el('b'))));
+    $('picked').textContent = picked.join(' · ');
+    for (let i = 0; i < 3; i++) slots.appendChild(decor());
+    for (const h of [...shownOn]) if (!selected.has(h)) shownOn.delete(h);
   }
 
   function toggle(host) {
@@ -49,6 +72,8 @@
 
   function go(n) {
     step = n;
+    $('ob-stage').dataset.step = String(n);
+    renderStage();
     for (const i of [1, 2, 3]) $('step-' + i).hidden = i !== n;
     document.querySelectorAll('.dots li').forEach((d, i) => d.classList.toggle('on', i < n));
     $('step-label').textContent = t('obStep', n, 3);
@@ -66,6 +91,7 @@
       ok = false;
     }
     $('incognito-status').classList.toggle('ok', ok);
+    $('ob-stage').classList.toggle('incog-ok', ok);
     $('incognito-status-text').textContent = ok ? t('ob2StatusOn') : t('ob2StatusOff');
     return ok;
   }

@@ -1,26 +1,16 @@
-/* First-run tour: three steps in one calm dialog. */
+/* First run: "build your fence". The step on the left, a live stage on the right:
+   every site you pick rises into the fence. */
 body {
   min-height: 100vh;
-}
-.bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(900px 420px at 50% -120px, rgba(58, 154, 91, 0.1), transparent 70%);
-}
-@media (prefers-color-scheme: dark) {
-  .bg {
-    background: radial-gradient(900px 420px at 50% -120px, rgba(58, 154, 91, 0.16), transparent 70%);
-  }
+  background: var(--bg);
 }
 .ob {
-  position: relative;
-  width: min(640px, calc(100% - 32px));
+  max-width: 1080px;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: max(56px, 11vh) 0 64px;
+  padding: 28px 40px 40px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 /* ---------- header: logo + progress ---------- */
@@ -28,8 +18,8 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 0 4px;
-  font-size: 16px;
+  height: 40px;
+  font-size: 15px;
 }
 .progress-wrap {
   margin-left: auto;
@@ -61,17 +51,20 @@ body {
   background: var(--accent-solid);
 }
 
-/* ---------- the dialog ---------- */
+/* ---------- the two columns ---------- */
+.ob-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  gap: 64px;
+  align-items: center;
+  padding: 24px 0;
+}
 .step {
-  padding: 36px 40px 28px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow), var(--edge);
-  animation: step-in 0.32s var(--ease);
+  animation: step-in 0.36s var(--ease);
 }
 .step[hidden] {
   display: none;
@@ -79,14 +72,15 @@ body {
 @keyframes step-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
 }
 .step h1 {
-  font-size: 28px;
-  line-height: 1.12;
+  font-size: 36px;
+  line-height: 1.06;
   font-weight: 620;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.038em;
+  max-width: 14em;
 }
 .step h1:focus {
   outline: none;
@@ -97,8 +91,9 @@ body {
   border-radius: 4px;
 }
 .lead {
-  margin-top: -8px;
-  font-size: 15px;
+  margin-top: -6px;
+  max-width: 34em;
+  font-size: 15.5px;
   line-height: 1.55;
   color: var(--muted);
   text-wrap: pretty;
@@ -128,11 +123,15 @@ body {
   transition:
     border-color var(--fast) ease,
     background-color var(--fast) ease,
-    box-shadow var(--fast) ease;
+    box-shadow var(--fast) ease,
+    transform 0.12s ease;
 }
 .choice:hover {
   border-color: var(--line-3);
   background: var(--surface-2);
+}
+.choice:active {
+  transform: scale(0.98);
 }
 .choice[aria-pressed='true'] {
   border-color: var(--accent);
@@ -140,7 +139,6 @@ body {
   box-shadow: 0 0 0 1px var(--accent) inset;
   padding-right: 34px;
 }
-/* drawn check (no glyph from a fallback font) */
 .choice[aria-pressed='true']::after {
   content: '';
   position: absolute;
@@ -163,31 +161,14 @@ body {
 .custom {
   display: flex;
   gap: 8px;
+  max-width: 520px;
 }
 .custom .input {
   flex: 1;
+  height: 38px;
 }
-
-/* ---------- tally: three pickets light up as sites are picked ---------- */
-.tally {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.pickets {
-  display: inline-flex;
-  gap: 4px;
-  align-items: flex-end;
-}
-.pickets i {
-  width: 8px;
-  height: 14px;
-  background: var(--line-2);
-  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
-  transition: background-color 0.2s ease;
-}
-.pickets i.on {
-  background: var(--signal);
+.custom .btn {
+  height: 38px;
 }
 .counter {
   font-size: 13px;
@@ -203,29 +184,28 @@ body {
   border-radius: var(--radius-sm);
   background: var(--warn-soft);
   color: var(--ink-2);
+  max-width: 520px;
 }
 .note[hidden] {
   display: none;
 }
 .fine {
   color: var(--muted);
+  max-width: 34em;
   text-wrap: pretty;
 }
-
-/* ---------- actions ---------- */
 .actions {
   display: flex;
-  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 6px -40px -28px;
-  padding: 14px 40px 16px;
+  padding-top: 18px;
+  margin-top: 4px;
   border-top: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface-2) 60%, var(--surface));
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 .actions .btn {
-  height: 34px;
+  height: 38px;
+  padding: 0 16px;
+  font-size: 13.5px;
 }
 .row-btns {
   display: flex;
@@ -238,10 +218,12 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  max-width: 520px;
   padding: 12px 14px;
   border-radius: var(--radius);
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--line);
+  box-shadow: var(--shadow-xs);
   font-weight: 550;
   font-size: 13.5px;
 }
@@ -259,6 +241,7 @@ body {
 }
 .how {
   color: var(--ink-2);
+  max-width: 34em;
   text-wrap: pretty;
 }
 .how em {
@@ -277,7 +260,7 @@ body {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 18px 18px 20px;
-  background: var(--surface-2);
+  background: var(--surface);
 }
 .tier h2 {
   display: flex;
@@ -319,22 +302,322 @@ body {
   color: var(--ink);
 }
 
-@media (max-width: 560px) {
+/* ---------- the stage ---------- */
+.stage {
+  --pk: #ffffff;
+  --sky-top: #f9faf9;
+  --sky-low: #e6efe9;
+  --horizon: rgba(58, 154, 91, 0.2);
+  position: relative;
+  height: 460px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow), var(--edge);
+  background:
+    radial-gradient(80% 50% at 50% 100%, var(--horizon), transparent 72%),
+    linear-gradient(to bottom, var(--sky-top), var(--sky-low));
+}
+@media (prefers-color-scheme: dark) {
+  .stage {
+    --pk: #020303;
+    --sky-top: #070908;
+    --sky-low: #0d1310;
+    --horizon: rgba(58, 154, 91, 0.42);
+  }
+}
+.stage-fence {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: opacity 0.35s ease, transform 0.45s var(--ease);
+}
+.slots {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+  height: 230px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent);
+}
+.slots::before,
+.slots::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: var(--pk);
+}
+.slots::before {
+  bottom: 22%;
+}
+.slots::after {
+  bottom: 56%;
+}
+@media (prefers-color-scheme: light) {
+  .slots {
+    filter: drop-shadow(0 0 0.6px rgba(17, 21, 19, 0.3));
+  }
+}
+.slot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.slot .pk {
+  --w: 26px;
+  width: var(--w);
+  height: 170px;
+  background: var(--pk);
+  clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 26px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #04130a;
+}
+/* your three slots */
+.slot.mine .pk {
+  --w: 40px;
+  height: 200px;
+  background: color-mix(in srgb, var(--pk) 55%, var(--sky-low));
+}
+.slot.mine.on .pk {
+  background: var(--signal);
+  animation: slot-rise 0.65s var(--spring) both;
+}
+@keyframes slot-rise {
+  from {
+    transform: translateY(70%);
+  }
+}
+.slot.pro-gate .pk {
+  --w: 34px;
+  height: 188px;
+  background: var(--pro-solid);
+}
+.stage-ground {
+  height: 1px;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+}
+/* the sites in your fence, named under the ground */
+.picked {
+  min-height: 18px;
+  margin: 14px 24px 0;
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stage[data-step='3'] .picked {
+  visibility: hidden;
+}
+.stage-fence {
+  padding-bottom: 22px;
+}
+/* the Pro picket carries a lock */
+.slot.pro-gate .pk {
+  position: relative;
+}
+.slot.pro-gate .pk b {
+  position: absolute;
+  left: 50%;
+  top: 40px;
+  width: 14px;
+  height: 11px;
+  margin-left: -7px;
+  border-radius: 2px;
+  background: var(--pro-ink);
+}
+.slot.pro-gate .pk b::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: -6px;
+  width: 8px;
+  height: 7px;
+  border: 1.7px solid var(--pro-ink);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+.stage[data-step='3'] .slot.mine.on .pk {
+  animation: none;
+}
+
+/* step 2: a normal window and an Incognito one; the second is fenced only if allowed */
+.windows {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.45s var(--ease);
+}
+.stage[data-step='2'] .windows {
+  opacity: 1;
+  transform: none;
+}
+.stage[data-step='2'] .stage-fence {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.win {
+  position: relative;
+  width: 168px;
+  height: 196px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  box-shadow: var(--shadow);
+}
+.win-bar {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.win-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-3);
+}
+.win.incog {
+  background: #26292b;
+  border-color: #33373a;
+}
+.win.incog .win-bar {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.win.incog .win-bar i {
+  background: rgba(255, 255, 255, 0.2);
+}
+/* a simple mask glyph */
+.win-mask {
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  width: 44px;
+  height: 18px;
+  margin-left: -22px;
+  border-radius: 9px 9px 14px 14px;
+  background: rgba(255, 255, 255, 0.16);
+}
+.win-mask::before,
+.win-mask::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  width: 10px;
+  height: 7px;
+  border-radius: 50%;
+  background: #26292b;
+}
+.win-mask::before {
+  left: 8px;
+}
+.win-mask::after {
+  right: 8px;
+}
+.win-fence {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px;
+}
+.win-fence b {
+  width: 18px;
+  height: 70px;
+  background: var(--signal);
+  clip-path: polygon(0 9px, 9px 0, 18px 9px, 18px 100%, 0 100%);
+}
+/* not allowed in Incognito: that window's fence is a dashed outline */
+.win.incog .win-fence b {
+  background: transparent;
+  height: 70px;
+  clip-path: none;
+  border: 1.5px dashed rgba(255, 255, 255, 0.28);
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+.stage.incog-ok .win.incog .win-fence b {
+  background: var(--signal);
+  border: 0;
+  clip-path: polygon(0 9px, 9px 0, 18px 9px, 18px 100%, 0 100%);
+}
+
+/* ---------- narrow windows: the stage sits above the step ---------- */
+@media (max-width: 900px) {
   .ob {
-    padding-top: 28px;
+    padding: 20px 20px 28px;
+  }
+  .ob-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .stage {
+    order: -1;
+    height: 230px;
+  }
+  .slots {
+    height: 150px;
+  }
+  .slot .pk {
+    height: 110px;
+  }
+  .slot.mine .pk {
+    --w: 32px;
+    height: 132px;
+  }
+  .slot.pro-gate .pk {
+    height: 124px;
+  }
+  .stage-fence {
+    padding-bottom: 14px;
+  }
+  .win {
+    width: 130px;
+    height: 150px;
+  }
+  .win-fence b {
+    height: 50px;
+  }
+  .win.incog .win-fence b {
+    height: 50px;
+  }
+}
+@media (max-width: 560px) {
+  .step h1 {
+    font-size: 28px;
   }
   .tiers {
     grid-template-columns: 1fr;
-  }
-  .step {
-    padding: 24px 20px 20px;
-  }
-  .step h1 {
-    font-size: 24px;
-  }
-  .actions {
-    margin: 6px -20px -20px;
-    padding: 12px 20px 14px;
   }
   /* the field gets the whole width (placeholders and typed sites are never clipped) */
   .custom {

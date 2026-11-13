@@ -1,4 +1,5 @@
-/* Toolbar popup: one surface, hairline sections. 360 px wide, height follows content (< 600 px). */
+/* Toolbar popup (360 px, height follows content, < 600 px):
+   the stage (your fence + state), the tab you're on, focus, the day's count. */
 html,
 body {
   background: var(--surface);
@@ -15,28 +16,19 @@ body {
 .spacer {
   flex: 1;
 }
-.zone {
-  padding: 16px;
-  position: relative;
-}
-.zone + .zone {
-  border-top: 1px solid var(--line);
-}
 
 /* ---------- header ---------- */
 .top {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 48px;
-  padding: 0 10px 0 16px;
-  border-bottom: 1px solid var(--line);
+  height: 44px;
+  padding: 0 8px 0 16px;
   position: relative;
-  z-index: 1;
-  background: var(--surface);
+  z-index: 2;
 }
 .top .logo {
-  font-size: 14px;
+  font-size: 13.5px;
 }
 .top .icon-btn {
   color: var(--muted);
@@ -46,99 +38,97 @@ body {
   height: 18px;
 }
 
-/* ---------- status: the lamp, the state, the switch ---------- */
-.zone-fence {
+/* ---------- the stage ---------- */
+.stage {
+  --stage-tint: var(--signal);
+  position: relative;
+  padding: 10px 16px 14px;
+  overflow: hidden;
+  /* light: a faint wash rising from the ground, in the colour of the state */
+  background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 7%, var(--surface)) 0%, var(--surface) 62%);
+  transition: background-color 0.4s ease;
+}
+.stage.is-off {
+  --stage-tint: transparent;
+}
+.stage.is-strict {
+  --stage-tint: var(--pro-solid);
+}
+.stage-fence {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  justify-content: center;
+  align-items: flex-end;
+  height: 62px;
   overflow: hidden;
 }
-.status {
-  --lamp: var(--signal);
-  --lamp-stroke: var(--signal);
-  --lamp-glow: var(--glow);
+#fence {
+  --w: 16px;
+  --h: 46px;
+  --gap: 8px;
+}
+.ground {
   position: relative;
+  z-index: 1;
+  height: 1px;
+  margin: 0 -16px 12px;
+  background: linear-gradient(to right, transparent, var(--line-3) 18%, var(--line-3) 82%, transparent);
+}
+.state {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  padding: 2px 0 4px;
-}
-/* the light behind the lamp (dark theme: light reads as light; on white it would read as a stain) */
-.status::before {
-  content: '';
-  position: absolute;
-  left: -78px;
-  top: -70px;
-  width: 168px;
-  height: 160px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, var(--lamp-glow), transparent);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-@media (prefers-color-scheme: dark) {
-  .status::before {
-    opacity: 1;
-  }
-}
-.status > * {
-  position: relative;
-}
-.lamp {
-  width: 11px;
-  height: 18px;
-  flex: none;
-  margin: 1px 2px 0 1px;
-  fill: var(--lamp);
-  stroke: var(--lamp-stroke);
-  stroke-width: 1.4;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px var(--lamp-glow));
-  transition: fill 0.25s ease, stroke 0.25s ease;
 }
 .status-text {
   flex: 1;
   min-width: 0;
 }
-.status h2 {
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+.state h2 {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 620;
+  letter-spacing: -0.018em;
 }
 #status-sub {
-  margin-top: 2px;
+  margin-top: 1px;
   font-size: 12.5px;
   line-height: 17px;
   color: var(--muted);
   text-wrap: pretty;
 }
-.status .switch {
-  margin-top: 0;
-}
-.status.is-off {
-  --lamp: transparent;
-  --lamp-stroke: var(--faint);
-  --lamp-glow: transparent;
-}
-.status.is-off .lamp {
-  filter: none;
-}
-.status.is-empty {
-  --lamp: transparent;
-  --lamp-glow: transparent;
-}
-.status.is-empty .lamp {
-  filter: none;
-}
-.status.is-strict {
-  --lamp: var(--pro-solid);
-  --lamp-stroke: var(--pro-solid);
-  --lamp-glow: var(--pro-glow);
+@media (prefers-color-scheme: dark) {
+  /* dark: light pools behind the fence instead of a wash */
+  .stage {
+    background: var(--surface);
+  }
+  .stage::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    width: 300px;
+    height: 120px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--stage-tint) 34%, transparent), transparent);
+    transition: opacity 0.4s ease;
+  }
+  .stage.is-off::before {
+    opacity: 0;
+  }
 }
 
-/* ---------- notes ---------- */
+/* ---------- body: notes, the tab you're on, add ---------- */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--line);
+}
 .note {
   display: flex;
   gap: 10px;
@@ -158,8 +148,6 @@ body {
   margin-top: 1px;
   color: var(--warn);
 }
-
-/* ---------- password unlock ---------- */
 .unlock {
   display: flex;
   flex-direction: column;
@@ -192,26 +180,36 @@ body {
   height: 32px;
 }
 
-/* ---------- current tab ---------- */
-.current {
+.here {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 8px 8px 8px 10px;
-  border-radius: var(--radius-md);
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--surface-2);
 }
-.current-text {
+.here-site {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+.here-site .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+.here-text {
   flex: 1;
   min-width: 0;
 }
 .current-host {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: -0.006em;
-  line-height: 18px;
+  letter-spacing: -0.008em;
+  line-height: 19px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -222,76 +220,123 @@ body {
   color: var(--muted);
   text-wrap: pretty;
 }
-.current .btn {
-  flex: none;
+.here-btn {
+  width: 100%;
+  height: 38px;
+  font-size: 13.5px;
+  border-radius: var(--radius-md);
+}
+.here-btn:not([disabled]):active {
+  transform: scale(0.985);
 }
 /* browser pages can't be blocked: the note says so, no dead button */
-.current.is-browser .btn {
+.here.is-browser {
+  padding: 10px 12px;
+}
+.here.is-browser .here-btn {
   display: none;
 }
-/* already on the list: a confirmed state, not a greyed-out button */
-.current .btn.is-blocked,
-.current .btn.is-blocked:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent-line);
-  color: var(--accent);
-  box-shadow: none;
-  cursor: default;
-  padding-left: 9px;
-}
-.current .btn.is-blocked::before {
-  content: '';
-  width: 8px;
-  height: 4px;
-  margin: -3px 2px 0 0;
-  border-left: 1.7px solid currentColor;
-  border-bottom: 1.7px solid currentColor;
-  transform: rotate(-45deg);
-}
-#current-avatar:empty,
 #current-avatar.empty {
   background: var(--bg-2);
   color: var(--muted);
   box-shadow: inset 0 0 0 1px var(--line);
 }
+/* already fenced: a confirmed state, not a greyed-out button */
+.here-btn.is-blocked,
+.here-btn.is-blocked:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent);
+  box-shadow: none;
+  cursor: default;
+}
+.here-btn.is-blocked::before {
+  content: '';
+  width: 9px;
+  height: 4.5px;
+  margin: -3px 4px 0 0;
+  border-left: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  transform: rotate(-45deg);
+}
 @media (prefers-color-scheme: dark) {
-  .current {
+  .here {
     background: rgba(255, 255, 255, 0.02);
   }
 }
 
-/* ---------- add ---------- */
 .add {
   display: flex;
   gap: 8px;
 }
 .add .input {
   flex: 1;
-  height: 32px;
+  height: 34px;
   font-size: 13px;
 }
-
-/* ---------- focus session ---------- */
-.focus {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.add .btn {
+  height: 34px;
 }
-.focus-head {
+
+/* ---------- focus: one line until it runs, then the timer ---------- */
+.focus {
+  padding: 12px 16px 12px;
+  border-top: 1px solid var(--line);
+}
+.focus-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.focus-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--muted);
+}
+.focus-icon .icon {
+  width: 17px;
+  height: 17px;
+}
+.focus-main {
+  flex: 1;
+  min-width: 0;
+}
+.focus-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 18px;
-}
-.focus-head .mono-label {
-  flex: 1;
-  font-weight: 500;
+  font-size: 13.5px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: -0.006em;
 }
 .focus-line {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 2px;
+}
+.focus-sub {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.timer {
+  display: none;
+  font-size: 30px;
+  line-height: 34px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.focus .btn {
+  flex: none;
 }
 .rounds {
   display: inline-flex;
@@ -306,7 +351,6 @@ body {
   height: 10px;
   clip-path: polygon(0 3px, 3px 0, 6px 3px, 6px 100%, 0 100%);
   color: var(--bg-2);
-  box-shadow: none;
 }
 .rounds .picket.done {
   color: var(--signal);
@@ -315,43 +359,19 @@ body {
 .rounds .picket.now {
   color: var(--signal);
 }
-.focus-body {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.focus-main {
-  flex: 1;
-  min-width: 0;
-}
-.timer {
-  font-size: 34px;
-  line-height: 38px;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-.focus-sub {
-  font-size: 12.5px;
-  line-height: 17px;
-  color: var(--muted);
-  text-wrap: pretty;
-}
-/* Not running (Pro idle, or the Free teaser): no static timer, just what a session does */
-.focus:not(.running) .timer {
+/* running: the timer takes the row */
+.focus.running .focus-title {
   display: none;
 }
-.focus:not(.running) .focus-sub {
-  color: var(--ink-2);
-  font-size: 13px;
-  line-height: 18px;
+.focus.running .timer {
+  display: block;
 }
-.focus.running .focus-head {
-  display: none;
+.focus.running .focus-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
-.focus .progress {
-  margin-top: 6px;
+.focus.running .progress {
+  margin-top: 10px;
 }
 .focus.break .progress > span {
   background: var(--faint);

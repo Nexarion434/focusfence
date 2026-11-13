@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, logo, fmtCountdown } = self.FFUI;
+  const { send, logo, el, fmtCountdown } = self.FFUI;
   const { t } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
 
@@ -22,8 +22,33 @@
     host = '';
   }
 
-  $('mark').innerHTML = logo(56);
+  $('mark').innerHTML = logo(20);
   $('site').textContent = host || t('thisSite');
+
+  /* The wall: enough pickets to cross the window, the site's picket lit at the centre.
+     Each picket rises after a delay set by its distance from the centre (a wave). */
+  let letter = (host[0] || '').toUpperCase();
+  function buildWall(still) {
+    const wall = $('wall');
+    const cs = getComputedStyle(document.body);
+    const step = parseFloat(cs.getPropertyValue('--pk-w')) + parseFloat(cs.getPropertyValue('--pk-gap'));
+    let n = Math.ceil(window.innerWidth / step) + 3;
+    if (n % 2 === 0) n++;
+    const mid = (n - 1) / 2;
+    wall.textContent = '';
+    wall.classList.toggle('still', !!still);
+    for (let i = 0; i < n; i++) {
+      const pk = el('span', { class: 'pk' + (i === mid ? ' lit' : '') }, i === mid ? letter : '');
+      pk.style.setProperty('--d', String(Math.abs(i - mid)));
+      wall.appendChild(pk);
+    }
+  }
+  buildWall(false);
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => buildWall(true), 120);
+  });
   $('url').textContent = original;
   $('url').title = original;
   document.title = host ? t('blockedDocTitleHost', host) : t('blockedDocTitle');
@@ -54,6 +79,11 @@
     const state = await send('getState');
     const entry = C.findMatchingEntry(state.settings.entries, hash, state.isPro);
     if (entry && entry.type !== 'domain') $('site').textContent = entry.label;
+    if (entry && entry.type === 'keyword') {
+      letter = '#';
+      const lit = document.querySelector('#wall .pk.lit');
+      if (lit) lit.textContent = letter;
+    }
     const custom = state.isPro && state.settings.blockMessage;
     $('message').textContent = custom || C.quote(Math.floor(Math.random() * C.QUOTES.length));
     pomodoro = state.pomodoro;

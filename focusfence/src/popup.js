@@ -3,7 +3,7 @@
 'use strict';
 (function () {
   const C = self.FFCore;
-  const { send, toast, logo, el, fmtCountdown, fmtTime, requestAccess, errorMessage, siteHue } = self.FFUI;
+  const { send, toast, logo, el, fence, fenceItems, fmtCountdown, fmtTime, requestAccess, errorMessage, siteHue } = self.FFUI;
   const { t, plural } = self.FFI18N;
   const $ = (id) => document.getElementById(id);
 
@@ -11,7 +11,34 @@
   let tab = null;
   let pendingAfterUnlock = null;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(20));
+  $('logo').insertAdjacentHTML('afterbegin', logo(18));
+
+  /** The fence's posture for the current state (see .fence[data-state] in base.css). */
+  function fenceState(s) {
+    const r = s.status.reason;
+    if (s.strict.active) return 'strict';
+    if (r === 'focus') return 'focus';
+    if (r === 'off') return 'down';
+    if (r === 'outside-schedule') return 'paused';
+    return 'up';
+  }
+
+  /** Progress through the current focus phase, 0..1 (its length comes from the session's own settings). */
+  function phaseProgress(p, now) {
+    const length = (p.phase === 'focus' ? p.focusMin : p.breakMin) * 60000;
+    return length > 0 ? Math.min(1, Math.max(0, 1 - (p.endsAt - now) / length)) : 0;
+  }
+
+  function drawFence() {
+    const s = state;
+    const p = s.pomodoro;
+    fence($('fence'), {
+      items: fenceItems(s.settings.entries, s.isPro, C.isProEntry),
+      state: fenceState(s),
+      max: 13,
+      progress: p && p.phase === 'focus' ? phaseProgress(p, Date.now()) : null,
+    });
+  }
 
   async function getTargetTab() {
     // ?tabId= lets automated tests point the popup at a specific tab.
@@ -60,9 +87,8 @@
     const st = statusText(s);
     $('status-title').textContent = st.title;
     setChunks($('status-sub'), st.sub);
-    // an empty list: blocking is on, but nothing is fenced yet (hollow lamp)
-    const empty = !s.settings.entries.length && !st.cls;
-    $('status-card').className = 'status ' + st.cls + (empty ? ' is-empty' : '');
+    $('status-card').className = 'stage ' + st.cls;
+    drawFence();
 
     const toggle = $('toggle-enabled');
     toggle.checked = s.settings.enabled || s.strict.active;
@@ -100,7 +126,7 @@
         : t('focusTeaser');
       $('focus-start').classList.remove('hidden');
       $('focus-start').textContent = s.isPro ? t('startFocus') : t('unlockPro');
-      $('focus-start').className = 'btn ' + (s.isPro ? 'btn-primary' : 'btn-pro-soft');
+      $('focus-start').className = 'btn btn-sm ' + (s.isPro ? 'btn-primary' : 'btn-pro-soft');
       $('focus-stop').classList.add('hidden');
     }
     tickTimer();
@@ -187,10 +213,8 @@
       const now = Date.now();
       const left = p.endsAt - now;
       $('focus-timer').textContent = fmtCountdown(left);
-      // progress through the current phase (its length comes from the session's own settings)
-      const length = (p.phase === 'focus' ? p.focusMin : p.breakMin) * 60000;
-      const done = length > 0 ? Math.min(1, Math.max(0, 1 - left / length)) : 0;
-      $('focus-progress').firstElementChild.style.width = (done * 100).toFixed(2) + '%';
+      $('focus-progress').firstElementChild.style.width = (phaseProgress(p, now) * 100).toFixed(2) + '%';
+      drawFence(); // the fence's lower rail fills as the round goes by
       if (left <= 0) refresh();
     } else {
       $('focus-timer').textContent = fmtCountdown(s.settings.pomodoro.focusMin * 60000);

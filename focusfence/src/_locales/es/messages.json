@@ -356,6 +356,9 @@
   "navFocus": {
     "message": "Sesiones de concentración"
   },
+  "tabFocus": {
+    "message": "Concentración"
+  },
   "navStrict": {
     "message": "Modo estricto"
   },

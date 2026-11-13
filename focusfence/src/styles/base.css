@@ -73,6 +73,7 @@
   --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
   /* motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: cubic-bezier(0.25, 1.35, 0.4, 1);
   --fast: 0.12s;
   /* kept for older references (store screenshot compositions) */
   --focus: 0 0 0 3px var(--ring);
@@ -610,6 +611,138 @@ textarea.input {
   flex: none;
   background: currentColor;
   clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
+}
+
+/* ---------- the fence: the signature. One picket per blocked site; its posture is the state ----------
+ * <div class="fence" data-state="up|focus|paused|down|strict|empty"> built by FFUI.fence().
+ * Pickets keep the logo's geometry: a 45° tip that rises half the picket's width. */
+.fence {
+  --w: 16px;
+  --h: 46px;
+  --gap: 8px;
+  --pk: var(--signal);
+  --pk-ink: #04130a;
+  --rail: color-mix(in srgb, var(--signal) 42%, transparent);
+  --drop: 0%;
+  --fence-glow: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+  gap: var(--gap);
+  height: var(--h);
+  padding: 0 calc(var(--gap) + 4px);
+  filter: drop-shadow(0 0 7px var(--fence-glow));
+  transition: filter 0.4s ease;
+}
+.fence .rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: max(3px, calc(var(--h) * 0.075));
+  border-radius: 2px;
+  background: var(--rail);
+  transform: translateY(calc(var(--drop) * 0.92));
+  transition:
+    transform 0.5s var(--spring) 0.05s,
+    background-color 0.3s ease;
+  overflow: hidden;
+}
+.fence .rail-a {
+  bottom: 24%;
+}
+.fence .rail-b {
+  bottom: 60%;
+}
+/* during a focus session the lower rail fills as the round goes by */
+.fence .rail-a i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--progress, 0%);
+  background: var(--signal);
+  transition: width 0.8s linear;
+}
+.fence .pk {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--w);
+  height: var(--h);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: calc(var(--w) * 0.32);
+  background: var(--pk);
+  clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%);
+  transform: translateY(var(--drop));
+  transition:
+    transform 0.52s var(--spring) calc(var(--i, 0) * 26ms),
+    background-color 0.3s ease;
+  font-size: calc(var(--w) * 0.56);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--pk-ink);
+  user-select: none;
+}
+.fence .pk.off {
+  background: color-mix(in srgb, var(--pk) 38%, var(--bg-2));
+}
+.fence .pk.enter {
+  animation: pk-rise 0.6s var(--spring) both;
+}
+@keyframes pk-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+.fence .more {
+  align-self: center;
+  margin-left: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  transform: translateY(calc(var(--drop) * 0.5));
+  transition: transform 0.5s var(--spring);
+}
+.fence[data-state='paused'] {
+  --pk: color-mix(in srgb, var(--signal) 30%, var(--line-3));
+  --rail: var(--line-2);
+  --drop: 34%;
+}
+.fence[data-state='down'] {
+  --pk: var(--line-3);
+  --pk-ink: var(--surface);
+  --rail: var(--line-2);
+  --drop: 58%;
+}
+.fence[data-state='strict'] {
+  --pk: var(--pro-solid);
+  --pk-ink: var(--pro-ink);
+  --rail: color-mix(in srgb, var(--pro-solid) 45%, transparent);
+}
+.fence[data-state='empty'] .pk {
+  background: var(--bg-2);
+  color: var(--faint);
+}
+@media (prefers-color-scheme: dark) {
+  .fence {
+    --fence-glow: rgba(58, 154, 91, 0.45);
+  }
+  .fence[data-state='focus'] {
+    --fence-glow: rgba(58, 154, 91, 0.7);
+  }
+  .fence[data-state='strict'] {
+    --fence-glow: rgba(217, 167, 75, 0.45);
+  }
+  .fence[data-state='paused'],
+  .fence[data-state='down'],
+  .fence[data-state='empty'] {
+    --fence-glow: transparent;
+  }
+  .fence[data-state='down'] {
+    --pk: #3a413e;
+    --pk-ink: #8e9893;
+  }
 }
 
 /* ---------- notices ---------- */

@@ -212,16 +212,18 @@ try {
   await opt.screenshot({ path: path.join(OUT, `options${suffix}.png`) });
   // The incognito warning depends on the viewer's Chrome settings; keep it out of marketing shots.
   await opt.addStyleTag({ content: '#incognito-warning{display:none!important}' });
-  await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
-  await opt.waitForTimeout(400);
+  // Settings show one destination at a time: open each by its link.
+  const view = async (hash) => {
+    await opt.evaluate((h) => (location.hash = h), hash);
+    await opt.waitForTimeout(450);
+  };
+  await view('#focus');
   await opt.screenshot({ path: path.join(OUT, `options-schedule${suffix}.png`) });
-  await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
-  await opt.waitForTimeout(400);
+  await view('#stats');
   await opt.screenshot({ path: path.join(OUT, `options-stats${suffix}.png`) });
-  await opt.evaluate(() => document.getElementById('plan').scrollIntoView({ block: 'end' }));
-  await opt.waitForTimeout(300);
+  await view('#plan');
   await opt.screenshot({ path: path.join(OUT, `options-plan${suffix}.png`) });
-  await opt.evaluate(() => window.scrollTo(0, 0)); // the sticky sidebar follows the scroll position
+  await view('#blocklist');
   await opt.screenshot({ path: path.join(OUT, `options-full${suffix}.png`), fullPage: true });
 
   // ---- popup (with a running focus session)

@@ -1,96 +1,224 @@
 # FocusFence extension UI: brief, system and critique log
 
-Status: **proposal on branch `design/extension-ui`** (PR against `feat/focusfence-v1`). Scope: the toolbar popup, Settings (options page, including the Plan / upgrade screen and the lock screen), the block page and the onboarding tour, in light and dark.
+Status: **proposal on branch `design/extension-ui`** (PR #4 against `feat/focusfence-v1`). Scope: the toolbar popup, Settings (including the Plan / upgrade screen and the lock screen), the block page and the onboarding tour, in light and dark (following the system).
 
-Companion to the landing page brief (`design/landing-v2/BRIEF.md`, PR #3). The landing sells the product in a dark room with one green light; the extension is the instrument people actually hold. Same brand and type, but light and dark are both first-class, and the density is a tool's, not a poster's.
+- **Round 1** restyled the existing layouts. The owner's verdict: a recolour of the same screens.
+- **Round 2** (this document) starts again from the feature list.
+  - The three concepts and the choice are in [`CONCEPTS.md`](CONCEPTS.md).
+  - This brief describes the system that was built and logs its critique passes.
 
-Nothing about behaviour changes: same features, prices, payments (ExtensionPay), permissions, storage format and i18n keys. Element ids the tests, the store screenshots and the landing's `--site` captures rely on are kept.
+Nothing about behaviour changes: same features, prices, payments (ExtensionPay), permissions, storage format and i18n semantics. One string was added, the "Focus" tab label in en, fr, es and de.
 
-## 1. Where we started (pass 0)
+## 1. Direction: the living fence
 
-`npm run design:shots` captures 32 states in light and dark (popup in eight states, Settings in sixteen, the block page in three, onboarding in five). What was wrong:
+Your blocklist is a fence. Every site you block becomes a picket, drawn with the logo's 45° tip (it rises half the picket's width) and the site's initial. The fence's **posture is the state**:
 
-**Popup**
-1. Card soup: status, current tab, add field, focus timer and footer are five boxes of equal weight. Nothing leads.
-2. In strict mode, two amber blocks are stacked (status, then the Incognito note), and amber already means "Pro" elsewhere.
-3. The idle focus card shows a large `25:00` that isn't counting. It's louder than the blocking status.
-4. Letter avatars use random saturated hues (purple, brown, slate blue). That's colour noise unrelated to the brand.
-5. The disabled "Block site" button is a washed-out green that still looks clickable.
-6. The light theme is warm beige (`#F5F4EF`) with a teal pine (`#276B5B`), an older palette. Neither matches the Picket F green or the near-black landing.
+| Posture | When | Look |
+|---|---|---|
+| up | blocking on (always or within the schedule) | standing, field green; in dark, a green light behind it |
+| focus | focus session running | standing and glowing; the lower rail fills as the round goes by |
+| paused | outside the schedule | half lowered, grey-green |
+| down | blocking off | lowered into the ground, grey |
+| strict | strict mode | standing, amber, amber light |
+| empty | nothing blocked yet | three or five pale slots |
 
-**Settings**
+The same object greets you everywhere:
+- in the popup, it is the status, readable in two seconds;
+- in Settings, it is the hero of the Blocklist;
+- on the block page, it is the wall you hit, and your site's picket is the lit one;
+- in onboarding, you build it, one picket per site.
 
-7. Every section has the same 22 px bold heading, a 600 px paragraph and a bordered box. Controls and descriptions have no rhythm.
-8. Pro-locked sections are greyed to 45 % with an "Available with Pro" card floating over the controls. It reads as broken, not as an offer. Seven PRO pills shout in the sidebar.
-9. The chart is chunky (44 px bars at 85 % green, with numbers on top), and the top-site meters are as loud as the bars.
-10. Link-buttons underline on hover because of a global `a:hover` rule (e.g. "Start focusing", "See Pro").
-11. The full-page capture showed the sticky sidebar at the bottom of the page. This was a capture artefact: both capture scripts now scroll to the top first.
+The stats chart's bars are pickets too.
 
-**Block page**
+Text always says what the fence shows, so the fence is `aria-hidden` and nobody depends on the picture.
 
-12. Two gradients (green top, amber corner) muddy the background, and the picket stripes read as a barcode. The landing fixed the same problem.
-13. The headline puts the site in brand green, so the distraction gets the brand colour.
+What stays from round 1 (the owner liked it): tokens, type, hairlines, the two-tone headline and the calm Pro upsell.
 
-**Onboarding**
+## 2. Information architecture
 
-14. A generic card sits at the top of an empty page, with tiny progress dots and colourful avatars. The Pro tier differs from Free only by an amber border.
+**Popup (360 px), top to bottom.** Each part has one job.
+1. **Stage:** your fence on a ground line. Under it, the state title and summary and the master switch.
+2. **This tab:** the site's monogram, host and note, and one full-width primary action, "Block site". A site already on the list shows a confirmed "✓ Blocked"; browser pages show only the note.
+3. **Add:** a typed field (Enter adds).
+4. **Focus:** one line while idle (what a session does, plus Start). While running, the row becomes the timer, with round pickets and a progress bar, and the stage fence glows.
+5. **Footer:** blocked today and this week (counts only, never a time estimate), and All settings.
 
-## 2. Direction: "the quiet instrument"
+**Settings.** Nine sections in a sidebar scroll became five destinations in a top bar:
 
-FocusFence is something you glance at, not something you browse. It should feel like a precise instrument: neutral surfaces, hairlines, crisp type and **one green signal that means "the fence is up"**. Amber appears only where commitment or money is involved: Pro and strict mode. Everything else is ink on paper (light) or light on graphite (dark).
+| Destination | Holds | Old links that open it |
+|---|---|---|
+| Blocklist | the fence, the composer (website / path / keyword), site cards, host access, block-page message with a live miniature | `#blocklist`, `#blockpage` |
+| Focus | focus session (big clock), schedule with a week ribbon | `#focus`, `#schedule` |
+| Strict mode | strict mode (a locked gate), password lock | `#strict`, `#security` |
+| Stats | today and this week, the 7-day picket chart, top sites, backup | `#stats`, `#backup` |
+| Plan | plans with prices, features, payments, licence and links, developer panel | `#plan` |
 
-Principles:
+- The on/off switch lives in the bar, because it is global state.
+- Free users see a PRO tag on the three Pro tabs. Opening one shows an offer card with the real prices under the page title; the real controls are shown softened and taken out of the keyboard order.
+- A single Pro section inside a Free page (the block-page message) gets a slim bar instead.
+- Every old section id still works as a link: the router opens the view that holds it, so the popup, onboarding and the tests all deep-link.
 
-- **State before words.** Every screen answers "am I protected right now?" before anything else: a status light in the popup, a lit fence on the block page, the switch at the top of the blocklist.
-- **Hairlines over boxes.** Group with spacing and 1 px rules. Use one surface per region, and add a card only where content is an object (a site, a plan, a time range).
-- **Green is a signal, not a decoration.** Green marks active blocking, primary actions, focus rings, ticks and the light. It is never used for a heading or a distraction.
-- **Numbers are instruments.** Timers and counts use Inter's display optical size with tabular figures and tight tracking.
-- **Both themes designed, not inverted.** Light is crisp white on a cool grey canvas. Dark is the landing's near-black with lifted panels and translucent hairlines. Each colour pair is checked in both themes.
+**Block page.** A scene, not a dialog:
+- a sky, and a picket fence across the horizon, built to the window's width;
+- the site's picket stands in the middle, taller, lit and lettered;
+- above it, the two-tone headline (the distraction dimmed), the quote or your own note, the focus pill when a session runs, the counts, "Back to work" and "Settings", and the URL in mono.
 
-Signature details, shared with the landing:
+In light it is a white picket fence at dawn; in dark, a silhouette against green light, as at the end of the website.
 
-- **The picket.** The logo's 45° picket tip (rise = half the width) is the only ornament:
-  - the **status lamp** in the popup: a lit picket that glows green when blocking is on, amber in strict mode and hollow grey when blocking is off or paused, with a soft light behind it;
-  - **round counters** in a focus session, with done, current and remaining pickets;
-  - the **selection counter** in onboarding, where three pickets light up as you pick sites;
-  - the **empty fence** in an empty blocklist;
-  - the **fence silhouette** against the light at the foot of the block page.
-- **Dimmed distractions.** Two-tone headline on the block page: the site is muted, "is fenced off" is bright, as in the landing's hero.
-- **Mono micro-labels.** Uppercase system mono at 11 px for kickers and section labels.
+**Onboarding.** A step on the left, a live stage on the right:
+1. Each site you pick rises into one of three lit slots, and the names show under the ground.
+2. A normal window and an Incognito one. The second's fence is dashed until FocusFence is allowed there.
+3. The fence with an amber picket carrying a lock, for Pro.
 
-## 3. Tokens
+Below 900 px the stage sits above the step.
 
-All tokens live in `src/styles/base.css` on `:root`, overridden under `prefers-color-scheme: dark`. The older token names (`--bg`, `--surface`, `--ink`, `--accent`, `--pro-soft`, …) are kept, with new values, so the store-screenshot compositions and the landing's `--site` captures keep working.
+## 3. The fence component
 
-### Colour
+`FFUI.fence(node, { items, state, max, progress, ghosts })` in `src/lib/ui.js`, with styles in `src/styles/base.css` (`.fence`).
+
+- **Geometry:** CSS variables `--w`, `--h` and `--gap`. Pickets are `clip-path` polygons whose tip rises `--w / 2`. Two rails sit behind them, at 24 % and 60 % of the height. Letters are 0.56 × the width.
+- **Diffing:** re-rendering the same entries only changes `data-state` and `--progress`, so posture changes animate with a 26 ms stagger per picket, on a spring curve. A new entry's picket rises (`.enter`). The first render is still, so nothing animates on every popup open.
+- **Long lists:** above `max` pickets (13 in the popup, 18 in Settings), the last slot becomes `+N`.
+- **Lapsed Pro:** rules kept after Pro lapses are drawn faded (`.off`).
+- **Wall:** the block page draws its own fence in `blocked.js`, one picket every 36 px. Each one rises in a wave that starts at the lit picket. Resizing rebuilds it without animating.
+
+## 4. Tokens
+
+The tokens are unchanged from round 1 and live in `src/styles/base.css`. The older names (`--bg`, `--surface`, `--ink`, `--accent`, `--pro-soft`, …) keep working for the store compositions.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `--bg` | `#F6F7F6` | `#0A0C0B` | page canvas (Settings, block page, onboarding) |
-| `--bg-2` | `#EDEFEE` | `#191D1B` | tracks: segmented control, meters, code |
-| `--surface` | `#FFFFFF` | `#111413` | cards, popup, sidebar items |
-| `--surface-2` | `#F5F6F5` | `#171A19` | hover, input fill |
-| `--surface-3` | `#EDEFEE` | `#1D2120` | pressed |
-| `--line` / `-2` / `-3` | `#E5E8E6` / `#D7DBD9` / `#C2C8C5` | white 7 / 11 / 18 % | hairlines, control borders, hover borders |
-| `--ink` | `#111513` | `#F1F4F2` | primary text |
-| `--ink-2` | `#3A423E` | `#C9D0CC` | secondary emphasis |
-| `--muted` | `#5E6763` | `#8E9893` | body, meta, the dimmed half of headlines |
-| `--faint` | `#8A938E` | `#5F6964` | icons and decoration only (never text) |
-| `--signal` | `#3A9A5B` | `#3A9A5B` | logo field green: lamp, light, chart, fence. Never small text |
-| `--accent` | `#287743` | `#6CC58A` | green text, links, icons, focus ring |
-| `--accent-solid` / `--accent-ink` | `#287743` / white | `#5DBE7E` / `#04130A` | primary button |
-| `--accent-soft` | `#E8F3EC` | green 12 % | selected chips, today's bar label |
-| `--pro` / `--pro-soft` | `#8A5A0B` / `#FBF0DA` | `#D9A74B` / amber 12 % | PRO badges, strict mode |
-| `--pro-solid` / `--pro-ink` | `#D9A13F` / `#1C1305` | `#D9A74B` / `#1A1206` | upgrade button |
-| `--danger` | `#B42318` | `#F2766B` | destructive actions, errors |
-| `--warn` | `#9A5B00` | `#E5B567` | warning icons and text |
-| `--switch-off` | `#868F8B` | `#5E6863` | off track (3:1 against its surface) |
+| `--bg` | `#F6F7F6` | `#0A0C0B` | canvas |
+| `--surface` / `-2` / `-3` | `#FFFFFF` / `#F5F6F5` / `#EDEFEE` | `#111413` / `#171A19` / `#1D2120` | cards, hover, pressed |
+| `--line` / `-2` / `-3` | `#E5E8E6` / `#D7DBD9` / `#C2C8C5` | white 7 / 11 / 18 % | hairlines and borders |
+| `--ink` / `--ink-2` / `--muted` | `#111513` / `#3A423E` / `#5E6763` | `#F1F4F2` / `#C9D0CC` / `#8E9893` | text |
+| `--signal` | `#3A9A5B` | `#3A9A5B` | the logo green: pickets, light, chart. Never small text |
+| `--accent` / `--accent-solid` | `#287743` | `#6CC58A` / `#5DBE7E` | green text, primary buttons, focus ring |
+| `--pro` / `--pro-solid` | `#8A5A0B` / `#D9A13F` | `#D9A74B` | Pro and strict mode |
+| `--danger` / `--warn` | `#B42318` / `#9A5B00` | `#F2766B` / `#E5B567` | errors, warnings |
 
-Dark values follow the landing: same text, muted and accent greens, and the same amber. The canvas `#0A0C0B` is the landing's `#08090A` with a hint of the field green, so panels can sit one step lighter.
+All text pairs are at least 4.5:1. The switch and icons are at least 3:1. The measured table is in round 1, below.
 
-Contrast (WCAG 2.1, measured):
+**Type.** Inter (variable weight and optical size, the website's 73 KB Latin file, bundled), with `cv11` and `ss01`. Display sizes take the display cut automatically.
 
-| Pair | Light | Dark |
+| Role | Size | Weight |
+|---|---|---|
+| Block-page headline | 34–64 px | 620 |
+| Big clocks | 64 px | 600 |
+| Onboarding title | 36 px | 620 |
+| Settings page title | 28 px | 620 |
+| Settings section title | 18 px | 600 |
+| Popup state | 17 px | 620 |
+| Body | 13.5–15.5 px | 400 |
+| UI | 12.5–14 px | 500–600 |
+| Mono label | 11 px | 500 |
+
+Headlines use −0.03 to −0.045em tracking.
+
+**Radius:** 6 for segments, 8 for buttons and inputs, 10 for chips, 12 for cards, 16 for the composer and dialogs, 24 for the onboarding stage.
+
+## 5. Motion and micro-interactions
+
+Every motion runs once per change, nothing loops, and `prefers-reduced-motion` turns all of it off.
+
+- The fence rises when blocking turns on and lowers when it turns off.
+- A new site's picket rises in the popup and in Settings.
+- On the block page, the fence rises in a wave from your picket and the copy fades up.
+- In onboarding, each picked site rises into its slot.
+- The schedule's week ribbon redraws as you toggle days and times, before you save.
+- The block-page miniature shows your note as you type.
+- The idle focus clock follows the length and rounds fields.
+- Switching Settings views fades in. A tab click moves focus to the view's title, for screen readers.
+
+## 6. Accessibility
+
+- **axe (WCAG 2.1 A/AA)** passes on:
+  - the popup, Free and Pro;
+  - all five Settings views, Free and Pro;
+  - the block page and the lock screen;
+  - every onboarding step;
+  
+  in light and dark.
+- `tests/a11y.spec.mjs` now walks every Settings view: with one view at a time, it would otherwise only audit the first.
+- **Keyboard:**
+  - every control is reachable;
+  - locked Pro controls are `inert`;
+  - the lock screen traps focus;
+  - focus rings are 2 px green with a 2 px offset.
+- Tabs use `aria-current="page"`. The fence, the stage, the wall, the week ribbon and the miniature are all `aria-hidden`; the surrounding text says the same in words.
+- Windows high contrast: the switch is drawn with system colours.
+- Text never clips:
+  - the onboarding field gets the full width below 560 px;
+  - placeholders were shortened to fit 390 px in en, fr, es and de;
+  - typed sites fit.
+
+## 7. Critique log, round 2
+
+Each pass captures 39 states × 2 themes (`npm run design:shots`), plus German and French spot checks.
+
+**Pass 1** (first build of concept A):
+1. In onboarding, the side-fade mask on the fence clipped the picked sites' names. The names moved under the ground, outside the mask.
+2. The empty blocklist showed two fences: the hero's empty slots and an illustration. The illustration went.
+3. The Focus page had no hero before a session starts. A big idle clock with one picket per round now follows the fields.
+4. The block page's mask also clipped the lit picket's tip. The wall box is now 44 px taller than the fence.
+5. In light, the Blocklist hero's glow sat to the right of a left-aligned fence and read as a smudge. On white the light is now a faint wash at the foot of the fence; dark keeps a pool of light behind it.
+6. The capture scripts scrolled to sections that now live in other views. They navigate by link instead: the design captures, the store screenshots, and the a11y and two other tests.
+
+**Pass 2:**
+1. In dark, the hero clipped its own glow into a rectangle. The hero no longer clips; the fence row does.
+2. Chrome re-applies its own fragment jump after load, so a routed view could sit 20 px down. The first section of each view now has a scroll margin larger than its offset, so a jump to it always lands on 0.
+3. In German, the bar overflowed at 1280 px ("Tarif" ran into the plan chip). The bar now uses the full width and shows "Pro ansehen" or the PRO badge, never both.
+
+**Pass 3:**
+1. The stats chart's `.bar` class collided with the new top bar's `.bar`, which became a centred flex column. The bar is now `.topbar`.
+2. Dead styles were removed (the old empty-state illustration, label rows).
+3. Rechecked:
+   - the block page at 420 px;
+   - onboarding at 390 px with a typed site;
+   - Settings at 760 px (the bar wraps, tabs on a second row);
+   - the German bar;
+   - lapsed Pro, no host access, strict mode on.
+
+No structural issues left.
+
+**Owner review fixes** (also in round 1's last commit, kept here):
+- the onboarding field at 390 px: full width, shorter placeholders, typed text checked;
+- "m.reddit.com ." in the Blocklist helper and the strict-mode limits: inline code no longer has a chip, so its padding no longer reads as a space before the period, in every language.
+
+## 8. Results
+
+- **Tests:** 101 passed. Three tests changed with the markup:
+  - the Pro-gating test clicks the Plan tab;
+  - the offline-license test opens `#plan`;
+  - the axe test audits every view.
+- **Final screenshots:** `design/extension-ui/screenshots/` (`npm run design:shots`). Popups are at 2x, pages at 1x, in light and dark.
+- **Concept boards:** `design/extension-ui/concepts/`.
+- **Store assets:**
+  - `npm run screenshots:all` regenerated the five screenshots and the promo tile in en, fr, es and de;
+  - the store script opens Settings views by link;
+  - `npm run docs` refreshed the website's copies.
+- **Zip:** `npm run build` rebuilt `dist/focusfence-1.0.0.zip`. `manifest.json`, `background.js`, `config.js` and `vendor/ExtPay.js` are unchanged; `_locales` gained the "Focus" tab label.
+
+## 9. Open points for the owner
+
+- PR #3's `--site` captures scroll to `#stats`, `#schedule .card` and `#strict-on` with `scrollIntoView`. With one Settings view at a time, they need `location.hash = '#stats'` (or `#focus`, `#strict`) first. After both PRs merge:
+  - re-run `npm run screenshots:site`;
+  - set the site's `--screen` token to `#0A0C0B`.
+- The new "Focus" tab label (fr "Concentration", es "Concentración", de "Fokus") deserves a native proofread, like the rest.
+
+---
+
+## Round 1 (history)
+
+What round 1 found in the original UI (pass 0):
+- **Popup:** card soup; two stacked amber blocks in strict mode; a fake idle timer; noisy letter avatars; a washed-out disabled button.
+- **Settings:** a warm-beige palette unrelated to the brand; Pro sections greyed out under floating cards; seven PRO pills; a chunky chart; link-buttons underlined on hover.
+- **Block page:** muddy gradients and a barcode-like fence; the distraction in brand green.
+- **Onboarding:** a generic card.
+
+Round 1 built the token system above (measured contrast below), the components (buttons, inputs, a 3:1 switch, badges, notices, segmented control, monograms), the optical-size font, and four critique passes (status class collision, fake timer, light-mode glow as a stain, chunked summaries, calm Pro gates, toast centring, drawn chevron, disabled ghost buttons, optical badge centring, forced colours, timer captures at the exact tick, a store-caption class collision).
+
+| Pair (WCAG 2.1) | Light | Dark |
 |---|---|---|
 | ink on surface | 18.4 | 16.7 |
 | muted on surface / canvas / track | 5.8 / 5.4 / 5.1 | 6.2 / 6.6 / 5.7 |
@@ -101,160 +229,3 @@ Contrast (WCAG 2.1, measured):
 | danger on surface | 6.6 | 6.7 |
 | switch track (off) vs surface, knob vs track | 3.3 / 3.3 | 3.2 / 5.8 |
 | faint icons vs surface | 3.2 | 3.3 |
-
-White on field green is only 3.5:1, so `--signal` never carries text. The light primary button uses a deeper green on the same hue (141°).
-
-### Type
-
-Inter (variable: weight and optical size, the same Latin subset as the landing, bundled, 73 KB) with `font-optical-sizing: auto` and the landing's features `cv11` and `ss01`. Large numbers get the display cut automatically. Mono is the system stack, for micro-labels and URLs only.
-
-| Role | Size / line | Weight | Tracking |
-|---|---|---|---|
-| Block-page headline | 46 px (clamp 30–46) / 1.06 | 620 | −0.035em |
-| Display numbers (timers, counts, prices) | 26–40 px / 1 | 600–620 | −0.03 to −0.035em |
-| Onboarding title | 28 px / 1.12 | 620 | −0.03em |
-| Section title (Settings h2) | 18 px / 24 | 600 | −0.016em |
-| Popup status | 16 px / 20 | 600 | −0.012em |
-| Body (Settings descriptions) | 13.5 px / 20 | 400 | 0 |
-| UI (popup, rows, buttons) | 13 px / 18 | 450–550 | 0 |
-| Meta | 12 px / 16 | 450 | 0 |
-| Mono label | 11 px / 14, uppercase | 500 | +0.08em |
-| Badge | 10.5 px / 16, uppercase | 600 | +0.04em |
-
-### Space, radius, elevation, motion
-
-- 4 px grid. Popup padding 16 px. Settings content is a 720 px column centred next to a 248 px sidebar; sections are separated by a hairline with 40 px above and below it.
-- Radius: 6 (segments, small controls), 8 (buttons, inputs), 10 (rows, chips), 12 (cards), 16 (dialogs, onboarding), pill (badges, status pill).
-- Elevation: light uses soft two-layer shadows. Dark uses a 1 px inner top highlight (white 4 %) plus black shadows, like the landing's lit panels.
-- Motion: 120 ms for hover and colour, 180 ms for the switch (ease-out), 280–400 ms for entrances (fade + 6–8 px rise). Nothing loops, and `prefers-reduced-motion` turns all of it off.
-
-## 4. Components
-
-- **Button**: 32 px (`sm` 28, `lg` 40). Variants: default (surface + border), primary (accent solid), pro (amber solid, dark ink), ghost, danger (red text, red-tint hover), icon (28 px square). Link-buttons never underline.
-- **Input**: 34–36 px with a 1 px border. Hover strengthens the border; focus shows a green border and a 3 px soft ring. Placeholders use `--muted`.
-- **Switch**: 34 × 20 px. Off is a mid-grey track with a white knob (3:1 both ways). On is green. Disabled is 50 %.
-- **Badge**: pill, 10.5 px uppercase. PRO is amber on amber-soft with a hairline; FREE and neutral badges are grey.
-- **Card**: surface, 1 px line, radius 12. Optional footer separated by a hairline, for actions.
-- **Row**: 52 px, hairline dividers. Remove buttons are quiet icons that turn red on hover.
-- **Monogram**: 28 px rounded square. The tint is derived from the site name (same hash as before), but low-chroma: about 93 % lightness in light, 16 % in dark, with letters at 5:1 or better.
-- **Notice**: neutral surface with a hairline and an amber icon, so warnings stay calm and don't read as Pro.
-- **Segmented control**: track on `--bg-2`; the active segment is a raised surface.
-- **Mono label**, **status lamp**, **picket counter**, **progress bar** (3 px), **stat** (display number + 12 px label).
-- **Toast**: inverted (ink background), radius 10, rises 6 px.
-
-Icons: one in-house set, drawn on a 24 grid with 1.7 px rounded strokes (settings sliders, pickets, calendar, timer, lock, key, page, chart, archive, sparkle, plus, x, check, warning, arrow). Original drawings, no icon library.
-
-## 5. Screens
-
-**Popup (360 px).** One surface with hairline sections:
-1. A header with the logo, wordmark, plan badge and settings button.
-2. The status block: lamp, status title and summary, and the switch, with the light behind the lamp.
-3. The current tab as an object row (monogram, host, note, "Block site").
-4. The add field with its button.
-5. The focus section, with a mono label, a display timer, round pickets and a phase progress bar while running.
-6. The footer: today's and this week's blocked attempts (the numbers emphasised, never a time estimate) and the link to all settings.
-
-Free users see the focus section as a quiet Pro teaser instead of a fake timer. Strict mode tints the lamp amber and turns the Incognito note into a neutral notice.
-
-**Settings.**
-- The sidebar has the brand, the Blocklist, then a single "PRO" group label above the seven Pro sections instead of seven pills, then Plan, plus the plan card at the bottom.
-- Each section has an 18 px title, a muted description and a control on the right where one exists. Content sits in cards with footers for actions.
-- Locked Pro sections show their real controls, softened. A gate bar at the top of the section explains the offer and links to the plans, instead of a card floating over the controls.
-- The chart has 7 slim bars on a hairline baseline. Today's bar is lit; earlier days are signal green at about 40 %.
-- Plan: two plan cards (the yearly card is lit amber, with "Save 44 %"), the features as a ticked two-column list, then the payments, licence and links.
-- Lock screen: a blurred canvas behind a 360 px dialog.
-
-**Block page.** Centred on the canvas, top to bottom:
-- the mark in its light;
-- a mono kicker;
-- the two-tone headline;
-- the quote;
-- the focus pill when a session is running;
-- the two counts in one hairline group;
-- "Back to work" and "Settings";
-- the URL in mono.
-
-A picket fence, silhouetted against a soft green light, closes the page.
-
-**Onboarding.**
-- Logo and a 3-segment progress bar.
-- A 640 px dialog with a 28 px display title and its actions in a footer bar.
-- Site chips with low-chroma monograms and a drawn check when selected.
-- The counter has three pickets that light up.
-- Free and Pro are shown side by side; the Pro tier is lit and carries the price.
-
-## 6. Process
-
-1. Pass 0: capture the existing UI in every state (`npm run design:shots`) and list what's wrong (section 1).
-2. Implement the system in `base.css` and the four pages.
-3. Repeat at least three times: capture all states in light and dark, critique as a senior designer, fix. Each pass is logged below.
-4. Keep the full test suite green, regenerate the store screenshots in all four languages and the website assets that embed them, then rebuild the zip.
-
-## 7. Critique log
-
-Each pass captures every state in light and dark (`npm run design:shots`: 32 states, 35 from pass 2), reviews them side by side, then fixes. The full suite runs after each pass.
-
-**Pass 1** (first build of the system; tests: 101 passed, axe clean in both themes):
-
-Popup:
-1. The status block stacked vertically because its `focus` state class collided with the focus card's `.focus` rules. States are now `is-focus`, `is-off` and `is-strict`.
-2. The phase progress was about 0 % whenever a session's end time was moved (as the store screenshots do). It now follows the phase length, the same source as the countdown.
-3. On white, the light behind the lamp read as a stain. The light now exists only in the dark theme; light mode keeps a crisp lamp.
-4. The idle `25:00` was a static timer. Idle and Free now say what a session does, next to the action; the big timer only exists while it counts.
-5. The amber "Unlock Pro" outweighed "Block site". It is now a soft amber button.
-6. The status summary broke inside a phrase ("6 / sites fenced"). Its chunks no longer break.
-7. "Browser pages can't be blocked" was truncated. It wraps now.
-8. The title and lamp were a size too small to lead (15 → 16 px, lamp 10 → 11 px).
-9. An empty list lit the lamp, so "Blocking is on · 0 sites fenced" looked active. The lamp is now hollow until something is fenced.
-10. On browser pages, the disabled "Block site" was noise next to the note that says why. It is now hidden.
-11. "Blocked" looked like a greyed-out button. It is now a confirmed green state with a tick.
-
-Settings:
-12. The Blocklist icon read as an "m", and the Block page icon was a second "no entry" sign. They are now a circle-slash and a window with text lines.
-13. At 760 px, the plan card and its full-width amber button pushed the settings below the fold. The card is now hidden in the narrow layout; the Plan link stays.
-14. The live session in Settings had none of the popup's round pickets and progress. Both are added.
-15. In light mode, the strict-mode card's radial glow read as a cream smudge. It is now a 64 px amber wash at the top of the card.
-
-Block page:
-16. In light mode, the halo banded, and the vertical fade erased the picket tips, so the fence read as stripes again. There is no halo on white now. The fence keeps its tips and fades sideways: pale green pickets in light, a black silhouette against the green light in dark.
-
-Onboarding:
-17. The dialog hugged the top of a tall, empty page. It now sits at an optical centre (11 vh).
-
-**Pass 2** (all states again, plus German and French, keyboard focus and toasts; tests: 101 passed):
-1. On Free, the seven Pro gates were seven amber bars down the page, which felt naggy. Each gate is now a neutral bar; only the lock icon and one small Upgrade button are amber.
-2. German and French were checked in the popup, Settings, the block page and onboarding (`--lang de|fr`). Everything fits at 360 px; the long footer wraps between its chunks, never inside one.
-3. Toasts centred on the window, half under the sidebar. They now centre on the content column.
-4. The native disclosure triangle on "What strict mode can't prevent" was the one untouched browser default. It is now a drawn chevron that turns open.
-5. Keyboard focus was checked by tabbing through the popup and Settings: a 2 px green ring with a 2 px offset on every control, plus a green border and soft ring on inputs, in both themes.
-6. The capture set gained the strict banner at the top of Settings, Pro rules kept after Pro lapses, and toasts.
-
-**Pass 3** (all 35 states at 2x for popups; tests: 101 passed):
-1. In strict mode, the disabled remove buttons turned into bordered grey boxes, because the generic disabled style beat the ghost variant. Disabled ghost buttons now stay borderless and faint.
-2. Uppercase badges (PRO, FREE, SAVE 44 %) sat about 1 px high, because line-height centres the em box rather than the caps. They are now optically centred.
-3. In Windows high-contrast mode, system colours replace backgrounds, so the switch would vanish. It is now drawn with system colours there (Canvas, CanvasText and Highlight), as checked with Chromium's forced-colours emulation.
-4. No structural issues left. The popup, block page and onboarding read as one family with the website: the same green, amber, type, picket and two-tone headline.
-
-**Pass 4** (final set, store assets; tests: 101 passed):
-1. The light and dark captures of a running session showed different seconds (18:42 and 18:40), because the timer kept ticking between them. The capture script now waits for the exact 18:42 tick, so every image shows the same moment, as the website's captures do.
-2. The store captions' composition has its own `.kicker` class, which picked up the new mono label of the same name. The utility is now `.mono-label`, and the captions render exactly as before.
-3. The tick in the store popup frame's bullet list still used the old pine. It now uses the accent.
-
-## 8. Results
-
-- **Tests:** 101 passed: unit, e2e, axe in light and dark, i18n fr/es/de, onboarding, store, build and zip checks. No test had to change, because every id, role and text the tests rely on is preserved.
-- **Final screenshots:** `design/extension-ui/screenshots/` holds 35 states in light and dark (70 PNGs). Popups are at 2x, pages at 1x.
-- **Store assets:** `npm run screenshots:all` regenerated the five screenshots and the promo tile in en, fr, es and de. `npm run docs` then refreshed the website copies, which the docs test requires to be byte-identical.
-- **Zip:** `npm run build` rebuilt `dist/focusfence-1.0.0.zip` (165 KB → 194 KB, mostly the optical-size font).
-  - Same 34 files; 16 changed: the four pages, their scripts and styles, `lib/ui.js`, the font and its notice.
-  - `manifest.json`, `background.js`, `config.js`, `_locales` and `vendor/ExtPay.js` are byte-identical.
-- **Strings:** no new strings. The sidebar's PRO group label reuses `planPro`.
-
-## 9. Open points for the owner
-
-- The landing page (PR #3) embeds captures of this UI. Once both PRs are merged:
-  - re-run `npm run screenshots:site`;
-  - set the site's `--screen` token to the extension's new dark canvas `#0A0C0B` (it was `#141917`), so product crops still sit seamlessly.
-- The extension now bundles the same Inter file as the website (weight + optical size), which adds 25 KB to the zip. The file keeps its name, and `THIRD_PARTY_NOTICES.txt` says which cut it is.
-- Unchanged behaviour of the store script: `store-2-popup.png` loads the popup about a second after `popup.png`, so its timer can read 18:41.
-

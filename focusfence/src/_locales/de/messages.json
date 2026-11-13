@@ -356,6 +356,9 @@
   "navFocus": {
     "message": "Fokus-Sitzungen"
   },
+  "tabFocus": {
+    "message": "Fokus"
+  },
   "navStrict": {
     "message": "Strikter Modus"
   },

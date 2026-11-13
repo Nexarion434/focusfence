@@ -93,6 +93,46 @@
     return '<svg class="icon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
   }
 
+  /**
+   * The fence: one picket per entry. Re-rendering with the same entries only changes the posture
+   * (data-state), so CSS animates it; a new entry's picket rises. Decorative (aria-hidden): the
+   * surrounding text always says the same thing in words.
+   *   items: [{ key, label, letter, off }]   state: up|focus|paused|down|strict|empty
+   */
+  function fence(node, { items = [], state = 'up', max = 14, progress = null, ghosts = 3 } = {}) {
+    const list = items.length ? items : Array.from({ length: ghosts }, (_, i) => ({ key: 'ghost' + i, label: '', letter: '' }));
+    const shown = list.length > max ? list.slice(0, max - 1) : list;
+    const sig = shown.map((x) => x.key + (x.off ? '~' : '')).join('|') + '#' + list.length;
+    node.setAttribute('aria-hidden', 'true');
+    node.classList.add('fence');
+    node.dataset.state = items.length ? state : 'empty';
+    node.style.setProperty('--progress', progress === null ? '0%' : Math.round(progress * 1000) / 10 + '%');
+    if (node.dataset.sig === sig) return node;
+    const before = new Set([...node.querySelectorAll('.pk')].map((p) => p.dataset.key));
+    const first = !node.dataset.sig;
+    node.dataset.sig = sig;
+    node.textContent = '';
+    node.append(el('span', { class: 'rail rail-a' }, el('i')), el('span', { class: 'rail rail-b' }));
+    shown.forEach((it, i) => {
+      const fresh = !first && !before.has(it.key) && items.length;
+      const pk = el('span', { class: 'pk' + (it.off ? ' off' : '') + (fresh ? ' enter' : ''), title: it.label || null, dataset: { key: it.key } }, it.letter || '');
+      pk.style.setProperty('--i', String(i));
+      node.appendChild(pk);
+    });
+    if (list.length > shown.length) node.appendChild(el('span', { class: 'more', text: '+' + (list.length - shown.length) }));
+    return node;
+  }
+
+  /** Fence items for a settings entry list (keyword rules get a #). */
+  function fenceItems(entries, isPro, isProEntry) {
+    return entries.map((e) => ({
+      key: e.id,
+      label: e.label,
+      letter: e.type === 'keyword' ? '#' : (String(e.host || e.label).replace(/^www\./, '')[0] || '?').toUpperCase(),
+      off: !isPro && isProEntry(e),
+    }));
+  }
+
   function fmtCountdown(ms) {
     const s = Math.max(0, Math.round(ms / 1000));
     const m = Math.floor(s / 60);
@@ -116,5 +156,5 @@
     return (err && err.message) || i18n('errGeneric', 'Something went wrong.');
   }
 
-  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fmtCountdown, fmtTime, errorMessage };
+  root.FFUI = { logo, send, toast, el, requestAccess, siteAvatar, siteHue, icon, fence, fenceItems, fmtCountdown, fmtTime, errorMessage };
 })(self);

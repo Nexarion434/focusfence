@@ -356,6 +356,9 @@
   "navFocus": {
     "message": "Focus sessions"
   },
+  "tabFocus": {
+    "message": "Focus"
+  },
   "navStrict": {
     "message": "Strict mode"
   },

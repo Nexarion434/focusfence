@@ -264,7 +264,11 @@ const MAIN = [
   }],
   ['options-free-locked', async (h, theme, name) => {
     await h.reset({ pro: false });
-    await h.options(theme, name, { scrollTo: '#schedule' });
+    await h.options(theme, name, { hash: '#focus' });
+  }],
+  ['options-free-strict', async (h, theme, name) => {
+    await h.reset({ pro: false });
+    await h.options(theme, name, { hash: '#strict' });
   }],
   ['options-empty', async (h, theme, name) => {
     await h.reset({ pro: false, entries: [], stats: false });
@@ -272,41 +276,50 @@ const MAIN = [
   }],
   ['options-schedule-focus', async (h, theme, name) => {
     await h.reset({ pro: true });
-    await h.options(theme, name, { scrollTo: '#schedule' });
+    await h.options(theme, name, { hash: '#focus' });
+  }],
+  ['options-schedule', async (h, theme, name) => {
+    await h.reset({ pro: true });
+    await h.options(theme, name, { hash: '#schedule' });
   }],
   ['options-focus-running', async (h, theme, name) => {
     await h.reset({ pro: true });
     await h.focus(LEFT + 2500);
-    await h.options(theme, name, { scrollTo: '#focus', ready: (p) => h.waitText(p, '#pomo-clock', '18:42') });
+    await h.options(theme, name, { hash: '#focus', ready: (p) => h.waitText(p, '#pomo-clock', '18:42') });
   }],
   ['options-strict-waiting', async (h, theme, name) => {
     await h.reset({ pro: true });
     await h.send('startStrict', { hours: 2 });
     await h.send('requestStrictUnlock');
-    await h.options(theme, name, { scrollTo: '#strict' });
+    await h.options(theme, name, { hash: '#strict' });
   }],
   ['options-strict-challenge', async (h, theme, name) => {
     await h.reset({ pro: true });
     await h.send('startStrict', { hours: 0 });
     await h.send('requestStrictUnlock');
     await h.strictChallenge();
-    await h.options(theme, name, { scrollTo: '#strict' });
+    await h.options(theme, name, { hash: '#strict' });
   }],
   ['options-blockpage-password', async (h, theme, name) => {
     await h.reset({ pro: true });
-    await h.options(theme, name, { scrollTo: '#blockpage' });
+    await h.send('setBlockMessage', { message: 'You promised yourself the thesis chapter first.' });
+    await h.options(theme, name, { hash: '#blockpage' });
+  }],
+  ['options-security', async (h, theme, name) => {
+    await h.reset({ pro: true });
+    await h.options(theme, name, { hash: '#security' });
   }],
   ['options-stats', async (h, theme, name) => {
     await h.reset({ pro: true });
-    await h.options(theme, name, { scrollTo: '#stats' });
+    await h.options(theme, name, { hash: '#stats' });
   }],
   ['options-plan-free', async (h, theme, name) => {
     await h.reset({ pro: false });
-    await h.options(theme, name, { scrollTo: '#plan' });
+    await h.options(theme, name, { hash: '#plan' });
   }],
   ['options-plan-pro', async (h, theme, name) => {
     await h.reset({ pro: true });
-    await h.options(theme, name, { scrollTo: '#plan', block: 'end' });
+    await h.options(theme, name, { hash: '#plan' });
   }],
   ['options-lock', async (h, theme, name) => {
     await h.reset({ pro: true });

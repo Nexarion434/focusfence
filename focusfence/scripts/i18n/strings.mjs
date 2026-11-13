@@ -175,6 +175,7 @@ export const S = {
   navBlocklist: { en: 'Blocklist', fr: 'Liste de blocage', es: 'Lista de bloqueo', de: 'Sperrliste' },
   navSchedule: { en: 'Schedule', fr: 'Horaires', es: 'Horario', de: 'Zeitplan' },
   navFocus: { en: 'Focus sessions', fr: 'Sessions de concentration', es: 'Sesiones de concentración', de: 'Fokus-Sitzungen' },
+  tabFocus: { en: 'Focus', fr: 'Concentration', es: 'Concentración', de: 'Fokus' },
   navStrict: { en: 'Strict mode', fr: 'Mode strict', es: 'Modo estricto', de: 'Strikter Modus' },
   navBlockpage: { en: 'Block page', fr: 'Page de blocage', es: 'Página de bloqueo', de: 'Sperrseite' },
   navSecurity: { en: 'Password lock', fr: 'Mot de passe', es: 'Contraseña', de: 'Passwortschutz' },

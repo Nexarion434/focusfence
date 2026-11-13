@@ -115,6 +115,8 @@ test.describe('Pro gating (simulated via DEV flag)', () => {
     const page = await ext.context.newPage();
     await page.goto(ext.base + 'options.html');
     await expect(page.locator('#schedule')).toHaveClass(/pro-locked/);
+    // Settings show one destination at a time; the developer panel lives under Plan.
+    await page.locator('[data-nav="plan"]').click();
     await expect(page.locator('#dev-panel')).toBeVisible();
     await page.locator('#dev-pro').check();
     await expect(page.locator('#schedule')).not.toHaveClass(/pro-locked/);
