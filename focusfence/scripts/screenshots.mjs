@@ -263,6 +263,28 @@ async function captureTheme(theme, SITE_OUT, written) {
     const y = Math.max(0, Math.floor(r.y - padY));
     return { x, y, width: Math.ceil(r.x + r.width + padX) - x, height: Math.ceil(r.y + r.height + padY) - y };
   };
+  // The block page's content (the union of its children), padded and centred on the page: the
+  // card the website shows on its own. Tighter than the page's 640px column, so it reads at small sizes.
+  const contentClip = async (page, selector, padX, padY) => {
+    const r = await page.locator(selector).first().evaluate((el) => {
+      const b = el.getBoundingClientRect();
+      const cx = b.x + b.width / 2;
+      let top = Infinity;
+      let bottom = -Infinity;
+      let half = 0;
+      for (const c of el.children) {
+        const k = c.getBoundingClientRect();
+        if (!k.width || !k.height) continue;
+        top = Math.min(top, k.top);
+        bottom = Math.max(bottom, k.bottom);
+        half = Math.max(half, cx - k.left, k.right - cx);
+      }
+      return { x: cx - half, y: top, width: 2 * half, height: bottom - top };
+    });
+    const x = Math.max(0, Math.floor(r.x - padX));
+    const y = Math.max(0, Math.floor(r.y - padY));
+    return { x, y, width: Math.ceil(r.x + r.width + padX) - x, height: Math.ceil(r.y + r.height + padY) - y };
+  };
   try {
     const api = await context.newPage();
     await api.goto(base + 'options.html');
@@ -298,7 +320,7 @@ async function captureTheme(theme, SITE_OUT, written) {
     await blocked.waitForTimeout(600); // entrance animation
     await waitFor(blocked, '#session-text', '18:42');
     // measured once the page is complete (the session line is shown), same frame as the capture
-    const cardRect = await clipOf(blocked, 'main.wrap', 64, 44);
+    const cardRect = await contentClip(blocked, 'main.wrap', 40, 36);
     const blockPng = await blocked.screenshot();
     await blocked.close();
     await webp(blockPng, 'block-page.webp');
@@ -322,15 +344,17 @@ async function captureTheme(theme, SITE_OUT, written) {
     if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
     await send('stopPomodoro');
 
-    // ---- settings at 1280 px: the blocklist (full window) and the stats panel
+    // ---- settings in a 1280x700 window (the sidebar and the whole blocklist), then the stats panel
     const opt = await context.newPage();
-    await opt.setViewportSize({ width: 1280, height: 800 });
+    await opt.setViewportSize({ width: 1280, height: 700 });
     await opt.goto(base + 'options.html');
     await hideIncognito(opt);
     await opt.waitForTimeout(600);
     const optPng = await opt.screenshot();
     await webp(optPng, 'blocklist.webp');
     await webp(optPng, 'blocklist-1x.webp', { scale: 0.5 });
+    await opt.setViewportSize({ width: 1280, height: 800 });
+    await opt.waitForTimeout(300);
     await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
     await opt.waitForTimeout(300);
     await webp(await opt.screenshot({ clip: await clipOf(opt, '#stats', 24) }), 'stats.webp');
@@ -340,6 +364,18 @@ async function captureTheme(theme, SITE_OUT, written) {
     await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
     await opt.waitForTimeout(300);
     await webp(await opt.screenshot({ clip: await clipOf(opt, '#schedule .card', 1) }), 'schedule.webp');
+    // ---- the settings page's own narrow layout (below 860px its summary cards stack): the stats
+    // panel for phones, in the narrowest window the page fits without scrolling sideways
+    for (const width of [684, 700, 720, 760]) {
+      await opt.setViewportSize({ width, height: 900 });
+      await opt.waitForTimeout(300);
+      if (await opt.evaluate(() => document.documentElement.scrollWidth <= innerWidth)) break;
+    }
+    await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
+    await opt.waitForTimeout(300);
+    await webp(await opt.screenshot({ clip: await clipOf(opt, '#stats', 16) }), 'stats-m.webp');
+    await opt.setViewportSize({ width: 900, height: 800 });
+    await opt.waitForTimeout(300);
 
     // ---- strict mode switched on ("until I unlock it": no date in the picture), 900 px window
     await send('startStrict', { hours: 0 });
