@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 100 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
+Current state: PR #1 open, 100 automated tests green. Repo **public**; site **live** at https://focusfence.dev/ (custom domain; privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
 
 ## Costs at a glance
 
@@ -10,7 +10,7 @@ Current state: PR #1 open, 100 automated tests green. Repo **public** and site *
 | 1 | Chrome Web Store developer registration | **US$5, one-time** (covers all your extensions; confirm the amount on the registration page) | Before the first upload | **Yes** |
 | 2 | Stripe card processing (through ExtensionPay) | **≈ 2.9% + US$0.30 per US card payment** (EUR payments are charged at Stripe's rate for European cards, which depends on your account country: check stripe.com/pricing), about +1–1.5% for international cards, +1% if currency conversion applies. No monthly fee | Per sale | Yes, if you sell Pro |
 | 3 | ExtensionPay service fee | **5% per transaction, at time of charge.** No up-front cost, no monthly fee (source: extensionpay.com pricing section, checked 2026-11-13; "lower fees and flat monthly rates are available for high-volume accounts"). Payments land in **your own Stripe account**, so Stripe's fees (#2) come **on top** | Per sale | Yes, if you sell Pro |
-| 4 | GitHub Pages | **US$0**: the repo is public (done 2026-11-13) | — | Done, free |
+| 4 | GitHub Pages (custom domain focusfence.dev) | **US$0**: the repo is public | — | Done, free |
 | 5 | Sales tax / VAT handling (e.g. Stripe Tax or an accountant) | Variable, to check with your accountant | Ongoing | Depends on where you sell |
 | 6 | Legal review of AGPL licensing / privacy policy | Variable | Once | Optional, recommended |
 | 7 | Domain `focusfence.dev` | **Already registered** by you at Hostinger (check the yearly renewal price there). Mail is handled by iCloud. Pointing the website at it is optional | Yearly renewal | Yes, for the contact email |
@@ -29,17 +29,26 @@ On the monthly plan, 18% goes to fees, mostly because of Stripe's fixed 30¢. Ov
 - [ ] Review and merge **PR #1** (`feat/focusfence-v1` → `main`): https://github.com/Nexarion434/focusfence/pull/1
       Agents are not allowed to merge on this server.
 
-## 2. Repository visibility + website (done 2026-11-13, one follow-up after merge)
+## 2. Repository, website and custom domain
 
-Done on your approval, after a history scan: gitleaks 8.21.2 found 0 leaks in 25 commits, and a grep of every blob found no tokens, keys, `.env`, local paths or personal emails. The only identity in the history is the commit author `Steve (agents-paradev) <hello@retype.studio>`, which is now public.
+Repo made public on 2026-11-13 after a history scan: gitleaks 8.21.2 found 0 leaks, and a grep of every blob found no tokens, keys, `.env`, local paths or personal emails. The only identity in the history is the commit author `Steve (agents-paradev) <hello@retype.studio>`.
 
-- [x] Repo made **public**.
-- [x] GitHub Pages enabled from **`feat/focusfence-v1` / `/docs`** (main isn't merged yet). The landing page, `privacy.html`, `blog/`, `robots.txt` and `sitemap.xml` return 200.
-- [ ] **After merging PR #1, switch Pages to `main`.** Otherwise the site stops updating, and breaks if the branch is deleted:
-      `gh api -X PUT repos/Nexarion434/focusfence/pages -f 'source[branch]=main' -f 'source[path]=/docs'`
-      Then check https://nexarion434.github.io/focusfence/ and `/privacy.html` again.
-- [ ] Until the merge, the site footer's "GNU AGPL v3" link (`/blob/main/focusfence/LICENSE`) returns 404. It fixes itself once `main` has the code.
-- [ ] If the account, repo or host changes, update `SOURCE_URL`/`PRIVACY_URL` in `focusfence/src/config.js`, `SOURCE_URL`/`SITE_URL` in `focusfence/scripts/docs.mjs` and the URLs in `focusfence/store/*.md`. Then run `npm run docs && npm run build`.
+- [x] Repo **public**; GitHub Pages serves `/docs`, currently from **`feat/focusfence-v1`** because `main` isn't merged yet.
+- [x] Custom domain **https://focusfence.dev/**:
+  - DNS at Hostinger: the 4 GitHub Pages A records on the apex, `www` as a CNAME to `nexarion434.github.io`, and the iCloud MX/SPF records kept.
+  - `docs/CNAME` contains `focusfence.dev`; it is written by `npm run docs`, so it survives regeneration.
+  - The Pages custom domain is set to `focusfence.dev`.
+  - The old https://nexarion434.github.io/focusfence/ URLs redirect to it.
+- [ ] **Merge PR #1** (agents may not merge on this server):
+      `gh pr merge 1 --repo Nexarion434/focusfence --merge`
+- [ ] **Then switch Pages to `main`.** Otherwise the site stops updating, and breaks if the branch is deleted:
+      `gh api -X PUT repos/Nexarion434/focusfence/pages -f 'source[branch]=main' -f 'source[path]=/docs' -f cname=focusfence.dev`
+      Check that https://focusfence.dev/, `/fr/`, `/es/`, `/de/` and `/privacy.html` return 200, and that the footer's "GNU AGPL v3" link (`/blob/main/focusfence/LICENSE`) works. It returns 404 until `main` has the code.
+- [ ] **Enforce HTTPS** once GitHub has issued the certificate for focusfence.dev (Settings → Pages shows it, usually within an hour of the DNS being right):
+      `gh api -X PUT repos/Nexarion434/focusfence/pages -F https_enforced=true`
+- [ ] Recommended: **verify the domain** for your account (GitHub → Settings → Pages → Verified domains, a TXT record at Hostinger). This prevents domain takeover.
+- [ ] **Next extension release:** `PRIVACY_URL` in `focusfence/src/config.js` still points to the github.io address (it redirects). The 1.0.0 zip was deliberately left unchanged; switch it to `https://focusfence.dev/privacy.html` in the next version, then run `npm run build`.
+- [ ] If the domain or repo changes again, update `SITE_URL` in `focusfence/scripts/docs.mjs` (it also writes `docs/CNAME`), `SOURCE_URL`/`PRIVACY_URL` in `focusfence/src/config.js` and the URLs in `focusfence/store/*.md`. Then run `npm run docs` (plus `npm run build` if `config.js` changed).
 
 ## 3. Privacy policy contact
 

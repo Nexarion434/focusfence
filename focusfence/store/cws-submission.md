@@ -11,7 +11,7 @@ Nothing here has been submitted. Dashboard field names can shift slightly betwee
 - [x] Contact email set: `contact@focusfence.dev` in `store/privacy-policy.md`, live on the privacy pages in all 4 languages.
 - [ ] `cd focusfence && npm test && npm run cws:check`. Expect `PASSED`, and use the zip it names: `dist/focusfence-1.0.0.zip`.
 - [ ] These URLs return 200 in a browser:
-      `https://nexarion434.github.io/focusfence/` and `https://nexarion434.github.io/focusfence/privacy.html`
+      `https://focusfence.dev/` and `https://focusfence.dev/privacy.html`
 
 ## 1. Account (one time)
 
@@ -44,7 +44,7 @@ Repeat for each language (dashboard language selector). English first.
 | Small promo tile (440×280) | `screenshots/promo-tile-440x280.png` (per language: same folders) |
 | Marquee promo tile (1400×560) | leave empty (optional; only used if Google features the item) |
 | Official URL | leave empty unless you verify the site in Google Search Console |
-| Homepage URL | `https://nexarion434.github.io/focusfence/` |
+| Homepage URL | `https://focusfence.dev/` |
 | Support URL | `https://github.com/Nexarion434/focusfence/issues` |
 | Mature content | `No` |
 
@@ -118,7 +118,7 @@ Tick all three certifications:
 ### Privacy policy URL
 
 ```
-https://nexarion434.github.io/focusfence/privacy.html
+https://focusfence.dev/privacy.html
 ```
 
 ## 5. Distribution tab

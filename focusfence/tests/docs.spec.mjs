@@ -78,7 +78,7 @@ test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal sc
 });
 
 /* ------------------------------------------------------------ multilingual */
-const SITE_URL = 'https://nexarion434.github.io/focusfence/';
+const SITE_URL = 'https://focusfence.dev/';
 const dirOf = (l) => (l === 'en' ? '' : l + '/');
 const all = (re, html) => [...html.matchAll(re)].map((m) => m[1]);
 const allHtml = () => {
@@ -232,6 +232,12 @@ test('site strings: every language has the same keys and shapes as English, and 
     const listing = read(`focusfence/store/listing.${lang}.md`);
     for (const k of ['priceMonthly', 'priceYearly']) expect(listing, `${lang}.${k}`).toContain(SITE[lang][k]);
   }
+});
+
+test('custom domain: docs/CNAME matches the canonical site origin', () => {
+  expect(read('docs/CNAME')).toBe(new URL(SITE_URL).host + '\n');
+  expect(new URL(SITE_URL).host).toBe('focusfence.dev');
+  expect(read('docs/robots.txt')).toContain(`Sitemap: ${SITE_URL}sitemap.xml`);
 });
 
 test('sitemap lists every language with hreflang alternates', () => {

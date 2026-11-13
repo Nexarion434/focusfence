@@ -66,7 +66,7 @@ SO GEHT'S
 4. Pro: Lege einen Zeitplan fest, starte eine Fokus-Sitzung oder schalte vor einer Deadline den strikten Modus ein.
 
 Zahlungen über ExtensionPay (Stripe). Kein FocusFence-Konto nötig.
-Datenschutzerklärung: https://nexarion434.github.io/focusfence/privacy.html
+Datenschutzerklärung: https://focusfence.dev/privacy.html
 Quellcode: https://github.com/Nexarion434/focusfence
 ```
 

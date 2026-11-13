@@ -121,7 +121,7 @@ The UI, manifest name/description and store listings are available in **English 
 
 ## Website (GitHub Pages)
 
-`npm run docs` regenerates `../docs/` (repo root). Live at https://nexarion434.github.io/focusfence/ (GitHub Pages, folder `/docs`; served from `feat/focusfence-v1` until PR #1 is merged, then from `main`).
+`npm run docs` regenerates `../docs/` (repo root). Live at https://focusfence.dev/ (GitHub Pages custom domain, `docs/CNAME` written by `npm run docs`; folder `/docs`, served from `feat/focusfence-v1` until PR #1 is merged, then from `main`). The old https://nexarion434.github.io/focusfence/ URLs redirect there.
 
 - **Languages:** English at the root (also `x-default`), French, Spanish and German under `docs/fr/`, `docs/es/`, `docs/de/`: landing page plus `privacy.html` each.
   - Landing text: `scripts/site-strings.mjs`.

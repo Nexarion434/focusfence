@@ -59,8 +59,11 @@ test('CWS submission checklist: every permission justified (≤ 1000 chars), val
   const single = /## Single purpose description\n\n```\n([\s\S]*?)\n```/.exec(doc)[1];
   expect(single.length).toBeLessThanOrEqual(1000);
   expect(read('store/listing.md')).toContain(single);
-  const privacyUrl = /PRIVACY_URL: '([^']+)'/.exec(read('src/config.js'))[1];
-  expect(doc).toContain('```\n' + privacyUrl + '\n```');
+  const site = /const SITE_URL = '([^']+)'/.exec(read('scripts/docs.mjs'))[1];
+  expect(doc).toContain('```\n' + site + 'privacy.html\n```');
+  // the extension's own link may still use the github.io address, which Pages redirects to the custom domain
+  const inExtension = /PRIVACY_URL: '([^']+)'/.exec(read('src/config.js'))[1];
+  expect([site + 'privacy.html', 'https://nexarion434.github.io/focusfence/privacy.html']).toContain(inExtension);
   expect(doc).toContain(S.extName.en);
 });
 

@@ -13,7 +13,7 @@ import { SITE, SITE_LANGS, LANG_NAMES, OG_LOCALE } from './site-strings.mjs';
 const DOCS = path.resolve(ROOT, '..', 'docs');
 const STORE_URL = null; // set to the Chrome Web Store URL once published
 const SOURCE_URL = 'https://github.com/Nexarion434/focusfence';
-const SITE_URL = 'https://nexarion434.github.io/focusfence/';
+const SITE_URL = 'https://focusfence.dev/'; // custom domain (GitHub Pages, docs/CNAME)
 const LICENSE_URL = `${SOURCE_URL}/blob/main/focusfence/LICENSE`;
 export const LANG_STORAGE_KEY = 'ff-lang';
 
@@ -38,6 +38,7 @@ for (const lang of SITE_LANGS) {
   }
 }
 fs.writeFileSync(path.join(DOCS, '.nojekyll'), '');
+fs.writeFileSync(path.join(DOCS, 'CNAME'), new URL(SITE_URL).host + '\n'); // GitHub Pages custom domain
 const pngSize = (rel) => {
   const b = fs.readFileSync(path.join(DOCS, rel));
   return [b.readUInt32BE(16), b.readUInt32BE(20)];

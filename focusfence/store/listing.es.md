@@ -66,7 +66,7 @@ CÓMO SE USA
 4. Pro: configura un horario, empieza una sesión de concentración o activa el modo estricto antes de una entrega.
 
 Pagos procesados por ExtensionPay (Stripe). No necesitas cuenta de FocusFence.
-Política de privacidad: https://nexarion434.github.io/focusfence/privacy.html
+Política de privacidad: https://focusfence.dev/privacy.html
 Código fuente: https://github.com/Nexarion434/focusfence
 ```
 

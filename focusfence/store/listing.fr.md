@@ -66,7 +66,7 @@ MODE D'EMPLOI
 4. Pro : définissez des horaires, lancez une session de concentration ou activez le mode strict avant une échéance.
 
 Paiements traités par ExtensionPay (Stripe). Aucun compte FocusFence nécessaire.
-Politique de confidentialité : https://nexarion434.github.io/focusfence/privacy.html
+Politique de confidentialité : https://focusfence.dev/privacy.html
 Code source : https://github.com/Nexarion434/focusfence
 ```
 

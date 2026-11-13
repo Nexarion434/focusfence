@@ -68,7 +68,7 @@ HOW TO USE
 4. Pro: set a schedule, start a focus session, or turn on strict mode before a deadline.
 
 Payments are processed by ExtensionPay (Stripe). No FocusFence account needed.
-Privacy policy: https://nexarion434.github.io/focusfence/privacy.html
+Privacy policy: https://focusfence.dev/privacy.html
 Source code: https://github.com/Nexarion434/focusfence
 ```
 
@@ -113,7 +113,7 @@ Certifications (all three apply):
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose
 - I do not use or transfer user data to determine creditworthiness or for lending purposes
 
-Privacy policy URL: `https://nexarion434.github.io/focusfence/privacy.html` (live since 2026-11-13). Field-by-field submission values: `store/cws-submission.md`.
+Privacy policy URL: `https://focusfence.dev/privacy.html` (custom domain since 2026-11-13; the old github.io address redirects there). Field-by-field submission values: `store/cws-submission.md`.
 
 ## Assets
 
