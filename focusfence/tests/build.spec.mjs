@@ -36,6 +36,8 @@ test('store build: DEV flag off, no Simulate Pro, Free blocking works', async ({
     expect(await send('addEntry', { raw: 'youtube.com/shorts', kind: 'path' })).toMatchObject({ ok: false, code: 'PRO_REQUIRED' });
     expect((await send('addEntry', { raw: 'reddit.com', kind: 'domain' })).ok).toBe(true);
     expect(await outcome(ext.context, 'https://old.reddit.com/')).toBe('blocked');
+    // first install of the store build opens the onboarding tour
+    expect(ext.context.pages().some((p) => p.url().endsWith('/onboarding.html'))).toBe(true);
   } finally {
     await ext.close();
   }
