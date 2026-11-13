@@ -34,8 +34,6 @@
   --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(93, 190, 126, 0.5), 0 10px 30px -10px rgba(93, 190, 126, 0.55);
   --glow: rgba(58, 154, 91, 0.22);
   --glow-2: rgba(58, 154, 91, 0.06);
-  --glow-final: rgba(58, 154, 91, 0.34);
-  --glow-final-2: rgba(58, 154, 91, 0.08);
   --pro: #d9a74b;
   --pro-bg: rgba(217, 167, 75, 0.12);
   /* components */
@@ -61,9 +59,31 @@
   --best-edge: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
   --save-ink: #04130a;
   --sel: rgba(108, 197, 138, 0.3);
-  --picket: #0a0d0b;
-  --picket-line: rgba(108, 197, 138, 0.18);
-  --rail-line: rgba(108, 197, 138, 0.1);
+  /* the lantern fence: the extension's block-page wall (design/extension-ui, blocked.css and
+     base.css), graphite at night; the lantern is a light, pale at the top and green below */
+  --wall-0: #232927;
+  --wall-1: #151a18;
+  --wall-2: #0b0e0d;
+  --wall-shade: rgb(0 0 0 / 0.3);
+  --wall-cap: rgb(255 255 255 / 0.07);
+  --wall-cap-r: rgb(0 0 0 / 0.35);
+  --wall-edge: rgb(255 255 255 / 0.05);
+  --lit-0: #c4f4d4;
+  --lit-1: #5cc583;
+  --lit-2: #2c7c48;
+  --lit-cap: 0.45;
+  --lit-edge: 0.5;
+  --lit-bloom: 0.85;
+  --rim-rgb: 127 217 160;
+  --rail: #0f1412;
+  --rail-hi: rgb(255 255 255 / 0.035);
+  --horizon: rgba(58, 154, 91, 0.34);
+  --sky-low: #08100c;
+  --floor-0: #080b0a;
+  --floor-1: #030404;
+  --ground-line: rgb(255 255 255 / 0.06);
+  --refl: 0.3;
+  --pool: rgb(76 184 115 / 0.5);
   --link-line: rgba(108, 197, 138, 0.55);
   --mark-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
   /* type */
@@ -78,6 +98,7 @@
   --r-lg: 18px;
   /* motion */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --spring: cubic-bezier(0.25, 1.35, 0.4, 1); /* the extension's: pickets rise with a little give */
   --dur: 0.7s;
 }
 /* Light: warm paper and ink, like the extension's light theme (its #f5f4ef is --screen).
@@ -102,8 +123,6 @@
     --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
     --glow: rgba(58, 154, 91, 0.13);
     --glow-2: rgba(58, 154, 91, 0.04);
-    --glow-final: rgba(58, 154, 91, 0.2);
-    --glow-final-2: rgba(58, 154, 91, 0.06);
     --pro: #7d5710;
     --pro-bg: #f7eedb;
     --top-bg: rgba(251, 250, 247, 0.72);
@@ -128,9 +147,30 @@
     --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
     --save-ink: #ffffff;
     --sel: rgba(39, 107, 91, 0.18);
-    --picket: #ffffff;
-    --picket-line: rgba(39, 107, 91, 0.26);
-    --rail-line: rgba(39, 107, 91, 0.18);
+    /* the lantern fence at dawn: sage pickets, soft as stone, and a jewel-green lantern */
+    --wall-0: #c3d1c8;
+    --wall-1: #d0dbd4;
+    --wall-2: #e2e9e4;
+    --wall-shade: rgb(17 21 19 / 0.05);
+    --wall-cap: rgb(255 255 255 / 0.55);
+    --wall-cap-r: rgb(17 21 19 / 0.06);
+    --wall-edge: rgb(255 255 255 / 0.75);
+    --lit-0: #52b678;
+    --lit-1: #3a9a5b;
+    --lit-2: #2a7845;
+    --lit-cap: 0.3;
+    --lit-edge: 0.28;
+    --lit-bloom: 0.4;
+    --rim-rgb: 58 154 91;
+    --rail: #d2ddd6;
+    --rail-hi: rgb(255 255 255 / 0.6);
+    --horizon: rgba(58, 154, 91, 0.1);
+    --sky-low: #edf3ec;
+    --floor-0: #e3eae2;
+    --floor-1: #f4f5f0;
+    --ground-line: rgb(17 21 19 / 0.1);
+    --refl: 0.16;
+    --pool: rgb(58 154 91 / 0.24);
     --link-line: rgba(39, 107, 91, 0.45);
     --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
   }
@@ -154,8 +194,6 @@
   --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
   --glow: rgba(58, 154, 91, 0.13);
   --glow-2: rgba(58, 154, 91, 0.04);
-  --glow-final: rgba(58, 154, 91, 0.2);
-  --glow-final-2: rgba(58, 154, 91, 0.06);
   --pro: #7d5710;
   --pro-bg: #f7eedb;
   --top-bg: rgba(251, 250, 247, 0.72);
@@ -180,9 +218,30 @@
   --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
   --save-ink: #ffffff;
   --sel: rgba(39, 107, 91, 0.18);
-  --picket: #ffffff;
-  --picket-line: rgba(39, 107, 91, 0.26);
-  --rail-line: rgba(39, 107, 91, 0.18);
+  /* the lantern fence at dawn: sage pickets, soft as stone, and a jewel-green lantern */
+  --wall-0: #c3d1c8;
+  --wall-1: #d0dbd4;
+  --wall-2: #e2e9e4;
+  --wall-shade: rgb(17 21 19 / 0.05);
+  --wall-cap: rgb(255 255 255 / 0.55);
+  --wall-cap-r: rgb(17 21 19 / 0.06);
+  --wall-edge: rgb(255 255 255 / 0.75);
+  --lit-0: #52b678;
+  --lit-1: #3a9a5b;
+  --lit-2: #2a7845;
+  --lit-cap: 0.3;
+  --lit-edge: 0.28;
+  --lit-bloom: 0.4;
+  --rim-rgb: 58 154 91;
+  --rail: #d2ddd6;
+  --rail-hi: rgb(255 255 255 / 0.6);
+  --horizon: rgba(58, 154, 91, 0.1);
+  --sky-low: #edf3ec;
+  --floor-0: #e3eae2;
+  --floor-1: #f4f5f0;
+  --ground-line: rgb(17 21 19 / 0.1);
+  --refl: 0.16;
+  --pool: rgb(58 154 91 / 0.24);
   --link-line: rgba(39, 107, 91, 0.45);
   --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
 }
@@ -654,10 +713,10 @@ code {
   --above: 404px;
   position: relative;
   width: 80em;
-  height: 31em;
+  height: 34em; /* the settings window; the popup and the block page end by 29em */
   margin-inline: auto;
   font-size: min(16px, calc((100vw - 2 * var(--gutter)) / 80));
-  font-size: min(16px, calc((100vw - 2 * var(--gutter)) / 80), max(10px, calc((100svh - var(--above)) / 31)));
+  font-size: min(16px, calc((100vw - 2 * var(--gutter)) / 80), max(10px, calc((100svh - var(--above)) / 29)));
 }
 .win {
   position: relative;
@@ -779,14 +838,14 @@ code {
   width: 100%;
 }
 .win-wrap .win-hero {
-  left: 3.75em;
+  left: 2em;
   top: 0;
   width: 54em;
 }
 .win-popup {
   position: absolute;
   z-index: 3;
-  left: 39.35em; /* hangs from the settings window's toolbar icon */
+  left: 37.6em; /* hangs from the settings window's toolbar icon */
   top: 3.25em;
   width: 17.5em; /* the 360px popup at 0.78 */
   border-radius: 0.75em;
@@ -795,9 +854,9 @@ code {
 }
 .win-wrap .win-card {
   z-index: 2;
-  left: 56em; /* under the popup's edge by less than its own margin: no content is covered */
-  top: 6.5em;
-  width: 20.25em;
+  left: 54.75em; /* just under the popup's edge, in the block page's empty margin */
+  top: 6.75em;
+  width: 23.5em; /* a 720 x 600 window */
   border-radius: 0.75em;
   box-shadow: var(--pop-shadow);
 }
@@ -912,10 +971,12 @@ code {
   text-transform: uppercase;
 }
 .picket {
-  width: 7px;
-  height: 11px;
+  /* the extension's picket ornament: the logo's 45° tip, as on its focus-round counters */
+  flex: none;
+  width: 8px;
+  height: 13px;
   background: var(--green);
-  clip-path: polygon(0 3.5px, 3.5px 0, 7px 3.5px, 7px 100%, 0 100%);
+  clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
 }
 .h2 {
   font-size: clamp(32px, 1.9vw + 20px, 48px);
@@ -934,16 +995,6 @@ code {
 .shot {
   position: relative;
   margin-top: clamp(48px, 6vw, 80px);
-}
-.shot::after {
-  content: '';
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  height: 26%;
-  background: linear-gradient(to bottom, transparent, var(--bg) 88%);
-  pointer-events: none;
 }
 .shot .win {
   box-shadow: var(--shot-shadow);
@@ -1394,25 +1445,26 @@ details[open] .faq-i {
   }
 }
 
-/* final call */
+/* final call: the page closes on the extension's block-page scene. A wall of pickets stands on a
+   ground that reflects it; the lantern in the middle holds the light and throws it on its neighbours,
+   the rails and the ground. Graphite at night (dark), sage at dawn (light). Ported from the
+   extension (design/extension-ui: src/styles/base.css .pk, src/styles/blocked.css); the wall's
+   markup and per-picket values come from scripts/docs.mjs. */
 .final {
+  --wall-h: 150px;
+  --floor-h: 76px;
+  --lit-rise: 50px;
+  --pk-w: 14px;
+  --pk-gap: 28px;
+  --lit-w: 22px;
   position: relative;
   padding: clamp(96px, 10vw, 152px) 0 0;
   overflow: hidden;
   text-align: center;
   isolation: isolate;
-}
-.final::before {
-  /* the light behind the fence */
-  content: '';
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  bottom: -260px;
-  width: min(1300px, 160vw);
-  height: 640px;
-  transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--glow-final), var(--glow-final-2) 58%, transparent);
+  background:
+    radial-gradient(min(520px, 62vw) 460px at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    linear-gradient(to bottom, var(--bg) 0%, var(--bg) 40%, var(--sky-low) 100%);
 }
 .final-in {
   display: grid;
@@ -1437,22 +1489,151 @@ details[open] .faq-i {
 .final .ticks {
   justify-content: center;
 }
-.fence {
-  width: 100%;
-  height: 180px;
-  margin-top: clamp(64px, 8vw, 104px);
-  margin-bottom: -1px;
-  fill: var(--picket);
-  stroke: var(--picket-line);
-  stroke-width: 1;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+.scene {
+  position: relative;
+  height: calc(var(--wall-h) + var(--lit-rise) + 40px + var(--floor-h));
+  margin-top: clamp(40px, 5vw, 72px);
 }
-.fence .rail {
-  stroke: var(--rail-line);
+/* the ground: it reflects the fence and catches the lantern's light */
+.scene .floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  background: linear-gradient(var(--floor-0), var(--floor-1));
 }
-.fence .pickets {
-  stroke: none;
+.scene .floor::before {
+  /* the ground line, fading out at the sides */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--ground-line) 20%, var(--ground-line) 80%, transparent);
+}
+.scene .floor::after {
+  /* the pool of light at the lantern's foot */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -18px;
+  width: 440px;
+  height: 44px;
+  margin-left: -220px;
+  background: radial-gradient(closest-side, var(--pool), transparent);
+}
+/* the wall: as wide as the section, the pickets overflow it evenly and fade toward its edges; its
+   mask also hides whatever is below the ground line (the pickets rise out of it) */
+.wall {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-h);
+  height: calc(var(--wall-h) + var(--lit-rise) + 40px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--pk-gap);
+  -webkit-mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+}
+/* the reflection: the same wall, flipped at the ground line, gone a few dozen pixels down */
+.wall.mirror {
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: var(--refl);
+  -webkit-mask-image: linear-gradient(to top, #000, transparent 46px), linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to top, #000, transparent 46px), linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  mask-composite: intersect;
+}
+/* rails, behind the pickets; the lantern lights the stretch around it */
+.wall::before,
+.wall::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 300px), rgb(var(--rim-rgb) / 0.55) 50%, transparent calc(50% + 300px)),
+    linear-gradient(var(--rail-hi), var(--rail-hi)) 0 0 / 100% 1px no-repeat,
+    var(--rail);
+}
+.wall::before {
+  bottom: calc(var(--wall-h) * 0.3);
+}
+.wall::after {
+  bottom: calc(var(--wall-h) * 0.68);
+}
+/* the picket material: a body that darkens toward the ground, a tip cut in two facets (the left one
+   catches the light), a shaded right face and a 1 px edge light, all gradients on a clip-path */
+.wall .pk {
+  --w: var(--pk-w);
+  --v: 1;
+  --rim: 0;
+  --pk-0: var(--wall-0);
+  --pk-1: var(--wall-1);
+  --pk-2: var(--wall-2);
+  --pk-cap: var(--wall-cap);
+  --pk-cap-r: var(--wall-cap-r);
+  --pk-edge: var(--wall-edge);
+  --pk-shade: var(--wall-shade);
+  --pk-layers:
+    linear-gradient(90deg, var(--pk-cap) 50%, var(--pk-cap-r) 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
+    linear-gradient(90deg, var(--pk-edge) 1px, transparent 1px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    linear-gradient(90deg, transparent 50%, var(--pk-shade) 50%) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    linear-gradient(180deg, var(--pk-0), var(--pk-1) 42%, var(--pk-2));
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--w);
+  height: var(--wall-h);
+  clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%);
+  background: var(--pk-layers);
+  /* the fence recedes into the dark (or the haze) away from the lantern */
+  opacity: var(--v);
+}
+/* the lantern's light on its neighbours: the edge and the tip facet that face it */
+.wall .pk.l {
+  background:
+    linear-gradient(90deg, transparent 50%, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
+    linear-gradient(270deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    var(--pk-layers);
+}
+.wall .pk.r {
+  background:
+    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%, transparent 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
+    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    var(--pk-layers);
+}
+/* the lantern: taller, lit from within */
+.wall .pk.lit {
+  --w: var(--lit-w);
+  --pk-0: var(--lit-0);
+  --pk-1: var(--lit-1);
+  --pk-2: var(--lit-2);
+  --pk-cap: rgb(255 255 255 / var(--lit-cap));
+  --pk-cap-r: rgb(0 0 0 / 0.08);
+  --pk-edge: rgb(255 255 255 / var(--lit-edge));
+  --pk-shade: rgb(0 0 0 / 0.08);
+  z-index: 3;
+  height: calc(var(--wall-h) + var(--lit-rise));
+}
+.wall .bloom {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  width: calc(var(--lit-w) + 10px);
+  height: calc(var(--wall-h) + var(--lit-rise) - 12px);
+  margin-left: calc((var(--lit-w) + 10px) / -2);
+  border-radius: 999px;
+  background: var(--lit-1);
+  filter: blur(18px);
+  opacity: var(--lit-bloom);
 }
 
 /* footer */
@@ -1660,6 +1841,40 @@ th {
 .motion [data-reveal].in {
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
+/* The closing wall rises once it comes into view, in a wave from the lantern, then the lantern
+   lights up (as on the extension's block page). Without the script, or with reduced motion, it
+   simply stands. */
+.motion [data-rise]:not(.in) .pk {
+  transform: translateY(102%);
+}
+.motion [data-rise]:not(.in) .bloom,
+.motion [data-rise]:not(.in) .floor::after {
+  opacity: 0;
+}
+.motion [data-rise].in .pk {
+  animation: wall-rise 0.9s var(--spring) both;
+  animation-delay: calc(var(--d, 0) * 24ms + 80ms);
+}
+.motion [data-rise].in .pk.lit {
+  animation-duration: 1.1s;
+  animation-delay: 40ms;
+}
+.motion [data-rise].in .bloom {
+  animation: light-on 1.1s ease 0.5s both;
+}
+.motion [data-rise].in .floor::after {
+  animation: light-on 1.1s ease 0.55s both;
+}
+@keyframes wall-rise {
+  from {
+    transform: translateY(102%);
+  }
+}
+@keyframes light-on {
+  from {
+    opacity: 0;
+  }
+}
 /* No endless animation: the status dot pings three times, then rests. */
 @media (prefers-reduced-motion: no-preference) {
   .pulse::after {
@@ -1803,7 +2018,7 @@ th {
   }
   .win-wrap {
     width: 21.875em;
-    height: 22em;
+    height: 23.5em;
     font-size: min(20px, calc((100vw - 2 * var(--gutter)) / 21.875));
   }
   .win-wrap .win-bar {
@@ -1821,8 +2036,8 @@ th {
   }
   .win-wrap .win-card {
     left: 0;
-    top: 8.5em;
-    width: 11.5em;
+    top: 8em;
+    width: 12.5em;
   }
   /* product images are shown whole: the extension's own narrow layout (stats), the block
      page's card, and the feature crops scaled to fit */
@@ -1832,9 +2047,6 @@ th {
   .screen-stats {
     padding: 0;
     overflow: hidden;
-  }
-  .shot::after {
-    display: none;
   }
   .details {
     grid-template-columns: 1fr;
@@ -1877,15 +2089,15 @@ th {
   .cta .btn {
     width: 100%;
   }
-  /* smaller pickets on phones: the same fence, seen from further away */
-  .fence {
-    width: 160%;
-    max-width: none;
-    margin-left: -30%;
-    margin-top: 40px;
-    margin-bottom: -55px;
-    transform: scale(0.625);
-    transform-origin: 50% 0;
+  /* phones: a lower wall, as on the extension's block page in a short window */
+  .final {
+    --wall-h: 112px;
+    --lit-rise: 38px;
+    --floor-h: 56px;
+  }
+  .scene .floor::after {
+    width: 300px;
+    margin-left: -150px;
   }
   .ticks {
     flex-direction: column;
@@ -1912,7 +2124,7 @@ th {
 @media print {
   .top,
   .stage,
-  .fence {
+  .scene {
     display: none;
   }
 }

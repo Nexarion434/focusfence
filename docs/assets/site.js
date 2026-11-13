@@ -112,7 +112,8 @@
   // Reveal on scroll. The observer's first callback reports what is already on screen,
   // so nothing is measured here.
   function setupReveal() {
-    var items = [].slice.call(document.querySelectorAll('[data-reveal]'));
+    // [data-reveal] blocks rise and fade in; [data-rise] is the closing fence, which rises itself
+    var items = [].slice.call(document.querySelectorAll('[data-reveal], [data-rise]'));
     document.documentElement.classList.add('motion');
     var io = new IntersectionObserver(
       function (entries) {

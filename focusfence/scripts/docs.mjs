@@ -37,7 +37,21 @@ copy(FONT, 'inter.woff2');
 copy('src/icons/icon128.png', 'icon128.png');
 copy('src/icons/icon32.png', 'favicon.png');
 // Localized product images (npm run screenshots:site): screenshots/site/<lang>/.
-const THEMED = ['block-page.webp', 'block-page-1x.webp', 'block-card.webp', 'popup.webp', 'blocklist.webp', 'blocklist-1x.webp', 'schedule.webp', 'focus.webp', 'strict.webp', 'stats.webp', 'stats-m.webp'];
+const THEMED = [
+  'block-page.webp',
+  'block-page-1x.webp',
+  'block-page-m.webp',
+  'block-card.webp',
+  'popup.webp',
+  'blocklist.webp',
+  'blocklist-1x.webp',
+  'schedule.webp',
+  'schedule-m.webp',
+  'focus.webp',
+  'strict.webp',
+  'stats.webp',
+  'stats-m.webp',
+];
 const SHOTS = [...THEMED, ...THEMED.map((f) => f.replace(/(-1x)?\.webp$/, '-light$1.webp')), 'og.png'];
 for (const lang of SITE_LANGS) {
   for (const file of SHOTS) {
@@ -190,6 +204,24 @@ const ICON = {
 };
 const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name]}</svg>`;
 const PRO = '<span class="pro">PRO</span>';
+/* The closing scene is the extension's block-page wall (design/extension-ui: src/blocked.js and
+ * src/styles/blocked.css): pickets 14 px wide, 28 px apart, and a lantern in the middle. Each picket's
+ * distance from the lantern sets how much it fades (--v) and how much of the lantern's light it
+ * catches on its facing edge (--rim), with the extension's own formulas. 33 pickets (1.4k px) are
+ * plenty: the wall fades out toward its edges, and every element here costs style and layout time
+ * on load, even below the fold. The ground reflects it (the mirror). */
+const WALL = (() => {
+  const n = 33;
+  const mid = (n - 1) / 2;
+  const pickets = Array.from({ length: n }, (_, i) => {
+    const d = Math.abs(i - mid);
+    if (!d) return '<span class="pk lit"></span>';
+    const v = (0.16 + 0.84 * Math.exp(-d / 4.4)).toFixed(3);
+    const rim = Math.exp(-d / 2.3).toFixed(3);
+    return `<span class="pk wall-pk ${i < mid ? 'l' : 'r'}" style="--d:${d};--v:${v};--rim:${rim}"></span>`;
+  });
+  return `<div class="wall">${pickets.join('')}<span class="bloom"></span></div>`;
+})();
 // Prices as written in each language ('$2.99', '2,99 €', '2,99 US$'): the amount, and an amount
 // formatted the same way. The yearly card compares a year of each plan from these figures.
 const amount = (price) => Number(/(\d+)[.,](\d\d)/.exec(price).slice(1).join('.'));
@@ -384,7 +416,7 @@ ${T.steps.map(([h, p], i) => `      <li class="step"><span class="step-n">0${i +
     <div class="shot" data-reveal>
       <div class="win">
         ${winBar(blockedTitle)}
-        <div class="win-body">${shot('block-page.webp', T.altBlock, { cls: 'win-img', srcset: true, sizes: 'min(1200px, calc(100vw - 48px))', narrow: 'block-card.webp' })}</div>
+        <div class="win-body">${shot('block-page.webp', T.altBlock, { cls: 'win-img', srcset: true, sizes: 'min(1200px, calc(100vw - 48px))', narrow: 'block-page-m.webp' })}</div>
       </div>
     </div>
     <div class="feats" data-reveal>
@@ -402,7 +434,7 @@ ${T.blockFeatures.map(([h, p], i) => `      <div class="feat"><h3>${h}${i ? PRO 
     <div class="bento">
       <article class="card card-schedule" data-reveal>
         <div class="card-text"><h3>${T.focusFeatures[0][0]}</h3><p>${T.focusFeatures[0][1]}</p></div>
-        <div class="screen">${shot('schedule.webp', T.altSchedule)}</div>
+        <div class="screen">${shot('schedule.webp', T.altSchedule, { narrow: 'schedule-m.webp' })}</div>
       </article>
       <article class="card card-timer" data-reveal>
         <div class="card-text"><h3>${T.focusFeatures[1][0]}</h3><p>${T.focusFeatures[1][1]}</p></div>
@@ -497,7 +529,11 @@ ${T.faq.map(([q, a]) => `      <details><summary><span>${q}</span>${icon('plus',
     <div class="cta">${CTA}</div>
     ${ticks}
   </div>
-  <svg class="fence" aria-hidden="true" focusable="false"><defs><pattern id="pickets" x="50%" width="44" height="180" patternUnits="userSpaceOnUse"><path d="M10.5 180V36l12-12 12 12v144z"/></pattern></defs><rect class="rail" y="88" width="100%" height="10"/><rect class="rail" y="146" width="100%" height="10"/><rect class="pickets" width="100%" height="180" fill="url(#pickets)"/></svg>
+  <div class="scene" aria-hidden="true" data-rise>
+    <div class="floor"></div>
+    ${WALL.replace('class="wall"', 'class="wall mirror"')}
+    ${WALL}
+  </div>
 </section>
 </main>`;
   return page({

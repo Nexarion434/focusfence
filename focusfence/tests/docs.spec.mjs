@@ -85,6 +85,11 @@ test('motion is optional: blocks reveal on scroll, and nothing stays hidden with
   const browser = await chromium.launch({ env });
   const hidden = (page) =>
     page.evaluate(() => [...document.querySelectorAll('[data-reveal]')].filter((el) => getComputedStyle(el).opacity !== '1').length);
+  // the closing fence: every picket of the wall standing (not sunk into the ground)
+  const standing = (page) =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('.scene .wall .pk')].every((pk) => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(pk).transform))
+    );
   try {
     const url = 'file://' + path.join(DOCS, 'index.html');
     // motion allowed: below-the-fold blocks start hidden, and all are shown once scrolled into view
@@ -102,6 +107,10 @@ test('motion is optional: blocks reveal on scroll, and nothing stays hidden with
     // every block has been revealed, and the transitions settle on fully opaque blocks
     await page.waitForFunction(() => document.querySelectorAll('[data-reveal]:not(.in)').length === 0, null, { timeout: 15000 });
     await page.waitForFunction(() => [...document.querySelectorAll('[data-reveal]')].every((el) => getComputedStyle(el).opacity === '1'), null, { timeout: 5000 });
+    // the closing fence rose once in view, and stands
+    await page.waitForFunction(() => document.querySelector('[data-rise]').classList.contains('in'), null, { timeout: 5000 });
+    await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+    expect(await standing(page)).toBe(true);
     // a jump straight to the end (anchor, fast scroll): everything above it is revealed too
     const jump = await ctx.newPage();
     await jump.goto(url + '#faq');
@@ -121,6 +130,7 @@ test('motion is optional: blocks reveal on scroll, and nothing stays hidden with
       const p = await c.newPage();
       await p.goto(url);
       expect(await hidden(p), JSON.stringify(opts)).toBe(0);
+      expect(await standing(p), JSON.stringify(opts)).toBe(true);
       await c.close();
     }
   } finally {
@@ -248,9 +258,9 @@ test('landing pages show the real, localized product UI in both themes: 2x WebP 
         sized(n.src, n.w, n.h);
       }
     }
-    // phones get the extension's own narrow stats layout and the block page's card, shown whole
-    expect(dark.flatMap((d) => d.narrow.map((n) => path.basename(n.src))), rel).toEqual(['block-card.webp', 'stats-m.webp']);
-    for (const name of [...SHOTS, 'stats-m']) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
+    // phones get the extension's own narrow layouts (a 400 px window): block page, schedule, stats
+    expect(dark.flatMap((d) => d.narrow.map((n) => path.basename(n.src))), rel).toEqual(['block-page-m.webp', 'schedule-m.webp', 'stats-m.webp']);
+    for (const name of [...SHOTS, 'block-page-m', 'schedule-m', 'stats-m']) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
     for (const src of srcsets(html)) expect(src, rel).toContain(`assets/${lang}/`);
     expect(html, rel).toContain(`assets/${lang}/blocklist-1x.webp 1280w`);
     expect(html, rel).toContain(`assets/${lang}/blocklist-light-1x.webp 1280w`);
@@ -281,6 +291,30 @@ test('pricing: the yearly comparison and the saving are computed from the real p
     expect([6 * m < y, y < 7 * m], lang).toEqual([true, true]);
     expect(T.yearlyItems[1], lang).toMatch(/12\D+7/);
   }
+});
+
+test("the closing fence is the extension's lantern wall in both themes, with nothing left of the old fence", () => {
+  for (const lang of SITE_LANGS) {
+    const rel = dirOf(lang) + 'index.html';
+    const html = read('docs', rel);
+    expect(html, rel).not.toMatch(/class="fence"|id="pickets"/);
+    expect(all(/<div class="(wall(?: mirror)?)">/g, html), rel).toEqual(['wall mirror', 'wall']);
+    const wall = /<div class="wall">([\s\S]*?)<span class="bloom"><\/span><\/div>/.exec(html)[1];
+    const pk = [...wall.matchAll(/<span class="pk ([^"]+)"(?: style="--d:(\d+);--v:([\d.]+);--rim:([\d.]+)")?><\/span>/g)];
+    expect(pk.length, rel).toBe(33);
+    // one lantern, in the middle; the other pickets fade and catch its light with the extension's formulas
+    expect(pk.map((p) => p[1]).filter((c) => c === 'lit').length, rel).toBe(1);
+    expect(pk[16][1], rel).toBe('lit');
+    for (const [, cls, d, v, rim] of pk.filter((p) => p[1] !== 'lit')) {
+      expect(cls, rel).toMatch(/^wall-pk [lr]$/);
+      expect(Number(v), `${rel} d=${d}`).toBeCloseTo(0.16 + 0.84 * Math.exp(-d / 4.4), 3);
+      expect(Number(rim), `${rel} d=${d}`).toBeCloseTo(Math.exp(-d / 2.3), 3);
+    }
+  }
+  const css = read('focusfence/scripts/site.css');
+  expect(css).not.toMatch(/--picket:|--picket-line|--rail-line|\.fence\b/);
+  // the extension's two palettes: graphite at night, sage at dawn, and the lantern's green in each
+  for (const token of ['--wall-0: #232927;', '--wall-0: #c3d1c8;', '--lit-1: #5cc583;', '--lit-1: #3a9a5b;']) expect(css).toContain(token);
 });
 
 test('the hero explains the product in the first screen: settings, popup and block page, at 1440x900 and 390x844', async () => {
@@ -355,7 +389,7 @@ test('on phones every product capture is shown whole (no crop), using the captur
         });
         for (const p of report.out) problems.push(`${lang} ${colorScheme}: ${p}`);
         const t = colorScheme === 'light' ? '-light' : '';
-        for (const f of [`block-card${t}.webp`, `stats-m${t}.webp`]) if (report.srcs.filter((s) => s === f).length < 1) problems.push(`${lang}: ${f} not used`);
+        for (const f of [`block-page-m${t}.webp`, `schedule-m${t}.webp`, `stats-m${t}.webp`]) if (!report.srcs.includes(f)) problems.push(`${lang}: ${f} not used`);
         await context.close();
       }
     }
