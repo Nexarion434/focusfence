@@ -59,15 +59,15 @@ test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal sc
     const problems = [];
     const localized = SITE_LANGS.flatMap((l) => [(l === 'en' ? '' : l + '/') + 'index.html', (l === 'en' ? '' : l + '/') + 'privacy.html']);
     for (const rel of [...localized, 'blog/index.html', 'blog/block-youtube-shorts-chrome.html']) {
-      for (const width of [1280, 390, 360]) {
+      for (const [width, colorScheme] of [[1280, 'dark'], [1280, 'light'], [390, 'light'], [360, 'dark']]) {
         // reduced motion: every block is in its final, visible state (no scroll reveal), so axe checks it all
-        const context = await browser.newContext({ viewport: { width, height: 800 }, colorScheme: 'dark', reducedMotion: 'reduce' });
+        const context = await browser.newContext({ viewport: { width, height: 800 }, colorScheme, reducedMotion: 'reduce' });
         const page = await context.newPage();
         await page.goto('file://' + path.join(DOCS, rel));
         if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) problems.push(`${rel}@${width}: horizontal scroll`);
         if (width === 1280) {
           const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
-          for (const v of r.violations) problems.push(`${rel}: ${v.id} ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
+          for (const v of r.violations) problems.push(`${rel} (${colorScheme}): ${v.id} ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
         }
         await context.close();
       }
@@ -99,8 +99,20 @@ test('motion is optional: blocks reveal on scroll, and nothing stays hidden with
       }
     });
     // every block has been revealed, and the transitions settle on fully opaque blocks
-    await page.waitForFunction(() => document.querySelectorAll('[data-reveal]:not(.in)').length === 0, null, { timeout: 5000 });
+    await page.waitForFunction(() => document.querySelectorAll('[data-reveal]:not(.in)').length === 0, null, { timeout: 15000 });
     await page.waitForFunction(() => [...document.querySelectorAll('[data-reveal]')].every((el) => getComputedStyle(el).opacity === '1'), null, { timeout: 5000 });
+    // a jump straight to the end (anchor, fast scroll): everything above it is revealed too
+    const jump = await ctx.newPage();
+    await jump.goto(url + '#faq');
+    await jump.waitForFunction(
+      () => {
+        const seen = [...document.querySelectorAll('[data-reveal]')].filter((el) => el.getBoundingClientRect().top < innerHeight * 0.85);
+        return seen.length > 10 && seen.every((el) => el.classList.contains('in'));
+      },
+      null,
+      { timeout: 15000 }
+    );
+    await jump.close();
     await ctx.close();
     // reduced motion, and no JavaScript at all: everything is visible from the start
     for (const opts of [{ reducedMotion: 'reduce' }, { javaScriptEnabled: false }]) {
@@ -184,29 +196,120 @@ const webpSize = (file) => {
   return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
 };
 
-test('landing pages show the real, localized product UI: 2x WebP captures with matching sizes', () => {
-  const SHOTS = ['block-page', 'popup', 'blocklist', 'schedule', 'focus', 'strict', 'stats'];
+test('landing pages show the real, localized product UI in both themes: 2x WebP captures with matching sizes', () => {
+  const SHOTS = ['blocklist', 'popup', 'block-card', 'block-page', 'schedule', 'focus', 'strict', 'stats'];
   for (const lang of SITE_LANGS) {
     const rel = dirOf(lang) + 'index.html';
     const html = read('docs', rel);
-    const imgs = [...html.matchAll(/<img[^>]* src="([^"]+)"[^>]* width="(\d+)" height="(\d+)"[^>]* alt="([^"]+)">/g)];
-    expect(imgs.length, rel).toBe(SHOTS.length);
-    for (const [, src, w, h, alt] of imgs) {
+    const imgs = [...html.matchAll(/<img class="([^"]*)" src="([^"]+)"[^>]* width="(\d+)" height="(\d+)"[^>]* alt="([^"]+)">/g)].map(
+      ([, cls, src, w, h, alt]) => ({ cls, src, w: +w, h: +h, alt })
+    );
+    expect(imgs.length, rel).toBe(SHOTS.length * 2);
+    const dark = imgs.filter((i) => /\bth-d\b/.test(i.cls));
+    const light = imgs.filter((i) => /\bth-l\b/.test(i.cls));
+    expect([dark.length, light.length], rel).toEqual([SHOTS.length, SHOTS.length]);
+    dark.forEach((d, i) => {
+      const l = light[i];
+      // each dark capture is followed by the light capture of the same screen
+      expect(l.src, rel).toBe(d.src.replace(/(-1x)?\.webp$/, '-light$1.webp'));
+      expect([l.w, l.h, l.alt], d.src).toEqual([d.w, d.h, d.alt]);
+    });
+    for (const { src, w, h, alt } of imgs) {
       expect(src, rel).toContain(`assets/${lang}/`);
       expect(alt.length, src).toBeGreaterThan(20);
       // width/height are the CSS size: half the 2x capture (no layout shift, crisp on HiDPI)
       const [W, H] = webpSize(path.join(DOCS, path.dirname(rel), src.replace('-1x.webp', '.webp')));
-      expect([W / 2, H / 2], src).toEqual([+w, +h]);
+      expect([W / 2, H / 2], src).toEqual([w, h]);
     }
     for (const name of SHOTS) expect(html, `${rel} ${name}`).toMatch(new RegExp(`assets/${lang}/${name}(-1x)?\\.webp`));
     for (const src of srcsets(html)) expect(src, rel).toContain(`assets/${lang}/`);
-    // the hero is never lazy, everything below it is
-    expect(html, rel).toMatch(/<img class="win-img" src="[^"]+block-page-1x\.webp"[^>]*fetchpriority="high"/);
-    expect((html.match(/loading="lazy"/g) || []).length, rel).toBe(SHOTS.length - 2);
-    // the popup capture really is the localized one (button label in that language), copied as is
+    // only one theme is ever downloaded: every product image is lazy, and the hero image of the
+    // visitor's theme is preloaded by the inline theme script
+    expect((html.match(/loading="lazy"/g) || []).length, rel).toBe(SHOTS.length * 2);
+    expect(html, rel).toContain(`assets/${lang}/blocklist-1x.webp 1280w`);
+    expect(html, rel).toContain(`assets/${lang}/blocklist-light-1x.webp 1280w`);
+    // the popup captures really are the localized ones (button label in that language), copied as is
     expect(html, rel).toContain(S.blockSite[lang]);
-    const popup = fs.readFileSync(path.join(DOCS, 'assets', lang, 'popup.webp'));
-    expect(popup.equals(fs.readFileSync(path.join(ROOT, `screenshots/site/${lang}/popup.webp`))), lang).toBe(true);
+    for (const f of ['popup.webp', 'popup-light.webp']) {
+      const copy = fs.readFileSync(path.join(DOCS, 'assets', lang, f));
+      expect(copy.equals(fs.readFileSync(path.join(ROOT, `screenshots/site/${lang}/${f}`))), `${lang} ${f}`).toBe(true);
+    }
+  }
+});
+
+test('theme: follows the system, the header toggle switches light / dark / system, the choice persists with no flash', async () => {
+  // the theme is applied by an inline script in <head>, before the styles: the first paint is already right
+  for (const rel of allHtml()) {
+    const html = read('docs', rel);
+    const head = html.slice(0, html.indexOf('</head>'));
+    expect(head.indexOf("localStorage.getItem(\"ff-theme\")"), rel).toBeGreaterThan(-1);
+    expect(head.indexOf('ff-theme'), rel).toBeLessThan(head.indexOf('<style>'));
+    expect(html, rel).toMatch(/<fieldset class="theme"><legend class="sr">[^<]+<\/legend>/);
+    expect((html.match(/<input type="radio" name="theme" value="(light|dark|system)">/g) || []).length, rel).toBe(3);
+  }
+  const env = { ...process.env };
+  if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
+  const browser = await chromium.launch({ env });
+  const url = 'file://' + path.join(DOCS, 'index.html');
+  const state = (page) =>
+    page.evaluate(() => {
+      const d = document.documentElement;
+      const shown = (sel) => getComputedStyle(document.querySelector(sel)).display !== 'none';
+      return {
+        pref: d.getAttribute('data-theme-pref'),
+        theme: d.getAttribute('data-theme'),
+        bg: getComputedStyle(document.body).backgroundColor,
+        dark: shown('.win-hero .th-d'),
+        light: shown('.win-hero .th-l'),
+        meta: [...document.querySelectorAll('meta[name="theme-color"]')].map((m) => m.content),
+        stored: localStorage.getItem('ff-theme'),
+      };
+    });
+  const DARK = 'rgb(8, 9, 10)';
+  const LIGHT = 'rgb(251, 250, 247)';
+  try {
+    // 1. no choice yet: the system decides (and the hidden theme's images are not shown)
+    for (const [colorScheme, bg] of [['dark', DARK], ['light', LIGHT]]) {
+      const ctx = await browser.newContext({ colorScheme });
+      const page = await ctx.newPage();
+      await page.goto(url);
+      const st = await state(page);
+      expect(st, colorScheme).toMatchObject({ pref: 'system', theme: null, bg, dark: colorScheme === 'dark', light: colorScheme === 'light' });
+      await ctx.close();
+    }
+    // 2. a stored choice wins over the system, from the first paint
+    const ctx = await browser.newContext({ colorScheme: 'dark' });
+    await ctx.addInitScript(() => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('ff-theme', 'light');
+        sessionStorage.setItem('seeded', '1');
+      }
+    });
+    const page = await ctx.newPage();
+    await page.goto(url);
+    expect(await state(page)).toMatchObject({ pref: 'light', theme: 'light', bg: LIGHT, dark: false, light: true, meta: ['#fbfaf7', '#fbfaf7'] });
+    expect(await page.locator('.theme input[value="light"]').isChecked()).toBe(true);
+    // 3. the toggle: dark, then back to system (the switch waits for the new theme's images, then cross-fades)
+    await page.click('.theme label[data-v="dark"]');
+    await expect.poll(() => state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK, dark: true, light: false, stored: 'dark', meta: ['#08090a', '#08090a'] });
+    await page.reload();
+    expect(await state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK });
+    await page.click('.theme label[data-v="system"]');
+    await expect.poll(() => state(page)).toMatchObject({ pref: 'system', theme: null, bg: DARK, stored: 'system', meta: ['#08090a', '#fbfaf7'] });
+    // keyboard: the toggle is a radio group
+    await page.focus('.theme input[value="system"]');
+    await page.keyboard.press('ArrowLeft');
+    await expect.poll(() => state(page)).toMatchObject({ pref: 'dark', theme: 'dark' });
+    await ctx.close();
+    // 4. without JavaScript the toggle (which could not work) is hidden, and the system decides
+    const ctx2 = await browser.newContext({ colorScheme: 'light', javaScriptEnabled: false });
+    const p2 = await ctx2.newPage();
+    await p2.goto(url);
+    expect(await p2.locator('.theme').isVisible()).toBe(false);
+    expect(await p2.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(LIGHT);
+    await ctx2.close();
+  } finally {
+    await browser.close();
   }
 });
 

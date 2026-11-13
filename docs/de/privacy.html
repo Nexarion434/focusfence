@@ -11,8 +11,10 @@
 <link rel="alternate" hreflang="es" href="https://focusfence.dev/es/privacy.html">
 <link rel="alternate" hreflang="de" href="https://focusfence.dev/de/privacy.html">
 <link rel="alternate" hreflang="x-default" href="https://focusfence.dev/privacy.html">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#08090a">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<script>(function(){var d=document.documentElement,p='system',t;try{p=localStorage.getItem("ff-theme")||p}catch(e){}if(p!=='light'&&p!=='dark')p='system';d.setAttribute('data-theme-pref',p);if(p==='system')t=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';else{t=p;d.setAttribute('data-theme',p);var m=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].setAttribute('content',p==='light'?'#fbfaf7':'#08090a')}})();</script>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://focusfence.dev/de/privacy.html">
 <meta property="og:site_name" content="FocusFence">
@@ -41,14 +43,15 @@
   font-display: swap;
 }
 
+/* Dark is the base theme. The light theme overrides the theme tokens below, either because
+   the OS prefers light (and the visitor chose "System") or because the visitor chose "Light"
+   in the header toggle (html[data-theme], set before the first paint by an inline script). */
 :root {
   color-scheme: dark;
   /* surfaces */
   --bg: #08090a;
   --bg-2: #0b0d0c;
-  --panel: rgba(255, 255, 255, 0.025);
-  --panel-2: rgba(255, 255, 255, 0.045);
-  --screen: #141917; /* the extension's own dark background: product images sit on it seamlessly */
+  --screen: #141917; /* the extension's own background: product images sit on it seamlessly */
   --line: rgba(255, 255, 255, 0.075);
   --line-2: rgba(255, 255, 255, 0.11);
   --line-3: rgba(255, 255, 255, 0.18);
@@ -56,15 +59,48 @@
   --text: #f3f5f4;
   --text-2: #c9d0cc;
   --muted: #8e9893;
+  --dim: #8e9893; /* the dimmed half of large two-tone headings */
   /* brand */
   --green: #3a9a5b; /* field green, the logo tile */
   --accent: #6cc58a;
   --cta: #5dbe7e;
   --cta-hover: #73cb91;
   --cta-ink: #04130a;
+  --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(93, 190, 126, 0.5), 0 10px 30px -10px rgba(93, 190, 126, 0.55);
   --glow: rgba(58, 154, 91, 0.22);
+  --glow-2: rgba(58, 154, 91, 0.06);
+  --glow-final: rgba(58, 154, 91, 0.34);
+  --glow-final-2: rgba(58, 154, 91, 0.08);
   --pro: #d9a74b;
   --pro-bg: rgba(217, 167, 75, 0.12);
+  /* components */
+  --top-bg: rgba(8, 9, 10, 0.7);
+  --top-bg-stuck: rgba(8, 9, 10, 0.82);
+  --chip: rgba(255, 255, 255, 0.09);
+  --chip-weak: rgba(255, 255, 255, 0.03);
+  --ghost: rgba(255, 255, 255, 0.04);
+  --ghost-hover: rgba(255, 255, 255, 0.08);
+  --soon-bg: rgba(58, 154, 91, 0.1);
+  --soon-line: rgba(108, 197, 138, 0.28);
+  --bar: #0e1211;
+  --dots: rgba(255, 255, 255, 0.11);
+  --tab-bg: rgba(255, 255, 255, 0.05);
+  --win-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.1) inset, 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 100px -20px rgba(58, 154, 91, 0.18);
+  --shot-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+  --pop-shadow: 0 0 0 1px rgba(255, 255, 255, 0.13), 0 24px 70px -10px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015) 60%);
+  --card-edge: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --pointer: rgba(255, 255, 255, 0.045);
+  --net-bg: rgba(58, 154, 91, 0.06);
+  --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.12), rgba(58, 154, 91, 0.03) 55%, rgba(255, 255, 255, 0.012));
+  --best-edge: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
+  --save-ink: #04130a;
+  --sel: rgba(108, 197, 138, 0.3);
+  --picket: #0a0d0b;
+  --picket-line: rgba(108, 197, 138, 0.18);
+  --rail-line: rgba(108, 197, 138, 0.1);
+  --link-line: rgba(108, 197, 138, 0.55);
+  --mark-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
   /* type */
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
@@ -78,6 +114,131 @@
   /* motion */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --dur: 0.7s;
+}
+/* Light: warm paper and ink, like the extension's light theme (its #f5f4ef is --screen).
+   Every text pair passes WCAG AA; --dim (3.5:1) is only used on headings of 26 px and up. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    color-scheme: light;
+    --bg: #fbfaf7;
+    --bg-2: #f4f3ee;
+    --screen: #f5f4ef;
+    --line: rgba(28, 38, 34, 0.085);
+    --line-2: rgba(28, 38, 34, 0.13);
+    --line-3: rgba(28, 38, 34, 0.24);
+    --text: #161d1a;
+    --text-2: #3b4842;
+    --muted: #5a645f;
+    --dim: #7e8883;
+    --accent: #276b5b;
+    --cta: #276b5b;
+    --cta-hover: #1f5a4c;
+    --cta-ink: #ffffff;
+    --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
+    --glow: rgba(58, 154, 91, 0.13);
+    --glow-2: rgba(58, 154, 91, 0.04);
+    --glow-final: rgba(58, 154, 91, 0.2);
+    --glow-final-2: rgba(58, 154, 91, 0.06);
+    --pro: #7d5710;
+    --pro-bg: #f7eedb;
+    --top-bg: rgba(251, 250, 247, 0.72);
+    --top-bg-stuck: rgba(251, 250, 247, 0.88);
+    --chip: rgba(28, 38, 34, 0.07);
+    --chip-weak: rgba(28, 38, 34, 0.025);
+    --ghost: #ffffff;
+    --ghost-hover: #f4f3ee;
+    --soon-bg: rgba(39, 107, 91, 0.07);
+    --soon-line: rgba(39, 107, 91, 0.3);
+    --bar: #efeee8;
+    --dots: rgba(28, 38, 34, 0.16);
+    --tab-bg: #ffffff;
+    --win-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 100px -40px rgba(28, 38, 34, 0.32), 0 18px 36px -18px rgba(28, 38, 34, 0.16);
+    --shot-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 90px -40px rgba(28, 38, 34, 0.3);
+    --pop-shadow: 0 0 0 1px rgba(28, 38, 34, 0.12), 0 24px 60px -16px rgba(28, 38, 34, 0.32), 0 2px 6px rgba(28, 38, 34, 0.07);
+    --card-bg: #ffffff;
+    --card-edge: inset 0 0 0 1px var(--line), 0 1px 2px rgba(28, 38, 34, 0.04);
+    --pointer: rgba(39, 107, 91, 0.05);
+    --net-bg: rgba(39, 107, 91, 0.06);
+    --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.1), rgba(58, 154, 91, 0.02) 55%, #ffffff);
+    --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
+    --save-ink: #ffffff;
+    --sel: rgba(39, 107, 91, 0.18);
+    --picket: #ffffff;
+    --picket-line: rgba(39, 107, 91, 0.26);
+    --rail-line: rgba(39, 107, 91, 0.18);
+    --link-line: rgba(39, 107, 91, 0.45);
+    --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
+  }
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #fbfaf7;
+  --bg-2: #f4f3ee;
+  --screen: #f5f4ef;
+  --line: rgba(28, 38, 34, 0.085);
+  --line-2: rgba(28, 38, 34, 0.13);
+  --line-3: rgba(28, 38, 34, 0.24);
+  --text: #161d1a;
+  --text-2: #3b4842;
+  --muted: #5a645f;
+  --dim: #7e8883;
+  --accent: #276b5b;
+  --cta: #276b5b;
+  --cta-hover: #1f5a4c;
+  --cta-ink: #ffffff;
+  --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
+  --glow: rgba(58, 154, 91, 0.13);
+  --glow-2: rgba(58, 154, 91, 0.04);
+  --glow-final: rgba(58, 154, 91, 0.2);
+  --glow-final-2: rgba(58, 154, 91, 0.06);
+  --pro: #7d5710;
+  --pro-bg: #f7eedb;
+  --top-bg: rgba(251, 250, 247, 0.72);
+  --top-bg-stuck: rgba(251, 250, 247, 0.88);
+  --chip: rgba(28, 38, 34, 0.07);
+  --chip-weak: rgba(28, 38, 34, 0.025);
+  --ghost: #ffffff;
+  --ghost-hover: #f4f3ee;
+  --soon-bg: rgba(39, 107, 91, 0.07);
+  --soon-line: rgba(39, 107, 91, 0.3);
+  --bar: #efeee8;
+  --dots: rgba(28, 38, 34, 0.16);
+  --tab-bg: #ffffff;
+  --win-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 100px -40px rgba(28, 38, 34, 0.32), 0 18px 36px -18px rgba(28, 38, 34, 0.16);
+  --shot-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 90px -40px rgba(28, 38, 34, 0.3);
+  --pop-shadow: 0 0 0 1px rgba(28, 38, 34, 0.12), 0 24px 60px -16px rgba(28, 38, 34, 0.32), 0 2px 6px rgba(28, 38, 34, 0.07);
+  --card-bg: #ffffff;
+  --card-edge: inset 0 0 0 1px var(--line), 0 1px 2px rgba(28, 38, 34, 0.04);
+  --pointer: rgba(39, 107, 91, 0.05);
+  --net-bg: rgba(39, 107, 91, 0.06);
+  --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.1), rgba(58, 154, 91, 0.02) 55%, #ffffff);
+  --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
+  --save-ink: #ffffff;
+  --sel: rgba(39, 107, 91, 0.18);
+  --picket: #ffffff;
+  --picket-line: rgba(39, 107, 91, 0.26);
+  --rail-line: rgba(39, 107, 91, 0.18);
+  --link-line: rgba(39, 107, 91, 0.45);
+  --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
+}
+/* Every product image exists in both themes (real captures of the extension in each);
+   only the one matching the page is shown, and lazy loading skips the other. */
+.th-l {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .th-l {
+    display: block;
+  }
+  :root:not([data-theme='dark']) .th-d {
+    display: none;
+  }
+}
+:root[data-theme='light'] .th-l {
+  display: block;
+}
+:root[data-theme='light'] .th-d {
+  display: none;
 }
 
 *,
@@ -150,7 +311,7 @@ code {
   font-family: var(--mono);
   font-size: 0.86em;
   color: var(--text-2);
-  background: var(--panel-2);
+  background: var(--chip-weak);
   box-shadow: inset 0 0 0 1px var(--line);
   padding: 0.12em 0.4em;
   border-radius: 6px;
@@ -161,7 +322,7 @@ code {
   border-radius: 6px;
 }
 ::selection {
-  background: rgba(108, 197, 138, 0.3);
+  background: var(--sel);
   color: var(--text);
 }
 .sr {
@@ -205,7 +366,7 @@ code {
   stroke-linejoin: round;
 }
 .dim {
-  color: var(--muted);
+  color: var(--dim);
 }
 
 /* ------------------------------------------------------------------ header */
@@ -213,7 +374,7 @@ code {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(8, 9, 10, 0.7);
+  background: var(--top-bg);
   -webkit-backdrop-filter: saturate(1.6) blur(16px);
   backdrop-filter: saturate(1.6) blur(16px);
   border-bottom: 1px solid transparent;
@@ -221,7 +382,7 @@ code {
 }
 .top.is-stuck {
   border-bottom-color: var(--line);
-  background: rgba(8, 9, 10, 0.82);
+  background: var(--top-bg-stuck);
 }
 .top-in {
   height: 64px;
@@ -284,10 +445,61 @@ code {
 }
 .langs a[aria-current='page'] {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--chip);
 }
 .top-cta {
   margin-left: 4px;
+}
+/* theme toggle: light / dark / system, as a radio group (keyboard: arrows) */
+.theme {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  margin: 0 -14px 0 0;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+:root:not([data-theme-pref]) .theme {
+  display: none; /* without JavaScript the page simply follows the system */
+}
+.theme label {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: color 0.15s, background-color 0.15s;
+}
+.theme label:hover {
+  color: var(--text);
+}
+.theme input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.theme .i {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.7;
+}
+:root[data-theme-pref='light'] .theme [data-v='light'],
+:root[data-theme-pref='dark'] .theme [data-v='dark'],
+:root[data-theme-pref='system'] .theme [data-v='system'] {
+  color: var(--text);
+  background: var(--chip);
+}
+.theme label:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ------------------------------------------------------------------ buttons */
@@ -314,7 +526,7 @@ code {
 .btn-primary {
   background: var(--cta);
   color: var(--cta-ink);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(93, 190, 126, 0.5), 0 10px 30px -10px rgba(93, 190, 126, 0.55);
+  box-shadow: var(--cta-shadow);
 }
 .btn-primary:hover {
   background: var(--cta-hover);
@@ -330,19 +542,19 @@ code {
 }
 .btn-ghost {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--ghost);
   box-shadow: inset 0 0 0 1px var(--line-2);
 }
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--ghost-hover);
 }
 /* Before the store listing exists: a status, not a fake button. */
 .btn-soon {
   gap: 10px;
   padding: 0 18px 0 16px;
   color: var(--text-2);
-  background: rgba(58, 154, 91, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(108, 197, 138, 0.28);
+  background: var(--soon-bg);
+  box-shadow: inset 0 0 0 1px var(--soon-line);
   cursor: default;
 }
 .pulse {
@@ -378,7 +590,7 @@ code {
   width: min(1500px, 140vw);
   height: 900px;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--glow), rgba(58, 154, 91, 0.06) 55%, transparent);
+  background: radial-gradient(closest-side, var(--glow), var(--glow-2) 55%, transparent);
   pointer-events: none;
 }
 .eyebrow {
@@ -391,7 +603,7 @@ code {
   color: var(--text-2);
   font-size: 13px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--chip-weak);
   box-shadow: inset 0 0 0 1px var(--line-2);
 }
 .eyebrow-dot {
@@ -412,7 +624,7 @@ code {
 }
 .display em {
   font-style: normal;
-  color: var(--muted);
+  color: var(--dim);
 }
 .hero-row {
   display: grid;
@@ -469,15 +681,18 @@ code {
   margin-top: clamp(48px, 5vw, 72px);
   padding-inline: var(--gutter);
 }
-.stage::after {
-  /* floor: the window settles into the page */
+.stage {
+  padding-bottom: 72px; /* room for the block-page card that hangs below the window */
+}
+.win-hero::after {
+  /* floor: the window (and its shadow) settles into the page */
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 22%;
-  background: linear-gradient(to bottom, transparent, var(--bg) 92%);
+  left: -60px;
+  right: -60px;
+  bottom: -90px;
+  height: calc(30% + 90px);
+  background: linear-gradient(to bottom, transparent, var(--bg) 62%);
   pointer-events: none;
 }
 .win-wrap {
@@ -491,7 +706,7 @@ code {
   margin-inline: auto;
   border-radius: var(--r-lg);
   background: var(--screen);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.1) inset, 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 100px -20px rgba(58, 154, 91, 0.18);
+  box-shadow: var(--win-shadow);
 }
 .win-bar {
   position: relative;
@@ -501,7 +716,7 @@ code {
   gap: 18px;
   padding: 0 14px 0 16px;
   border-radius: var(--r-lg) var(--r-lg) 0 0;
-  background: #0e1211;
+  background: var(--bar);
   border-bottom: 1px solid var(--line);
 }
 .win-dots {
@@ -512,7 +727,7 @@ code {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.11);
+  background: var(--dots);
 }
 .win-tab {
   display: inline-flex;
@@ -524,7 +739,7 @@ code {
   border-radius: 8px;
   color: var(--text-2);
   font-size: 12.5px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--tab-bg);
   box-shadow: inset 0 0 0 1px var(--line);
 }
 .win-tab span {
@@ -543,7 +758,7 @@ code {
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--chip);
   box-shadow: inset 0 0 0 1px var(--line-2);
 }
 .win-ext svg {
@@ -558,15 +773,49 @@ code {
 }
 .win-popup {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 48px;
-  right: 10px;
+  right: 2.35%; /* under the toolbar icon, and over the settings' add button in every language */
   width: 28.125%; /* 360 / 1280: the popup at the same scale as the page */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.13), 0 24px 70px -10px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--pop-shadow);
 }
 .win-popup img {
+  width: 100%;
+}
+/* the block page, as it greets you on a fenced-off site */
+.win-card {
+  position: absolute;
+  z-index: 1;
+  right: -28px;
+  bottom: -64px;
+  width: 37%;
+  border-radius: 14px;
+  box-shadow: var(--pop-shadow);
+}
+.win-card .win-bar {
+  height: 34px;
+  gap: 12px;
+  padding: 0 12px;
+  border-radius: 14px 14px 0 0;
+}
+.win-card .win-dots {
+  gap: 6px;
+}
+.win-card .win-dots i {
+  width: 9px;
+  height: 9px;
+}
+.win-card .win-tab {
+  height: 22px;
+  padding: 0 10px 0 8px;
+  font-size: 11.5px;
+}
+.win-card .win-body {
+  border-radius: 0 0 14px 14px;
+}
+.win-card img {
   width: 100%;
 }
 
@@ -687,7 +936,7 @@ code {
   pointer-events: none;
 }
 .shot .win {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: var(--shot-shadow);
 }
 .feats {
   display: grid;
@@ -740,8 +989,8 @@ code {
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--r-lg);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015) 60%);
-  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
 }
 .card::after,
 .plan::after {
@@ -750,7 +999,7 @@ code {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -200%), rgba(255, 255, 255, 0.045), transparent 60%);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -200%), var(--pointer), transparent 60%);
   pointer-events: none;
 }
 .card-text {
@@ -804,7 +1053,7 @@ code {
   padding: clamp(12px, 3vw, 40px);
   border-radius: var(--r-lg);
   border-top: 0;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: var(--shot-shadow);
 }
 .details {
   display: grid;
@@ -866,8 +1115,8 @@ code {
 }
 .manifest {
   border-radius: var(--r-lg);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
-  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
   overflow: hidden;
 }
 .manifest figcaption {
@@ -904,7 +1153,7 @@ code {
   padding: 16px 22px;
   color: var(--text-2);
   font-size: 14px;
-  background: rgba(58, 154, 91, 0.06);
+  background: var(--net-bg);
 }
 .manifest-net::before {
   content: '';
@@ -927,8 +1176,8 @@ code {
   position: relative;
   padding: 32px;
   border-radius: var(--r-lg);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
-  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
 }
 .plan h3 {
   display: flex;
@@ -940,8 +1189,8 @@ code {
   color: var(--text-2);
 }
 .plan-best {
-  background: linear-gradient(180deg, rgba(58, 154, 91, 0.12), rgba(58, 154, 91, 0.03) 55%, rgba(255, 255, 255, 0.012));
-  box-shadow: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
+  background: var(--best-bg);
+  box-shadow: var(--best-edge);
 }
 .save {
   display: inline-flex;
@@ -949,7 +1198,7 @@ code {
   height: 22px;
   padding: 0 8px;
   border-radius: 999px;
-  color: var(--cta-ink);
+  color: var(--save-ink);
   background: var(--accent);
   font-size: 11.5px;
   font-weight: 650;
@@ -1109,7 +1358,7 @@ details[open] .faq-i {
   width: min(1300px, 160vw);
   height: 640px;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, rgba(58, 154, 91, 0.34), rgba(58, 154, 91, 0.08) 58%, transparent);
+  background: radial-gradient(closest-side, var(--glow-final), var(--glow-final-2) 58%, transparent);
 }
 .final-in {
   display: grid;
@@ -1117,7 +1366,7 @@ details[open] .faq-i {
 }
 .final-mark svg {
   border-radius: 14px;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
+  box-shadow: var(--mark-shadow);
 }
 .final-h {
   margin-top: 36px;
@@ -1139,14 +1388,14 @@ details[open] .faq-i {
   height: 180px;
   margin-top: clamp(64px, 8vw, 104px);
   margin-bottom: -1px;
-  fill: #0a0d0b;
-  stroke: rgba(108, 197, 138, 0.18);
+  fill: var(--picket);
+  stroke: var(--picket-line);
   stroke-width: 1;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
 }
 .fence .rail {
-  stroke: rgba(108, 197, 138, 0.1);
+  stroke: var(--rail-line);
 }
 .fence .pickets {
   stroke: none;
@@ -1253,7 +1502,7 @@ details[open] .faq-i {
 .prose a {
   color: var(--text);
   text-decoration: underline;
-  text-decoration-color: rgba(108, 197, 138, 0.55);
+  text-decoration-color: var(--link-line);
   text-underline-offset: 3px;
   overflow-wrap: anywhere;
 }
@@ -1291,7 +1540,7 @@ tr:last-child td {
 th {
   color: var(--text);
   font-weight: 560;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--chip-weak);
 }
 .doc-meta {
   display: flex;
@@ -1458,51 +1707,35 @@ th {
   .links {
     display: none;
   }
-  .langs {
+  .theme {
     margin-left: auto;
   }
   .top-cta {
     display: none;
   }
-  /* the window keeps a readable scale and is cropped at the sides; the popup sits below it */
+  /* Phones: the settings window keeps a legible scale and runs off the right edge;
+     the block-page card overlaps its lower half. */
   .stage {
-    padding: 0;
+    padding: 0 0 8px;
     overflow: hidden;
   }
-  .stage::after {
-    display: none;
-  }
   .win-wrap {
-    width: 680px;
-    margin-left: calc(50% - 340px);
+    width: auto;
+    margin: 0 var(--gutter);
   }
   .win-hero {
-    background: none;
-    box-shadow: none;
-  }
-  .win-hero .win-bar {
-    border-radius: 0;
-    background: transparent;
-    border-bottom: 0;
-  }
-  .win-hero .win-bar {
-    justify-content: center;
-  }
-  .win-hero .win-dots,
-  .win-hero .win-ext {
-    display: none;
-  }
-  .win-hero .win-body {
-    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
-    mask-image: linear-gradient(to bottom, #000 70%, transparent);
+    width: 720px;
+    max-width: none;
   }
   .win-popup {
+    display: none;
+  }
+  .win-card {
     position: relative;
-    top: auto;
     right: auto;
-    width: min(300px, 80vw);
-    margin: -56px auto 8px;
-    border-radius: 12px;
+    bottom: auto;
+    width: min(330px, 100%);
+    margin: -150px auto 0;
   }
   /* UI crops keep a legible scale and fade out at the right edge */
   .card .screen,
@@ -1600,6 +1833,9 @@ th {
   .btn {
     font-size: 14px;
   }
+  .top .brand span {
+    display: none; /* logo only: room for the theme and language switchers */
+  }
   .btn-soon {
     padding-inline: 14px;
   }
@@ -1619,6 +1855,7 @@ th {
 <header class="top"><div class="wrap top-in">
   <a class="brand" href="../de/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a>
   <nav class="links" aria-label="Hauptnavigation"><a href="../de/#features">Funktionen</a><a href="../de/#pricing">Preise</a><a href="../blog/" hreflang="en">Blog</a><a href="../de/privacy.html">Datenschutz</a></nav>
+  <fieldset class="theme"><legend class="sr">Erscheinungsbild</legend><label data-v="light" title="Hell"><input type="radio" name="theme" value="light"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M3 12h2M19 12h2M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41"/></svg><span class="sr">Hell</span></label><label data-v="dark" title="Dunkel"><input type="radio" name="theme" value="dark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A7.5 7.5 0 0 1 9.4 4.5a7.5 7.5 0 1 0 10.1 10.1z"/></svg><span class="sr">Dunkel</span></label><label data-v="system" title="Systemeinstellung"><input type="radio" name="theme" value="system"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg><span class="sr">Systemeinstellung</span></label></fieldset>
   <nav class="langs" aria-label="Sprache"><a href="../privacy.html" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/privacy.html" hreflang="fr" lang="fr" data-set-lang="fr"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/privacy.html" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/privacy.html" hreflang="de" lang="de" data-set-lang="de" aria-current="page"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
 </div></header>
 <main class="doc" id="main"><div class="wrap prose"><h1 id="datenschutzerklarung-von-focusfence">Datenschutzerklärung von FocusFence</h1>

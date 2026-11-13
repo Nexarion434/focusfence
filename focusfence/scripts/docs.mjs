@@ -37,7 +37,8 @@ copy(FONT, 'inter.woff2');
 copy('src/icons/icon128.png', 'icon128.png');
 copy('src/icons/icon32.png', 'favicon.png');
 // Localized product images (npm run screenshots:site): screenshots/site/<lang>/.
-const SHOTS = ['block-page.webp', 'block-page-1x.webp', 'popup.webp', 'blocklist.webp', 'blocklist-1x.webp', 'schedule.webp', 'focus.webp', 'strict.webp', 'stats.webp', 'og.png'];
+const THEMED = ['block-page.webp', 'block-page-1x.webp', 'block-card.webp', 'popup.webp', 'blocklist.webp', 'blocklist-1x.webp', 'schedule.webp', 'focus.webp', 'strict.webp', 'stats.webp'];
+const SHOTS = [...THEMED, ...THEMED.map((f) => f.replace(/(-1x)?\.webp$/, '-light$1.webp')), 'og.png'];
 for (const lang of SITE_LANGS) {
   for (const file of SHOTS) {
     const src = `screenshots/site/${lang}/${file}`;
@@ -129,7 +130,26 @@ const typo = (lang, s) => (lang === 'fr' ? s.replace(/ ([?!:;»])/g, ' $1').repl
 // of the site (e.g. the EN link of the switcher) never redirects either, so the
 // choice holds even when localStorage is blocked.
 const REDIRECT_JS = `(function(){try{var L=${JSON.stringify(SITE_LANGS.filter((l) => l !== 'en'))},K=${JSON.stringify(LANG_STORAGE_KEY)},s=null,r=document.referrer,b=location.origin+location.pathname.replace(/[^/]*$/,'');if(r&&r.indexOf(b)===0)return;try{s=localStorage.getItem(K)}catch(e){}if(s==='en')return;var t=L.indexOf(s)>=0?s:null;if(!t&&!s){var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).toLowerCase().split('-')[0];if(c==='en')break;if(L.indexOf(c)>=0){t=c;break}}}if(t)location.replace(t+'/'+location.search+location.hash)}catch(e){}})();`;
-const SITE_JS = fs.readFileSync(path.join(ROOT, 'scripts/site.js'), 'utf8').replace('__LANG_KEY__', LANG_STORAGE_KEY);
+// Theme: 'light' | 'dark' | 'system' (default) in localStorage. Runs in <head> before the
+// styles, so the first paint already has the right theme. Also preloads the hero image of
+// that theme (the hero images are lazy so that only one theme is ever downloaded).
+export const THEME_STORAGE_KEY = 'ff-theme';
+const THEME_COLOR = { dark: '#08090a', light: '#fbfaf7' };
+const themeJs = (pre) =>
+  `(function(){var d=document.documentElement,p='system',t;try{p=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})||p}catch(e){}` +
+  `if(p!=='light'&&p!=='dark')p='system';d.setAttribute('data-theme-pref',p);` +
+  `if(p==='system')t=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';` +
+  `else{t=p;d.setAttribute('data-theme',p);var m=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].setAttribute('content',p==='light'?'${THEME_COLOR.light}':'${THEME_COLOR.dark}')}` +
+  (pre
+    ? `var l=document.createElement('link');l.rel='preload';l.as='image';l.setAttribute('fetchpriority','high');l.setAttribute('imagesizes',${JSON.stringify(pre.sizes)});l.setAttribute('imagesrcset',t==='light'?${JSON.stringify(pre.light)}:${JSON.stringify(pre.dark)});document.head.appendChild(l);`
+    : '') +
+  `})();`;
+const SITE_JS = fs
+  .readFileSync(path.join(ROOT, 'scripts/site.js'), 'utf8')
+  .replace('__LANG_KEY__', LANG_STORAGE_KEY)
+  .replaceAll('__THEME_KEY__', THEME_STORAGE_KEY)
+  .replace('__THEME_DARK__', THEME_COLOR.dark)
+  .replace('__THEME_LIGHT__', THEME_COLOR.light);
 const CSS = fs.readFileSync(path.join(ROOT, 'scripts/site.css'), 'utf8');
 
 /* ------------------------------------------------------------ shared bits */
@@ -164,6 +184,9 @@ const ICON = {
   device: '<rect x="3.5" y="5" width="17" height="11.5" rx="1.5"/><path d="M8.5 20h7M12 16.5V20"/>',
   eyeoff: '<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><path d="M4.5 4.5l15 15"/>',
   lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  sun: '<circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M3 12h2M19 12h2M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41"/>',
+  moon: '<path d="M19.5 14.6A7.5 7.5 0 0 1 9.4 4.5a7.5 7.5 0 1 0 10.1 10.1z"/>',
+  monitor: '<rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/>',
 };
 const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name]}</svg>`;
 const PRO = '<span class="pro">PRO</span>';
@@ -176,7 +199,7 @@ const PRO = '<span class="pro">PRO</span>';
  * @param o.switchHref  lang -> href for the switcher (defaults to the same page in that language)
  * @param o.head        extra <head> markup (preloads)
  */
-function page({ lang, base, file, translated, title, description, body, canonical, noindex, redirect, switchHref, head = '' }) {
+function page({ lang, base, file, translated, title, description, body, canonical, noindex, redirect, switchHref, head = '', preload = null }) {
   const T = SITE[lang];
   const home = base + dirOf(lang);
   const homeHref = home || './';
@@ -210,8 +233,10 @@ function page({ lang, base, file, translated, title, description, body, canonica
 <title>${attr(title)}</title>
 <meta name="description" content="${attr(description)}">
 <link rel="canonical" href="${canonical}">${alternates}${noindex ? '\n<meta name="robots" content="noindex">' : ''}
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#08090a">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="${THEME_COLOR.dark}" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="${THEME_COLOR.light}" media="(prefers-color-scheme: light)">
+<script>${themeJs(preload)}</script>
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
 <meta property="og:site_name" content="FocusFence">
@@ -235,6 +260,13 @@ function page({ lang, base, file, translated, title, description, body, canonica
 <header class="top"><div class="wrap top-in">
   <a class="brand" href="${homeHref}">${LOGO(24)}<span>FocusFence</span></a>
   <nav class="links" aria-label="${attr(T.navLabel)}"><a href="${homeHref}#features">${T.navFeatures}</a><a href="${homeHref}#pricing">${T.navPricing}</a><a href="${base}blog/" hreflang="en">${T.navBlog}</a><a href="${home}privacy.html">${T.navPrivacy}</a></nav>
+  <fieldset class="theme"><legend class="sr">${T.themeLabel}</legend>${[
+    ['light', T.themeLight, 'sun'],
+    ['dark', T.themeDark, 'moon'],
+    ['system', T.themeSystem, 'monitor'],
+  ]
+    .map(([v, label, ic]) => `<label data-v="${v}" title="${attr(label)}"><input type="radio" name="theme" value="${v}">${icon(ic)}<span class="sr">${label}</span></label>`)
+    .join('')}</fieldset>
   <nav class="langs" aria-label="${attr(T.langLabel)}">${switcher}</nav>${STORE_URL ? `\n  <a class="btn btn-primary btn-sm top-cta" href="${STORE_URL}">${T.ctaNav}</a>` : ''}
 </div></header>
 ${fill(body)}
@@ -260,12 +292,18 @@ function landing(lang) {
   /** <img> with intrinsic size in CSS pixels (all product images are 2x). */
   const img = (file, alt, { cls = '', lazy = true, srcset = '', sizes = '', priority = false } = {}) => {
     const [w, h] = size(file);
+    if (w % 2 || h % 2) throw new Error(`${file}: a 2x capture needs even dimensions, got ${w}x${h}`);
     return (
       `<img${cls ? ` class="${cls}"` : ''} src="${A}${srcset ? file.replace('.webp', '-1x.webp') : file}"` +
       (srcset ? ` srcset="${A}${file.replace('.webp', '-1x.webp')} ${w / 2}w, ${A}${file} ${w}w" sizes="${sizes}"` : '') +
       ` width="${w / 2}" height="${h / 2}"${lazy ? ' loading="lazy"' : ''} decoding="async"${priority ? ' fetchpriority="high"' : ''} alt="${attr(alt)}">`
     );
   };
+  /** The same capture in both themes: CSS shows the one matching the page theme, and lazy
+   * loading means the other one is never downloaded. */
+  const shot = (file, alt, opts = {}) =>
+    img(file, alt, { ...opts, lazy: true, cls: `${opts.cls ? opts.cls + ' ' : ''}th-d` }) +
+    img(file.replace('.webp', '-light.webp'), alt, { ...opts, lazy: true, cls: `${opts.cls ? opts.cls + ' ' : ''}th-l` });
   const winBar = (title, ext) =>
     `<div class="win-bar" aria-hidden="true"><span class="win-dots"><i></i><i></i><i></i></span><span class="win-tab">${LOGO(14)}<span>${esc(title)}</span></span>${
       ext ? `<span class="win-ext">${LOGO(16)}</span>` : ''
@@ -283,7 +321,9 @@ function landing(lang) {
   const DETAIL_ICONS = ['shield', 'page', 'backup', 'theme', 'globe', 'incognito'];
   const DETAIL_PRO = [true, true, true, false, false, false];
   const POINT_ICONS = ['device', 'eyeoff', 'lock'];
-  const heroSizes = '(max-width: 720px) 680px, min(1280px, calc(100vw - 48px))';
+  const heroSizes = '(max-width: 720px) 700px, min(1280px, calc(100vw - 48px))';
+  const blockedTitle = S.blockedDocTitleHost[lang].replace('$1', 'reddit.com');
+  const pre = (name) => `${A}${name}-1x.webp 1280w, ${A}${name}.webp 2560w`;
 
   const body = `
 <main id="main">
@@ -299,10 +339,14 @@ function landing(lang) {
   <div class="stage">
     <div class="win-wrap">
       <div class="win win-hero">
-        ${winBar(S.blockedDocTitleHost[lang].replace('$1', 'reddit.com'), true)}
-        <div class="win-body">${img('block-page.webp', T.altBlock, { cls: 'win-img', lazy: false, priority: true, srcset: true, sizes: heroSizes })}</div>
+        ${winBar(S.optionsTitle[lang], true)}
+        <div class="win-body">${shot('blocklist.webp', T.altBlocklist, { cls: 'win-img', priority: true, srcset: true, sizes: heroSizes })}</div>
       </div>
-      <div class="win-popup">${img('popup.webp', T.altPopup, { lazy: false })}</div>
+      <div class="win-popup">${shot('popup.webp', T.altPopup)}</div>
+      <div class="win win-card">
+        ${winBar(blockedTitle)}
+        <div class="win-body">${shot('block-card.webp', T.altBlock)}</div>
+      </div>
     </div>
   </div>
 </section>
@@ -324,8 +368,8 @@ ${T.steps.map(([h, p], i) => `      <li class="step"><span class="step-n">0${i +
     </header>
     <div class="shot" data-reveal>
       <div class="win">
-        ${winBar(S.optionsTitle[lang])}
-        <div class="win-body">${img('blocklist.webp', T.altBlocklist, { cls: 'win-img', srcset: true, sizes: '(max-width: 720px) 760px, min(1200px, calc(100vw - 48px))' })}</div>
+        ${winBar(blockedTitle)}
+        <div class="win-body">${shot('block-page.webp', T.altBlock, { cls: 'win-img', srcset: true, sizes: '(max-width: 720px) 760px, min(1200px, calc(100vw - 48px))' })}</div>
       </div>
     </div>
     <div class="feats" data-reveal>
@@ -343,15 +387,15 @@ ${T.blockFeatures.map(([h, p], i) => `      <div class="feat"><h3>${h}${i ? PRO 
     <div class="bento">
       <article class="card card-schedule" data-reveal>
         <div class="card-text"><h3>${T.focusFeatures[0][0]}</h3><p>${T.focusFeatures[0][1]}</p></div>
-        <div class="screen">${img('schedule.webp', T.altSchedule)}</div>
+        <div class="screen">${shot('schedule.webp', T.altSchedule)}</div>
       </article>
       <article class="card card-timer" data-reveal>
         <div class="card-text"><h3>${T.focusFeatures[1][0]}</h3><p>${T.focusFeatures[1][1]}</p></div>
-        <div class="screen">${img('focus.webp', T.altFocus)}</div>
+        <div class="screen">${shot('focus.webp', T.altFocus)}</div>
       </article>
       <article class="card card-strict" data-reveal>
         <div class="card-text"><h3>${T.focusFeatures[2][0]}</h3><p>${T.focusFeatures[2][1]}</p></div>
-        <div class="screen">${img('strict.webp', T.altStrict)}</div>
+        <div class="screen">${shot('strict.webp', T.altStrict)}</div>
       </article>
     </div>
   </div>
@@ -363,7 +407,7 @@ ${T.blockFeatures.map(([h, p], i) => `      <div class="feat"><h3>${h}${i ? PRO 
       <div>${kicker(T.statsKicker, true)}${h2(T.statsH2).replace('<h2 ', '<h2 id="stats-h" ')}</div>
       <p class="sec-lead">${T.statsLead}</p>
     </header>
-    <div class="screen screen-stats" data-reveal>${img('stats.webp', T.altStats)}</div>
+    <div class="screen screen-stats" data-reveal>${shot('stats.webp', T.altStats)}</div>
     <ul class="details" data-reveal>
 ${T.details.map(([h, p], i) => `      <li>${icon(DETAIL_ICONS[i])}<h3>${h}${DETAIL_PRO[i] ? PRO : ''}</h3><p>${p}</p></li>`).join('\n')}
     </ul>
@@ -440,6 +484,7 @@ ${T.faq.map(([q, a]) => `      <details><summary><span>${q}</span>${icon('plus',
     file: '',
     translated: true,
     redirect: lang === 'en',
+    preload: { sizes: heroSizes, dark: pre('blocklist'), light: pre('blocklist-light') },
     title: typo(lang, T.title),
     description: typo(lang, T.description),
     canonical: SITE_URL + dirOf(lang),
