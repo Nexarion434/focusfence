@@ -115,6 +115,11 @@ const ext = await launchExtension({
   proxyPort: net.port,
   colorScheme: DARK ? 'dark' : 'light',
   mutate(mf, dir) {
+    // the marketing compositions below use inline <style>; relax CSP in this throwaway copy only
+    mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace(
+      "style-src 'self'",
+      "style-src 'self' 'unsafe-inline'"
+    );
     fs.writeFileSync(path.join(dir, 'promo.html'), promoHtml());
   },
 });

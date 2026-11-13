@@ -13,6 +13,11 @@
   const MINUTES_SAVED_PER_BLOCK = 5;
   const STATS_RETENTION_DAYS = 90;
   const ALL_SITES_ORIGIN = '*://*/*';
+  const MAX_PATH_LENGTH = 512;
+  // Chrome allows at most 1000 regex rules per extension; path/keyword entries use one each.
+  const MAX_PATTERN_ENTRIES = 500;
+  const MAX_SCHEDULE_WINDOWS = 50;
+  const STRICT_HOURS = [0, 1, 2, 4, 8, 24, 48, 72, 168];
 
   const DEFAULT_SETTINGS = Object.freeze({
     version: 1,
@@ -117,12 +122,18 @@
 
     if (t === 'path') {
       const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(text) ? text : 'http://' + text;
-      let path = new URL(withScheme).pathname || '/';
+      const parsedUrl = new URL(withScheme);
+      if (parsedUrl.search || parsedUrl.hash) {
+        // e.g. youtube.com/watch?v=abc would otherwise silently block every video
+        throw new Error('Path rules match the path only. Remove the "?…" part, or use a keyword rule.');
+      }
+      let path = parsedUrl.pathname || '/';
       path = path.replace(/\/{2,}/g, '/');
       if (path.length > 1) path = path.replace(/\/$/, '');
       if (path === '/' || path === '') {
         throw new Error('Add a path after the domain, e.g. youtube.com/shorts.');
       }
+      if (path.length > MAX_PATH_LENGTH) throw new Error('That path is too long.');
       return { type: 'path', host, path, label: host + path };
     }
     throw new Error('Unknown rule type.');
@@ -199,10 +210,17 @@
     return h * 60 + min;
   }
 
+  function cleanDays(days) {
+    return Array.isArray(days)
+      ? [...new Set(days.filter((d) => Number.isInteger(d) && d >= 0 && d <= 6))].sort((a, b) => a - b)
+      : [];
+  }
+
   function validateWindow(w) {
-    if (!w || !Array.isArray(w.days)) return 'Pick at least one day.';
-    const days = w.days.filter((d) => Number.isInteger(d) && d >= 0 && d <= 6);
+    if (!w || typeof w !== 'object' || !Array.isArray(w.days)) return 'Pick at least one day.';
+    const days = cleanDays(w.days);
     if (!days.length) return 'Pick at least one day.';
+    if (typeof w.start !== 'string' || typeof w.end !== 'string') return 'Use a 24-hour time like 09:00.';
     const s = parseHM(w.start);
     const e = parseHM(w.end);
     if (s === null || e === null) return 'Use a 24-hour time like 09:00.';
@@ -330,9 +348,10 @@
     s.days[k] = s.days[k] || {};
     s.days[k][label] = (s.days[k][label] || 0) + 1;
     // prune old days
-    const cutoff = now - STATS_RETENTION_DAYS * 24 * 60 * MINUTE;
+    const d = new Date(now);
+    const cutoffKey = dayKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() - STATS_RETENTION_DAYS, 12));
     for (const key of Object.keys(s.days)) {
-      if (new Date(key + 'T00:00:00').getTime() < cutoff) delete s.days[key];
+      if (key < cutoffKey) delete s.days[key];
     }
     return s;
   }
@@ -340,8 +359,10 @@
   function summarizeStats(stats, now, days) {
     const out = { total: 0, today: 0, bySite: {}, byDay: [] };
     const daysObj = (stats && stats.days) || {};
+    const base = new Date(now);
     for (let i = days - 1; i >= 0; i--) {
-      const k = dayKey(now - i * 24 * 60 * MINUTE);
+      // calendar arithmetic, not "now - i*24h", so DST changes never skip or repeat a day
+      const k = dayKey(new Date(base.getFullYear(), base.getMonth(), base.getDate() - i, 12));
       const bucket = daysObj[k] || {};
       let n = 0;
       for (const [site, c] of Object.entries(bucket)) {
@@ -417,8 +438,8 @@
         enabled: !!src.schedule.enabled,
         windows: src.schedule.windows
           .filter((w) => !validateWindow(w))
-          .slice(0, 50)
-          .map((w) => ({ id: uid(), days: w.days.filter((d) => d >= 0 && d <= 6), start: w.start, end: w.end })),
+          .slice(0, MAX_SCHEDULE_WINDOWS)
+          .map((w) => ({ id: uid(), days: cleanDays(w.days), start: w.start, end: w.end })),
       };
     }
     if (src.pomodoro) {
@@ -452,6 +473,43 @@
     const readyAt = strict.unlockRequestedAt + STRICT_UNLOCK_DELAY_MS;
     if (now < readyAt) return { phase: 'waiting', readyAt, remainingMs: readyAt - now };
     return { phase: 'challenge', readyAt };
+  }
+
+  /**
+   * Does a set of granted origin patterns let us redirect every request to `host`
+   * and its subdomains? Access to a parent domain (*://*.reddit.com/*) covers
+   * old.reddit.com too.
+   */
+  function hostCovered(host, origins) {
+    const set = origins instanceof Set ? origins : new Set(origins || []);
+    if (set.has(ALL_SITES_ORIGIN) || set.has('<all_urls>') || set.has('*://*/*')) return true;
+    const labels = host.split('.');
+    for (let i = 0; i < labels.length - 1; i++) {
+      const parent = labels.slice(i).join('.');
+      if (set.has('*://*.' + parent + '/*')) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Advance a Pomodoro session to `now`, replaying phases on the session's own
+   * timeline (so a sleeping service worker or closed browser never restarts a
+   * stale session). Returns the new session or null when it is over.
+   */
+  function advancePomodoroTo(p, now) {
+    let cur = p ? Object.assign({}, p) : null;
+    let guard = 0;
+    while (cur && cur.endsAt <= now && guard++ < 100) {
+      const t = cur.endsAt;
+      if (cur.phase === 'focus') {
+        cur = cur.cycle < cur.totalCycles
+          ? Object.assign({}, cur, { phase: 'break', startedAt: t, endsAt: t + cur.breakMin * MINUTE })
+          : null;
+      } else {
+        cur = Object.assign({}, cur, { phase: 'focus', cycle: cur.cycle + 1, startedAt: t, endsAt: t + cur.focusMin * MINUTE });
+      }
+    }
+    return cur;
   }
 
   const STRICT_GAP_TOLERANCE_MS = 3 * MINUTE;
@@ -513,6 +571,12 @@
     makeChallenge,
     strictUnlockState,
     applyStrictHeartbeat,
+    hostCovered,
+    advancePomodoroTo,
+    cleanDays,
+    MAX_PATTERN_ENTRIES,
+    MAX_SCHEDULE_WINDOWS,
+    STRICT_HOURS,
   };
 
   root.FFCore = api;

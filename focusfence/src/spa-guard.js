@@ -9,7 +9,14 @@
  */
 (() => {
   let last = location.href;
+  let timer = 0;
+  function stop() {
+    clearInterval(timer);
+    removeEventListener('popstate', check);
+  }
   function check() {
+    // The extension was updated or removed: this orphaned script must go quiet.
+    if (!chrome.runtime || !chrome.runtime.id) return stop();
     if (location.href === last) return;
     last = location.href;
     try {
@@ -20,10 +27,10 @@
         () => {}
       );
     } catch (e) {
-      /* extension reloaded; ignore */
+      stop(); // "Extension context invalidated"
     }
   }
-  setInterval(check, 400);
+  timer = setInterval(check, 400);
   addEventListener('popstate', check);
   if (window.navigation) window.navigation.addEventListener('navigatesuccess', check);
 })();

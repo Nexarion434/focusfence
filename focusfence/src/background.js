@@ -29,9 +29,20 @@ async function saveLicense(user) {
     plan: user && user.plan ? user.plan.interval || user.plan.nickname || null : null,
     status: (user && user.subscriptionStatus) || null,
     checkedAt: Date.now(),
+    lastError: null,
   };
   await chrome.storage.local.set({ license });
   return license;
+}
+
+/** ExtPay throws strings, Responses or TypeErrors; turn them into one friendly error. */
+function paymentError(e) {
+  const raw = e && e.message ? e.message : String(e);
+  console.warn('[FocusFence] ExtensionPay error', raw);
+  return new FFError(
+    'NETWORK',
+    "Couldn't reach the payment service (ExtensionPay). Check your connection and try again."
+  );
 }
 
 async function refreshLicense() {
@@ -40,7 +51,14 @@ async function refreshLicense() {
     const user = await extpay.getUser();
     return await saveLicense(user);
   } catch (e) {
-    console.warn('[FocusFence] license check failed (keeping cached value)', e);
+    // Offline or service down: keep the last known status, remember the failure.
+    const { license } = await chrome.storage.local.get('license');
+    const kept = Object.assign({ paid: false }, license, {
+      lastError: e && e.message ? e.message : String(e),
+      lastErrorAt: Date.now(),
+    });
+    await chrome.storage.local.set({ license: kept });
+    console.warn('[FocusFence] license check failed (keeping cached value)', kept.lastError);
     return null;
   }
 }
@@ -121,7 +139,7 @@ async function accessChecker(entries) {
   for (const e of entries) {
     if (all) map[e.id] = true;
     else if (e.type === 'keyword') map[e.id] = false;
-    else map[e.id] = origins.has('*://*.' + e.host + '/*');
+    else map[e.id] = C.hostCovered(e.host, origins);
   }
   return { all, map, has: (e) => !!map[e.id] };
 }
@@ -232,7 +250,9 @@ async function syncNow() {
     await chrome.storage.local.set({ strict: st.strict });
   }
   if (st.pomodoro && st.pomodoro.endsAt <= now) {
-    await advancePomodoro(st, now);
+    st.pomodoro = C.advancePomodoroTo(st.pomodoro, now);
+    if (st.pomodoro) await chrome.storage.local.set({ pomodoro: st.pomodoro });
+    else await chrome.storage.local.remove('pomodoro');
   }
 
   const status = C.blockingStatus({ settings: st.settings, isPro, pomodoro: st.pomodoro, strict: st.strict, now });
@@ -268,29 +288,6 @@ async function ensureAlarms(st) {
   } else {
     await chrome.alarms.clear('ff-strict-end');
   }
-}
-
-async function advancePomodoro(st, now) {
-  const p = st.pomodoro;
-  if (!p) return;
-  let next = null;
-  if (p.phase === 'focus') {
-    if (p.cycle < p.totalCycles) {
-      next = Object.assign({}, p, { phase: 'break', endsAt: now + p.breakMin * C.MINUTE, startedAt: now });
-    } else {
-      next = null; // last focus block done -> session complete
-    }
-  } else if (p.phase === 'break') {
-    next = Object.assign({}, p, {
-      phase: 'focus',
-      cycle: p.cycle + 1,
-      endsAt: now + p.focusMin * C.MINUTE,
-      startedAt: now,
-    });
-  }
-  st.pomodoro = next;
-  await chrome.storage.local.set({ pomodoro: next });
-  if (!next) await chrome.storage.local.remove('pomodoro');
 }
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -365,8 +362,17 @@ const handlers = {
 
   async addEntry({ raw, kind }) {
     return mutateSettings(async (settings, st) => {
-      const parsed = C.parseEntry(raw, kind || 'auto');
+      if (typeof raw !== 'string' || raw.length > 2048) throw new FFError('INVALID', 'Enter a website, path or keyword.');
+      let parsed;
+      try {
+        parsed = C.parseEntry(raw, kind || 'auto');
+      } catch (e) {
+        throw new FFError('INVALID', e.message);
+      }
       if (C.isProEntry(parsed) && !isProFrom(st)) throw proRequired();
+      if (C.isProEntry(parsed) && settings.entries.filter(C.isProEntry).length >= C.MAX_PATTERN_ENTRIES) {
+        throw new FFError('LIMIT', 'You can have up to ' + C.MAX_PATTERN_ENTRIES + ' path and keyword rules.');
+      }
       const key = C.entryKey(parsed);
       const existing = settings.entries.find((e) => C.entryKey(e) === key);
       if (existing) return { entry: existing, duplicate: true };
@@ -401,10 +407,16 @@ const handlers = {
       if (!isProFrom(st)) throw proRequired();
       if (st.strict.active) throw strictBlocked();
       if (!(await isUnlocked(st))) throw lockedErr();
+      if (!schedule || typeof schedule !== 'object' || (schedule.windows && !Array.isArray(schedule.windows))) {
+        throw new FFError('INVALID', 'Invalid schedule.');
+      }
+      if ((schedule.windows || []).length > C.MAX_SCHEDULE_WINDOWS) {
+        throw new FFError('INVALID', 'At most ' + C.MAX_SCHEDULE_WINDOWS + ' time ranges.');
+      }
       const windows = (schedule.windows || []).map((w) => {
         const err = C.validateWindow(w);
         if (err) throw new FFError('INVALID', err);
-        return { id: w.id || C.uid(), days: [...new Set(w.days)].sort(), start: w.start, end: w.end };
+        return { id: typeof w.id === 'string' ? w.id : C.uid(), days: C.cleanDays(w.days), start: w.start, end: w.end };
       });
       settings.schedule = { enabled: !!schedule.enabled, windows };
       return { schedule: settings.schedule };
@@ -451,8 +463,9 @@ const handlers = {
     const st = await loadAll();
     if (!isProFrom(st)) throw proRequired();
     if (st.strict.active) return { strict: st.strict };
-    const h = Number(hours) || 0;
-    if (h < 0 || h > 24 * 7) throw new FFError('INVALID', 'Pick a duration between 1 hour and 7 days.');
+    const h = typeof hours === 'number' ? hours : typeof hours === 'string' && hours.trim() !== '' ? Number(hours) : NaN;
+    // A bad value must never fall back to "until I unlock it".
+    if (!C.STRICT_HOURS.includes(h)) throw new FFError('INVALID', 'Pick one of the listed durations.');
     const now = Date.now();
     const strict = {
       active: true,
@@ -506,8 +519,8 @@ const handlers = {
     const st = await loadAll();
     if (!isProFrom(st)) throw proRequired();
     if (!(await isUnlocked(st))) throw lockedErr();
-    if (typeof password !== 'string' || password.length < 4) {
-      throw new FFError('INVALID', 'Use at least 4 characters.');
+    if (typeof password !== 'string' || password.length < 4 || password.length > 256) {
+      throw new FFError('INVALID', 'Use between 4 and 256 characters.');
     }
     const salt = bufToHex(crypto.getRandomValues(new Uint8Array(16)));
     const iterations = 150000;
@@ -528,9 +541,21 @@ const handlers = {
   async unlock({ password }) {
     const st = await loadAll();
     if (!st.lock) return { unlocked: true };
-    const h = await hashPassword(String(password || ''), st.lock.salt, st.lock.iterations);
-    if (!timingSafeEqual(h, st.lock.hash)) throw new FFError('BAD_PASSWORD', 'Wrong password.');
-    await chrome.storage.session.set({ unlockedUntil: Date.now() + UNLOCK_SESSION_MS });
+    const now = Date.now();
+    const sess = await chrome.storage.session.get(['failedUnlocks', 'unlockBlockedUntil']);
+    if ((sess.unlockBlockedUntil || 0) > now) {
+      const secs = Math.ceil((sess.unlockBlockedUntil - now) / 1000);
+      throw new FFError('THROTTLED', 'Too many wrong passwords. Try again in ' + secs + ' s.');
+    }
+    const h = await hashPassword(String(password || '').slice(0, 1024), st.lock.salt, st.lock.iterations);
+    if (!timingSafeEqual(h, st.lock.hash)) {
+      const failed = (sess.failedUnlocks || 0) + 1;
+      // after 5 misses: 30 s, then doubling up to 15 min
+      const wait = failed >= 5 ? Math.min(15 * 60, 30 * 2 ** (failed - 5)) * 1000 : 0;
+      await chrome.storage.session.set({ failedUnlocks: failed, unlockBlockedUntil: wait ? now + wait : 0 });
+      throw new FFError('BAD_PASSWORD', 'Wrong password.');
+    }
+    await chrome.storage.session.set({ unlockedUntil: now + UNLOCK_SESSION_MS, failedUnlocks: 0, unlockBlockedUntil: 0 });
     return { unlocked: true };
   },
 
@@ -560,6 +585,7 @@ const handlers = {
     if (st.strict.active) throw strictBlocked();
     if (!(await isUnlocked(st))) throw lockedErr();
     let obj = data;
+    if (typeof data === 'string' && data.length > 2 * 1024 * 1024) throw new FFError('INVALID', 'That file is too large.');
     if (typeof data === 'string') {
       try {
         obj = JSON.parse(data);
@@ -567,14 +593,20 @@ const handlers = {
         throw new FFError('INVALID', 'The file is not valid JSON.');
       }
     }
-    const settings = C.validateImport(obj, st.settings);
+    let settings;
+    try {
+      settings = C.validateImport(obj, st.settings);
+    } catch (e) {
+      throw new FFError('INVALID', e.message);
+    }
     await chrome.storage.local.set({ settings });
     return { count: settings.entries.length };
   },
 
   async recordBlock({ url }, sender) {
     // only our own block page may record stats
-    if (!sender.url || !sender.url.startsWith(BLOCKED_PAGE)) return {};
+    if (!sender.url || !sender.url.startsWith(BLOCKED_PAGE) || !sender.tab || sender.frameId !== 0) return {};
+    if (typeof url !== 'string' || url.length > 8192) return {};
     const st = await loadAll();
     const isPro = isProFrom(st);
     const entry = C.findMatchingEntry(st.settings.entries, url, isPro);
@@ -603,7 +635,12 @@ const handlers = {
     return {};
   },
 
-  async spaNav({ url }) {
+  async spaNav({ url }, sender) {
+    try {
+      if (typeof url !== 'string' || new URL(url).origin !== new URL(sender.url).origin) return {};
+    } catch (e) {
+      return {};
+    }
     const st = await loadAll();
     const isPro = isProFrom(st);
     const status = C.blockingStatus({
@@ -624,19 +661,28 @@ const handlers = {
     if (CONFIG.DEV) {
       throw new FFError('DEV_ONLY', 'Payments are disabled in the DEV build. Use “Simulate Pro” instead.');
     }
-    await extpay.openPaymentPage(plan || undefined);
+    try {
+      await extpay.openPaymentPage(plan === 'monthly' || plan === 'yearly' ? plan : undefined);
+    } catch (e) {
+      throw paymentError(e);
+    }
     return {};
   },
 
   async openLogin() {
     if (CONFIG.DEV) throw new FFError('DEV_ONLY', 'Payments are disabled in the DEV build.');
-    await extpay.openLoginPage();
+    try {
+      await extpay.openLoginPage();
+    } catch (e) {
+      throw paymentError(e);
+    }
     return {};
   },
 
   async refreshLicense() {
-    const license = await refreshLicense();
-    return { license };
+    await refreshLicense();
+    const { license } = await chrome.storage.local.get('license');
+    return { license: license || { paid: false } };
   },
 
   async sync() {
@@ -645,7 +691,7 @@ const handlers = {
 };
 
 // Messages that change state trigger a rule sync afterwards.
-const READ_ONLY = new Set(['getState', 'getStats', 'exportSettings', 'spaNav']);
+const READ_ONLY = new Set(['getState', 'getStats', 'exportSettings', 'spaNav', 'refreshLicense']);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || typeof msg.type !== 'string' || !Object.prototype.hasOwnProperty.call(handlers, msg.type)) {
@@ -656,16 +702,20 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const fromExtensionPage = sender.url && sender.url.startsWith(chrome.runtime.getURL(''));
   if (!fromExtensionPage && msg.type !== 'spaNav') return false;
 
-  const run = READ_ONLY.has(msg.type)
-    ? handlers[msg.type](msg, sender)
-    : serial(() => handlers[msg.type](msg, sender));
+  const run = serial(() => handlers[msg.type](msg, sender));
   run
     .then(async (result) => {
       if (!READ_ONLY.has(msg.type)) await queueSync();
       sendResponse(Object.assign({ ok: true }, result));
     })
     .catch((err) => {
-      sendResponse({ ok: false, code: err.code || 'ERROR', error: err.message || String(err) });
+      if (!(err instanceof FFError)) console.error('[FocusFence] handler failed', msg.type, err);
+      const known = err instanceof FFError;
+      sendResponse({
+        ok: false,
+        code: known ? err.code : 'ERROR',
+        error: known ? err.message : 'Something went wrong. Please try again.',
+      });
     });
   return true;
 });

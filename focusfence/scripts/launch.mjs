@@ -41,8 +41,9 @@ function makeCert() {
  * terminated locally with a self-signed cert (Chromium runs with
  * --ignore-certificate-errors in tests).
  */
-export async function startFakeInternet() {
+export async function startFakeInternet({ downHosts = [] } = {}) {
   const hits = [];
+  const isDown = (host) => downHosts.some((d) => host === d || host.endsWith('.' + d));
   const handler = (scheme) => (req, res) => {
     let url;
     try {
@@ -52,6 +53,10 @@ export async function startFakeInternet() {
       return;
     }
     hits.push(url.href);
+    if (isDown(url.hostname)) {
+      req.socket.destroy(); // simulate "offline / service down"
+      return;
+    }
     if (url.pathname === '/favicon.ico') {
       res.writeHead(404).end();
       return;
@@ -67,6 +72,11 @@ export async function startFakeInternet() {
     s.on('close', () => sockets.delete(s));
   });
   server.on('connect', (req, socket, head) => {
+    if (isDown(String(req.url).split(':')[0])) {
+      hits.push('CONNECT ' + req.url);
+      socket.destroy();
+      return;
+    }
     socket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
     if (head && head.length) socket.unshift(head);
     tls.emit('connection', socket);
