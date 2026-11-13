@@ -112,8 +112,13 @@ const REDIRECT_JS = `(function(){try{var L=${JSON.stringify(SITE_LANGS.filter((l
 const LANG_JS = `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-set-lang]');if(a){try{localStorage.setItem(${JSON.stringify(LANG_STORAGE_KEY)},a.getAttribute('data-set-lang'))}catch(err){}}});\n`;
 
 /* ------------------------------------------------------------ shared bits */
-const LOGO = (size) =>
-  `<svg width="${size}" height="${size}" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2E7D6B"/><rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/></svg>`;
+const LOGO_SVG = fs
+  .readFileSync(path.join(ROOT, 'src/lib/ui.js'), 'utf8')
+  .match(/const LOGO_SVG =\s*([\s\S]*?);\n/)[1]
+  .split('\n')
+  .map((l) => l.trim().replace(/^\+?\s*'/, '').replace(/'\s*\+?$/, ''))
+  .join('');
+const LOGO = (size) => LOGO_SVG.replace(/SIZE/g, String(size));
 
 /**
  * @param o.lang        page language
@@ -163,7 +168,7 @@ function page({ lang, base, file, translated, title, description, body, canonica
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
-  <a class="brand" href="${home || './'}">${LOGO(28)}<span>FocusFence</span></a>
+  <a class="brand" href="${home || './'}">${LOGO(32)}<span>FocusFence</span></a>
   <div class="nav-right">
     <nav><a href="${home || './'}#features">${T.navFeatures}</a><a href="${home || './'}#pricing">${T.navPricing}</a><a href="${base}blog/" hreflang="en">${T.navBlog}</a><a href="${home}privacy.html">${T.navPrivacy}</a></nav>
     <nav class="langs" aria-label="${attr(T.langLabel)}">${switcher}</nav>
@@ -171,7 +176,7 @@ function page({ lang, base, file, translated, title, description, body, canonica
 </div></header>
 ${fill(body)}
 <footer class="foot"><div class="wrap foot-in">
-  <div class="brand">${LOGO(22)}<span>FocusFence</span></div>
+  <div class="brand">${LOGO(24)}<span>FocusFence</span></div>
   <p>${fill(T.footLicense)} · <a href="${SOURCE_URL}">${T.footSource}</a> · <a href="${home}privacy.html">${T.footPrivacy}</a> · <a href="${base}blog/" hreflang="en">${T.footBlog}</a></p>
   <p class="muted">${fill(T.footNotAffiliated)}</p>
 </div></footer>

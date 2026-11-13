@@ -72,7 +72,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 93 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 94 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 
@@ -92,7 +92,7 @@ npm run cws:check        # build + Chrome Web Store pre-submission checks on the
 npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
 npm run i18n             # regenerate src/_locales from scripts/i18n/strings.mjs
 npm run docs             # regenerate ../docs (website)
-npm run icons            # src/icons/*.png
+npm run icons            # src/icons/*.png from the Picket F logo (LOGO_SVG in src/lib/ui.js, the single source)
 ```
 
 `npm run cws:check` checks the following, and fails on the usual rejection causes:

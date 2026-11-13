@@ -19,8 +19,8 @@
   let pomoDirty = false;
   let messageDirty = false;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(26));
-  $('lock-logo').innerHTML = logo(44);
+  $('logo').insertAdjacentHTML('afterbegin', logo(24));
+  $('lock-logo').innerHTML = logo(48);
   $('empty-logo').innerHTML = logo(40);
 
   // Pro gate overlays

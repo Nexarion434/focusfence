@@ -209,13 +209,13 @@ async function syncSpaGuard(st, isPro, access) {
 
 async function updateBadge(st, status) {
   let text = '';
-  let color = '#2E7D6B';
+  let color = '#1F5A4C'; // pine: stands out on the field-green icon, 8:1 with white text
   let title = 'FocusFence';
   const now = Date.now();
   if (st.pomodoro && st.pomodoro.endsAt > now && isProFrom(st)) {
     const mins = Math.max(1, Math.ceil((st.pomodoro.endsAt - now) / C.MINUTE));
     text = mins + 'm';
-    color = st.pomodoro.phase === 'focus' ? '#2E7D6B' : '#7A8A84';
+    color = st.pomodoro.phase === 'focus' ? '#1F5A4C' : '#7A8A84';
     title = st.pomodoro.phase === 'focus' ? M('titleFocus') : M('titleBreak');
   } else if (!status.active) {
     text = status.reason === 'off' ? M('badgeOff') : '';

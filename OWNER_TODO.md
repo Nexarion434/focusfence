@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 93 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
+Current state: PR #1 open, 94 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
 
 ## Costs at a glance
 

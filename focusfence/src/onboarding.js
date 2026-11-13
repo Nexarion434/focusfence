@@ -13,7 +13,7 @@
   const options = [...SUGGESTIONS];
   let step = 1;
 
-  $('logo').insertAdjacentHTML('afterbegin', logo(28));
+  $('logo').insertAdjacentHTML('afterbegin', logo(32));
 
   function renderChoices() {
     const wrap = $('choices');

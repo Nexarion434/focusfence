@@ -4,12 +4,12 @@
 (function (root) {
   'use strict';
 
+  // Picket F logo (design/logo, direction 1). 16-unit grid: crisp at sizes that are
+  // multiples of 16 (and of 8 on HiDPI screens). Keep in sync with scripts/icons.mjs.
   const LOGO_SVG =
-    '<svg width="SIZE" height="SIZE" viewBox="0 0 32 32" aria-hidden="true">' +
-    '<rect width="32" height="32" rx="9" fill="#2E7D6B"/>' +
-    '<rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/>' +
-    '<rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/>' +
-    '<path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/>' +
+    '<svg width="SIZE" height="SIZE" viewBox="0 0 16 16" aria-hidden="true">' +
+    '<rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/>' +
+    '<polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/>' +
     '</svg>';
 
   function logo(size) {

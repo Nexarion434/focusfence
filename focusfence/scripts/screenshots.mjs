@@ -48,8 +48,8 @@ function frameHtml({ title, body, popupQuery, popupHeight }) {
   .pop{padding:16px}
   iframe{border:0;width:360px;height:${popupHeight || 520}px;display:block;border-radius:12px;box-shadow:var(--shadow);background:var(--bg)}
 </style></head><body>
-<div class="copy"><div class="brand">${LOGO.replace(/SIZE/g, '34')}FocusFence</div>${title}${body}</div>
-<div class="device"><div class="chrome"><i></i><i></i><i></i><span class="url">instagram.com</span><span class="ext">${LOGO.replace(/SIZE/g, '18')}</span></div>
+<div class="copy"><div class="brand">${LOGO.replace(/SIZE/g, '32')}FocusFence</div>${title}${body}</div>
+<div class="device"><div class="chrome"><i></i><i></i><i></i><span class="url">instagram.com</span><span class="ext">${LOGO.replace(/SIZE/g, '16')}</span></div>
 <div class="pop"><iframe src="popup.html${popupQuery || ''}"></iframe></div></div>
 </body></html>`;
 }
@@ -70,7 +70,7 @@ function captionHtml({ kicker, headline, sub }, img) {
   .bar i{width:10px;height:10px;border-radius:50%;background:var(--line-2);display:block}
   .win img{display:block;width:1040px;height:650px}
 </style></head><body>
-<div class="cap"><div class="kicker">${LOGO.replace(/SIZE/g, '22')}${escHtml(kicker)}</div><h1>${escHtml(headline)}</h1><p>${escHtml(sub)}</p></div>
+<div class="cap"><div class="kicker">${LOGO.replace(/SIZE/g, '24')}${escHtml(kicker)}</div><h1>${escHtml(headline)}</h1><p>${escHtml(sub)}</p></div>
 <div class="win"><div class="bar"><i></i><i></i><i></i></div><img src="${img}" alt=""></div>
 </body></html>`;
 }
@@ -101,19 +101,17 @@ function promoHtml() {
   return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="styles/base.css">
 <style>
   :root{color-scheme:light}
-  body{width:440px;height:280px;margin:0;overflow:hidden;background:#2E7D6B;color:#fff;position:relative;font-family:Inter,sans-serif}
+  body{width:440px;height:280px;margin:0;overflow:hidden;background:#1F5A4C;color:#fff;position:relative;font-family:Inter,sans-serif}
   .glow{position:absolute;inset:0;background:radial-gradient(320px 220px at 85% 10%, rgba(255,255,255,.18), transparent 70%),radial-gradient(260px 200px at 0% 100%, rgba(0,0,0,.18), transparent 70%)}
   .fence{position:absolute;left:0;right:0;bottom:0;height:86px;background:repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,255,255,.10) 22px 34px);mask-image:linear-gradient(to top,#000 10%,transparent)}
   .in{position:relative;padding:34px 34px}
   .brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:30px;letter-spacing:-.03em}
-  .brand svg rect:first-child{fill:#fff}
-  .brand svg path{fill:#2E7D6B}
-  .brand svg rect:not(:first-child){fill:#9BCBBB}
+  .brand svg{flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.22);border-radius:11px}
   h2{font-size:25px;line-height:1.15;letter-spacing:-.025em;font-weight:720;margin:24px 0 10px;max-width:340px}
   p{font-size:14px;opacity:.85;margin:0}
   .pill{position:absolute;right:28px;top:36px;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.16)}
 </style></head><body><div class="glow"></div><div class="fence"></div>
-<div class="in"><div class="brand">${LOGO.replace(/SIZE/g, '44')}FocusFence</div>
+<div class="in"><div class="brand">${LOGO.replace(/SIZE/g, '48')}FocusFence</div>
 <h2>${escHtml(CAPTIONS.promo[LANG].headline)}</h2><p>${escHtml(CAPTIONS.promo[LANG].sub)}</p></div>
 </body></html>`;
 }

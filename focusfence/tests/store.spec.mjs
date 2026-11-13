@@ -83,3 +83,45 @@ test('no estimated "time saved / reclaimed" claims anywhere users can see them',
   );
   expect(hits).toEqual([]);
 });
+
+test('icons are the chosen Picket F logo, rendered from the shared SVG, crisp at 16 px', async () => {
+  const { chromium } = await import('@playwright/test');
+  const { LOGO_SVG, iconSvg } = await import('../scripts/icons.mjs');
+  // exact geometry picked by the owner (design/logo direction 1, commit 8e87f19)
+  expect(LOGO_SVG).toContain('viewBox="0 0 16 16"');
+  expect(LOGO_SVG).toContain('<rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/>');
+  expect(LOGO_SVG).toContain('<polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/>');
+  const env = { ...process.env };
+  if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
+  const browser = await chromium.launch({ env });
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    for (const size of [16, 32, 48, 128]) {
+      const uri = 'data:image/svg+xml;base64,' + Buffer.from(iconSvg(size)).toString('base64');
+      await page.setContent(`<body style="margin:0;background:transparent"><img id="i" src="${uri}" width="${size}" height="${size}"></body>`);
+      await page.waitForFunction(() => document.getElementById('i').complete);
+      const fresh = await page.locator('#i').screenshot({ omitBackground: true });
+      expect(fresh.equals(fs.readFileSync(path.join(ROOT, `src/icons/icon${size}.png`))), `icon${size}.png matches the logo SVG`).toBe(true);
+    }
+    // 16 px crispness: the F's vertical/horizontal edges are pure white or pure tile green, no grey seams
+    await page.setContent(`<canvas id="c" width="16" height="16"></canvas>`);
+    const bad = await page.evaluate(async (src) => {
+      const img = new Image();
+      img.src = src;
+      await img.decode();
+      const ctx = document.getElementById('c').getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const px = (x, y) => Array.from(ctx.getImageData(x, y, 1, 1).data).slice(0, 3).join(',');
+      const out = [];
+      // stem column x=4..6 between y=4..13, top arm row y=5..6 x=7..11, middle arm y=9..10 x=7..10: all white
+      for (let y = 4; y < 14; y++) for (let x = 4; x < 7; x++) if (px(x, y) !== '255,255,255') out.push(`stem ${x},${y}=${px(x, y)}`);
+      for (const [y0, x1] of [[5, 12], [9, 11]]) for (let y = y0; y < y0 + 2; y++) for (let x = 7; x < x1; x++) if (px(x, y) !== '255,255,255') out.push(`arm ${x},${y}=${px(x, y)}`);
+      // pixels just outside those edges are pure tile green
+      for (const [x, y] of [[3, 8], [7, 4], [12, 5], [11, 9], [7, 12], [7, 8]]) if (px(x, y) !== '58,154,91') out.push(`tile ${x},${y}=${px(x, y)}`);
+      return out;
+    }, 'data:image/png;base64,' + fs.readFileSync(path.join(ROOT, 'src/icons/icon16.png')).toString('base64'));
+    expect(bad).toEqual([]);
+  } finally {
+    await browser.close();
+  }
+});
