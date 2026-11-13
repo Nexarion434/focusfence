@@ -1,0 +1,213 @@
+// Captures UI screenshots + Chrome Web Store assets into ./screenshots.
+// Usage: npm run screenshots   (set FF_CHROME_LIBS if Chromium needs local libs)
+import fs from 'node:fs';
+import path from 'node:path';
+import { ROOT, launchExtension, startFakeInternet } from './launch.mjs';
+
+const OUT = path.join(ROOT, 'screenshots');
+fs.mkdirSync(OUT, { recursive: true });
+const DARK = process.argv.includes('--dark');
+const MIN = 60 * 1000;
+
+const LOGO = fs
+  .readFileSync(path.join(ROOT, 'src/lib/ui.js'), 'utf8')
+  .match(/const LOGO_SVG =\s*([\s\S]*?);\n/)[1]
+  .split('\n')
+  .map((l) => l.trim().replace(/^\+?\s*'/, '').replace(/'\s*\+?$/, ''))
+  .join('');
+
+function frameHtml({ title, body, popupQuery, popupHeight }) {
+  return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="styles/base.css">
+<style>
+  body{width:1280px;height:800px;overflow:hidden;margin:0;display:grid;grid-template-columns:1fr 520px;align-items:center;
+    background:radial-gradient(900px 600px at 0% 0%, var(--accent-soft), transparent 60%),radial-gradient(700px 500px at 100% 100%, var(--pro-soft), transparent 65%),var(--bg);}
+  .copy{padding:0 40px 0 96px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;letter-spacing:-.02em;margin-bottom:34px}
+  h1{font-size:54px;line-height:1.05;letter-spacing:-.035em;font-weight:760;margin:0 0 20px}
+  h1 em{font-style:normal;color:var(--accent)}
+  p.lead{font-size:20px;color:var(--ink-2);max-width:520px;line-height:1.5}
+  ul{list-style:none;padding:0;margin:30px 0 0;display:flex;flex-direction:column;gap:12px;font-size:16.5px;color:var(--ink-2)}
+  li{display:flex;gap:12px;align-items:center}
+  li::before{content:'';width:20px;height:20px;border-radius:6px;background:var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%232E7D6B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;flex:none}
+  .device{justify-self:start;width:392px;border-radius:18px;background:var(--surface);box-shadow:0 2px 6px rgba(28,38,34,.06),0 40px 80px rgba(28,38,34,.18);overflow:hidden;border:1px solid var(--line)}
+  .chrome{height:40px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--bg-2);border-bottom:1px solid var(--line)}
+  .chrome i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+  .chrome .url{margin-left:12px;flex:1;height:24px;border-radius:8px;background:var(--surface);font-size:12px;color:var(--muted);display:flex;align-items:center;padding:0 10px}
+  .chrome .ext{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--accent-soft)}
+  .pop{padding:16px}
+  iframe{border:0;width:360px;height:${popupHeight || 520}px;display:block;border-radius:12px;box-shadow:var(--shadow);background:var(--bg)}
+</style></head><body>
+<div class="copy"><div class="brand">${LOGO.replace(/SIZE/g, '34')}FocusFence</div>${title}${body}</div>
+<div class="device"><div class="chrome"><i></i><i></i><i></i><span class="url">instagram.com</span><span class="ext">${LOGO.replace(/SIZE/g, '18')}</span></div>
+<div class="pop"><iframe src="popup.html${popupQuery || ''}"></iframe></div></div>
+</body></html>`;
+}
+
+function promoHtml() {
+  return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="styles/base.css">
+<style>
+  :root{color-scheme:light}
+  body{width:440px;height:280px;margin:0;overflow:hidden;background:#2E7D6B;color:#fff;position:relative;font-family:Inter,sans-serif}
+  .glow{position:absolute;inset:0;background:radial-gradient(320px 220px at 85% 10%, rgba(255,255,255,.18), transparent 70%),radial-gradient(260px 200px at 0% 100%, rgba(0,0,0,.18), transparent 70%)}
+  .fence{position:absolute;left:0;right:0;bottom:0;height:86px;background:repeating-linear-gradient(90deg, transparent 0 22px, rgba(255,255,255,.10) 22px 34px);mask-image:linear-gradient(to top,#000 10%,transparent)}
+  .in{position:relative;padding:34px 34px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:30px;letter-spacing:-.03em}
+  .brand svg rect:first-child{fill:#fff}
+  .brand svg path{fill:#2E7D6B}
+  .brand svg rect:not(:first-child){fill:#9BCBBB}
+  h2{font-size:25px;line-height:1.15;letter-spacing:-.025em;font-weight:720;margin:24px 0 10px;max-width:340px}
+  p{font-size:14px;opacity:.85;margin:0}
+  .pill{position:absolute;right:28px;top:36px;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.16)}
+</style></head><body><div class="glow"></div><div class="fence"></div>
+<div class="in"><div class="brand">${LOGO.replace(/SIZE/g, '44')}FocusFence</div>
+<h2>Fence off distractions. Get your focus back.</h2><p>Block sites, schedule focus, stay in strict mode.</p></div>
+</body></html>`;
+}
+
+async function seed(send, page) {
+  await page.evaluate(async () => {
+    await chrome.storage.local.clear();
+  });
+  await send('setDevPro', { on: true });
+  for (const [raw, kind] of [
+    ['poker', 'keyword'],
+    ['news.ycombinator.com', 'domain'],
+    ['facebook.com', 'domain'],
+    ['x.com', 'domain'],
+    ['youtube.com/shorts', 'path'],
+    ['reddit.com', 'domain'],
+  ]) {
+    await send('addEntry', { raw, kind });
+  }
+  await send('setSchedule', {
+    schedule: {
+      enabled: false,
+      windows: [
+        { days: [1, 2, 3, 4, 5], start: '09:00', end: '12:30' },
+        { days: [1, 2, 3, 4, 5], start: '13:30', end: '18:00' },
+      ],
+    },
+  });
+  await send('setBlockMessage', { message: '' });
+  // realistic-looking local stats for the last 7 days
+  await page.evaluate(async () => {
+    const C = self.FFCore;
+    const days = {};
+    const pattern = [
+      { 'reddit.com': 9, 'x.com': 6, 'youtube.com/shorts': 7, 'news.ycombinator.com': 3 },
+      { 'reddit.com': 7, 'x.com': 5, 'youtube.com/shorts': 4, 'facebook.com': 2 },
+      { 'reddit.com': 6, 'x.com': 3, 'youtube.com/shorts': 5, 'news.ycombinator.com': 2 },
+      { 'reddit.com': 5, 'x.com': 4, 'youtube.com/shorts': 2 },
+      { 'reddit.com': 3, 'x.com': 2, 'youtube.com/shorts': 3, 'news.ycombinator.com': 1 },
+      { 'reddit.com': 2, 'x.com': 2, 'youtube.com/shorts': 1 },
+      { 'reddit.com': 2, 'x.com': 1, 'youtube.com/shorts': 1 },
+    ];
+    pattern.forEach((p, i) => {
+      days[C.dayKey(Date.now() - (6 - i) * 864e5)] = p;
+    });
+    await chrome.storage.local.set({ stats: { days } });
+  });
+}
+
+const net = await startFakeInternet();
+let frameQuery = '';
+const ext = await launchExtension({
+  proxyPort: net.port,
+  colorScheme: DARK ? 'dark' : 'light',
+  mutate(mf, dir) {
+    fs.writeFileSync(path.join(dir, 'promo.html'), promoHtml());
+  },
+});
+const { context, base } = ext;
+const suffix = DARK ? '-dark' : '';
+try {
+  const api = await context.newPage();
+  await api.goto(base + 'options.html');
+  const send = (type, payload = {}) =>
+    api.evaluate(([t, p]) => chrome.runtime.sendMessage({ type: t, ...p }), [type, payload]);
+  await seed(send, api);
+
+  // a tab on a site that is not blocked yet, for the popup's "current site" row
+  const insta = await context.newPage();
+  await insta.goto('https://www.instagram.com/');
+  const tabId = await api.evaluate(async () => {
+    const tabs = await chrome.tabs.query({});
+    return tabs.find((t) => t.url && t.url.includes('instagram.com')).id;
+  });
+  frameQuery = `?tabId=${tabId}`;
+
+  // ---- block page
+  const blocked = await context.newPage();
+  await blocked.setViewportSize({ width: 1280, height: 800 });
+  await blocked.goto('https://www.reddit.com/r/all/');
+  await blocked.evaluate(() => {
+    document.getElementById('message').textContent = 'Starve your distractions, feed your focus.';
+  });
+  await blocked.waitForTimeout(700);
+  await blocked.screenshot({ path: path.join(OUT, `block-page${suffix}.png`) });
+  await blocked.screenshot({ path: path.join(OUT, `store-1-block-page${suffix}.png`) });
+
+  // ---- options page
+  const opt = await context.newPage();
+  await opt.setViewportSize({ width: 1280, height: 800 });
+  await opt.goto(base + 'options.html');
+  await opt.waitForTimeout(500);
+  await opt.screenshot({ path: path.join(OUT, `options${suffix}.png`) });
+  await opt.screenshot({ path: path.join(OUT, `store-3-options-blocklist${suffix}.png`) });
+  await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
+  await opt.waitForTimeout(400);
+  await opt.screenshot({ path: path.join(OUT, `store-4-schedule-focus-strict${suffix}.png`) });
+  await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
+  await opt.waitForTimeout(400);
+  await opt.screenshot({ path: path.join(OUT, `store-5-stats${suffix}.png`) });
+  await opt.evaluate(() => document.getElementById('plan').scrollIntoView({ block: 'end' }));
+  await opt.waitForTimeout(300);
+  await opt.screenshot({ path: path.join(OUT, `options-plan${suffix}.png`) });
+  await opt.screenshot({ path: path.join(OUT, `options-full${suffix}.png`), fullPage: true });
+
+  // ---- popup (with a running focus session)
+  await send('startPomodoro');
+  await api.evaluate(async () => {
+    const { pomodoro } = await chrome.storage.local.get('pomodoro');
+    pomodoro.endsAt = Date.now() + (18 * 60 + 42) * 1000;
+    await chrome.storage.local.set({ pomodoro });
+  });
+  const popup = await context.newPage();
+  await popup.setViewportSize({ width: 360, height: 600 });
+  await popup.goto(base + 'popup.html' + frameQuery);
+  await popup.waitForTimeout(500);
+  const h = await popup.evaluate(() => document.querySelector('.popup').getBoundingClientRect().height);
+  await popup.setViewportSize({ width: 360, height: Math.ceil(h) });
+  await popup.screenshot({ path: path.join(OUT, `popup${suffix}.png`) });
+
+  // ---- store screenshot with the popup in context
+  fs.writeFileSync(
+    path.join(ext.extDir, 'frame.html'),
+    frameHtml({
+      title: '<h1>Fence off the <em>endless feeds.</em></h1>',
+      body:
+        '<p class="lead">Block distracting sites in one click — or just the worst part, like YouTube Shorts.</p>' +
+        '<ul><li>Unlimited sites, subdomains included</li><li>Pomodoro focus sessions &amp; schedules</li><li>Strict mode when willpower runs out</li><li>100% private — nothing leaves your device</li></ul>',
+      popupQuery: frameQuery,
+      popupHeight: Math.ceil(h),
+    })
+  );
+  const frame = await context.newPage();
+  await frame.setViewportSize({ width: 1280, height: 800 });
+  await frame.goto(base + 'frame.html');
+  await frame.waitForTimeout(900);
+  await frame.screenshot({ path: path.join(OUT, `store-2-popup${suffix}.png`) });
+
+  // ---- promo tile
+  if (!DARK) {
+    const promo = await context.newPage();
+    await promo.setViewportSize({ width: 440, height: 280 });
+    await promo.goto(base + 'promo.html');
+    await promo.waitForTimeout(400);
+    await promo.screenshot({ path: path.join(OUT, 'promo-tile-440x280.png') });
+  }
+  console.log('screenshots written to', OUT);
+} finally {
+  await ext.close();
+  await net.close();
+}
