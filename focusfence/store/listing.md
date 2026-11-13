@@ -12,7 +12,7 @@ Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomo
 
 ## Category · Language
 
-Productivity → Tools. English (United States).
+Productivity → Tools. English (United States). Translated listings: `listing.fr.md`, `listing.es.md`, `listing.de.md`.
 
 ## Full description
 
