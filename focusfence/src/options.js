@@ -335,7 +335,6 @@
     const st = state.stats;
     $('stat-today').textContent = st.today;
     $('stat-week').textContent = st.total;
-    $('stat-saved').textContent = C.formatMinutes(st.minutesSaved);
     const chart = $('chart');
     chart.textContent = '';
     chart.setAttribute(

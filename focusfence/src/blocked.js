@@ -32,7 +32,6 @@
 
   function renderStats(sum) {
     $('today').textContent = sum.today;
-    $('saved').textContent = C.formatMinutes(sum.todayMinutesSaved);
     $('week').textContent = sum.total;
   }
 

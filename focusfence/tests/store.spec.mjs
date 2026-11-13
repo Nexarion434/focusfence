@@ -63,3 +63,23 @@ test('CWS submission checklist: every permission justified (≤ 1000 chars), val
   expect(doc).toContain('```\n' + privacyUrl + '\n```');
   expect(doc).toContain(S.extName.en);
 });
+
+test('no estimated "time saved / reclaimed" claims anywhere users can see them', () => {
+  // The extension only knows real blocked counts; any minutes-saved figure would be made up.
+  const claim = /minutes?\s*saved|time\s*(saved|reclaimed)|reclaim|MINUTES_SAVED|minutesSaved|temps\s*(regagné|gagné|récupéré)|regagn|tiempo\s*(recuperado|ahorrado)|ahorrado|gewonnene?n?\s*Zeit|Zeit\s*(gewonnen|gespart|zurück)|zurückgewinn/i;
+  const REPO = path.resolve(ROOT, '..');
+  const files = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (/\.(js|mjs|html|json|md|css)$/.test(e.name)) files.push(p);
+    }
+  };
+  for (const d of ['focusfence/src', 'focusfence/store', 'docs', 'marketing']) walk(path.join(REPO, d));
+  files.push(path.join(ROOT, 'scripts/i18n/strings.mjs'), path.join(ROOT, 'scripts/site-strings.mjs'), path.join(ROOT, 'README.md'));
+  const hits = files.flatMap((f) =>
+    fs.readFileSync(f, 'utf8').split('\n').flatMap((line, i) => (claim.test(line) ? [`${path.relative(REPO, f)}:${i + 1}: ${line.trim().slice(0, 100)}`] : []))
+  );
+  expect(hits).toEqual([]);
+});

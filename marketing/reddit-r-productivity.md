@@ -24,7 +24,7 @@ What worked better:
 1. **Block the feed, not the tool.** Block only the infinite-scroll parts: YouTube Shorts, the Reddit front page, the "For you" tab. The useful pages stay reachable.
 2. **Make unblocking slow, not impossible.** A 10-minute wait plus typing a sentence is enough friction that I almost always change my mind, but I'm not locked out in a real emergency.
 3. **Schedule it.** Blocking only during work blocks (9–12:30, 13:30–18:00) means I don't feel the urge to rebel against it in the evening.
-4. **Count what you skipped.** Seeing "5 blocked today ≈ 25 min reclaimed" is surprisingly motivating.
+4. **Count what you skipped.** Seeing "5 blocked today" is surprisingly motivating.
 5. **Pomodoro on top.** 25 minutes of focus with *everything* blocked, then a 5-minute break where the schedule rules apply again.
 
 Disclosure: I got annoyed enough that I built a small Chrome extension around these ideas (it's called FocusFence; free for whole-site blocking, paid for the path/schedule/strict features). But the method works with any blocker that supports path rules and schedules.

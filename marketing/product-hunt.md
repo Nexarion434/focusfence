@@ -36,7 +36,7 @@ Thumbnail: `focusfence/src/icons/icon128.png` (upload a 240×240 version).
 > So FocusFence does three things differently:
 > • **Block just the bad part.** `youtube.com/shorts` is blocked while YouTube itself still works, including when you tap into Shorts from the home page. (Pro)
 > • **Private by design.** No account, no analytics. Blocking runs in Chrome's built-in rule engine, so the extension never reads your pages, and it asks for site access one site at a time.
-> • **Calm, not shaming.** The block page shows a quote and the time you've reclaimed today, not a red stop sign.
+> • **Calm, not shaming.** The block page shows a quote and how many times you've been blocked today, not a red stop sign.
 >
 > Free is unlimited for whole-site blocking (subdomains included). Pro ($2.99/mo or $19.99/yr) adds schedules, Pomodoro focus sessions, strict mode with a 10-minute cooling-off unlock, a password lock, stats and backup.
 >

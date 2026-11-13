@@ -26,7 +26,7 @@ GRATIS: UNBEGRENZT VIELE SEITEN, FÜR IMMER
 ✓ Subdomains inklusive: Blockierst du reddit.com, sind auch old.reddit.com, m.reddit.com und www.reddit.com gesperrt
 ✓ Ein Klick: Öffne das Erweiterungsfenster auf einer beliebigen Seite und klicke auf „Seite blockieren“
 ✓ Ein/Aus-Schalter für Pausen
-✓ Eine ruhige Sperrseite mit Zitat und der heute gewonnenen Zeit
+✓ Eine ruhige Sperrseite mit Zitat und den heutigen Sperrungen
 
 ━━━━━━━━━━━━━━━━━━━━
 FOCUSFENCE PRO: 2,99 $/MONAT ODER 19,99 $/JAHR
@@ -37,7 +37,7 @@ FOCUSFENCE PRO: 2,99 $/MONAT ODER 19,99 $/JAHR
 ✓ Pomodoro-Timer: Fokus- und Pausenrunden; während des Fokus ist deine ganze Liste gesperrt. Der Countdown erscheint auf dem Symbol
 ✓ Strikter Modus: Blockieren lässt sich nicht ausschalten, Seiten lassen sich nicht entfernen. Vorzeitig beenden kostet 10 Minuten Bedenkzeit und eine Tipp-Aufgabe
 ✓ Passwortschutz: Schütze deine Einstellungen (ideal mit einem Accountability-Partner)
-✓ Statistik: blockierte Versuche pro Seite und Tag, plus geschätzte gewonnene Zeit
+✓ Statistik: blockierte Versuche pro Seite und Tag
 ✓ Eigene Nachricht auf der Sperrseite: eine Notiz an dein zukünftiges Ich
 ✓ Einstellungen als JSON exportieren und importieren
 

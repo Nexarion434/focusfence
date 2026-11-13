@@ -327,7 +327,7 @@
     "message": "Nada bloqueado hoy todavía"
   },
   "todayCount": {
-    "message": "$1 bloqueos hoy · ≈$2 recuperados"
+    "message": "Bloqueos hoy: $1 · Esta semana: $2"
   },
   "allSettings": {
     "message": "Todos los ajustes →"
@@ -743,9 +743,6 @@
   "statWeek": {
     "message": "esta semana"
   },
-  "statSaved": {
-    "message": "≈ tiempo recuperado (5 min / visita)"
-  },
   "chartAria": {
     "message": "Intentos bloqueados por día, últimos 7 días: $1"
   },
@@ -904,9 +901,6 @@
   },
   "statsGroupAria": {
     "message": "Tu concentración hoy"
-  },
-  "reclaimedToday": {
-    "message": "tiempo recuperado hoy"
   },
   "backToWork": {
     "message": "Volver al trabajo"

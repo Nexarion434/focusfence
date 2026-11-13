@@ -20,7 +20,7 @@ FocusFence (« l’extension ») est une extension Chrome qui bloque les sites d
 | Votre liste de blocage (domaines, chemins, mots-clés) | Pour bloquer ces sites | `chrome.storage.local` |
 | Réglages (marche/arrêt, planning, durées des sessions, message de la page de blocage) | Pour appliquer vos préférences | `chrome.storage.local` |
 | Minuteurs des sessions de concentration et du mode strict | Pour que les sessions continuent après un redémarrage du navigateur | `chrome.storage.local` |
-| Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours) | Pour afficher vos statistiques et le « temps regagné » | `chrome.storage.local` |
+| Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours) | Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine) | `chrome.storage.local` |
 | Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même) | Pour protéger vos réglages | `chrome.storage.local` |
 | Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe | Confort | `chrome.storage.session` (effacé à la fermeture du navigateur) |
 | Nombre de mots de passe erronés (pour ralentir les tentatives) | Sécurité | `chrome.storage.session` (effacé à la fermeture du navigateur) |

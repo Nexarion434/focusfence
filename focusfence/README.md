@@ -8,7 +8,7 @@ A calm, private, freemium **Chrome extension (Manifest V3)** that blocks distrac
 | Domain blocking incl. subdomains (`reddit.com` → `old.reddit.com`, `m.youtube.com`, …) | Path & keyword blocking (`youtube.com/shorts` only) |
 | One-click "Block site" for the current tab | Pomodoro focus sessions |
 | On/off switch | Strict mode (10-minute cooling-off + typing challenge to end early) |
-| Block page with quote + time reclaimed | Password lock · Stats · Custom block-page message · JSON export/import |
+| Block page with quote + today's blocked count | Password lock · Stats · Custom block-page message · JSON export/import |
 
 No backend, no analytics; nothing leaves the device except ExtensionPay license checks after a user starts an upgrade.
 
@@ -72,7 +72,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 91 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 93 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 

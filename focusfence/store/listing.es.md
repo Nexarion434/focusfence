@@ -26,7 +26,7 @@ GRATIS: WEBS ILIMITADAS, PARA SIEMPRE
 ✓ Subdominios incluidos: bloquea reddit.com y también quedan bloqueadas old.reddit.com, m.reddit.com y www.reddit.com
 ✓ Un clic: abre la ventana de la extensión en cualquier web y pulsa «Bloquear web»
 ✓ Interruptor de encendido y apagado para los descansos
-✓ Una página de bloqueo tranquila, con una cita y el tiempo recuperado hoy
+✓ Una página de bloqueo tranquila, con una cita y los bloqueos de hoy
 
 ━━━━━━━━━━━━━━━━━━━━
 FOCUSFENCE PRO: 2,99 US$/MES O 19,99 US$/AÑO
@@ -37,7 +37,7 @@ FOCUSFENCE PRO: 2,99 US$/MES O 19,99 US$/AÑO
 ✓ Temporizador Pomodoro: rondas de concentración y descanso; toda tu lista queda bloqueada mientras te concentras. La cuenta atrás aparece en el icono
 ✓ Modo estricto: no se puede desactivar el bloqueo ni quitar webs. Salir antes requiere 10 minutos de espera y un reto de escritura
 ✓ Contraseña: protege tus ajustes (ideal con alguien que te ayude a cumplir)
-✓ Estadísticas: intentos bloqueados por web y por día, y tiempo ahorrado estimado
+✓ Estadísticas: intentos bloqueados por web y por día
 ✓ Mensaje personalizado en la página de bloqueo: una nota para tu yo del futuro
 ✓ Exporta e importa tus ajustes en JSON
 

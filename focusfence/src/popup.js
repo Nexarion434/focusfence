@@ -100,10 +100,21 @@
     tickTimer();
 
     const today = s.stats.today;
-    $('today-stats').textContent =
-      today === 0
-        ? t('todayNone')
-        : t('todayCount', today, C.formatMinutes(s.stats.todayMinutesSaved));
+    const statsEl = $('today-stats');
+    statsEl.textContent = '';
+    if (today === 0) statsEl.textContent = t('todayNone');
+    else {
+      // each "label: n" chunk stays on one line; wrapping only happens between chunks
+      t('todayCount', today, s.stats.total)
+        .split(' · ')
+        .forEach((chunk, i) => {
+          if (i) statsEl.append(' · ');
+          const span = document.createElement('span');
+          span.className = 'nowrap';
+          span.textContent = chunk;
+          statsEl.append(span);
+        });
+    }
   }
 
   function renderCurrent() {

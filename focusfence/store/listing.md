@@ -28,7 +28,7 @@ FREE: UNLIMITED SITES, FOREVER
 ✓ Subdomains included: block reddit.com and old.reddit.com, m.reddit.com and www.reddit.com are blocked too
 ✓ One click: open the popup on any site and press "Block site"
 ✓ On/off switch for breaks
-✓ A calm block page with a motivational quote and the time you've reclaimed today
+✓ A calm block page with a motivational quote and how many times you've been blocked today
 
 ━━━━━━━━━━━━━━━━━━━━
 FOCUSFENCE PRO: $2.99/MONTH OR $19.99/YEAR
@@ -39,7 +39,7 @@ FOCUSFENCE PRO: $2.99/MONTH OR $19.99/YEAR
 ✓ Pomodoro focus timer: focus rounds and breaks, with everything on your list blocked while you focus. The countdown shows on the toolbar icon
 ✓ Strict mode: blocking can't be switched off and sites can't be removed. Ending early takes a 10-minute cooling-off period plus a typing challenge
 ✓ Password lock: protect your settings (great with an accountability partner)
-✓ Stats: blocked attempts per site and per day, plus estimated time saved
+✓ Stats: blocked attempts per site and per day
 ✓ Custom block page message: leave a note for your future self
 ✓ Export and import your settings as JSON
 
@@ -79,7 +79,7 @@ The store ranks mainly on the **title**, then the **short description**, then th
 - **Title** leads with the brand and then the two highest-intent generic queries: *website blocker* and *pomodoro / focus timer*. No third-party brand names in the title. Google's policy treats those as keyword spam and they risk rejection.
 - **Short description** names the main differentiator in plain words (*just YouTube Shorts*), which is a common search intent, plus *schedules*, *Pomodoro focus timer*, *strict mode* and *private*.
 - **First 2 lines of the full description** (shown before "Read more") restate *block distracting websites* and *website blocker* naturally, then give the privacy hook.
-- Secondary phrases appear once each, in sentences: *site blocker*, *block YouTube Shorts*, *block websites during work or study hours*, *focus timer*, *time saved*. No keyword lists, no repetition, no claims about other products. All of these would violate the store's [program policies](https://developer.chrome.com/docs/webstore/program-policies/) on keyword spam.
+- Secondary phrases appear once each, in sentences: *site blocker*, *block YouTube Shorts*, *block websites during work or study hours*, *focus timer*. No keyword lists, no repetition, no claims about other products. All of these would violate the store's [program policies](https://developer.chrome.com/docs/webstore/program-policies/) on keyword spam.
 - Screenshots carry short captions in the image (block page, popup, blocklist, schedule/strict, stats), because users decide from screenshots.
 - After launch: answer reviews, ship small updates (freshness), and add localized listings (FR, DE, ES, PT-BR) with translated titles. Each locale is indexed separately.
 

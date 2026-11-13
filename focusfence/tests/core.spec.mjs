@@ -113,7 +113,10 @@ test.describe('stats, import/export, strict helpers', () => {
     expect(sum.today).toBe(2);
     expect(sum.total).toBe(3);
     expect(sum.bySite['reddit.com']).toBe(2);
-    expect(sum.minutesSaved).toBe(15);
+    // only real counts: no estimated minutes
+    expect(sum).not.toHaveProperty('minutesSaved');
+    expect(sum).not.toHaveProperty('todayMinutesSaved');
+    expect(C).not.toHaveProperty('MINUTES_SAVED_PER_BLOCK');
   });
   test('export/import round-trip drops invalid rows', () => {
     const settings = {

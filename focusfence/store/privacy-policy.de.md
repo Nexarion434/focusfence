@@ -20,7 +20,7 @@ FocusFence („die Erweiterung“) ist eine Chrome-Erweiterung, die Websites Ihr
 | Ihre Sperrliste (Domains, Pfade, Stichwörter) | Um diese Websites zu sperren | `chrome.storage.local` |
 | Einstellungen (Ein/Aus, Zeitplan, Dauer der Fokus-Sitzungen, Nachricht der Sperrseite) | Um Ihre Vorlieben anzuwenden | `chrome.storage.local` |
 | Timer für Fokus-Sitzungen und Strikt-Modus | Damit Sitzungen einen Browser-Neustart überstehen | `chrome.storage.local` |
-| Anzahl gesperrter Aufrufe pro gesperrter Website und Tag (letzte 90 Tage) | Für Ihre Statistik und die „gewonnene Zeit“ | `chrome.storage.local` |
+| Anzahl gesperrter Aufrufe pro gesperrter Website und Tag (letzte 90 Tage) | Für Ihre Statistik (gesperrte Aufrufe heute und diese Woche) | `chrome.storage.local` |
 | Passwortschutz: ein gesalzener PBKDF2-SHA-256-Hash (nie das Passwort selbst) | Um Ihre Einstellungen zu schützen | `chrome.storage.local` |
 | „Entsperrt“-Markierung für 15 Minuten nach Eingabe des Passworts | Komfort | `chrome.storage.session` (wird beim Schließen des Browsers gelöscht) |
 | Anzahl falscher Passworteingaben (um das Raten zu bremsen) | Sicherheit | `chrome.storage.session` (wird beim Schließen des Browsers gelöscht) |

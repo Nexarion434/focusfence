@@ -8,22 +8,22 @@
         "en": {
           "kicker": "Block page",
           "headline": "Distractions hit a calm wall",
-          "sub": "Blocked sites show a gentle reminder and today's reclaimed time, not an error."
+          "sub": "Blocked sites show a gentle reminder and today's count, not an error."
         },
         "fr": {
           "kicker": "Page de blocage",
           "headline": "Les distractions butent sur un mur apaisant",
-          "sub": "Les sites bloqués affichent un rappel bienveillant et le temps regagné, pas une erreur."
+          "sub": "Les sites bloqués affichent un rappel bienveillant et le compte du jour, pas une erreur."
         },
         "es": {
           "kicker": "Página de bloqueo",
           "headline": "Las distracciones chocan con un muro tranquilo",
-          "sub": "Las webs bloqueadas muestran un recordatorio amable y el tiempo recuperado, no un error."
+          "sub": "Las webs bloqueadas muestran un recordatorio amable y el recuento de hoy, no un error."
         },
         "de": {
           "kicker": "Sperrseite",
           "headline": "Ablenkungen prallen an einer ruhigen Wand ab",
-          "sub": "Gesperrte Seiten zeigen eine freundliche Erinnerung und gewonnene Zeit – keinen Fehler."
+          "sub": "Gesperrte Seiten zeigen eine freundliche Erinnerung und den heutigen Zähler – keinen Fehler."
         }
       }
     },
@@ -111,22 +111,22 @@
       "text": {
         "en": {
           "kicker": "Private stats",
-          "headline": "See the time you take back",
+          "headline": "See what you skipped",
           "sub": "Blocked attempts per site and per day, counted on your device only."
         },
         "fr": {
           "kicker": "Statistiques privées",
-          "headline": "Voyez le temps que vous récupérez",
+          "headline": "Voyez ce que vous avez évité",
           "sub": "Tentatives bloquées par site et par jour, comptées uniquement sur votre appareil."
         },
         "es": {
           "kicker": "Estadísticas privadas",
-          "headline": "Mira el tiempo que recuperas",
+          "headline": "Mira lo que has evitado",
           "sub": "Intentos bloqueados por web y por día, contados solo en tu dispositivo."
         },
         "de": {
           "kicker": "Private Statistik",
-          "headline": "Sieh, wie viel Zeit du zurückgewinnst",
+          "headline": "Sieh, was du ausgelassen hast",
           "sub": "Blockierte Versuche pro Seite und Tag, nur auf deinem Gerät gezählt."
         }
       }

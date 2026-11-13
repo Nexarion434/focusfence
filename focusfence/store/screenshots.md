@@ -5,11 +5,11 @@ Captions live in [`screenshots.json`](screenshots.json), the single source used 
 
 | # | File | Kicker | Headline | Subtitle | What the UI shows | Why it's in this slot |
 |---|---|---|---|---|---|---|
-| 1 | `screenshots/store-1-block-page.png` | BLOCK PAGE | **Distractions hit a calm wall** | Blocked sites show a gentle reminder and today's reclaimed time, not an error. | `reddit.com is fenced off`, quote, "5 blocked today · 25 min reclaimed · 89 this week", *Back to work* | The moment users will actually live with. It is distinctive and calm, unlike competitors' red stop signs. |
+| 1 | `screenshots/store-1-block-page.png` | BLOCK PAGE | **Distractions hit a calm wall** | Blocked sites show a gentle reminder and today's count, not an error. | `reddit.com is fenced off`, quote, "5 blocked today · 89 this week", *Back to work* | The moment users will actually live with. It is distinctive and calm, unlike competitors' red stop signs. |
 | 2 | `screenshots/store-2-popup.png` | (brand) | **Fence off the endless feeds.** | Block distracting sites in one click, or just the worst part, like YouTube Shorts. + 4 bullet benefits | Toolbar popup over instagram.com: one-click **Block site**, Pro focus session running (18:42) | Shows the core action (one click) and the differentiator (Shorts-only blocking). |
 | 3 | `screenshots/store-3-options-blocklist.png` | BLOCKLIST | **Block whole sites, or just the worst part** | Subdomains included. Pro blocks paths like youtube.com/shorts, or any keyword. | Blocklist with domains, a path rule (`youtube.com/shorts`) and a keyword (`poker`); Website / Path / Keyword switch | Answers the question "does it block old.reddit.com / m.youtube.com?" and shows Pro precision. |
 | 4 | `screenshots/store-4-schedule-focus-strict.png` | SCHEDULES · FOCUS · STRICT MODE | **Focus on your schedule** | Block during work hours, run Pomodoro sessions, lock it in with strict mode. | Two weekday time ranges, Pomodoro settings (25/5 × 4), strict-mode start | Groups the three Pro features people search for (schedule, pomodoro, strict). |
-| 5 | `screenshots/store-5-stats.png` | PRIVATE STATS | **See the time you take back** | Blocked attempts per site and per day, counted on your device only. | 7-day bar chart (decreasing), top sites, "7h 25m reclaimed" | Motivation plus the privacy promise; closes the scroll on a positive result. |
+| 5 | `screenshots/store-5-stats.png` | PRIVATE STATS | **See what you skipped** | Blocked attempts per site and per day, counted on your device only. | 7-day bar chart (decreasing), top sites, blocked today / this week | Motivation plus the privacy promise; closes the scroll on a positive result. |
 
 Small promo tile (440×280): `promo-tile-440x280.png` in each language folder:
 
@@ -24,9 +24,9 @@ Small promo tile (440×280): `promo-tile-440x280.png` in each language folder:
 
 | # | Lang | Kicker | Headline | Subtitle |
 |---|---|---|---|---|
-| 1 | fr | Page de blocage | **Les distractions butent sur un mur apaisant** | Les sites bloqués affichent un rappel bienveillant et le temps regagné, pas une erreur. |
-| 1 | es | Página de bloqueo | **Las distracciones chocan con un muro tranquilo** | Las webs bloqueadas muestran un recordatorio amable y el tiempo recuperado, no un error. |
-| 1 | de | Sperrseite | **Ablenkungen prallen an einer ruhigen Wand ab** | Gesperrte Seiten zeigen eine freundliche Erinnerung und gewonnene Zeit – keinen Fehler. |
+| 1 | fr | Page de blocage | **Les distractions butent sur un mur apaisant** | Les sites bloqués affichent un rappel bienveillant et le compte du jour, pas une erreur. |
+| 1 | es | Página de bloqueo | **Las distracciones chocan con un muro tranquilo** | Las webs bloqueadas muestran un recordatorio amable y el recuento de hoy, no un error. |
+| 1 | de | Sperrseite | **Ablenkungen prallen an einer ruhigen Wand ab** | Gesperrte Seiten zeigen eine freundliche Erinnerung und den heutigen Zähler – keinen Fehler. |
 | 2 | fr | En un clic | **Bloquez les fils sans fin.** | Bloquez les sites qui vous distraient en un clic, ou seulement le pire, comme YouTube Shorts. |
 | 2 | es | Con un clic | **Corta los feeds infinitos.** | Bloquea las webs que te distraen con un clic, o solo lo peor, como YouTube Shorts. |
 | 2 | de | Ein Klick | **Schluss mit endlosen Feeds.** | Blockiere ablenkende Seiten mit einem Klick – oder nur das Schlimmste, wie YouTube Shorts. |
@@ -36,9 +36,9 @@ Small promo tile (440×280): `promo-tile-440x280.png` in each language folder:
 | 4 | fr | Horaires · Concentration · Mode strict | **Concentrez-vous selon vos horaires** | Bloquez pendant le travail, lancez des sessions Pomodoro, verrouillez avec le mode strict. |
 | 4 | es | Horarios · Concentración · Modo estricto | **Concéntrate según tu horario** | Bloquea en horas de trabajo, haz sesiones Pomodoro y blíndalo con el modo estricto. |
 | 4 | de | Zeitpläne · Fokus · Strikter Modus | **Fokus nach deinem Zeitplan** | Sperre während der Arbeit, starte Pomodoro-Sitzungen, sichere alles mit dem strikten Modus. |
-| 5 | fr | Statistiques privées | **Voyez le temps que vous récupérez** | Tentatives bloquées par site et par jour, comptées uniquement sur votre appareil. |
-| 5 | es | Estadísticas privadas | **Mira el tiempo que recuperas** | Intentos bloqueados por web y por día, contados solo en tu dispositivo. |
-| 5 | de | Private Statistik | **Sieh, wie viel Zeit du zurückgewinnst** | Blockierte Versuche pro Seite und Tag, nur auf deinem Gerät gezählt. |
+| 5 | fr | Statistiques privées | **Voyez ce que vous avez évité** | Tentatives bloquées par site et par jour, comptées uniquement sur votre appareil. |
+| 5 | es | Estadísticas privadas | **Mira lo que has evitado** | Intentos bloqueados por web y por día, contados solo en tu dispositivo. |
+| 5 | de | Private Statistik | **Sieh, was du ausgelassen hast** | Blockierte Versuche pro Seite und Tag, nur auf deinem Gerät gezählt. |
 
 In the dashboard, upload each set under its language: **Store listing → language → Screenshots**.
 

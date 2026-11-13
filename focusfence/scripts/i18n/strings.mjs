@@ -163,7 +163,7 @@ export const S = {
   focusCfg: { en: '$1 min focus · $2 min break · $3 rounds', fr: '$1 min de concentration · $2 min de pause · $3 cycles', es: '$1 min de concentración · $2 min de descanso · $3 rondas', de: '$1 Min. Fokus · $2 Min. Pause · $3 Runden' },
   focusTeaser: { en: 'Pomodoro sessions that block everything on your list', fr: 'Des sessions Pomodoro qui bloquent toute votre liste', es: 'Sesiones Pomodoro que bloquean toda tu lista', de: 'Pomodoro-Sitzungen, die deine ganze Liste blockieren' },
   todayNone: { en: 'Nothing blocked yet today', fr: 'Rien de bloqué aujourd’hui', es: 'Nada bloqueado hoy todavía', de: 'Heute noch nichts blockiert' },
-  todayCount: { en: '$1 blocked today · ≈$2 reclaimed', fr: '$1 bloqués aujourd’hui · ≈$2 gagnées', es: '$1 bloqueos hoy · ≈$2 recuperados', de: '$1 heute blockiert · ≈$2 gewonnen' },
+  todayCount: { en: 'Blocked today: $1 · This week: $2', fr: 'Bloqués aujourd’hui : $1 · Cette semaine : $2', es: 'Bloqueos hoy: $1 · Esta semana: $2', de: 'Heute blockiert: $1 · Diese Woche: $2' },
   allSettings: { en: 'All settings →', fr: 'Tous les réglages →', es: 'Todos los ajustes →', de: 'Alle Einstellungen →' },
   toastAlreadyBlocked: { en: '$1 is already blocked', fr: '$1 est déjà bloqué', es: '$1 ya está bloqueada', de: '$1 ist bereits blockiert' },
   toastBlocked: { en: 'Blocked $1', fr: '$1 bloqué', es: '$1 bloqueada', de: '$1 blockiert' },
@@ -368,7 +368,6 @@ export const S = {
   statsDesc: { en: 'Blocked attempts over the last 7 days. Counted on this device only.', fr: 'Tentatives bloquées sur les 7 derniers jours. Comptées uniquement sur cet appareil.', es: 'Intentos bloqueados en los últimos 7 días. Se cuentan solo en este dispositivo.', de: 'Blockierte Versuche der letzten 7 Tage. Nur auf diesem Gerät gezählt.' },
   statToday: { en: 'blocked today', fr: 'bloqués aujourd’hui', es: 'bloqueos hoy', de: 'heute blockiert' },
   statWeek: { en: 'this week', fr: 'cette semaine', es: 'esta semana', de: 'diese Woche' },
-  statSaved: { en: '≈ time reclaimed (5 min / visit)', fr: '≈ temps regagné (5 min / visite)', es: '≈ tiempo recuperado (5 min / visita)', de: '≈ gewonnene Zeit (5 Min. / Besuch)' },
   chartAria: { en: 'Blocked attempts per day, last 7 days: $1', fr: 'Tentatives bloquées par jour, 7 derniers jours : $1', es: 'Intentos bloqueados por día, últimos 7 días: $1', de: 'Blockierte Versuche pro Tag, letzte 7 Tage: $1' },
   barTitle: { en: '$1 blocked', fr: '$1 bloqués', es: '$1 bloqueos', de: '$1 blockiert' },
   topSites: { en: 'Top sites', fr: 'Sites les plus bloqués', es: 'Webs más bloqueadas', de: 'Top-Seiten' },
@@ -428,7 +427,6 @@ export const S = {
   isFencedOff: { en: ' is fenced off', fr: ' est bloqué', es: ' está bloqueada', de: ' ist gesperrt' },
   sessionLeft: { en: '$1 · $2 left', fr: '$1 · encore $2', es: '$1 · quedan $2', de: '$1 · noch $2' },
   statsGroupAria: { en: 'Your focus today', fr: 'Votre concentration aujourd’hui', es: 'Tu concentración hoy', de: 'Dein Fokus heute' },
-  reclaimedToday: { en: 'time reclaimed today', fr: 'de temps regagné aujourd’hui', es: 'tiempo recuperado hoy', de: 'heute gewonnene Zeit' },
   backToWork: { en: 'Back to work', fr: 'Retour au travail', es: 'Volver al trabajo', de: 'Zurück an die Arbeit' },
 
   // ------------------------------------------------------------ onboarding

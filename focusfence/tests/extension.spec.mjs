@@ -28,10 +28,27 @@ test.describe('Free tier: domain blocking', () => {
     await expect(page.locator('#site')).toHaveText('old.reddit.com');
     await expect(page.locator('#message')).not.toBeEmpty();
     await expect(page.locator('#today')).toHaveText('1');
-    await expect(page.locator('#saved')).toHaveText('5 min');
+    await expect(page.locator('#week')).toHaveText('1');
+    await expect(page.locator('#saved')).toHaveCount(0); // no made-up time estimate
     await page.close();
     const stats = await api.send('getStats', { days: 7 });
     expect(stats.summary.bySite['reddit.com']).toBe(1);
+  });
+
+  test('popup and Stats tab show only real blocked counts, no time estimate', async ({ api, ext }) => {
+    await api.send('addEntry', { raw: 'reddit.com', kind: 'domain' });
+    (await visit(ext.context, 'https://reddit.com/')).close();
+    const popup = await ext.context.newPage();
+    await popup.goto(ext.base + 'popup.html');
+    await expect(popup.locator('#today-stats')).toHaveText('Blocked today: 1 · This week: 1');
+    await popup.close();
+    const opt = await ext.context.newPage();
+    await opt.goto(ext.base + 'options.html#stats');
+    await expect(opt.locator('#stat-today')).toHaveText('1');
+    await expect(opt.locator('#stat-week')).toHaveText('1');
+    await expect(opt.locator('#stat-saved')).toHaveCount(0);
+    for (const p of [opt]) expect(await p.locator('body').innerText()).not.toMatch(/reclaim|time saved|\bmin\b.*visit/i);
+    await opt.close();
   });
 
   test('popup quick-adds the current tab and the on/off toggle works', async ({ api, ext }) => {

@@ -134,7 +134,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   padding: 2px 4px 0;
+}
+.foot a {
+  white-space: nowrap;
+}
+.nowrap {
+  white-space: nowrap;
 }
 
 .warn {

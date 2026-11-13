@@ -327,7 +327,7 @@
     "message": "Heute noch nichts blockiert"
   },
   "todayCount": {
-    "message": "$1 heute blockiert · ≈$2 gewonnen"
+    "message": "Heute blockiert: $1 · Diese Woche: $2"
   },
   "allSettings": {
     "message": "Alle Einstellungen →"
@@ -743,9 +743,6 @@
   "statWeek": {
     "message": "diese Woche"
   },
-  "statSaved": {
-    "message": "≈ gewonnene Zeit (5 Min. / Besuch)"
-  },
   "chartAria": {
     "message": "Blockierte Versuche pro Tag, letzte 7 Tage: $1"
   },
@@ -904,9 +901,6 @@
   },
   "statsGroupAria": {
     "message": "Dein Fokus heute"
-  },
-  "reclaimedToday": {
-    "message": "heute gewonnene Zeit"
   },
   "backToWork": {
     "message": "Zurück an die Arbeit"

@@ -327,7 +327,7 @@
     "message": "Nothing blocked yet today"
   },
   "todayCount": {
-    "message": "$1 blocked today · ≈$2 reclaimed"
+    "message": "Blocked today: $1 · This week: $2"
   },
   "allSettings": {
     "message": "All settings →"
@@ -743,9 +743,6 @@
   "statWeek": {
     "message": "this week"
   },
-  "statSaved": {
-    "message": "≈ time reclaimed (5 min / visit)"
-  },
   "chartAria": {
     "message": "Blocked attempts per day, last 7 days: $1"
   },
@@ -904,9 +901,6 @@
   },
   "statsGroupAria": {
     "message": "Your focus today"
-  },
-  "reclaimedToday": {
-    "message": "time reclaimed today"
   },
   "backToWork": {
     "message": "Back to work"

@@ -10,7 +10,6 @@
 
   const MINUTE = 60 * 1000;
   const STRICT_UNLOCK_DELAY_MS = 10 * MINUTE;
-  const MINUTES_SAVED_PER_BLOCK = 5;
   const STATS_RETENTION_DAYS = 90;
   const ALL_SITES_ORIGIN = '*://*/*';
   const MAX_PATH_LENGTH = 512;
@@ -393,8 +392,6 @@
       out.total += n;
       if (i === 0) out.today = n;
     }
-    out.minutesSaved = out.total * MINUTES_SAVED_PER_BLOCK;
-    out.todayMinutesSaved = out.today * MINUTES_SAVED_PER_BLOCK;
     return out;
   }
 
@@ -559,7 +556,6 @@
   const api = {
     MINUTE,
     STRICT_UNLOCK_DELAY_MS,
-    MINUTES_SAVED_PER_BLOCK,
     ALL_SITES_ORIGIN,
     DEFAULT_SETTINGS,
     QUOTES,

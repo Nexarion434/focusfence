@@ -26,7 +26,7 @@ GRATUIT : SITES ILLIMITÉS, POUR TOUJOURS
 ✓ Sous-domaines compris : bloquez reddit.com, et old.reddit.com, m.reddit.com et www.reddit.com le sont aussi
 ✓ Un clic : ouvrez la fenêtre de l'extension sur n'importe quel site et cliquez sur « Bloquer le site »
 ✓ Interrupteur marche/arrêt pour les pauses
-✓ Une page de blocage apaisante, avec une citation et le temps regagné aujourd'hui
+✓ Une page de blocage apaisante, avec une citation et le nombre de blocages du jour
 
 ━━━━━━━━━━━━━━━━━━━━
 FOCUSFENCE PRO : 2,99 $/MOIS OU 19,99 $/AN
@@ -37,7 +37,7 @@ FOCUSFENCE PRO : 2,99 $/MOIS OU 19,99 $/AN
 ✓ Minuteur Pomodoro : cycles de concentration et de pause, toute votre liste est bloquée pendant la concentration. Le compte à rebours s'affiche sur l'icône
 ✓ Mode strict : impossible de désactiver le blocage ou de retirer des sites. En sortir plus tôt demande 10 minutes de réflexion et un défi de saisie
 ✓ Mot de passe : protégez vos réglages (idéal avec un partenaire de responsabilité)
-✓ Statistiques : tentatives bloquées par site et par jour, et estimation du temps gagné
+✓ Statistiques : tentatives bloquées par site et par jour
 ✓ Message personnalisé sur la page de blocage : un mot pour votre futur vous
 ✓ Export et import de vos réglages en JSON
 

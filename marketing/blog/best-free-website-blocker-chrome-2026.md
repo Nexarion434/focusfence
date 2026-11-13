@@ -49,7 +49,7 @@ A website blocker sits next to everything you browse. Prefer blockers that:
 
 ### Where FocusFence fits, honestly
 
-- **Free:** unlimited sites, subdomains included, one-click "Block site" from the toolbar, and a calm block page that shows the time you've reclaimed. No account, no analytics.
+- **Free:** unlimited sites, subdomains included, one-click "Block site" from the toolbar, and a calm block page that shows how many times you've been blocked today. No account, no analytics.
 - **Pro ($2.99/month or $19.99/year):** path and keyword rules (like `youtube.com/shorts`), schedules, Pomodoro focus sessions, strict mode with a 10-minute cooling-off unlock, password lock, stats, export/import.
 - **Limits:** like every extension, it can be disabled from `chrome://extensions`. A timed strict session pauses while it's off, so the timer can't run out in the background. It only covers Chrome on the device where it's installed.
 
