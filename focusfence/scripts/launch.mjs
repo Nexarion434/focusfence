@@ -106,7 +106,7 @@ export function prepareExtension({ grantAll = true, mutate, srcDir = SRC } = {})
   return dir;
 }
 
-export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme, srcDir, lang } = {}) {
+export async function launchExtension({ grantAll = true, proxyPort, viewport, mutate, colorScheme, srcDir, lang, deviceScaleFactor } = {}) {
   const extDir = prepareExtension({ grantAll, mutate, srcDir });
   const args = [
     `--disable-extensions-except=${extDir}`,
@@ -133,6 +133,7 @@ export async function launchExtension({ grantAll = true, proxyPort, viewport, mu
     env,
     viewport: viewport || { width: 1280, height: 800 },
     colorScheme: colorScheme || 'light',
+    ...(deviceScaleFactor ? { deviceScaleFactor } : {}),
     ...(lang ? { locale: lang } : {}),
   });
   let [sw] = context.serviceWorkers();
