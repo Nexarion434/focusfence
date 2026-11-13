@@ -25,15 +25,18 @@ test('manifest is localized and each store listing matches its locale', () => {
   }
 });
 
-test('five 1280x800 store screenshots + 440x280 promo tile, captions documented', () => {
-  const { shots } = JSON.parse(read('store/screenshots.json'));
+test('five 1280x800 store screenshots + 440x280 promo tile per language, captions documented', () => {
+  const { shots, promo } = JSON.parse(read('store/screenshots.json'));
   const plan = read('store/screenshots.md');
   expect(shots).toHaveLength(5);
-  for (const s of shots) {
-    expect(pngSize('screenshots/' + s.file), s.file).toEqual([1280, 800]);
-    expect(plan).toContain(s.headline);
-    expect(plan).toContain(s.sub);
+  for (const lang of ['en', 'fr', 'es', 'de']) {
+    const dir = lang === 'en' ? 'screenshots/' : `screenshots/${lang}/`;
+    for (const s of shots) {
+      expect(pngSize(dir + s.file), dir + s.file).toEqual([1280, 800]);
+      expect(plan, `${lang} headline in plan`).toContain(s.text[lang].headline);
+    }
+    expect(pngSize(dir + 'promo-tile-440x280.png'), lang).toEqual([440, 280]);
+    expect(promo[lang].headline).toBeTruthy();
   }
-  expect(pngSize('screenshots/promo-tile-440x280.png')).toEqual([440, 280]);
   expect(pngSize('src/icons/icon128.png')).toEqual([128, 128]);
 });

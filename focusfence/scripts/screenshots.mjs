@@ -1,14 +1,22 @@
-// Captures UI screenshots + Chrome Web Store assets into ./screenshots.
-// Usage: npm run screenshots   (set FF_CHROME_LIBS if Chromium needs local libs)
+// Captures UI screenshots + Chrome Web Store assets.
+// Usage: npm run screenshots                       English  -> ./screenshots/
+//        node scripts/screenshots.mjs --lang fr    French   -> ./screenshots/fr/  (also es, de)
+//        npm run screenshots:all                   all four languages
+// (set FF_CHROME_LIBS if Chromium needs local libs)
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, launchExtension, startFakeInternet } from './launch.mjs';
 
-const OUT = path.join(ROOT, 'screenshots');
-const SHOTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'store/screenshots.json'), 'utf8')).shots;
+const argLang = process.argv.indexOf('--lang');
+const LANG = argLang > 0 ? process.argv[argLang + 1] : 'en';
+const OUT = LANG === 'en' ? path.join(ROOT, 'screenshots') : path.join(ROOT, 'screenshots', LANG);
+const CAPTIONS = JSON.parse(fs.readFileSync(path.join(ROOT, 'store/screenshots.json'), 'utf8'));
+if (!CAPTIONS.promo[LANG]) throw new Error('no captions for language ' + LANG);
+const SHOTS = CAPTIONS.shots.map((x) => ({ file: x.file, raw: x.raw, ...x.text[LANG] }));
 const shot = (file) => SHOTS.find((x) => x.file === file);
 const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 fs.mkdirSync(OUT, { recursive: true });
+console.log('language:', LANG, '->', OUT);
 const DARK = process.argv.includes('--dark');
 const MIN = 60 * 1000;
 
@@ -75,6 +83,16 @@ async function captioned(context, base, extDir, spec) {
   await p.setViewportSize({ width: 1280, height: 800 });
   await p.goto(base + name);
   await p.waitForTimeout(500);
+  // Translations differ in length: keep the headline on one line and put the
+  // browser frame right under the caption.
+  await p.evaluate(() => {
+    const h1 = document.querySelector('h1');
+    let size = 46;
+    while (h1.scrollWidth > 1180 && size > 30) h1.style.fontSize = --size + 'px';
+    h1.style.whiteSpace = 'nowrap';
+    const cap = document.querySelector('.cap').getBoundingClientRect();
+    document.querySelector('.win').style.top = Math.max(232, Math.round(cap.bottom + 36)) + 'px';
+  });
   await p.screenshot({ path: path.join(OUT, spec.file.replace('.png', suffix + '.png')) });
   await p.close();
 }
@@ -96,7 +114,7 @@ function promoHtml() {
   .pill{position:absolute;right:28px;top:36px;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.16)}
 </style></head><body><div class="glow"></div><div class="fence"></div>
 <div class="in"><div class="brand">${LOGO.replace(/SIZE/g, '44')}FocusFence</div>
-<h2>Fence off distractions. Get your focus back.</h2><p>Block sites, schedule focus, stay in strict mode.</p></div>
+<h2>${escHtml(CAPTIONS.promo[LANG].headline)}</h2><p>${escHtml(CAPTIONS.promo[LANG].sub)}</p></div>
 </body></html>`;
 }
 
@@ -150,6 +168,7 @@ let frameQuery = '';
 const ext = await launchExtension({
   proxyPort: net.port,
   colorScheme: DARK ? 'dark' : 'light',
+  ...(LANG === 'en' ? {} : { lang: LANG }),
   mutate(mf, dir) {
     // the marketing compositions below use inline <style>; relax CSP in this throwaway copy only
     mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace(
@@ -182,7 +201,7 @@ try {
   await blocked.setViewportSize({ width: 1280, height: 800 });
   await blocked.goto('https://www.reddit.com/r/all/');
   await blocked.evaluate(() => {
-    document.getElementById('message').textContent = 'Starve your distractions, feed your focus.';
+    document.getElementById('message').textContent = self.FFCore.quote(1); // same quote in every language
   });
   await blocked.waitForTimeout(700);
   await blocked.screenshot({ path: path.join(OUT, `block-page${suffix}.png`) });
@@ -225,10 +244,10 @@ try {
   fs.writeFileSync(
     path.join(ext.extDir, 'frame.html'),
     frameHtml({
-      title: '<h1>Fence off the <em>endless feeds.</em></h1>',
+      title: `<h1>${escHtml(CAPTIONS.popupFrame[LANG].pre)}<em>${escHtml(CAPTIONS.popupFrame[LANG].em)}</em></h1>`,
       body:
         `<p class="lead">${escHtml(shot('store-2-popup.png').sub)}</p>` +
-        '<ul><li>Unlimited sites, subdomains included</li><li>Pomodoro focus sessions &amp; schedules</li><li>Strict mode when willpower runs out</li><li>100% private — nothing leaves your device</li></ul>',
+        `<ul>${CAPTIONS.popupFrame[LANG].bullets.map((b) => `<li>${escHtml(b)}</li>`).join('')}</ul>`,
       popupQuery: frameQuery,
       popupHeight: Math.ceil(h),
     })
@@ -251,6 +270,13 @@ try {
     await promo.setViewportSize({ width: 440, height: 280 });
     await promo.goto(base + 'promo.html');
     await promo.waitForTimeout(400);
+    await promo.evaluate(() => {
+      const h2 = document.querySelector('h2');
+      let size = 25;
+      while (document.body.scrollHeight > 280 - 18 && size > 18) h2.style.fontSize = --size + 'px';
+      const inner = document.querySelector('.in');
+      while (inner.getBoundingClientRect().bottom > 262 && size > 16) h2.style.fontSize = --size + 'px';
+    });
     await promo.screenshot({ path: path.join(OUT, 'promo-tile-440x280.png') });
   }
   console.log('screenshots written to', OUT);
