@@ -70,12 +70,12 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 
 | Role | Size (360 → 1440 px) | Weight | Tracking | Line height |
 |---|---|---|---|---|
-| Display (h1) | 44 → 80 px | 620 | −0.045em | 0.98 |
+| Display (h1) | 40 → 64 px | 620 | −0.045em | 0.98 |
 | Closing line | 38 → 72 px | 620 | −0.045em | 1.0 |
 | Section (h2) | 32 → 48 px | 600 | −0.038em | 1.04 |
 | Statement | 26 → 40 px | 560 | −0.03em | 1.16 |
 | Card title (h3) | 17 px | 590 | −0.014em | 1.35 |
-| Lead | 17 → 19 px | 400 | −0.012em | 1.55 |
+| Lead | 16 → 18 px | 400 | −0.012em | 1.55 |
 | Body | 15–16 px | 400 | −0.006em | 1.6 |
 | Nav, small | 13.5 px | 500 | 0 | |
 | Mono kicker | 12 px, uppercase | 500 | +0.1em | 1 |
@@ -86,25 +86,26 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 
 - Content 1200 px; product windows up to 1280 px; prose 700 px. Gutters `clamp(20px, 4vw, 40px)`.
 - Radii 8 (controls), 14 (tables), 18 (windows, cards). Pills for buttons and badges.
-- Breakpoints: 1024 (two-column heads and grids stack, bento cards go full width), 860 (steps and plans stack), 720 (section links move to the footer; product windows keep a legible scale and are cropped instead of shrunk), 480 (full-width buttons, stacked ticks, smaller fence), 400 (tighter buttons). Checked at 360, 390, 768, 1024, 1280 and 1440 px: no horizontal scroll.
+- Breakpoints: 1024 (two-column heads and grids stack, bento cards go full width), 860 (steps and plans stack), 720 (section links move to the footer; the hero cluster is recomposed for phones; phones get captures made for them, and every product image is shown whole), 480 (full-width buttons, smaller fence), 400 (tighter buttons). Checked at 360, 390, 768, 1024, 1280 and 1440 px: no horizontal scroll.
+- The hero cluster is sized in em, so it scales as one picture: 1em is 16 px when the cluster is 1280 px wide (or 350 px on phones). On desktop it also shrinks on short screens, so all three surfaces stay in the first screen on laptops (for example 1280×800, 1366×768 and 1536×864).
 
 ## 6. Page plan (as built)
 
 1. **Header:** logo and wordmark; Features, Pricing, Blog, Privacy; mono EN/FR/ES/DE switcher; "Add to Chrome" pill once `STORE_URL` is set. Translucent, blurred, hairline after scrolling.
-2. **Hero:** kicker pill, two-tone H1 on one line (two in Spanish), then a split row with the lead on the left and the actions plus three ticks on the right. Until the store link exists, the primary action is an honest status ("Coming soon to the Chrome Web Store", a dot that pings three times), not a dead button.
+2. **Hero:** kicker pill, two-tone H1 on one line in every language at 1440 px, then a split row with the lead on the left and the actions plus three ticks on the right. Until the store link exists, the primary action is an honest status ("Coming soon to the Chrome Web Store", a dot that pings three times), not a dead button.
 
-   Below it, the product in one look. Each window's tab title comes from the extension's own strings.
-   - **What you control:** the real Settings window, with every section in the sidebar and a blocklist of websites, a path and a keyword.
-   - **One click and a timer:** the real popup hangs from the toolbar icon at the same scale.
-   - **What you get instead:** a block-page window ("reddit.com is fenced off", with today's counts) breaks out of the frame at the bottom right.
+   Below it, the product in one look, all inside the first screen at 1440×900 and 390×844 (a test checks it in every language). Each window's tab title comes from the extension's own strings.
+   - **What you control:** the real Settings window (1280×700), with every section in the sidebar and the whole blocklist of websites, a path and a keyword.
+   - **One click and a timer:** the real popup hangs from the toolbar icon, whole, down to its timer and its blocked counts.
+   - **What you get instead:** the block page's card ("reddit.com is fenced off", with today's counts) in its own window, to the right. It slips under the popup's edge by less than its own margin, so no content is covered.
 
-   On phones, the settings window keeps a legible scale and runs off the right edge, and the block-page card overlaps its lower half.
+   On phones, the settings window runs off the right edge behind the other two; the popup sits on the right and the block page's card on the left, side by side, both whole.
 3. **Statement + three steps** (from onboarding): pick up to three sites, allow the block page, get back to work.
-4. **Block** (`#features`): the full block page in a browser window (the hero's settings view moved up), then the two block features.
+4. **Block** (`#features`): the full block page in a browser window, then the two block features. On phones the window shows the block page's card instead, whole, so both counts stay readable.
 5. **Focus:** bento of three cards with real UI crops at 1:1: schedule ranges, the popup's focus timer and strict mode switched on.
-6. **Stats:** the real stats panel, large, then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check).
+6. **Stats:** the real stats panel, large, then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check). On phones, the panel is the extension's own narrow layout, where the two summary cards stack, shown whole.
 7. **Privacy:** two-tone statement, three points, and a mono card listing what FocusFence actually asks Chrome for, plus the single network exception (ExtensionPay, only after upgrading).
-8. **Pricing:** Free / Pro monthly / Pro yearly (lit card, "Save 44%"), localized prices, how to upgrade, payment note.
+8. **Pricing:** Free / Pro monthly / Pro yearly (lit card, "Save 44%"), localized prices, how to upgrade, payment note. The yearly card ends with "One year of Pro": two quiet bars, 12 × Pro monthly ($35.88) against Pro yearly ($19.99), computed from the prices and written like each language's own prices (a test checks the arithmetic).
 9. **FAQ:** heading and contact line left (sticky on desktop), accordion right.
 10. **Closing:** logo in its light, "Get your focus back.", the action, the picket fence against the green light.
 11. **Footer:** brand line, Product / Resources / Contact (contact@focusfence.dev), license and trademark notes.
@@ -113,9 +114,11 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 
 `npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`:
 
-- 2x captures in **both themes** (`name.webp` and `name-light.webp`), encoded to WebP by Chromium's own canvas encoder (no image tooling needed): settings/blocklist and block page (1x and 2x, `srcset`), block-page card, popup, focus timer, schedule, strict mode, stats. The 2560×1600 captures weigh 40–95 KB.
-- The block-page card is cropped from the very same frame as the full block page, so its countdown matches the popup's.
-- The feature crops come from a 900 px window, so the cards are compact and shown at 1:1.
+- 2x captures in **both themes** (`name.webp` and `name-light.webp`), encoded to WebP by Chromium's own canvas encoder (no image tooling needed): settings/blocklist (1280×700) and block page (1280×800), both 1x and 2x for `srcset`; block-page card, popup, focus timer, schedule, strict mode, stats, and the phone stats. The largest (the 2x settings windows) weigh 79–95 KB.
+- The block-page card is the block page's content (its logo, headline, quote, session, counts, buttons and address) with even margins, cropped from the very same frame as the full block page, so its countdown matches the popup's.
+- The phone stats (`stats-m`) come from the narrowest window the settings page fits without scrolling sideways (684 px in English, 760 px in the other languages). Below 860 px the extension stacks its two summary cards, so both stay whole and readable.
+- The feature crops come from a 900 px window, so the cards are compact and shown at 1:1 on desktop and whole on phones.
+- Phone-only captures are served by `<picture>` below 720 px, still one per theme and lazy.
 - Countdowns are captured at exactly 18:42 (the script waits for that tick), and the stats are captured after the block-page visit, so every number agrees across images.
 - `og.png` (1200×630) per language, composed from the same captures: logo, localized kicker and two-tone headline (auto-fitted), ticks, window and popup.
 
@@ -130,23 +133,23 @@ Subtle and optional; nothing is hidden without JavaScript, and `prefers-reduced-
 
 ## 9. Quality bar (measured)
 
-- **Lighthouse** (v12.6, local static server with gzip). The server is shared with other agents and was saturated during the final runs (6 cores, load average 4–6), so the figures are medians with the full range of repeated runs:
+- **Lighthouse** (v12.6, local static server with gzip). The server is shared with other agents and often saturated (6 cores, load average 3–6), so the figures are medians of three runs, with their range. These were re-measured for round 3, at a load average of 2.7–4.3:
 
   | Page | Perf, phone (median, range) | Perf, desktop | A11y | Best practices | SEO |
   |---|---|---|---|---|---|
-  | `/` dark | 98 (97–99) | 100 | 100 | 100 | 100 |
-  | `/` light | 97 (95–99) | 100 | 100 | 100 | 100 |
-  | `/fr/` `/es/` `/de/`, both themes | 98 (91–100) | 100 | 100 | 100 | 100 |
-  | `/privacy.html`, both themes | 97 (90–100) | 100 | 100 | 100 | 100 |
-  | `/blog/*` | 100 | 100 | 100 | 100 | 66: drafts carry `noindex` by design until published |
+  | `/` dark | 98 (98–99) | 100 | 100 | 100 | 100 |
+  | `/` light | 96 (95–98) | 100 | 100 | 100 | 100 |
+  | `/fr/` `/es/` `/de/`, both themes | 98–99 (92–99) | 100 (`/de/`) | 100 | 100 | 100 |
+  | `/privacy.html`, both themes | 100 (99–100) | 100 (round 2) | 100 | 100 | 100 |
+  | `/blog/*` (round 2) | 100 | 100 | 100 | 100 | 66: drafts carry `noindex` by design until published |
 
-  On phones, LCP is 1.4–2.1 s and CLS 0. A visitor downloads only their theme's images (checked in the network log). Round 1, measured on a quieter server, scored 96–100.
-- **Accessibility:** axe (WCAG 2 A/AA) passes on every page in **both themes** at 1280 px, with no horizontal scroll at 1280, 390 and 360 px (`tests/docs.spec.mjs`). Also covered:
+  On phones, LCP is 2.0–2.4 s on the landing pages (1.4 s on privacy) and CLS is 0. Only TBT moves with the server's load; runs at a load average of 6 dropped to 78–95. The A/B check in pass 12 shows this build costs the same as round 2. A visitor downloads only their theme's images.
+- **Accessibility:** axe (WCAG 2 A/AA) passes on every page in **both themes** at 1280 px, with no horizontal scroll at 1280, 390 and 360 px (`tests/docs.spec.mjs`). The pricing bars are decorative (`aria-hidden`); their figures are plain text. Also covered:
   - skip link, landmarks and labelled navs;
   - focus-visible rings, including on the theme toggle, which is a native radio group;
   - real `<details>` for the FAQ;
   - alt text on every product image (the hidden theme's image is `display: none`, so it is never announced twice).
-- **Weight:** about 250 KB on a first visit on a phone. That covers HTML with inline CSS (16 KB gzipped), the font (73 KB), the hero settings capture (39–41 KB at 1x), the block-page card (33–35 KB) and the next lazy screenshot. All of a language's product images come to 330 KB (dark) or 355 KB (light), and the other theme is never fetched.
+- **Weight:** about 190–210 KB before scrolling on a phone. That covers HTML with inline CSS (17 KB gzipped), the font (73 KB), and the three hero captures: settings 33–38 KB at 1x, popup 33–39 KB and block-page card 31–37 KB. On phones the Block section reuses that card. All of a language's product images in one theme come to 350–380 KB (dark) or 376–406 KB (light) on disk, desktop and phone variants included. A visitor fetches one theme, and one variant of each image.
 
 ## 10. Critique log
 
@@ -244,9 +247,57 @@ Fixes:
   - `en-*-first-screen@2x.png`
   - `og-en.png` and `og-all-languages.png`
 
+### Round 3: design review (first screen, phone crops, pricing)
+
+**Pass 10** (the review's findings, confirmed on the round 2 build):
+1. At 390 px, the Stats frame cut the right-hand metric ("89 this week" sliced at the edge), in every language and both themes.
+2. The same crop-and-fade pattern had two more victims on phones:
+   - the Block section's block page, cut in half, through its own "89 this week";
+   - the end of the strict-mode sentence and the schedule's buttons.
+3. The hero did not fit the first screen. At 1440×900 the popup was cut through its timer, and the block-page card was entirely below the fold. At 390×844 only a sliver of Settings showed.
+4. The yearly plan had two bullets and looked sparse next to Free and Monthly.
+
+Fixes:
+- **Phones get captures made for them**, served by `<picture>` below 720 px:
+  - the stats panel in the extension's own narrow layout (its summary cards stack);
+  - the block page's card.
+- **Every product image is shown whole on phones**; the crop-and-fade rules are gone.
+- **Hero:**
+  - the H1 is 64 px instead of 80, with tighter spacing;
+  - the cluster is sized in em, so it scales as one picture;
+  - Settings is a 1280×700 window (every section and the whole blocklist);
+  - the popup hangs whole from the toolbar icon;
+  - the block page's card stands on the right;
+  - on phones, the popup and the card sit side by side in front of the settings window.
+- **The block-page card is cropped to its content with even margins** (498 px wide in English instead of 768), so it reads at small sizes.
+- **Pricing:** the yearly card ends with "One year of Pro", two quiet bars: 12 × Pro monthly against Pro yearly, computed from the real prices.
+- **Three new tests:**
+  - all three hero surfaces in the first screen, at 1440×900 and 390×844, in every language;
+  - nothing clipped at 390 px, with the phone captures in use, in every language and both themes;
+  - the pricing arithmetic.
+  - The first two were checked against the old rules: both fail on them.
+
+**Pass 11** (all languages, both themes, more sizes):
+1. The card's headline touched the popup's edge. The card now slips under the popup by less than its own margin (13 px clear), and the cluster is centred.
+2. On phones the popup covered the "Blocklist" heading; it moved down one line.
+3. On phones the status pill had shrunk to its text once "See features" was hidden; it is full width again below 480 px.
+4. At 1024×768 the stacked copy pushed the card below the fold; the cluster's height budget now accounts for it (`--above`).
+5. The phone stats capture first came out cut on the right: the settings page needs 648 px, and a 640 px window scrolled sideways. The capture now picks the narrowest window with no sideways scroll (684 px in English, 760 px in the other languages).
+6. Checked sizes:
+   - The whole cluster fits the first screen at 721×900, 768×1024, 1024×768, 1280×800, 1366×768, 1536×864, 1920×1080 and 390×844 (all four languages at 390×844 and 1440×900).
+   - It does not fully fit on short phones (360×740), where the card's lower edge falls below the fold.
+
+**Pass 12** (final, all languages, both themes):
+- Full pages and 2x first screens were re-shot from the final build: `<lang>-desktop-<dark|light>.png`, `<lang>-mobile-<dark|light>.png` and `en-*-first-screen@2x.png` in `screenshots/`.
+- The full test suite passes (107 tests).
+- The two heaviest browser tests are marked slow: axe across 40 page loads took 58 s against the default 60 s on this busy server.
+- Lighthouse was re-measured (section 9). One run of the English page scored 92 on a phone, with 215–333 ms of TBT, while the server's load average was 6 on 6 cores. Two checks on the same server, interleaved with the round 2 build, showed no regression:
+  - Main-thread work without throttling: layout 31.5 vs 32.4 ms, style 10.6 vs 10.8 ms, script 7.5 vs 7.5 ms (medians of six).
+  - Lighthouse, phone, dark, four runs each: round 2 scored 97, 99, 99, 99; this build scored 99, 99, 99, 99, with lower TBT.
+
 ## 11. Open points for the owner
 
-- New French, Spanish and German strings in `focusfence/scripts/site-strings.mjs` deserve a native proofread, like the rest of the site. They cover the statement, steps, section heads, details, permissions card, pricing notes and the theme toggle labels.
+- New French, Spanish and German strings in `focusfence/scripts/site-strings.mjs` deserve a native proofread, like the rest of the site. They cover the statement, steps, section heads, details, permissions card, pricing notes, the theme toggle labels and the "One year of Pro" caption.
 - The German extension UI says "du" while the site says "Sie" (unchanged here; the screenshots show the product as it is).
 - When the store listing is live, set `STORE_URL` in `focusfence/scripts/docs.mjs` and run `npm run docs`: the header pill and the green buttons appear automatically.
 - If the extension's UI is redesigned (another branch is working on it), run `npm run screenshots:site` and `npm run docs`: every website image, in both themes and all four languages, is re-captured from the real UI.
