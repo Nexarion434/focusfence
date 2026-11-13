@@ -20,6 +20,10 @@ const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 fs.mkdirSync(OUT, { recursive: true });
 console.log('language:', LANG, '->', OUT);
 const DARK = process.argv.includes('--dark');
+// --site --src <dir>: capture the website images from another copy of the extension's source
+// (for example the redesigned UI on another branch before it is merged). Default: ./src
+const argSrc = process.argv.indexOf('--src');
+const SITE_SRC = argSrc > 0 ? path.resolve(process.argv[argSrc + 1]) : undefined;
 const MIN = 60 * 1000;
 
 const LOGO = fs
@@ -180,7 +184,7 @@ function ogHtml(T) {
   .light{position:absolute;inset:0;background:
     radial-gradient(560px 380px at 86% 62%, rgba(58,154,91,.26), transparent 70%),
     radial-gradient(900px 500px at 70% -10%, rgba(58,154,91,.08), transparent 70%)}
-  .copy{position:absolute;left:72px;top:66px;width:496px}
+  .copy{position:absolute;left:72px;top:66px;width:470px} /* clear of the popup at 556px */
   .brand{display:flex;align-items:center;gap:14px;font-weight:620;font-size:25px;letter-spacing:-.02em}
   .brand svg{border-radius:10px}
   .kicker{margin-top:64px;display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 15px 0 13px;border-radius:999px;
@@ -191,14 +195,14 @@ function ogHtml(T) {
   .foot{position:absolute;left:72px;bottom:56px;display:grid;gap:10px;font-size:17px;color:#8E9893;letter-spacing:-.01em}
   .foot span{display:flex;align-items:center;gap:9px}
   .foot svg{width:17px;height:17px;fill:none;stroke:#6CC58A;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-  .win{position:absolute;left:640px;top:84px;width:760px;border-radius:16px;overflow:hidden;background:#141917;
+  .win{position:absolute;left:652px;top:74px;width:504px;border-radius:16px;overflow:hidden;background:#141917;
     box-shadow:0 0 0 1px rgba(255,255,255,.11),0 40px 90px rgba(0,0,0,.65)}
   .bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:#0E1211;border-bottom:1px solid rgba(255,255,255,.07)}
   .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.13)}
-  .win img{display:block;width:760px;height:475px}
-  .pop{position:absolute;left:592px;top:300px;width:250px;border-radius:13px;overflow:hidden;
+  .win img{display:block;width:504px;height:420px}
+  .pop{position:absolute;left:556px;top:262px;width:224px;border-radius:12px;overflow:hidden;
     box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 70px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5)}
-  .pop img{display:block;width:250px}
+  .pop img{display:block;width:224px}
 </style></head><body><div class="light"></div>
 <div class="win"><div class="bar"><i></i><i></i><i></i></div><img src="og-block.png" alt=""></div>
 <div class="pop"><img src="og-popup.png" alt=""></div>
@@ -222,6 +226,7 @@ async function captureTheme(theme, SITE_OUT, written) {
     proxyPort: net.port,
     colorScheme: theme,
     deviceScaleFactor: 2,
+    ...(SITE_SRC ? { srcDir: SITE_SRC } : {}),
     ...(LANG === 'en' ? {} : { lang: LANG }),
     mutate(mf, dir) {
       mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'");
@@ -263,28 +268,6 @@ async function captureTheme(theme, SITE_OUT, written) {
     const y = Math.max(0, Math.floor(r.y - padY));
     return { x, y, width: Math.ceil(r.x + r.width + padX) - x, height: Math.ceil(r.y + r.height + padY) - y };
   };
-  // The block page's content (the union of its children), padded and centred on the page: the
-  // card the website shows on its own. Tighter than the page's 640px column, so it reads at small sizes.
-  const contentClip = async (page, selector, padX, padY) => {
-    const r = await page.locator(selector).first().evaluate((el) => {
-      const b = el.getBoundingClientRect();
-      const cx = b.x + b.width / 2;
-      let top = Infinity;
-      let bottom = -Infinity;
-      let half = 0;
-      for (const c of el.children) {
-        const k = c.getBoundingClientRect();
-        if (!k.width || !k.height) continue;
-        top = Math.min(top, k.top);
-        bottom = Math.max(bottom, k.bottom);
-        half = Math.max(half, cx - k.left, k.right - cx);
-      }
-      return { x: cx - half, y: top, width: 2 * half, height: bottom - top };
-    });
-    const x = Math.max(0, Math.floor(r.x - padX));
-    const y = Math.max(0, Math.floor(r.y - padY));
-    return { x, y, width: Math.ceil(r.x + r.width + padX) - x, height: Math.ceil(r.y + r.height + padY) - y };
-  };
   try {
     const api = await context.newPage();
     await api.goto(base + 'options.html');
@@ -294,97 +277,153 @@ async function captureTheme(theme, SITE_OUT, written) {
     await insta.goto('https://www.instagram.com/');
     const tabId = await api.evaluate(async () => (await chrome.tabs.query({})).find((t) => t.url && t.url.includes('instagram.com')).id);
     const hideIncognito = (pg) => pg.addStyleTag({ content: '#incognito-warning{display:none!important}' });
-    // ---- a running focus session: the block page and the popup show the same moment, 18:42 left.
-    // The countdowns tick, so each capture starts a little above 18:42 and waits for that exact value.
-    await send('startPomodoro');
+    const LEFT = (18 * 60 + 42) * 1000;
     const setLeft = (ms) =>
       api.evaluate(async (left) => {
         const { pomodoro } = await chrome.storage.local.get('pomodoro');
         pomodoro.endsAt = Date.now() + left;
         await chrome.storage.local.set({ pomodoro });
       }, ms);
-    const LEFT = (18 * 60 + 42) * 1000;
     const waitFor = (pg, sel, text) =>
       pg.waitForFunction(([s, t]) => (document.querySelector(s)?.textContent || '').includes(t), [sel, text], { polling: 50, timeout: 10000 });
-    // block page, 1280x800 CSS px (this visit is today's 5th blocked attempt), and a crop of its content
-    await setLeft(LEFT + 2500);
+    // fences rise and light up once (nothing loops): capture the settled picture
+    const settle = async (pg) => {
+      await pg.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+      await pg.waitForTimeout(150);
+    };
+    // a section of Settings, below the sticky top bar, whole in the window
+    const shoot = async (pg, selector, pad, name) => {
+      await pg.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        window.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + window.scrollY - 96));
+      }, selector);
+      await pg.waitForTimeout(200);
+      await webp(await pg.screenshot({ clip: await clipOf(pg, selector, pad) }), name);
+    };
+
+    // ---- the block page, as the extension shows it (no focus session), in a 1280x800 window.
+    // This visit is today's 5th blocked attempt: 5 today, 89 this week, as in the popup below.
     const blocked = await context.newPage();
     await blocked.setViewportSize({ width: 1280, height: 800 });
     await blocked.goto('https://www.reddit.com/r/all/');
-    // the page fills itself in asynchronously (random quote, counts, session): once that is done,
-    // pin the quote so every language and theme shows the same one
-    await waitFor(blocked, '#session-text', ':');
+    // The page fills itself in asynchronously (a random quote, then the counts once the visit is
+    // recorded). Then pin the quote, so every language and theme shows the same one.
+    await waitFor(blocked, '#week', '89');
     await blocked.evaluate(() => {
       document.getElementById('message').textContent = self.FFCore.quote(1);
     });
-    await blocked.waitForTimeout(600); // entrance animation
-    await waitFor(blocked, '#session-text', '18:42');
-    // measured once the page is complete (the session line is shown), same frame as the capture
-    const cardRect = await contentClip(blocked, 'main.wrap', 40, 36);
+    await settle(blocked);
     const blockPng = await blocked.screenshot();
-    await blocked.close();
     await webp(blockPng, 'block-page.webp');
     await webp(blockPng, 'block-page-1x.webp', { scale: 0.5 });
-    await webp(blockPng, 'block-card.webp', { crop: cardRect });
-    if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-block.png'), blockPng);
-    // popup (360 CSS px wide) and its focus-session card
-    await setLeft(LEFT + 2500);
+    // The same page in smaller windows: the hero's, and a narrow one for phones. A resize is not a
+    // new visit, and the wall is rebuilt in place, standing.
+    for (const [name, width, height] of [
+      ['block-card.webp', 720, 600],
+      ['block-page-m.webp', 400, 720],
+    ]) {
+      await blocked.setViewportSize({ width, height });
+      await blocked.waitForTimeout(500);
+      await settle(blocked);
+      const png = await blocked.screenshot();
+      await webp(png, name);
+      // the Open Graph image shows the block page in this smaller window
+      if (theme === 'dark' && name === 'block-card.webp') fs.writeFileSync(path.join(extDir, 'og-block.png'), png);
+    }
+    await blocked.close();
+
+    // ---- the popup, idle: 360 CSS px wide, 448 tall with a site on the tab
     const popup = await context.newPage();
     await popup.setViewportSize({ width: 360, height: 640 });
     await popup.goto(base + 'popup.html?tabId=' + tabId);
-    await popup.waitForTimeout(300);
+    await waitFor(popup, '#today-stats', '89');
+    await settle(popup);
     const h = await popup.evaluate(() => Math.ceil(document.querySelector('.popup').getBoundingClientRect().height));
     await popup.setViewportSize({ width: 360, height: h });
-    await waitFor(popup, '#focus-timer', '18:42');
+    await settle(popup);
     const popupPng = await popup.screenshot();
-    const focusPng = await popup.screenshot({ clip: await clipOf(popup, '#focus-card', 1) });
     await popup.close();
     await webp(popupPng, 'popup.webp');
-    await webp(focusPng, 'focus.webp');
     if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
-    await send('stopPomodoro');
 
-    // ---- settings in a 1280x700 window (the sidebar and the whole blocklist), then the stats panel
+    // ---- Settings, Blocklist: the fence of your sites, the composer and the site cards
     const opt = await context.newPage();
-    await opt.setViewportSize({ width: 1280, height: 700 });
-    await opt.goto(base + 'options.html');
+    await opt.setViewportSize({ width: 1280, height: 740 });
+    await opt.goto(base + 'options.html#blocklist');
     await hideIncognito(opt);
     await opt.waitForTimeout(600);
+    await settle(opt);
     const optPng = await opt.screenshot();
     await webp(optPng, 'blocklist.webp');
     await webp(optPng, 'blocklist-1x.webp', { scale: 0.5 });
-    await opt.setViewportSize({ width: 1280, height: 800 });
-    await opt.waitForTimeout(300);
-    await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
-    await opt.waitForTimeout(300);
-    await webp(await opt.screenshot({ clip: await clipOf(opt, '#stats', 24) }), 'stats.webp');
-    // ---- settings at 900 px: compact cards for the feature crops
-    await opt.setViewportSize({ width: 900, height: 800 });
-    await opt.waitForTimeout(300);
-    await opt.evaluate(() => document.getElementById('schedule').scrollIntoView());
-    await opt.waitForTimeout(300);
-    await webp(await opt.screenshot({ clip: await clipOf(opt, '#schedule .card', 1) }), 'schedule.webp');
-    // ---- the settings page's own narrow layout (below 860px its summary cards stack): the stats
-    // panel for phones, in the narrowest window the page fits without scrolling sideways
-    for (const width of [684, 700, 720, 760]) {
-      await opt.setViewportSize({ width, height: 900 });
-      await opt.waitForTimeout(300);
-      if (await opt.evaluate(() => document.documentElement.scrollWidth <= innerWidth)) break;
+    // Settings show one destination at a time: open each by its link.
+    const view = async (hash) => {
+      await opt.evaluate((h) => (location.hash = h), hash);
+      await opt.waitForTimeout(500);
+      await settle(opt);
+    };
+    // The stats (the 7-day picket chart) and the schedule (its week ribbon), in a 1280 px window and
+    // in the narrow layout for phones (a 400 px window, which the page fits without scrolling sideways).
+    // The schedule is switched on for its picture; its "active / paused now" note depends on the
+    // clock at capture time, so it is left out, like the Incognito warning.
+    const WINDOWS = [
+      { days: [1, 2, 3, 4, 5], start: '09:00', end: '12:30' },
+      { days: [1, 2, 3, 4, 5], start: '13:30', end: '18:00' },
+    ];
+    await send('setSchedule', { schedule: { enabled: true, windows: WINDOWS } });
+    // whether everything inside an element stays inside it (in French and German, some of the narrow
+    // layout's buttons need more than 400 px)
+    const fits = (pg, selector) =>
+      pg.evaluate((sel) => {
+        const box = document.querySelector(sel).getBoundingClientRect();
+        return [...document.querySelectorAll(sel + ' *')].every((e) => {
+          const r = e.getBoundingClientRect();
+          return !r.width || (r.left >= box.left - 0.5 && r.right <= box.right + 0.5);
+        });
+      }, selector);
+    for (const [hash, selector, name] of [
+      ['#stats', '#stats', 'stats'],
+      ['#schedule', '#schedule .card', 'schedule'],
+    ]) {
+      // a 1280 px window, then the narrowest phone-like window in which the section fits whole
+      for (const width of [1280, 400, 440, 480, 520, 560]) {
+        await opt.setViewportSize({ width, height: 1000 });
+        await opt.reload();
+        await hideIncognito(opt);
+        await opt.addStyleTag({ content: '#schedule-state{visibility:hidden!important}' });
+        await view(hash);
+        if (width > 760) {
+          await shoot(opt, selector, selector === '#stats' ? 24 : 1, `${name}.webp`);
+        } else if (await fits(opt, selector)) {
+          await shoot(opt, selector, selector === '#stats' ? 16 : 1, `${name}-m.webp`);
+          break;
+        }
+      }
     }
-    await opt.evaluate(() => document.getElementById('stats').scrollIntoView());
-    await opt.waitForTimeout(300);
-    await webp(await opt.screenshot({ clip: await clipOf(opt, '#stats', 16) }), 'stats-m.webp');
-    await opt.setViewportSize({ width: 900, height: 800 });
-    await opt.waitForTimeout(300);
+    await send('setSchedule', { schedule: { enabled: false, windows: WINDOWS } });
 
-    // ---- strict mode switched on ("until I unlock it": no date in the picture), 900 px window
+    // ---- the popup during a focus session: its focus row, at exactly 18:42 left
+    await send('startPomodoro');
+    await setLeft(LEFT + 3000);
+    const focus = await context.newPage();
+    await focus.setViewportSize({ width: 360, height: 720 });
+    await focus.goto(base + 'popup.html?tabId=' + tabId);
+    await waitFor(focus, '#focus-timer', '18:42');
+    const focusPng = await focus.screenshot({ clip: await clipOf(focus, '#focus-card', 1) });
+    await focus.close();
+    await webp(focusPng, 'focus.webp');
+    await send('stopPomodoro');
+
+    // ---- strict mode switched on ("until I unlock it": no time in the picture): the popup's stage,
+    // where the fence turns amber and the switch locks
     await send('startStrict', { hours: 0 });
-    await opt.reload();
-    await hideIncognito(opt);
-    await opt.waitForTimeout(600);
-    await opt.evaluate(() => document.getElementById('strict').scrollIntoView());
-    await opt.waitForTimeout(300);
-    await webp(await opt.screenshot({ clip: await clipOf(opt, '#strict-on', 1) }), 'strict.webp');
+    const strict = await context.newPage();
+    await strict.setViewportSize({ width: 360, height: 720 });
+    await strict.goto(base + 'popup.html?tabId=' + tabId);
+    await waitFor(strict, '#today-stats', '89');
+    await settle(strict);
+    await webp(await strict.screenshot({ clip: await clipOf(strict, '#status-card', 0) }), 'strict.webp');
+    await strict.close();
 
     // ---- Open Graph image, 1200x630, from the dark captures (PNG: the most widely supported format for link previews)
     if (theme === 'dark') {
