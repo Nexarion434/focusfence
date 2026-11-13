@@ -6,7 +6,11 @@ Round 2 (owner feedback on PR #3) added:
 - a light theme that follows the system, with a light / dark / system toggle in the header;
 - a richer hero that explains the product at a glance.
 
-Both are covered in sections 3, 6, 7 and 10.
+Round 3 (design review) fitted the hero into the first screen and showed every product image whole on phones.
+
+Round 4 follows the approved extension redesign (PR #4, `design/extension-ui` at `b51d0c3`): the fence is now drawn as **lanterns**. Every product image is re-captured from that UI, the page closes on its block-page scene, and the copy says what the free plan really allows. See sections 2, 6, 7 and 10.
+
+**Round 4 is in progress.** PR #4's own round 4 redraws the fence again (frosted-glass pills). This branch follows PR #4's round 3 lantern for now. The hero images and the closing fence will be re-synced to PR #4's round 4 once it is done. The copy, the capture pipeline (`--src`), the phone captures and the tests carry over unchanged.
 
 Reference: [linear.app](https://linear.app), studied on 2026-11-13 with desktop (1440 px) and mobile (390 px) captures and its computed styles. We borrow its level of craft, not its assets, copy or brand.
 
@@ -32,9 +36,12 @@ FocusFence sells the absence of noise. The page feels like the product does when
 
 Signature details:
 
-- **The picket.** The logo's 45° picket tip is the only ornament: a 7×11 px picket in front of each kicker, and a picket fence at the end of the page (same 45° tip, rise = half the width). In dark it is a silhouette against green light; in light, a white picket fence.
+- **The lantern fence** (round 4, from the extension). One picket per site, drawn with the logo's 45° tip, lettered and lit from within. The page uses the extension's own fence and nothing else:
+  - in the product images;
+  - in front of each kicker, the extension's 8×13 picket ornament (as on its focus-round counters);
+  - at the end of the page, the extension's block-page scene: a wall of pickets on a reflecting ground, with one lantern lit in the middle (graphite at night, sage at dawn).
 - **Dimmed distractions.** In two-tone headings the distracting thing is set in the muted grey.
-- **One moment, told three times.** The hero's popup and its block-page card show the same focus session at the same second (18:42 left, 5 blocked today, 89 this week), and so do the stats further down.
+- **One moment, told everywhere.** The hero's popup, Settings and block page show the same six sites and the same counts after the block-page visit (5 blocked today, 89 this week), and so do the stats further down. The focus card shows a session at exactly 18:42.
 
 ## 3. Palettes: dark first, light as polished
 
@@ -55,7 +62,18 @@ The site follows the system theme (`prefers-color-scheme`) until the visitor pic
 | `--cta` | `#5DBE7E`, ink text | `#276B5B`, white text | primary button (the product's own light button colour) | 8.3 / 6.3 : 1 |
 | `--pro` | `#D9A74B` on 12 % amber | `#7D5710` on `#F7EEDB` | PRO badges (as in the extension) | 8.0 / 5.6 : 1 |
 
-Light-theme details: cards are white with a hairline and a 1 px shadow instead of translucent white; windows get soft ink shadows instead of black ones; the closing fence becomes a white picket fence against a pale green light.
+Light-theme details: cards are white with a hairline and a 1 px shadow instead of translucent white; windows get soft ink shadows instead of black ones.
+
+**The lantern fence** (round 4) brings the extension's own picket tokens, unchanged:
+
+| Token | Dark (night) | Light (dawn) | Use |
+|---|---|---|---|
+| `--wall-0` / `-1` / `-2` | `#232927` / `#151A18` / `#0B0E0D` (graphite) | `#C3D1C8` / `#D0DBD4` / `#E2E9E4` (sage) | the wall's pickets, top to foot |
+| `--lit-0` / `-1` / `-2` | `#C4F4D4` / `#5CC583` / `#2C7C48` | `#52B678` / `#3A9A5B` / `#2A7845` | the lantern (the middle stop is the logo green) |
+| `--rail` | `#0F1412` | `#D2DDD6` | rails, lit near the lantern |
+| `--pool`, `--refl` | green at 50 %, reflection 30 % | green at 24 %, reflection 16 % | the light on the ground and the wall's reflection |
+
+Only the sky and the ground are tuned to the page. The section starts on the page's own background and ends on the extension's ground colours, warmed slightly in light to sit on the paper.
 
 ### Theme switching, without a flash
 
@@ -95,32 +113,39 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 2. **Hero:** kicker pill, two-tone H1 on one line in every language at 1440 px, then a split row with the lead on the left and the actions plus three ticks on the right. Until the store link exists, the primary action is an honest status ("Coming soon to the Chrome Web Store", a dot that pings three times), not a dead button.
 
    Below it, the product in one look, all inside the first screen at 1440×900 and 390×844 (a test checks it in every language). Each window's tab title comes from the extension's own strings.
-   - **What you control:** the real Settings window (1280×700), with every section in the sidebar and the whole blocklist of websites, a path and a keyword.
-   - **One click and a timer:** the real popup hangs from the toolbar icon, whole, down to its timer and its blocked counts.
-   - **What you get instead:** the block page's card ("reddit.com is fenced off", with today's counts) in its own window, to the right. It slips under the popup's edge by less than its own margin, so no content is covered.
+   - **What you control:** the real Settings window (1280×740), on its Blocklist: the top bar with five destinations, your fence of six lit pickets (R, Y, X, F, N, #), the composer and the site cards.
+   - **One click:** the real popup, as the extension shows it idle with Pro: its lit fence, "Blocking is on", the full-width Block site button, the focus row and the counts. It hangs from the toolbar icon, whole, at its real height (448 px in English).
+   - **What you get instead:** the real block page in a 720×600 window, to the right: "reddit.com is fenced off", the quote, today's counts, and the wall with reddit.com's lantern. It slips under the popup's edge, in the page's empty margin.
 
-   On phones, the settings window runs off the right edge behind the other two; the popup sits on the right and the block page's card on the left, side by side, both whole.
+   On phones, the settings window runs off the right edge behind the other two; the popup sits on the right and the block page on the left, side by side, both whole.
 3. **Statement + three steps** (from onboarding): pick up to three sites, allow the block page, get back to work.
-4. **Block** (`#features`): the full block page in a browser window, then the two block features. On phones the window shows the block page's card instead, whole, so both counts stay readable.
-5. **Focus:** bento of three cards with real UI crops at 1:1: schedule ranges, the popup's focus timer and strict mode switched on.
-6. **Stats:** the real stats panel, large, then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check). On phones, the panel is the extension's own narrow layout, where the two summary cards stack, shown whole.
+4. **Block** (`#features`): the full block page in a browser window (1280×800, the whole scene down to its reflecting ground), then the two block features. On phones the window shows the same page in a 400 px window, whole.
+5. **Focus:** bento of three cards with real UI crops: the schedule with its week ribbon, the popup's focus row at 18:42 (round pickets and progress), and strict mode as the popup shows it (the fence turns amber, the switch locks).
+6. **Stats:** the real stats panel, large (the 7-day chart drawn as pickets, today's lit), then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check). On phones, the panel comes from the extension's own narrow layout, shown whole.
 7. **Privacy:** two-tone statement, three points, and a mono card listing what FocusFence actually asks Chrome for, plus the single network exception (ExtensionPay, only after upgrading).
 8. **Pricing:** Free / Pro monthly / Pro yearly (lit card, "Save 44%"), localized prices, how to upgrade, payment note. The yearly card ends with "One year of Pro": two quiet bars, 12 × Pro monthly ($35.88) against Pro yearly ($19.99), computed from the prices and written like each language's own prices (a test checks the arithmetic).
 9. **FAQ:** heading and contact line left (sticky on desktop), accordion right.
-10. **Closing:** logo in its light, "Get your focus back.", the action, the picket fence against the green light.
+10. **Closing:** logo in its light, "Get your focus back.", the action, then the extension's block-page scene: a wall of pickets on a reflecting ground, the lantern lit in the middle, its light on the rails, its neighbours and the ground. It rises in a wave from the lantern when it comes into view (section 8).
 11. **Footer:** brand line, Product / Resources / Contact (contact@focusfence.dev), license and trademark notes.
 
 ## 7. Product imagery
 
-`npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`:
+`npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`. Round 4 captures the redesigned UI (PR #4 at `b51d0c3`) through `--src <its focusfence/src>`, because that UI is not merged into this branch yet. Once it is, `npm run screenshots:site` gives the same images from `src/`.
 
-- 2x captures in **both themes** (`name.webp` and `name-light.webp`), encoded to WebP by Chromium's own canvas encoder (no image tooling needed): settings/blocklist (1280×700) and block page (1280×800), both 1x and 2x for `srcset`; block-page card, popup, focus timer, schedule, strict mode, stats, and the phone stats. The largest (the 2x settings windows) weigh 79–95 KB.
-- The block-page card is the block page's content (its logo, headline, quote, session, counts, buttons and address) with even margins, cropped from the very same frame as the full block page, so its countdown matches the popup's.
-- The phone stats (`stats-m`) come from the narrowest window the settings page fits without scrolling sideways (684 px in English, 760 px in the other languages). Below 860 px the extension stacks its two summary cards, so both stay whole and readable.
-- The feature crops come from a 900 px window, so the cards are compact and shown at 1:1 on desktop and whole on phones.
-- Phone-only captures are served by `<picture>` below 720 px, still one per theme and lazy.
-- Countdowns are captured at exactly 18:42 (the script waits for that tick), and the stats are captured after the block-page visit, so every number agrees across images.
-- `og.png` (1200×630) per language, composed from the same captures: logo, localized kicker and two-tone headline (auto-fitted), ticks, window and popup.
+- 2x captures in **both themes** (`name.webp` and `name-light.webp`), encoded to WebP by Chromium's own canvas encoder (no image tooling needed).
+  - Hero: the Blocklist in a 1280×740 window (1x and 2x for `srcset`), the idle popup, and the block page in a 720×600 window.
+  - Sections: the block page at 1280×800 (1x and 2x), the stats, the schedule, the popup's focus row and its strict-mode stage.
+  - The largest files (the 2x settings windows) weigh 79–95 KB.
+- **As the extension shows itself.** The block page and the popup are captured without a focus session, as in the extension's own screens. Captures wait for every animation to settle, since the fences rise and light up once.
+- **One visit.** The block page is captured once at 1280×800, then resized to 720×600 and 400×720. A resize is not a new visit, so the counts stay 5 and 89.
+- **Phones** get the extension's own narrow layouts, served by `<picture>` below 720 px, still one per theme and lazy:
+  - the block page at 400 px;
+  - the stats at 400 px;
+  - the schedule at the narrowest window where the whole card fits: 400 px in English and Spanish, 440 px in German, 480 px in French, whose save buttons need the room.
+- **Schedule.** It is switched on for its picture, so its week ribbon is green. Its "active / paused now" note depends on the clock at capture time, so it is hidden, like the Incognito warning.
+- **Popup height.** The popup is captured at its real height, 448 px in English and Spanish. It is 461 px in German and 511 px in French, where the focus row and the footer wrap; the hero leaves room for that.
+- **Focus timer.** It is captured at exactly 18:42; the script waits for that tick.
+- **Open Graph.** `og.png` (1200×630) per language is composed from the same captures: logo, localized kicker and two-tone headline (auto-fitted, clear of the popup), ticks, the 720×600 block page and the popup.
 
 ## 8. Motion
 
@@ -130,6 +155,7 @@ Subtle and optional; nothing is hidden without JavaScript, and `prefers-reduced-
 - A soft light follows the pointer across cards and plans (fine pointers only).
 - FAQ answers open with a height transition where the browser supports it.
 - No endless animation: the status dot pings three times and rests.
+- The closing wall rises once, the first time it comes into view: in a wave from the lantern (24 ms per picket, the extension's spring curve), then the lantern and its pool of light fade in. It uses the extension's timings and only animates `transform` and `opacity`. Without the script, or with reduced motion, it simply stands.
 
 ## 9. Quality bar (measured)
 
@@ -294,6 +320,22 @@ Fixes:
 - Lighthouse was re-measured (section 9). One run of the English page scored 92 on a phone, with 215–333 ms of TBT, while the server's load average was 6 on 6 cores. Two checks on the same server, interleaved with the round 2 build, showed no regression:
   - Main-thread work without throttling: layout 31.5 vs 32.4 ms, style 10.6 vs 10.8 ms, script 7.5 vs 7.5 ms (medians of six).
   - Lighthouse, phone, dark, four runs each: round 2 scored 97, 99, 99, 99; this build scored 99, 99, 99, 99, with lower TBT.
+
+### Round 4: the redesigned extension UI (in progress)
+
+**Pass 13** (synced to PR #4 round 3, the lantern):
+- Every product image was re-captured from PR #4's source at `b51d0c3`, through the new `--src` option, in both themes and all four languages.
+- **Hero.** It shows the idle Pro popup (448 px tall in English), the Blocklist with its lit fence, and the block page in a 720×600 window. All three stay inside the first screen at 1440×900 and 390×844 in every language (tested).
+- **Closing fence.** It became the extension's block-page scene, ported from its CSS. The kicker glyph took the extension's 8×13 picket geometry.
+- **Copy.** The free plan "blocks as many websites as you like; paths and keywords need Pro", as in the extension's corrected onboarding, in all four languages.
+- **Found and fixed:**
+  - The Open Graph window cut the new, wider block page. It now uses the 720×600 capture, and the headline column clears the popup in every language; Spanish had run under it.
+  - At a 400 px window, the extension's schedule footer overflows in French and German, so its save button was cut. Phone captures now use the narrowest window where the whole card fits.
+  - The Block section's bottom fade hid the reflecting ground; it is gone.
+  - Performance: the first scene had 61 pickets per wall, which cost about 16 ms of style and 17 ms of layout on load (unthrottled), below the fold or not. It now has 33. An interleaved Lighthouse A/B with and without the scene shows no difference (96 / 96 and 98 / 98 on phones).
+- **Findings for PR #4:**
+  - The French popup is 511 px tall, not 448, because its focus row wraps beside "Lancer la concentration". Its footer also wraps in French and German.
+  - The schedule footer overflows a 400 px window in French and German.
 
 ## 11. Open points for the owner
 
