@@ -155,3 +155,57 @@ test.describe('strict mode clock', () => {
     expect(u.strict.endsAt).toBeNull();
   });
 });
+
+test.describe('review edge cases', () => {
+  test('host access via a parent domain counts', () => {
+    expect(C.hostCovered('old.reddit.com', ['*://*.reddit.com/*'])).toBe(true);
+    expect(C.hostCovered('reddit.com', ['*://*.reddit.com/*'])).toBe(true);
+    expect(C.hostCovered('reddit.com', ['*://*.old.reddit.com/*'])).toBe(false);
+    expect(C.hostCovered('notreddit.com', ['*://*.reddit.com/*'])).toBe(false);
+    expect(C.hostCovered('a.b', ['*://*/*'])).toBe(true);
+  });
+  test('schedule boundaries: end is exclusive, 24:00 and week wrap-around work', () => {
+    const d = (day, h, m) => new Date(2026, 10, 15 + day, h, m); // day 0 = Sunday
+    expect(C.isWithinSchedule([{ days: [1], start: '09:00', end: '17:00' }], d(1, 16, 59))).toBe(true);
+    expect(C.isWithinSchedule([{ days: [1], start: '09:00', end: '17:00' }], d(1, 17, 0))).toBe(false);
+    expect(C.isWithinSchedule([{ days: [1], start: '20:00', end: '24:00' }], d(1, 23, 59))).toBe(true);
+    // Saturday 22:00 -> Sunday 02:00 (week wraps from day 6 to day 0)
+    expect(C.isWithinSchedule([{ days: [6], start: '22:00', end: '02:00' }], d(0, 1, 0))).toBe(true);
+    expect(C.validateWindow({ days: [1], start: '25:00', end: '10:00' })).toBeTruthy();
+    expect(C.validateWindow({ days: [1], start: 9, end: '10:00' })).toBeTruthy();
+    expect(C.cleanDays([3, 3, 'x', 9, 1])).toEqual([1, 3]);
+  });
+  test('7-day stats never skip or repeat a day across DST changes', () => {
+    const prev = process.env.TZ;
+    process.env.TZ = 'Europe/Paris';
+    try {
+      // 2026-10-25 is the autumn DST change in Europe (25-hour day)
+      for (const t of [new Date(2026, 9, 25, 23, 30), new Date(2026, 9, 26, 0, 30), new Date(2026, 2, 29, 23, 30)]) {
+        const days = C.summarizeStats({ days: {} }, t.getTime(), 7).byDay.map((x) => x.day);
+        expect(new Set(days).size).toBe(7);
+        expect(days[6]).toBe(C.dayKey(t));
+      }
+    } finally {
+      process.env.TZ = prev;
+    }
+  });
+  test('path rules reject query strings and very long paths', () => {
+    expect(() => C.parseEntry('youtube.com/watch?v=abc', 'path')).toThrow(/path only/);
+    expect(() => C.parseEntry('example.com/' + 'a'.repeat(600), 'path')).toThrow(/too long/);
+  });
+  test('keyword with a space matches %20, + and -', () => {
+    const e = { id: 'k', ...C.parseEntry('online poker', 'keyword') };
+    const [rule] = C.buildRules({ entries: [e], isPro: true, active: true, blockedPageUrl: 'x', hasAccess: () => true });
+    const re = new RegExp(rule.condition.regexFilter, 'i');
+    for (const u of ['https://a.b/online%20poker', 'https://a.b/?q=online+poker', 'https://a.b/online-poker']) expect(re.test(u), u).toBe(true);
+  });
+  test('Pomodoro replay', () => {
+    const now = Date.now();
+    const p = { phase: 'focus', cycle: 1, totalCycles: 2, focusMin: 25, breakMin: 5, endsAt: now - 6 * 60e3 };
+    // focus ended 6 min ago -> 5-min break also over -> round 2 focus, 1 min in
+    const r = C.advancePomodoroTo(p, now);
+    expect(r).toMatchObject({ phase: 'focus', cycle: 2 });
+    expect(r.endsAt).toBe(p.endsAt + 5 * 60e3 + 25 * 60e3);
+    expect(C.advancePomodoroTo({ ...p, cycle: 2 }, now)).toBeNull();
+  });
+});

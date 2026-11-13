@@ -40,3 +40,50 @@ test('store build: DEV flag off, no Simulate Pro, Free blocking works', async ({
     await ext.close();
   }
 });
+
+test('store build: ExtensionPay offline keeps the cached license and fails gracefully', async () => {
+  const { startFakeInternet } = await import('../scripts/launch.mjs');
+  const net = await startFakeInternet({ downHosts: ['extensionpay.com'] });
+  const ext = await launchExtension({ proxyPort: net.port, srcDir: path.join(ROOT, 'dist/focusfence') });
+  try {
+    const page = await ext.context.newPage();
+    await page.goto(ext.base + 'options.html');
+    const send = (type, payload = {}) =>
+      page.evaluate(([t, p]) => chrome.runtime.sendMessage({ type: t, ...p }), [type, payload]);
+
+    // Without an ExtensionPay key nothing is fetched at all (privacy: no network for Free users).
+    const before = net.hits.filter((h) => h.includes('extensionpay')).length;
+    expect((await send('refreshLicense')).license.paid).toBe(false);
+    expect(net.hits.filter((h) => h.includes('extensionpay')).length).toBe(before);
+
+    // A paying user goes offline: Pro stays unlocked from the cached status.
+    await page.evaluate(async () => {
+      await chrome.storage.sync.set({ extensionpay_api_key: 'test-key' });
+      await chrome.storage.local.set({ license: { paid: true, checkedAt: Date.now() - 864e5 } });
+    });
+    const r = await send('refreshLicense');
+    expect(r.ok).toBe(true);
+    expect(r.license.paid).toBe(true);
+    expect(r.license.lastError).toBeTruthy();
+    expect(net.hits.some((h) => h.includes('extensionpay.com'))).toBe(true);
+    const st = await send('getState');
+    expect(st.isPro).toBe(true);
+    await page.reload();
+    await expect(page.locator('#license-note')).toBeVisible();
+    await expect(page.locator('#license-note')).toContainText("Couldn't reach ExtensionPay");
+
+    // With a key, checkout simply opens ExtensionPay's page in a tab (Chrome shows its own offline page).
+    const tab = ext.context.waitForEvent('page');
+    expect((await send('openPayment', { plan: 'yearly' })).ok).toBe(true);
+    expect((await tab).url()).toMatch(/extensionpay\.com|chrome-error:/); // offline: Chrome's own error page
+
+    // First-time checkout must create a key over the network: offline -> friendly, typed error.
+    await page.evaluate(() => chrome.storage.sync.remove('extensionpay_api_key'));
+    const pay = await send('openPayment', { plan: 'yearly' });
+    expect(pay).toMatchObject({ ok: false, code: 'NETWORK' });
+    expect(pay.error).toMatch(/Check your connection/);
+  } finally {
+    await ext.close();
+    await net.close();
+  }
+});
