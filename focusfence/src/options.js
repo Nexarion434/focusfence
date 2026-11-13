@@ -61,6 +61,7 @@
     const id = decodeURIComponent(location.hash.slice(1));
     const view = VIEW_OF[id] || views[0];
     for (const v of views) v.hidden = v !== view;
+    groundFence();
     for (const a of document.querySelectorAll('#nav a')) {
       if (VIEW_OF[a.dataset.nav] === view) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
@@ -174,13 +175,22 @@
       t('masterOn');
   }
 
+  /** The ground's shadow (or pool of light) under the hero fence is as wide as the fence (measured
+      while the Blocklist view is shown; route() calls this again when it opens). */
+  function groundFence() {
+    const w = $('hero-fence').offsetWidth;
+    if (w) $('blocklist').querySelector('.hero').style.setProperty('--fence-w', w + 'px');
+  }
+
   /** The fence, drawn large: same posture as in the popup. */
   function renderFence() {
     const s = state;
     const r = s.status.reason;
     const st = s.strict.active ? 'strict' : r === 'focus' ? 'focus' : r === 'off' ? 'down' : r === 'outside-schedule' ? 'paused' : 'up';
-    fence($('hero-fence'), { items: fenceItems(s.settings.entries, s.isPro, C.isProEntry), state: st, max: 18, ghosts: 5 });
-    $('blocklist').querySelector('.hero').className = 'hero' + (st === 'down' || st === 'paused' ? ' is-off' : st === 'strict' ? ' is-strict' : '');
+    fence($('hero-fence'), { items: fenceItems(s.settings.entries, s.isPro, C.isProEntry), state: st, max: 16, ghosts: 5 });
+    const hero = $('blocklist').querySelector('.hero');
+    hero.className = 'hero' + (st === 'down' || st === 'paused' ? ' is-off' : st === 'strict' ? ' is-strict' : '');
+    groundFence();
     const n = s.settings.entries.length;
     $('fence-count').textContent = n ? plural(n, 'sitesFenced') : '';
   }
@@ -470,7 +480,7 @@
     const max = Math.max(1, ...st.byDay.map((d) => d.count));
     st.byDay.forEach((d, i) => {
       const date = new Date(d.day + 'T12:00:00');
-      const fill = el('div', { class: 'bar-fill' });
+      const fill = el('div', { class: 'bar-fill pk' + (i === st.byDay.length - 1 ? ' lit' : '') });
       fill.style.height = Math.round((d.count / max) * 100) + '%';
       chart.appendChild(
         el(

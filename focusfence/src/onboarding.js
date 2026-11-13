@@ -41,20 +41,25 @@
     const slots = $('slots');
     slots.textContent = '';
     const picked = [...selected];
-    const decor = () => el('div', { class: 'slot' }, el('span', { class: 'pk' }));
-    for (let i = 0; i < 3; i++) slots.appendChild(decor());
+    // the wall's pickets either side, fading with distance (--d)
+    const decor = (d) => {
+      const slot = el('div', { class: 'slot' }, el('span', { class: 'pk wall-pk' }));
+      slot.style.setProperty('--d', String(d));
+      return slot;
+    };
+    for (let i = 0; i < 3; i++) slots.appendChild(decor(3 - i));
     for (let i = 0; i < MAX; i++) {
       const host = picked[i];
-      const slot = el('div', { class: 'slot mine' + (host ? ' on' : '') }, el('span', { class: 'pk' }, host ? host[0].toUpperCase() : ''));
+      const slot = el('div', { class: 'slot mine' + (host ? ' on' : '') }, el('span', { class: 'pk ' + (host ? 'lit' : 'slot-outline') }, host ? host[0].toUpperCase() : ''));
       if (host) {
         if (shownOn.has(host)) slot.querySelector('.pk').style.animation = 'none'; // only new picks rise
         shownOn.add(host);
       }
       slots.appendChild(slot);
     }
-    if (step === 3) slots.appendChild(el('div', { class: 'slot pro-gate' }, el('span', { class: 'pk' }, el('b'))));
+    if (step === 3) slots.appendChild(el('div', { class: 'slot pro-gate' }, el('span', { class: 'pk lit' }, el('b'))));
     $('picked').textContent = picked.join(' · ');
-    for (let i = 0; i < 3; i++) slots.appendChild(decor());
+    for (let i = 0; i < 3; i++) slots.appendChild(decor(i + 1));
     for (const h of [...shownOn]) if (!selected.has(h)) shownOn.delete(h);
   }
 

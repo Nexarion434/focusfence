@@ -104,6 +104,8 @@ async function run({ grantAll = true, captures }) {
         });
       },
       tabIdFor,
+      /** Wait until the page's one-time animations (rises, fades, the lantern lighting up) have finished. */
+      settle: (p) => p.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})))),
       /** Countdowns tick: start a little above 18:42 and wait for that exact value, so every capture agrees. */
       waitText: (p, sel, text) =>
         p.waitForFunction(([s, t]) => (document.querySelector(s)?.textContent || '').includes(t), [sel, text], { polling: 50, timeout: 10000 }),
@@ -230,7 +232,7 @@ const MAIN = [
     await h.reset({ pro: false });
     const p = await h.page(theme, 'https://www.reddit.com/r/all/', { width: 1280, height: 800 });
     await p.evaluate(() => (document.getElementById('message').textContent = self.FFCore.quote(1)));
-    await p.waitForTimeout(500);
+    await h.settle(p); // the wall rises in a wave, then the lantern lights up
     await h.shot(p, name);
     await p.close();
   }],
@@ -239,7 +241,7 @@ const MAIN = [
     await h.focus(LEFT + 2500);
     const p = await h.page(theme, 'https://www.youtube.com/shorts/abc123', { width: 1280, height: 800 });
     await p.evaluate(() => (document.getElementById('message').textContent = self.FFCore.quote(1)));
-    await p.waitForTimeout(500);
+    await h.settle(p);
     await h.waitText(p, '#session-text', '18:42');
     await h.shot(p, name);
     await p.close();
@@ -248,7 +250,7 @@ const MAIN = [
     await h.reset({ pro: true });
     await h.send('setBlockMessage', { message: 'You promised yourself the thesis chapter first. Close the tab and open the draft.' });
     const p = await h.page(theme, 'https://news.ycombinator.com/item?id=4242424242', { width: 420, height: 800 });
-    await p.waitForTimeout(500);
+    await h.settle(p);
     await h.shot(p, name);
     await p.close();
   }],
@@ -303,7 +305,8 @@ const MAIN = [
   ['options-blockpage-password', async (h, theme, name) => {
     await h.reset({ pro: true });
     await h.send('setBlockMessage', { message: 'You promised yourself the thesis chapter first.' });
-    await h.options(theme, name, { hash: '#blockpage' });
+    // the list renders after the router's first jump: scroll to the miniature once it has
+    await h.options(theme, name, { hash: '#blockpage', scrollTo: '#blockpage' });
   }],
   ['options-security', async (h, theme, name) => {
     await h.reset({ pro: true });
@@ -366,6 +369,7 @@ const MAIN = [
     for (const host of ['reddit.com', 'youtube.com']) await p.locator(`.choice[data-host="${host}"]`).click();
     await p.locator('#custom-input').focus();
     await p.locator('#custom-input').blur();
+    await p.waitForTimeout(800); // each picked site's picket rises into its slot
     await h.shot(p, name);
     await p.close();
   }],
@@ -374,6 +378,7 @@ const MAIN = [
     const p = await h.page(theme, h.base + 'onboarding.html', { width: 1280, height: 800 });
     for (const host of ['reddit.com', 'youtube.com', 'x.com', 'tiktok.com']) await p.locator(`.choice[data-host="${host}"]`).click();
     await p.evaluate(() => document.activeElement && document.activeElement.blur());
+    await p.waitForTimeout(800);
     await h.shot(p, name);
     await p.close();
   }],
@@ -408,6 +413,7 @@ const MAIN = [
     const p = await h.page(theme, h.base + 'onboarding.html', { width: 390, height: 844 });
     await p.locator('.choice[data-host="reddit.com"]').click();
     await p.evaluate(() => document.activeElement && document.activeElement.blur());
+    await p.waitForTimeout(800);
     await h.shot(p, name, { fullPage: true });
     await p.close();
   }],

@@ -1,28 +1,49 @@
-/* Block page: you hit the fence. A fence stands across the horizon; the picket of the site
-   you just tried is the lit one. Light: a white picket fence at dawn. Dark: a silhouette
-   against a green light (as at the end of the website). */
+/* Block page: you hit the fence. The fence stands on a ground that reflects it; the picket of the
+   site you just tried is the lantern: it holds the light and throws it on its neighbours, the rails
+   and the ground. Light theme: sage pickets at dawn. Dark theme: graphite at night, as at the end of
+   the website. The picket material and the lantern are shared with every fence (base.css). */
 html,
 body {
   height: 100%;
 }
 body {
-  --wall-h: clamp(140px, 24vh, 230px);
-  --pk-w: 22px;
-  --pk-gap: 14px;
-  --wall-pk: #ffffff;
-  --sky-top: #f8f9f8;
-  --sky-low: #e5efe8;
-  --horizon: rgba(58, 154, 91, 0.2);
+  /* the scene's geometry: pickets, the lantern, the ground under them */
+  --wall-h: clamp(112px, 19vh, 178px);
+  --floor-h: clamp(48px, 11vh, 100px);
+  --lit-rise: clamp(36px, 7vh, 56px);
+  --pk-w: 14px;
+  --pk-gap: 28px;
+  --lit-w: 22px;
+  /* dawn */
+  --sky-top: #fbfcfb;
+  --sky-low: #edf4ef;
+  --horizon: rgba(58, 154, 91, 0.1);
+  --rim-rgb: 58 154 91;
+  --rail: #d2ddd6;
+  --rail-hi: rgb(255 255 255 / 0.6);
+  --floor-0: #e3ebe5;
+  --floor-1: #f5f8f6;
+  --ground-line: rgb(17 21 19 / 0.1);
+  --refl: 0.16;
+  --pool: rgb(58 154 91 / 0.24);
   position: relative;
   overflow: hidden;
   background: var(--sky-top);
 }
 @media (prefers-color-scheme: dark) {
   body {
-    --wall-pk: #020303;
-    --sky-top: #060807;
-    --sky-low: #0c120f;
-    --horizon: rgba(58, 154, 91, 0.46);
+    /* night */
+    --sky-top: #030504;
+    --sky-low: #08100c;
+    --horizon: rgba(58, 154, 91, 0.34);
+    --rim-rgb: 127 217 160;
+    --rail: #0f1412;
+    --rail-hi: rgb(255 255 255 / 0.035);
+    --floor-0: #080b0a;
+    --floor-1: #030404;
+    --ground-line: rgb(255 255 255 / 0.06);
+    --refl: 0.3;
+    --pool: rgb(76 184 115 / 0.5);
   }
 }
 
@@ -30,8 +51,8 @@ body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(70vw 46vh at 50% 100%, var(--horizon), transparent 70%),
-    linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-top) 38%, var(--sky-low) 100%);
+    radial-gradient(34vw 56vh at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-top) 42%, var(--sky-low) 100%);
   animation: sky-in 1.2s ease both;
 }
 @keyframes sky-in {
@@ -40,75 +61,153 @@ body {
   }
 }
 
-/* ---------- the wall ---------- */
-.wall {
-  /* the box is 44 px taller than the fence so the lit picket's tip isn't masked away */
+/* ---------- the ground: it reflects the fence and catches the lantern's light ---------- */
+.floor {
   position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  background: linear-gradient(var(--floor-0), var(--floor-1));
+}
+.floor::before {
+  /* the ground line, fading out at the sides */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--ground-line) 20%, var(--ground-line) 80%, transparent);
+}
+.floor::after {
+  /* the pool of light at the lantern's foot */
+  content: '';
+  position: absolute;
   left: 50%;
-  bottom: -2px;
-  height: calc(var(--wall-h) + 44px);
+  top: -18px;
+  width: 440px;
+  height: 44px;
+  margin-left: -220px;
+  background: radial-gradient(closest-side, var(--pool), transparent);
+  animation: light-on 1.1s ease 0.55s both;
+}
+
+/* ---------- the wall: enough pickets to cross the window, the lantern in the middle ---------- */
+.wall {
+  /* as wide as the window (the pickets overflow it evenly); taller than the fence so the lantern's
+     tip and glow aren't masked away */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-h);
+  height: calc(var(--wall-h) + var(--lit-rise) + 40px);
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   gap: var(--pk-gap);
-  transform: translateX(-50%);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  mask-image: linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
 }
-/* rails, behind the pickets */
+/* the ground reflects the fence: the same wall, flipped at the ground line, strongest at the foot
+   and gone a few dozen pixels down */
+.wall.mirror {
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: var(--refl);
+  -webkit-mask-image:
+    linear-gradient(to top, #000, transparent 46px),
+    linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to top, #000, transparent 46px),
+    linear-gradient(to right, transparent 4%, #000 30%, #000 70%, transparent 96%);
+  mask-composite: intersect;
+}
+/* rails, behind the pickets; the lantern lights the stretch around it */
 .wall::before,
 .wall::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  height: 7px;
-  background: var(--wall-pk);
+  height: 3px;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 300px), rgb(var(--rim-rgb) / 0.55) 50%, transparent calc(50% + 300px)),
+    linear-gradient(var(--rail-hi), var(--rail-hi)) 0 0 / 100% 1px no-repeat,
+    var(--rail);
 }
 .wall::before {
-  bottom: calc(var(--wall-h) * 0.26);
+  bottom: calc(var(--wall-h) * 0.3);
 }
 .wall::after {
-  bottom: calc(var(--wall-h) * 0.62);
+  bottom: calc(var(--wall-h) * 0.68);
 }
 .wall .pk {
+  --w: var(--pk-w);
+  --v: 1;
+  --rim: 0;
   position: relative;
   z-index: 1;
   flex: none;
-  width: var(--pk-w);
+  width: var(--w);
   height: var(--wall-h);
-  background: var(--wall-pk);
-  clip-path: polygon(0 calc(var(--pk-w) / 2), 50% 0, 100% calc(var(--pk-w) / 2), 100% 100%, 0 100%);
+  /* the fence recedes into the dark (or the haze) away from the lantern */
+  opacity: var(--v);
   animation: wall-rise 0.9s var(--spring) both;
   animation-delay: calc(var(--d, 0) * 24ms + 80ms);
 }
-/* the picket of the site you tried: taller, lit, with its initial */
+/* the lantern's light on its neighbours: the edge and the tip facet that face it */
+.wall .pk.l {
+  background:
+    linear-gradient(90deg, transparent 50%, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
+    linear-gradient(270deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    var(--pk-layers);
+}
+.wall .pk.r {
+  background:
+    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.6)) 50%, transparent 50%) 0 0 / 100% calc(var(--w) / 2) no-repeat,
+    linear-gradient(90deg, rgb(var(--rim-rgb) / calc(var(--rim) * 0.95)), rgb(var(--rim-rgb) / calc(var(--rim) * 0.4)) 1.25px, transparent 5px) 0 calc(var(--w) / 2) / 100% 100% no-repeat,
+    var(--pk-layers);
+}
+/* the picket of the site you tried: taller, lit from within, with its initial (see .lantern in base.css) */
 .wall .pk.lit {
-  --pk-w: 30px;
-  height: calc(var(--wall-h) + 38px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 26px;
-  background: var(--signal);
-  color: #04130a;
-  font-weight: 700;
-  font-size: 15px;
+  --w: var(--lit-w);
+  z-index: 3;
+  height: calc(var(--wall-h) + var(--lit-rise));
+  padding-top: calc(var(--lit-w) / 2 + 9px);
+  font-size: 14px;
+  opacity: 1;
   animation-delay: 40ms;
   animation-duration: 1.1s;
+}
+.wall .bloom {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  width: calc(var(--lit-w) + 10px);
+  height: calc(var(--wall-h) + var(--lit-rise) - 12px);
+  margin-left: calc((var(--lit-w) + 10px) / -2);
+  border-radius: 999px;
+  background: var(--lit-1);
+  filter: blur(18px);
+  opacity: var(--lit-bloom);
+  animation: light-on 1.1s ease 0.5s both;
 }
 @keyframes wall-rise {
   from {
     transform: translateY(102%);
   }
 }
-.wall.still .pk {
-  animation: none;
-}
-@media (prefers-color-scheme: light) {
-  /* white pickets need an edge against the pale sky */
-  .wall {
-    filter: drop-shadow(0 0 0.6px rgba(17, 21, 19, 0.28)) drop-shadow(0 10px 24px rgba(40, 119, 67, 0.12));
+@keyframes light-on {
+  from {
+    opacity: 0;
   }
+}
+.wall.still .pk,
+.wall.still .bloom {
+  animation: none;
 }
 
 /* ---------- brand ---------- */
@@ -134,12 +233,13 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  bottom: var(--wall-h);
+  /* centred in the sky above the lantern's tip */
+  bottom: calc(var(--floor-h) + var(--wall-h) + var(--lit-rise) * 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 72px 24px 40px;
+  padding: 72px 24px 32px;
   text-align: center;
   animation: copy-in 0.7s var(--ease) 0.15s both;
 }
@@ -239,12 +339,25 @@ h1 #site {
   color: var(--muted);
 }
 
-@media (max-height: 600px) {
+/* short windows: a lower fence, so the message keeps its room */
+@media (max-height: 700px) {
   body {
-    --wall-h: 90px;
+    --wall-h: 104px;
+    --lit-rise: 38px;
+    --floor-h: 52px;
   }
   .wrap {
-    padding-top: 56px;
+    padding-top: 60px;
+  }
+}
+@media (max-height: 560px) {
+  body {
+    --wall-h: 76px;
+    --lit-rise: 28px;
+    --floor-h: 36px;
+  }
+  .wrap {
+    padding-top: 52px;
   }
 }
 @media (max-width: 520px) {

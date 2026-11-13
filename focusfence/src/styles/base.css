@@ -613,52 +613,211 @@ textarea.input {
   clip-path: polygon(0 4px, 4px 0, 8px 4px, 8px 100%, 0 100%);
 }
 
+/* ---------- the picket material: one object on every page ----------
+ * A body that darkens toward the ground, a tip cut in two facets (the left one catches the light),
+ * a shaded right face and a 1 px edge light. A context sets the colours (--pk-0/1/2, top to foot);
+ * `.lit` makes it a lantern, a picket that holds the light: your sites while the fence is up, the
+ * site you just tried on the block page, the site you pick in onboarding. */
+@property --pk-0 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e1e7e3;
+}
+@property --pk-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #d5ddd8;
+}
+@property --pk-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #cbd4ce;
+}
+:root {
+  /* unlit: the fence while it's down, a rule that isn't blocking */
+  --unlit-0: #e1e7e3;
+  --unlit-1: #d5ddd8;
+  --unlit-2: #cbd4ce;
+  --unlit-cap: rgb(255 255 255 / 0.65);
+  --unlit-cap-r: rgb(17 21 19 / 0.06);
+  --unlit-edge: rgb(255 255 255 / 0.75);
+  --unlit-shade: rgb(17 21 19 / 0.045);
+  --pk-0: var(--unlit-0);
+  --pk-1: var(--unlit-1);
+  --pk-2: var(--unlit-2);
+  --pk-cap: var(--unlit-cap);
+  --pk-cap-r: var(--unlit-cap-r);
+  --pk-edge: var(--unlit-edge);
+  --pk-shade: var(--unlit-shade);
+  --pk-ink: #5e6763;
+  /* lit: the lantern */
+  --lit-0: #52b678;
+  --lit-1: #3a9a5b;
+  --lit-2: #2a7845;
+  --lit-ink: #ffffff;
+  --lit-cap: 0.3;
+  --lit-edge: 0.28;
+  --lit-bloom: 0.4;
+  --lit-glow: transparent;
+  /* the wall: the other pickets of the block page's fence (and its miniatures), sage at dawn */
+  --wall-0: #c3d1c8;
+  --wall-1: #d0dbd4;
+  --wall-2: #e2e9e4;
+  --wall-shade: rgb(17 21 19 / 0.05);
+  --wall-cap: rgb(255 255 255 / 0.55);
+  --wall-cap-r: rgb(17 21 19 / 0.06);
+  --wall-edge: rgb(255 255 255 / 0.75);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --unlit-0: #3b4340;
+    --unlit-1: #2e3532;
+    --unlit-2: #252b29;
+    --unlit-cap: rgb(255 255 255 / 0.09);
+    --unlit-cap-r: rgb(0 0 0 / 0.25);
+    --unlit-edge: rgb(255 255 255 / 0.07);
+    --unlit-shade: rgb(0 0 0 / 0.18);
+    --pk-ink: #a2aca7;
+    /* in the dark the lantern is a light: pale at the top, green below, a halo around it */
+    --lit-0: #c4f4d4;
+    --lit-1: #5cc583;
+    --lit-2: #2c7c48;
+    --lit-ink: #04170b;
+    --lit-cap: 0.45;
+    --lit-edge: 0.5;
+    --lit-bloom: 0.85;
+    --lit-glow: rgba(58, 154, 91, 0.5);
+    /* graphite at night */
+    --wall-0: #232927;
+    --wall-1: #151a18;
+    --wall-2: #0b0e0d;
+    --wall-shade: rgb(0 0 0 / 0.3);
+    --wall-cap: rgb(255 255 255 / 0.07);
+    --wall-cap-r: rgb(0 0 0 / 0.35);
+    --wall-edge: rgb(255 255 255 / 0.05);
+  }
+}
+.pk {
+  /* an empty slot is the picket's outline, open at the ground (see .slot-outline) */
+  --s: 1.25px;
+  --pk-ring: polygon(
+    evenodd,
+    0 calc(var(--w, 16px) / 2),
+    50% 0,
+    100% calc(var(--w, 16px) / 2),
+    100% 100%,
+    0 100%,
+    0 calc(var(--w, 16px) / 2),
+    var(--s) calc(var(--w, 16px) / 2 + var(--s) * 0.4142),
+    var(--s) 100%,
+    calc(100% - var(--s)) 100%,
+    calc(100% - var(--s)) calc(var(--w, 16px) / 2 + var(--s) * 0.4142),
+    50% calc(var(--s) * 1.4142),
+    var(--s) calc(var(--w, 16px) / 2 + var(--s) * 0.4142)
+  );
+  --pk-layers:
+    linear-gradient(90deg, var(--pk-cap) 50%, var(--pk-cap-r) 50%) 0 0 / 100% calc(var(--w, 16px) / 2) no-repeat,
+    linear-gradient(90deg, var(--pk-edge) 1px, transparent 1px) 0 calc(var(--w, 16px) / 2) / 100% 100% no-repeat,
+    linear-gradient(90deg, transparent 50%, var(--pk-shade) 50%) 0 calc(var(--w, 16px) / 2) / 100% 100% no-repeat,
+    linear-gradient(180deg, var(--pk-0), var(--pk-1) 42%, var(--pk-2));
+  clip-path: polygon(0 calc(var(--w, 16px) / 2), 50% 0, 100% calc(var(--w, 16px) / 2), 100% 100%, 0 100%);
+  background: var(--pk-layers);
+  color: var(--pk-ink);
+  /* the initial sits under the tip, so it still shows when the fence is lowered */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-weight: 650;
+  line-height: 1;
+  user-select: none;
+}
+.pk.lit {
+  --pk-0: var(--lit-0);
+  --pk-1: var(--lit-1);
+  --pk-2: var(--lit-2);
+  --pk-cap: rgb(255 255 255 / var(--lit-cap));
+  --pk-cap-r: rgb(0 0 0 / 0.08);
+  --pk-edge: rgb(255 255 255 / var(--lit-edge));
+  --pk-shade: rgb(0 0 0 / 0.08);
+  --pk-ink: var(--lit-ink);
+}
+.pk.wall-pk {
+  --pk-0: var(--wall-0);
+  --pk-1: var(--wall-1);
+  --pk-2: var(--wall-2);
+  --pk-cap: var(--wall-cap);
+  --pk-cap-r: var(--wall-cap-r);
+  --pk-edge: var(--wall-edge);
+  --pk-shade: var(--wall-shade);
+}
+@media (prefers-color-scheme: light) {
+  /* white initials on the green, as in the logo; a hairline shadow keeps them crisp */
+  .pk.lit,
+  .fence[data-state='up'] .pk,
+  .fence[data-state='focus'] .pk {
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.22);
+  }
+}
+
 /* ---------- the fence: the signature. One picket per blocked site; its posture is the state ----------
  * <div class="fence" data-state="up|focus|paused|down|strict|empty"> built by FFUI.fence().
- * Pickets keep the logo's geometry: a 45° tip that rises half the picket's width. */
+ * Up, the pickets are lit; down, they're unlit and sunk into the ground; paused, half sunk and dim;
+ * strict, amber; empty, pale slots waiting for a site. Two thin rails run behind them. */
 .fence {
   --w: 16px;
-  --h: 46px;
-  --gap: 8px;
-  --pk: var(--signal);
-  --pk-ink: #04130a;
-  --rail: color-mix(in srgb, var(--signal) 42%, transparent);
-  --drop: 0%;
+  --h: 50px;
+  --gap: 10px;
+  --rail: color-mix(in srgb, var(--signal) 30%, transparent);
+  --rail-fill: var(--lit-1);
+  /* how far the fence is sunk into the ground, as a share of its height */
+  --drop: 0;
   --fence-glow: transparent;
   position: relative;
   display: inline-flex;
   align-items: flex-end;
   gap: var(--gap);
   height: var(--h);
-  padding: 0 calc(var(--gap) + 4px);
-  filter: drop-shadow(0 0 7px var(--fence-glow));
+  padding: 0 3px;
+  filter: drop-shadow(0 0 8px var(--fence-glow));
   transition: filter 0.4s ease;
+}
+.fence[data-state='up'],
+.fence[data-state='focus'] {
+  --pk-0: var(--lit-0);
+  --pk-1: var(--lit-1);
+  --pk-2: var(--lit-2);
+  --pk-cap: rgb(255 255 255 / var(--lit-cap));
+  --pk-cap-r: rgb(0 0 0 / 0.08);
+  --pk-edge: rgb(255 255 255 / var(--lit-edge));
+  --pk-shade: rgb(0 0 0 / 0.08);
+  --pk-ink: var(--lit-ink);
+  --fence-glow: var(--lit-glow);
 }
 .fence .rail {
   position: absolute;
   left: 0;
   right: 0;
-  height: max(3px, calc(var(--h) * 0.075));
+  height: max(2px, calc(var(--h) * 0.045));
   border-radius: 2px;
   background: var(--rail);
-  transform: translateY(calc(var(--drop) * 0.92));
+  transform: translateY(calc(var(--h) * var(--drop)));
   transition:
     transform 0.5s var(--spring) 0.05s,
     background-color 0.3s ease;
   overflow: hidden;
 }
 .fence .rail-a {
-  bottom: 24%;
+  bottom: 30%;
 }
 .fence .rail-b {
-  bottom: 60%;
+  bottom: 68%;
 }
 /* during a focus session the lower rail fills as the round goes by */
 .fence .rail-a i {
   position: absolute;
   inset: 0 auto 0 0;
   width: var(--progress, 0%);
-  background: var(--signal);
+  background: var(--rail-fill);
   transition: width 0.8s linear;
 }
 .fence .pk {
@@ -667,24 +826,27 @@ textarea.input {
   flex: none;
   width: var(--w);
   height: var(--h);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: calc(var(--w) * 0.32);
-  background: var(--pk);
-  clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%);
-  transform: translateY(var(--drop));
+  padding-top: calc(var(--w) / 2 + var(--w) * 0.16);
+  font-size: calc(var(--w) * 0.6);
+  transform: translateY(calc(var(--h) * var(--drop)));
   transition:
     transform 0.52s var(--spring) calc(var(--i, 0) * 26ms),
-    background-color 0.3s ease;
-  font-size: calc(var(--w) * 0.56);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--pk-ink);
-  user-select: none;
+    --pk-0 0.4s ease,
+    --pk-1 0.4s ease,
+    --pk-2 0.4s ease,
+    color 0.3s ease;
 }
+/* a Pro rule kept after Pro lapsed: it stands in the fence, but holds no light */
 .fence .pk.off {
-  background: color-mix(in srgb, var(--pk) 38%, var(--bg-2));
+  --pk-0: var(--unlit-0);
+  --pk-1: var(--unlit-1);
+  --pk-2: var(--unlit-2);
+  --pk-cap: var(--unlit-cap);
+  --pk-cap-r: var(--unlit-cap-r);
+  --pk-edge: var(--unlit-edge);
+  --pk-shade: var(--unlit-shade);
+  --pk-ink: var(--muted);
+  text-shadow: none;
 }
 .fence .pk.enter {
   animation: pk-rise 0.6s var(--spring) both;
@@ -694,54 +856,81 @@ textarea.input {
     transform: translateY(105%);
   }
 }
+/* the sites beyond the last picket: a count beside the fence, clear of its rails */
 .fence .more {
-  align-self: center;
-  margin-left: 2px;
+  position: absolute;
+  left: 100%;
+  top: calc(var(--h) * 0.5 - 8px);
+  margin-left: 7px;
   font-size: 12px;
+  line-height: 16px;
   font-weight: 600;
   color: var(--muted);
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  transform: translateY(calc(var(--drop) * 0.5));
+  transform: translateY(calc(var(--h) * var(--drop) * 0.5));
   transition: transform 0.5s var(--spring);
 }
 .fence[data-state='paused'] {
-  --pk: color-mix(in srgb, var(--signal) 30%, var(--line-3));
+  --pk-0: #b9d2c1;
+  --pk-1: #a3c3ae;
+  --pk-2: #92b59e;
+  --pk-ink: #24402e;
   --rail: var(--line-2);
-  --drop: 34%;
+  --drop: 0.34;
 }
 .fence[data-state='down'] {
-  --pk: var(--line-3);
-  --pk-ink: var(--surface);
   --rail: var(--line-2);
-  --drop: 58%;
+  --drop: 0.52;
 }
 .fence[data-state='strict'] {
-  --pk: var(--pro-solid);
+  --pk-0: #ecbf68;
+  --pk-1: var(--pro-solid);
+  --pk-2: #b8842a;
+  --pk-cap: rgb(255 255 255 / 0.32);
+  --pk-cap-r: rgb(0 0 0 / 0.07);
+  --pk-edge: rgb(255 255 255 / 0.32);
+  --pk-shade: rgb(0 0 0 / 0.07);
   --pk-ink: var(--pro-ink);
-  --rail: color-mix(in srgb, var(--pro-solid) 45%, transparent);
+  --rail: color-mix(in srgb, var(--pro-solid) 40%, transparent);
+  --rail-fill: var(--pro-solid);
 }
-.fence[data-state='empty'] .pk {
-  background: var(--bg-2);
-  color: var(--faint);
+.fence[data-state='empty'] {
+  --rail: var(--line);
+}
+/* an empty slot: the picket's outline, open at the ground, waiting for a site */
+.fence[data-state='empty'] .pk,
+.pk.slot-outline {
+  clip-path: var(--pk-ring);
+  background: var(--line-3);
+  text-shadow: none;
+}
+@media (prefers-color-scheme: light) {
+  .fence[data-state='strict'] .pk,
+  .fence[data-state='paused'] .pk {
+    text-shadow: none;
+  }
 }
 @media (prefers-color-scheme: dark) {
   .fence {
-    --fence-glow: rgba(58, 154, 91, 0.45);
+    --rail: color-mix(in srgb, var(--signal) 40%, transparent);
   }
   .fence[data-state='focus'] {
-    --fence-glow: rgba(58, 154, 91, 0.7);
+    --fence-glow: rgba(58, 154, 91, 0.75);
+  }
+  .fence[data-state='paused'] {
+    --pk-0: #6f8f7b;
+    --pk-1: #4f6b5a;
+    --pk-2: #3c5446;
+    --pk-ink: #e3efe7;
   }
   .fence[data-state='strict'] {
+    --pk-0: #f6dfaa;
+    --pk-1: #d9a74b;
+    --pk-2: #a87a26;
+    --pk-cap: rgb(255 255 255 / 0.4);
+    --pk-edge: rgb(255 255 255 / 0.4);
     --fence-glow: rgba(217, 167, 75, 0.45);
-  }
-  .fence[data-state='paused'],
-  .fence[data-state='down'],
-  .fence[data-state='empty'] {
-    --fence-glow: transparent;
-  }
-  .fence[data-state='down'] {
-    --pk: #3a413e;
-    --pk-ink: #8e9893;
   }
 }
 

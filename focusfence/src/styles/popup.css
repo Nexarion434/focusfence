@@ -41,8 +41,9 @@ body {
 /* ---------- the stage ---------- */
 .stage {
   --stage-tint: var(--signal);
+  --pool: rgb(17 21 19 / 0.15);
   position: relative;
-  padding: 10px 16px 14px;
+  padding: 4px 16px 12px;
   overflow: hidden;
   /* light: a faint wash rising from the ground, in the colour of the state */
   background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 7%, var(--surface)) 0%, var(--surface) 62%);
@@ -50,6 +51,7 @@ body {
 }
 .stage.is-off {
   --stage-tint: transparent;
+  --pool: rgb(17 21 19 / 0.08);
 }
 .stage.is-strict {
   --stage-tint: var(--pro-solid);
@@ -60,20 +62,33 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 62px;
+  height: 60px;
   overflow: hidden;
 }
 #fence {
   --w: 16px;
-  --h: 46px;
-  --gap: 8px;
+  --h: 48px;
+  --gap: 10px;
 }
 .ground {
   position: relative;
   z-index: 1;
   height: 1px;
-  margin: 0 -16px 12px;
+  margin: 0 -16px 10px;
   background: linear-gradient(to right, transparent, var(--line-3) 18%, var(--line-3) 82%, transparent);
+}
+/* the fence stands on the ground: a soft contact shadow in light, a pool of its light in dark
+   (--fence-w is the fence's measured width, set by popup.js) */
+.ground::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: calc(var(--fence-w, 160px) + 36px);
+  height: 9px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--pool), transparent);
+  transition: opacity 0.4s ease;
 }
 .state {
   position: relative;
@@ -104,20 +119,30 @@ body {
   .stage {
     background: var(--surface);
   }
+  .stage {
+    --pool: color-mix(in srgb, var(--stage-tint) 55%, transparent);
+  }
+  .stage.is-off {
+    --pool: rgb(255 255 255 / 0.05);
+  }
   .stage::before {
     content: '';
     position: absolute;
     left: 50%;
-    top: 6px;
+    top: 0;
     width: 300px;
-    height: 120px;
+    height: 112px;
     transform: translateX(-50%);
     border-radius: 50%;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--stage-tint) 34%, transparent), transparent);
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--stage-tint) 30%, transparent), transparent);
     transition: opacity 0.4s ease;
   }
   .stage.is-off::before {
     opacity: 0;
+  }
+  .ground::after {
+    top: -7px;
+    height: 15px;
   }
 }
 
@@ -125,8 +150,8 @@ body {
 .body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 16px 16px;
+  gap: 8px;
+  padding: 12px 16px 14px;
   border-top: 1px solid var(--line);
 }
 .note {
@@ -183,8 +208,8 @@ body {
 .here {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 12px;
+  gap: 10px;
+  padding: 10px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--surface-2);
@@ -222,7 +247,7 @@ body {
 }
 .here-btn {
   width: 100%;
-  height: 38px;
+  height: 36px;
   font-size: 13.5px;
   border-radius: var(--radius-md);
 }
@@ -271,16 +296,16 @@ body {
 }
 .add .input {
   flex: 1;
-  height: 34px;
+  height: 32px;
   font-size: 13px;
 }
 .add .btn {
-  height: 34px;
+  height: 32px;
 }
 
 /* ---------- focus: one line until it runs, then the timer ---------- */
 .focus {
-  padding: 12px 16px 12px;
+  padding: 10px 16px;
   border-top: 1px solid var(--line);
 }
 .focus-row {
@@ -383,8 +408,8 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  min-height: 40px;
-  padding: 10px 16px;
+  min-height: 36px;
+  padding: 8px 16px;
   border-top: 1px solid var(--line);
   background: var(--bg);
   font-size: 12px;

@@ -201,7 +201,9 @@ try {
   await blocked.evaluate(() => {
     document.getElementById('message').textContent = self.FFCore.quote(1); // same quote in every language
   });
-  await blocked.waitForTimeout(700);
+  // the wall rises in a wave and the lantern lights up: capture the settled scene
+  await blocked.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+  await blocked.waitForTimeout(150);
   await blocked.screenshot({ path: path.join(OUT, `block-page${suffix}.png`) });
 
   // ---- options page

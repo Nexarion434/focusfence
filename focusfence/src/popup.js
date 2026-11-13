@@ -35,9 +35,11 @@
     fence($('fence'), {
       items: fenceItems(s.settings.entries, s.isPro, C.isProEntry),
       state: fenceState(s),
-      max: 13,
+      max: 11,
       progress: p && p.phase === 'focus' ? phaseProgress(p, Date.now()) : null,
     });
+    // the ground's shadow (or pool of light) is as wide as the fence
+    $('status-card').style.setProperty('--fence-w', $('fence').offsetWidth + 'px');
   }
 
   async function getTargetTab() {

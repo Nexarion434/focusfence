@@ -25,22 +25,32 @@
   $('mark').innerHTML = logo(20);
   $('site').textContent = host || t('thisSite');
 
-  /* The wall: enough pickets to cross the window, the site's picket lit at the centre.
-     Each picket rises after a delay set by its distance from the centre (a wave). */
+  /* The wall: enough pickets to cross the window, the site's picket in the middle as a lantern.
+     Each picket rises after a delay set by its distance from the lantern (a wave); the farther it
+     is, the less of the lantern's light (--rim) it catches and the more it fades (--v). */
   let letter = (host[0] || '').toUpperCase();
   function buildWall(still) {
-    const wall = $('wall');
     const cs = getComputedStyle(document.body);
     const step = parseFloat(cs.getPropertyValue('--pk-w')) + parseFloat(cs.getPropertyValue('--pk-gap'));
     let n = Math.ceil(window.innerWidth / step) + 3;
     if (n % 2 === 0) n++;
     const mid = (n - 1) / 2;
-    wall.textContent = '';
-    wall.classList.toggle('still', !!still);
-    for (let i = 0; i < n; i++) {
-      const pk = el('span', { class: 'pk' + (i === mid ? ' lit' : '') }, i === mid ? letter : '');
-      pk.style.setProperty('--d', String(Math.abs(i - mid)));
-      wall.appendChild(pk);
+    // the wall, and its reflection in the ground (the same pickets, flipped by CSS). Built through
+    // the CSSOM, not markup: the extension's CSP allows no inline style attributes.
+    for (const wall of [$('wall'), $('mirror')]) {
+      wall.textContent = '';
+      wall.classList.toggle('still', !!still);
+      for (let i = 0; i < n; i++) {
+        const d = Math.abs(i - mid);
+        const pk = el('span', { class: 'pk' + (i === mid ? ' lit' : ' wall-pk' + (i < mid ? ' l' : ' r')) }, i === mid ? letter : '');
+        pk.style.setProperty('--d', String(d));
+        if (d) {
+          pk.style.setProperty('--v', (0.16 + 0.84 * Math.exp(-d / 4.4)).toFixed(3));
+          pk.style.setProperty('--rim', Math.exp(-d / 2.3).toFixed(3));
+        }
+        wall.appendChild(pk);
+      }
+      wall.appendChild(el('span', { class: 'bloom' }));
     }
   }
   buildWall(false);
@@ -81,8 +91,7 @@
     if (entry && entry.type !== 'domain') $('site').textContent = entry.label;
     if (entry && entry.type === 'keyword') {
       letter = '#';
-      const lit = document.querySelector('#wall .pk.lit');
-      if (lit) lit.textContent = letter;
+      for (const lit of document.querySelectorAll('.wall .pk.lit')) lit.textContent = letter;
     }
     const custom = state.isPro && state.settings.blockMessage;
     $('message').textContent = custom || C.quote(Math.floor(Math.random() * C.QUOTES.length));
