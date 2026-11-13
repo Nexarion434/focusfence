@@ -1,0 +1,138 @@
+body {
+  width: 360px;
+  min-height: 200px;
+}
+.popup {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 2px 4px;
+}
+.top .logo {
+  font-size: 15.5px;
+}
+.spacer {
+  flex: 1;
+}
+.status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-color: transparent;
+  background: var(--accent-soft);
+  box-shadow: none;
+}
+.status h1 {
+  font-size: 16px;
+  font-weight: 680;
+  color: var(--accent-strong);
+}
+.status .status-text {
+  flex: 1;
+  min-width: 0;
+}
+.status.off {
+  background: var(--bg-2);
+}
+.status.off h1 {
+  color: var(--ink-2);
+}
+.status.strict {
+  background: var(--pro-soft);
+}
+.status.strict h1 {
+  color: var(--pro);
+}
+.unlock {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+.row .input {
+  flex: 1;
+}
+.current {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  background: var(--faint);
+  flex: none;
+}
+.current-text {
+  flex: 1;
+  min-width: 0;
+}
+.current-host {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.add {
+  display: flex;
+  gap: 8px;
+}
+.add .input {
+  flex: 1;
+}
+.focus {
+  padding: 12px 14px;
+}
+.focus-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.focus h2 {
+  font-size: 14px;
+  font-weight: 650;
+}
+.focus-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.timer {
+  flex: 1;
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.focus.running .timer {
+  color: var(--accent);
+}
+.focus.locked .timer {
+  color: var(--faint);
+}
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px 0;
+}

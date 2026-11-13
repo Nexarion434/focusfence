@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FocusFence Settings</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/options.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="side">
+        <div class="side-brand"><span class="logo" id="logo"><span>FocusFence</span></span></div>
+        <nav class="nav" id="nav">
+          <a href="#blocklist" data-nav="blocklist">
+            <svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z" /><path d="M5 12h14M12 5v14" /></svg>Blocklist</a>
+          <a href="#schedule" data-nav="schedule">
+            <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" /></svg>Schedule<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#focus" data-nav="focus">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7" /><path d="M12 9v4l2.5 2M10 3h4" /></svg>Focus sessions<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#strict" data-nav="strict">
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>Strict mode<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#blockpage" data-nav="blockpage">
+            <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z" /><path d="M9 9h6M9 13h6M9 17h3" /></svg>Block page<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#security" data-nav="security">
+            <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" /></svg>Password lock<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#stats" data-nav="stats">
+            <svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7" /></svg>Stats<span class="badge badge-pro pro-tag">PRO</span></a>
+          <a href="#backup" data-nav="backup">
+            <svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>Backup<span class="badge badge-pro pro-tag">PRO</span></a>
+        </nav>
+        <div class="side-plan card" id="side-plan">
+          <div class="side-plan-head"><strong id="side-plan-title">Free plan</strong><span class="badge" id="side-plan-badge">FREE</span></div>
+          <p class="muted small" id="side-plan-text">Unlimited sites. Upgrade for schedules, focus sessions and strict mode.</p>
+          <a class="btn btn-pro btn-sm btn-block" href="#plan" id="side-plan-btn">See Pro</a>
+        </div>
+      </aside>
+
+      <main class="main" id="main">
+        <div class="welcome card hidden" id="welcome">
+          <div>
+            <h2>Welcome to FocusFence 👋</h2>
+            <p class="muted">Add the sites that steal your attention. Chrome will ask once per site to let FocusFence show its calm block page instead of an error screen.</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="welcome-close">Got it</button>
+        </div>
+
+        <div class="strict-banner hidden" id="strict-banner">
+          <svg viewBox="0 0 24 24" width="18" height="18"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+          <span id="strict-banner-text">Strict mode is on. Your blocklist can only grow.</span>
+          <a href="#strict" class="small">Manage</a>
+        </div>
+
+        <!-- BLOCKLIST -->
+        <section class="panel" id="blocklist">
+          <header class="panel-head">
+            <div>
+              <h1>Blocklist</h1>
+              <p class="muted">Blocking a domain also blocks its subdomains — <code>reddit.com</code> covers <code>old.reddit.com</code> and <code>m.reddit.com</code>.</p>
+            </div>
+            <div class="master">
+              <span class="muted small" id="master-label">Blocking on</span>
+              <label class="switch"><input type="checkbox" id="master-toggle" aria-label="Blocking enabled" /><span class="track"></span></label>
+            </div>
+          </header>
+
+          <form class="add-row card" id="add-form" autocomplete="off">
+            <div class="seg" role="radiogroup" aria-label="Rule type" id="type-seg">
+              <button type="button" role="radio" aria-checked="true" data-type="domain">Website</button>
+              <button type="button" role="radio" aria-checked="false" data-type="path">Path <span class="badge badge-pro">PRO</span></button>
+              <button type="button" role="radio" aria-checked="false" data-type="keyword">Keyword <span class="badge badge-pro">PRO</span></button>
+            </div>
+            <div class="add-input-row">
+              <input class="input" id="add-input" placeholder="reddit.com" aria-label="Website, path or keyword" />
+              <button class="btn btn-primary" type="submit" id="add-submit">Add to blocklist</button>
+            </div>
+            <p class="muted small" id="add-hint">Blocks the whole site, including every subdomain.</p>
+          </form>
+
+          <div class="access-banner hidden" id="access-banner">
+            <div>
+              <strong id="access-title">Show the FocusFence block page</strong>
+              <p class="small muted" id="access-text">Some sites are blocked with Chrome's error page because FocusFence doesn't have access to them yet.</p>
+            </div>
+            <button class="btn btn-sm" id="access-grant">Allow</button>
+          </div>
+
+          <ul class="entries" id="entries"></ul>
+          <div class="empty hidden" id="entries-empty">
+            <div class="empty-icon" id="empty-logo"></div>
+            <h3>Your fence is empty</h3>
+            <p class="muted">Start with the sites you open without thinking — social feeds, news, video.</p>
+            <div class="chips" id="suggestions"></div>
+          </div>
+        </section>
+
+        <!-- SCHEDULE -->
+        <section class="panel" id="schedule" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Schedule</h1>
+              <p class="muted">Only block during the hours you want to focus. Outside these windows, blocking pauses automatically.</p>
+            </div>
+            <div class="master">
+              <span class="muted small">Use schedule</span>
+              <label class="switch"><input type="checkbox" id="schedule-toggle" aria-label="Use schedule" /><span class="track"></span></label>
+            </div>
+          </header>
+          <div class="card pad">
+            <div id="windows" class="windows"></div>
+            <div class="actions">
+              <button class="btn btn-sm" id="window-add" type="button">+ Add time range</button>
+              <span class="spacer"></span>
+              <span class="muted small" id="schedule-state"></span>
+              <button class="btn btn-primary btn-sm" id="schedule-save" type="button">Save schedule</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FOCUS -->
+        <section class="panel" id="focus" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Focus sessions</h1>
+              <p class="muted">Pomodoro-style rounds. During focus, everything on your blocklist is blocked — even outside your schedule.</p>
+            </div>
+          </header>
+          <div class="card pad focus-grid">
+            <label class="field"><span>Focus</span><div class="unit"><input class="input" type="number" min="1" max="180" id="pomo-focus" /><span>min</span></div></label>
+            <label class="field"><span>Break</span><div class="unit"><input class="input" type="number" min="1" max="60" id="pomo-break" /><span>min</span></div></label>
+            <label class="field"><span>Rounds</span><div class="unit"><input class="input" type="number" min="1" max="12" id="pomo-cycles" /><span>×</span></div></label>
+            <div class="focus-actions">
+              <button class="btn btn-sm" id="pomo-save" type="button">Save</button>
+              <button class="btn btn-primary btn-sm" id="pomo-start" type="button">Start focus</button>
+              <button class="btn btn-sm hidden" id="pomo-stop" type="button">Stop session</button>
+            </div>
+            <div class="focus-live hidden" id="pomo-live">
+              <div class="focus-clock" id="pomo-clock">25:00</div>
+              <div class="muted small" id="pomo-phase">Focus · round 1 of 4</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STRICT -->
+        <section class="panel" id="strict" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Strict mode</h1>
+              <p class="muted">For when willpower runs out. While strict mode is on, blocking can't be turned off, sites can't be removed and the schedule can't be changed. Ending early takes a 10-minute cooling-off period and a typing challenge.</p>
+            </div>
+          </header>
+          <div class="card pad" id="strict-off">
+            <div class="strict-start">
+              <label class="field"><span>Duration</span>
+                <select class="input" id="strict-hours">
+                  <option value="1">1 hour</option>
+                  <option value="2" selected>2 hours</option>
+                  <option value="4">4 hours</option>
+                  <option value="8">8 hours</option>
+                  <option value="24">24 hours</option>
+                  <option value="0">Until I unlock it</option>
+                </select>
+              </label>
+              <button class="btn btn-primary" id="strict-start" type="button">Start strict mode</button>
+            </div>
+          </div>
+          <div class="card pad strict-on hidden" id="strict-on">
+            <div class="strict-status">
+              <span class="badge badge-pro">STRICT MODE ON</span>
+              <span id="strict-until" class="muted"></span>
+            </div>
+            <div id="strict-locked">
+              <p class="muted small">Need out? Request an unlock. You'll have to wait 10 minutes, then type a sentence exactly.</p>
+              <button class="btn btn-sm" id="strict-request" type="button">Request unlock</button>
+            </div>
+            <div id="strict-waiting" class="hidden">
+              <p>Cooling off… <strong id="strict-countdown">10:00</strong></p>
+              <p class="muted small">Still want to unlock? Take a breath. You can cancel anytime.</p>
+              <button class="btn btn-sm" id="strict-cancel" type="button">Cancel unlock</button>
+            </div>
+            <form id="strict-challenge" class="hidden" autocomplete="off">
+              <p class="small">Type this exactly to end strict mode:</p>
+              <p class="challenge" id="strict-phrase"></p>
+              <div class="row">
+                <input class="input" id="strict-typed" placeholder="Type the sentence above" spellcheck="false" />
+                <button class="btn btn-danger" type="submit">End strict mode</button>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="strict-cancel-2" type="button">Keep strict mode</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- BLOCK PAGE -->
+        <section class="panel" id="blockpage" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Block page</h1>
+              <p class="muted">Write a note to your future self. It replaces the rotating quotes on the block page.</p>
+            </div>
+          </header>
+          <div class="card pad">
+            <textarea class="input" id="message" rows="3" maxlength="280" placeholder="e.g. You promised yourself the thesis chapter first."></textarea>
+            <div class="actions">
+              <span class="muted small" id="message-count">0 / 280</span>
+              <span class="spacer"></span>
+              <a class="btn btn-sm" id="message-preview" target="_blank" href="blocked.html#https://reddit.com/">Preview</a>
+              <button class="btn btn-primary btn-sm" id="message-save" type="button">Save message</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECURITY -->
+        <section class="panel" id="security" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Password lock</h1>
+              <p class="muted">Require a password to turn blocking off, remove sites or change settings. Ideal if someone else holds the key. Passwords are hashed (PBKDF2) and never leave this device.</p>
+            </div>
+          </header>
+          <div class="card pad">
+            <form class="row" id="password-form" autocomplete="off">
+              <input class="input" type="password" id="password-new" placeholder="New password" autocomplete="new-password" />
+              <input class="input" type="password" id="password-confirm" placeholder="Confirm password" autocomplete="new-password" />
+              <button class="btn btn-primary" type="submit" id="password-save">Set password</button>
+            </form>
+            <div class="actions" id="password-actions">
+              <span class="muted small" id="password-state">No password set.</span>
+              <span class="spacer"></span>
+              <button class="btn btn-sm hidden" id="password-lock" type="button">Lock now</button>
+              <button class="btn btn-sm btn-danger hidden" id="password-remove" type="button">Remove password</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATS -->
+        <section class="panel" id="stats" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Stats</h1>
+              <p class="muted">Blocked attempts over the last 7 days. Counted on this device only.</p>
+            </div>
+          </header>
+          <div class="stats-grid">
+            <div class="card pad stat"><div class="stat-num" id="stat-today">0</div><div class="muted small">blocked today</div></div>
+            <div class="card pad stat"><div class="stat-num" id="stat-week">0</div><div class="muted small">this week</div></div>
+            <div class="card pad stat"><div class="stat-num" id="stat-saved">0 min</div><div class="muted small">≈ time reclaimed (5 min / visit)</div></div>
+          </div>
+          <div class="card pad">
+            <div class="chart" id="chart" aria-label="Blocked attempts per day"></div>
+            <h3 class="sub">Top sites</h3>
+            <ul class="top-sites" id="top-sites"></ul>
+            <div class="actions"><span class="spacer"></span><button class="btn btn-sm btn-ghost" id="stats-clear" type="button">Clear stats</button></div>
+          </div>
+        </section>
+
+        <!-- BACKUP -->
+        <section class="panel" id="backup" data-pro>
+          <header class="panel-head">
+            <div>
+              <h1>Backup</h1>
+              <p class="muted">Export your blocklist, schedule and preferences as JSON, or import them on another computer. Passwords and stats are never exported.</p>
+            </div>
+          </header>
+          <div class="card pad actions-row">
+            <button class="btn" id="export-btn" type="button">Export settings</button>
+            <label class="btn" for="import-file">Import settings…</label>
+            <input type="file" id="import-file" accept="application/json,.json" class="visually-hidden" />
+          </div>
+        </section>
+
+        <!-- PLAN -->
+        <section class="panel" id="plan">
+          <header class="panel-head">
+            <div>
+              <h1 id="plan-title">FocusFence Pro</h1>
+              <p class="muted" id="plan-sub">Everything in Free, plus the tools that make focus stick.</p>
+            </div>
+          </header>
+          <div class="plans" id="plans">
+            <div class="card plan-card">
+              <div class="plan-name">Monthly</div>
+              <div class="plan-price"><span id="price-monthly">$2.99</span><span class="muted">/month</span></div>
+              <button class="btn btn-block" data-plan="monthly" type="button">Choose monthly</button>
+            </div>
+            <div class="card plan-card featured">
+              <div class="plan-name">Yearly <span class="badge badge-accent">SAVE 44%</span></div>
+              <div class="plan-price"><span id="price-yearly">$19.99</span><span class="muted">/year</span></div>
+              <button class="btn btn-pro btn-block" data-plan="yearly" type="button">Choose yearly</button>
+            </div>
+          </div>
+          <ul class="features">
+            <li>Schedules by day and time</li>
+            <li>Block paths &amp; keywords (e.g. youtube.com/shorts)</li>
+            <li>Pomodoro focus sessions</li>
+            <li>Strict mode with cooling-off unlock</li>
+            <li>Password lock for settings</li>
+            <li>Stats &amp; custom block page</li>
+            <li>Export / import settings</li>
+            <li>Private: no account, no tracking</li>
+          </ul>
+          <p class="muted small plan-foot">Payments are handled securely by ExtensionPay (Stripe). <a href="#" id="restore-link">Already paid? Restore purchase</a></p>
+          <div class="dev card pad hidden" id="dev-panel">
+            <div>
+              <strong>Developer build</strong>
+              <p class="muted small">Payments are disabled. Simulate a Pro license locally to test gated features.</p>
+            </div>
+            <label class="switch"><input type="checkbox" id="dev-pro" aria-label="Simulate Pro" /><span class="track"></span></label>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="lock-overlay hidden" id="lock-overlay">
+      <form class="card lock-card" id="lock-form">
+        <div class="lock-logo" id="lock-logo"></div>
+        <h2>Settings are locked</h2>
+        <p class="muted">Enter your FocusFence password to make changes.</p>
+        <input class="input" type="password" id="lock-password" placeholder="Password" autocomplete="current-password" />
+        <button class="btn btn-primary btn-block" type="submit">Unlock</button>
+      </form>
+    </div>
+
+    <script src="lib/core.js"></script>
+    <script src="lib/ui.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blocked · FocusFence</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/blocked.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+    <main class="wrap">
+      <div class="mark" id="mark"></div>
+      <p class="eyebrow">FocusFence</p>
+      <h1><span id="site">This site</span> is fenced off</h1>
+      <blockquote class="message" id="message">Starve your distractions, feed your focus.</blockquote>
+
+      <div class="session hidden" id="session">
+        <span class="dot"></span>
+        <span id="session-text">Focus session · 18:42 left</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="num" id="today">1</div><div class="label">blocked today</div></div>
+        <div class="stat"><div class="num" id="saved">5 min</div><div class="label">time reclaimed today</div></div>
+        <div class="stat"><div class="num" id="week">1</div><div class="label">this week</div></div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn btn-primary" id="back">Back to work</button>
+        <a class="btn btn-ghost" href="options.html" target="_blank" id="settings">Settings</a>
+      </div>
+      <p class="url muted small" id="url"></p>
+    </main>
+    <script src="lib/core.js"></script>
+    <script src="lib/ui.js"></script>
+    <script src="blocked.js"></script>
+  </body>
+</html>
