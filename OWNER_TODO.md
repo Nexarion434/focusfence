@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 84 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
+Current state: PR #1 open, 91 automated tests green. Repo **public** and site **live** since 2026-11-13: https://nexarion434.github.io/focusfence/ (privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German.
 
 ## Costs at a glance
 
@@ -43,7 +43,8 @@ Done on your approval, after a history scan: gitleaks 8.21.2 found 0 leaks in 25
 
 ## 3. Privacy policy contact
 
-- [ ] Replace `[CONTACT EMAIL — to be filled in before publication]` in `focusfence/store/privacy-policy.md` with a dedicated support address. **The live privacy page shows this placeholder now**, so do this before submitting.
+- [ ] Replace `[CONTACT EMAIL — to be filled in before publication]` in `focusfence/store/privacy-policy.md` with a dedicated support address. **The live privacy pages (all 4 languages) show this placeholder now**, so do this before submitting.
+      Edit the English file only. The French, Spanish and German policies use `{{CONTACT}}` and pick up the same address.
 - [ ] `cd focusfence && npm run docs`, then commit `docs/` and push.
 
 ## 4. Licensing decision
@@ -93,6 +94,7 @@ A test keeps it in sync with the manifest and the listing.
 - [ ] In the dashboard, add the **French, Spanish and German** listings from `focusfence/store/listing.fr.md`, `listing.es.md` and `listing.de.md`. Title and short description must match `src/_locales/<lang>/messages.json`.
 - [ ] For each of those languages, upload its own screenshots and promo tile from `focusfence/screenshots/fr/`, `es/` and `de/` (same order as English).
 - [ ] Optional: have a native speaker proofread the UI strings (`focusfence/scripts/i18n/strings.mjs`, one table for all four languages), then run `npm run i18n`.
+- [ ] Optional but recommended: have the **website** translations proofread too: `focusfence/scripts/site-strings.mjs` (landing) and `focusfence/store/privacy-policy.{fr,es,de}.md`. The translated policies say the English version prevails. Then run `npm run docs`.
 
 ## 9. Marketing (drafts only; nothing was posted)
 

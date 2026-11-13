@@ -3,21 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FocusFence — Website Blocker & Focus Timer for Chrome</title>
+<script>(function(){try{var L=["fr","es","de"],K="ff-lang",s=null,r=document.referrer,b=location.origin+location.pathname.replace(/[^/]*$/,'');if(r&&r.indexOf(b)===0)return;try{s=localStorage.getItem(K)}catch(e){}if(s==='en')return;var t=L.indexOf(s)>=0?s:null;if(!t&&!s){var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).toLowerCase().split('-')[0];if(c==='en')break;if(L.indexOf(c)>=0){t=c;break}}}if(t)location.replace(t+'/'+location.search+location.hash)}catch(e){}})();</script>
+<title>FocusFence — Website Blocker &amp; Focus Timer for Chrome</title>
 <meta name="description" content="Block distracting websites in Chrome. Block YouTube Shorts but keep YouTube, schedule focus hours, run Pomodoro sessions and lock yourself in with strict mode. Private: nothing leaves your device.">
 <link rel="canonical" href="https://nexarion434.github.io/focusfence/">
+<link rel="alternate" hreflang="en" href="https://nexarion434.github.io/focusfence/">
+<link rel="alternate" hreflang="fr" href="https://nexarion434.github.io/focusfence/fr/">
+<link rel="alternate" hreflang="es" href="https://nexarion434.github.io/focusfence/es/">
+<link rel="alternate" hreflang="de" href="https://nexarion434.github.io/focusfence/de/">
+<link rel="alternate" hreflang="x-default" href="https://nexarion434.github.io/focusfence/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="FocusFence — Website Blocker & Focus Timer for Chrome">
+<meta property="og:url" content="https://nexarion434.github.io/focusfence/">
+<meta property="og:site_name" content="FocusFence">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:locale:alternate" content="es_ES">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:title" content="FocusFence — Website Blocker &amp; Focus Timer for Chrome">
 <meta property="og:description" content="Block distracting websites in Chrome. Block YouTube Shorts but keep YouTube, schedule focus hours, run Pomodoro sessions and lock yourself in with strict mode. Private: nothing leaves your device.">
-<meta property="og:image" content="https://nexarion434.github.io/focusfence/assets/social.png">
+<meta property="og:image" content="https://nexarion434.github.io/focusfence/assets/en/social.png">
+<meta property="og:image:width" content="440">
+<meta property="og:image:height" content="280">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="assets/site.css">
+<script src="assets/lang.js" defer></script>
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
   <a class="brand" href="./"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2E7D6B"/><rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/></svg><span>FocusFence</span></a>
-  <nav><a href="./#features">Features</a><a href="./#pricing">Pricing</a><a href="blog/">Blog</a><a href="privacy.html">Privacy</a></nav>
+  <div class="nav-right">
+    <nav><a href="./#features">Features</a><a href="./#pricing">Pricing</a><a href="blog/" hreflang="en">Blog</a><a href="privacy.html">Privacy</a></nav>
+    <nav class="langs" aria-label="Language"><a href="./" hreflang="en" lang="en" data-set-lang="en" aria-current="page"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="fr/" hreflang="fr" lang="fr" data-set-lang="fr"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="es/" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="de/" hreflang="de" lang="de" data-set-lang="de"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
+  </div>
 </div></header>
 
 <main>
@@ -29,11 +47,11 @@
     <div class="cta"><span class="btn btn-primary is-soon" aria-disabled="true">Coming soon to the Chrome Web Store</span><a class="btn" href="#features">See features</a></div>
     <p class="small muted">Free forever for unlimited sites · No account · No tracking</p>
   </div>
-  <div class="hero-shot"><img src="assets/popup.png" width="360" height="437" alt="FocusFence popup with a running focus session and a one-click Block site button"></div>
+  <div class="hero-shot"><img src="assets/en/popup.png" width="360" height="437" alt="FocusFence popup with a running focus session and a one-click Block site button"></div>
 </div></section>
 
 <section class="band"><div class="wrap">
-  <img class="wide" src="assets/block-page.png" width="1280" height="800" loading="lazy" alt="The FocusFence block page: reddit.com is fenced off, with a motivational quote and time reclaimed today">
+  <img class="wide" src="assets/en/block-page.png" width="1280" height="800" loading="lazy" alt="The FocusFence block page: reddit.com is fenced off, with a motivational quote and time reclaimed today">
 </div></section>
 
 <section id="features"><div class="wrap">
@@ -47,8 +65,8 @@
     <div class="feat"><h3>Stats, password lock &amp; more <span class="pro">PRO</span></h3><p>See blocked attempts per site and time reclaimed. Lock settings with a password, write your own block-page message, export and import your setup.</p></div>
   </div>
   <div class="shots">
-    <img src="assets/schedule.png" width="1280" height="800" loading="lazy" alt="Schedule, focus session and strict mode settings">
-    <img src="assets/stats.png" width="1280" height="800" loading="lazy" alt="Stats: blocked attempts per day and top sites">
+    <img src="assets/en/schedule.png" width="1280" height="800" loading="lazy" alt="Schedule, focus session and strict mode settings">
+    <img src="assets/en/stats.png" width="1280" height="800" loading="lazy" alt="Stats: blocked attempts per day and top sites">
   </div>
 </div></section>
 
@@ -62,7 +80,7 @@
   <h2>Simple pricing</h2>
   <div class="prices">
     <div class="price"><h3>Free</h3><div class="amt">$0</div><ul class="checks"><li>Unlimited blocked sites</li><li>Subdomains included</li><li>One-click block from the popup</li><li>On/off switch</li><li>Calm block page</li></ul></div>
-    <div class="price"><h3>Pro monthly</h3><div class="amt">$2.99<span>/month</span></div><ul class="checks"><li>Everything in Free</li><li>Schedules</li><li>Path & keyword blocking</li><li>Pomodoro focus sessions</li><li>Strict mode</li><li>Password lock, stats, custom message, backup</li></ul></div>
+    <div class="price"><h3>Pro monthly</h3><div class="amt">$2.99<span>/month</span></div><ul class="checks"><li>Everything in Free</li><li>Schedules</li><li>Path &amp; keyword blocking</li><li>Pomodoro focus sessions</li><li>Strict mode</li><li>Password lock, stats, custom message, backup</li></ul></div>
     <div class="price featured"><h3>Pro yearly <span class="save">Save 44%</span></h3><div class="amt">$19.99<span>/year</span></div><ul class="checks"><li>Everything in Pro monthly</li><li>12 months for less than the price of 7</li></ul></div>
   </div>
   <p class="small muted center">Payments are processed by ExtensionPay (Stripe).</p>
@@ -85,7 +103,7 @@
 </main>
 <footer class="foot"><div class="wrap foot-in">
   <div class="brand"><svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2E7D6B"/><rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/></svg><span>FocusFence</span></div>
-  <p>Free software under the <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="https://github.com/Nexarion434/focusfence">Source code</a> · <a href="privacy.html">Privacy policy</a> · <a href="blog/">Blog</a></p>
+  <p>Free software under the <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="https://github.com/Nexarion434/focusfence">Source code</a> · <a href="privacy.html">Privacy policy</a> · <a href="blog/" hreflang="en">Blog (English)</a></p>
   <p class="muted">Not affiliated with Google. Chrome is a trademark of Google LLC.</p>
 </div></footer>
 </body>

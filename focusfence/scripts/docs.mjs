@@ -1,31 +1,51 @@
 // Generates the static GitHub Pages site in ../docs (repo root):
-//   docs/index.html    landing page
-//   docs/privacy.html  rendered from store/privacy-policy.md (single source of truth)
-// Usage: npm run docs   — then enable Pages on branch "main", folder "/docs".
+//   docs/index.html, docs/privacy.html            English (default, x-default)
+//   docs/<lang>/index.html, docs/<lang>/privacy.html  fr, es, de
+//   docs/blog/                                     English-only articles
+// Landing strings: scripts/site-strings.mjs. Privacy: store/privacy-policy[.<lang>].md
+// (translations use {{CONTACT}}, filled from the English file's Contact line so
+// the address is entered once). Usage: npm run docs
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './launch.mjs';
+import { SITE, SITE_LANGS, LANG_NAMES, OG_LOCALE } from './site-strings.mjs';
 
 const DOCS = path.resolve(ROOT, '..', 'docs');
 const STORE_URL = null; // set to the Chrome Web Store URL once published
 const SOURCE_URL = 'https://github.com/Nexarion434/focusfence';
 const SITE_URL = 'https://nexarion434.github.io/focusfence/';
+const LICENSE_URL = `${SOURCE_URL}/blob/main/focusfence/LICENSE`;
+export const LANG_STORAGE_KEY = 'ff-lang';
 
+const dirOf = (lang) => (lang === 'en' ? '' : lang + '/');
+
+/* ---------------------------------------------------------------- assets */
 fs.rmSync(DOCS, { recursive: true, force: true });
 fs.mkdirSync(path.join(DOCS, 'assets'), { recursive: true });
-const copy = (from, to) => fs.copyFileSync(path.join(ROOT, from), path.join(DOCS, 'assets', to));
+const copy = (from, to) => {
+  fs.mkdirSync(path.dirname(path.join(DOCS, 'assets', to)), { recursive: true });
+  fs.copyFileSync(path.join(ROOT, from), path.join(DOCS, 'assets', to));
+};
 copy('src/icons/icon128.png', 'icon128.png');
 copy('src/icons/icon32.png', 'favicon.png');
 copy('src/fonts/inter-var-latin.woff2', 'inter.woff2');
-copy('screenshots/popup.png', 'popup.png');
-copy('screenshots/block-page.png', 'block-page.png');
-copy('screenshots/options-stats.png', 'stats.png');
-copy('screenshots/options-schedule.png', 'schedule.png');
-copy('screenshots/promo-tile-440x280.png', 'social.png');
+// Localized UI screenshots (scripts/screenshots.mjs --lang): screenshots/ = en, screenshots/<lang>/ otherwise.
+const SHOTS = { popup: 'popup.png', 'block-page': 'block-page.png', stats: 'options-stats.png', schedule: 'options-schedule.png', social: 'promo-tile-440x280.png' };
+for (const lang of SITE_LANGS) {
+  for (const [name, file] of Object.entries(SHOTS)) {
+    const localized = lang === 'en' ? `screenshots/${file}` : `screenshots/${lang}/${file}`;
+    copy(fs.existsSync(path.join(ROOT, localized)) ? localized : `screenshots/${file}`, `${lang}/${name}.png`);
+  }
+}
 fs.writeFileSync(path.join(DOCS, '.nojekyll'), '');
+const pngSize = (rel) => {
+  const b = fs.readFileSync(path.join(DOCS, rel));
+  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+};
 
 /* ------------------------------------------------ tiny markdown renderer */
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const attr = (s) => esc(s).replace(/"/g, '&quot;');
 function inline(s) {
   return esc(s)
     .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -47,7 +67,7 @@ function markdown(md) {
     let m;
     if ((m = /^(#{1,3}) (.*)$/.exec(line))) {
       const level = m[1].length;
-      const id = m[2].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const id = m[2].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       out.push(`<h${level} id="${id}">${inline(m[2])}</h${level}>`);
       i++;
     } else if (/^\s*[-*] /.test(line) || /^\d+\. /.test(line)) {
@@ -78,42 +98,82 @@ function markdown(md) {
   return out.join('\n');
 }
 
+/* ------------------------------------------------------------ typography */
+// French: non-breaking space before ? ! : ; » and after «.
+const typo = (lang, s) => (lang === 'fr' ? s.replace(/ ([?!:;»])/g, ' $1').replace(/« /g, '« ') : s);
+
+/* ------------------------------------------------------- language plumbing */
+// Root only: first-visit redirect from navigator.languages. An explicit choice
+// (a click in the language switcher, stored in localStorage) always wins, and
+// English is never redirected away from once chosen. Arriving from another page
+// of the site (e.g. the EN link of the switcher) never redirects either, so the
+// choice holds even when localStorage is blocked.
+const REDIRECT_JS = `(function(){try{var L=${JSON.stringify(SITE_LANGS.filter((l) => l !== 'en'))},K=${JSON.stringify(LANG_STORAGE_KEY)},s=null,r=document.referrer,b=location.origin+location.pathname.replace(/[^/]*$/,'');if(r&&r.indexOf(b)===0)return;try{s=localStorage.getItem(K)}catch(e){}if(s==='en')return;var t=L.indexOf(s)>=0?s:null;if(!t&&!s){var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).toLowerCase().split('-')[0];if(c==='en')break;if(L.indexOf(c)>=0){t=c;break}}}if(t)location.replace(t+'/'+location.search+location.hash)}catch(e){}})();`;
+const LANG_JS = `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-set-lang]');if(a){try{localStorage.setItem(${JSON.stringify(LANG_STORAGE_KEY)},a.getAttribute('data-set-lang'))}catch(err){}}});\n`;
+
 /* ------------------------------------------------------------ shared bits */
 const LOGO = (size) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2E7D6B"/><rect x="6" y="13" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><rect x="6" y="19" width="20" height="2.4" rx="1.2" fill="#A9D6C8"/><path d="M8.5 10.2 10.5 7l2 3.2V25h-4zM14 10.2 16 7l2 3.2V25h-4zM19.5 10.2 21.5 7l2 3.2V25h-4z" fill="#fff"/></svg>`;
 
-let BASE = ''; // '' for root pages, '../' for pages in docs/blog/
-const CTA = STORE_URL
-  ? `<a class="btn btn-primary" href="${STORE_URL}">Add to Chrome — it's free</a>`
-  : `<span class="btn btn-primary is-soon" aria-disabled="true">Coming soon to the Chrome Web Store</span>`;
-
-function page({ title, description, body, canonical, noindex }) {
+/**
+ * @param o.lang        page language
+ * @param o.base        relative path to the site root ('' | '../')
+ * @param o.file        file name within the language folder ('' for index, 'privacy.html')
+ * @param o.translated  true if the page exists in every language (emits hreflang)
+ * @param o.switchHref  lang -> href for the switcher (defaults to the same page in that language)
+ */
+function page({ lang, base, file, translated, title, description, body, canonical, noindex, redirect, switchHref }) {
+  const T = SITE[lang];
+  const home = base + dirOf(lang);
+  const sameIn = (l) => base + dirOf(l) + file;
+  const switcher = SITE_LANGS.map((l) => {
+    const href = (switchHref ? switchHref(l) : sameIn(l)) || './';
+    const current = l === lang ? ' aria-current="page"' : '';
+    return `<a href="${href}" hreflang="${l}" lang="${l}" data-set-lang="${l}"${current}><span aria-hidden="true">${l.toUpperCase()}</span><span class="sr">${LANG_NAMES[l]}</span></a>`;
+  }).join('');
+  const alternates = translated
+    ? SITE_LANGS.map((l) => `\n<link rel="alternate" hreflang="${l}" href="${SITE_URL}${dirOf(l)}${file}">`).join('') +
+      `\n<link rel="alternate" hreflang="x-default" href="${SITE_URL}${file}">`
+    : '';
+  const ogAlt = translated
+    ? SITE_LANGS.filter((l) => l !== lang).map((l) => `\n<meta property="og:locale:alternate" content="${OG_LOCALE[l]}">`).join('')
+    : '';
+  const fill = (s) => typo(lang, s).replace(/\{license\}/g, LICENSE_URL).replace(/\{source\}/g, SOURCE_URL).replace(/\{privacy\}/g, home + 'privacy.html');
   return `<!doctype html>
-<html lang="en">
+<html lang="${lang}">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title>
-<meta name="description" content="${description}">
-<link rel="canonical" href="${canonical}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
+<meta name="viewport" content="width=device-width, initial-scale=1">${redirect ? `\n<script>${REDIRECT_JS}</script>` : ''}
+<title>${attr(title)}</title>
+<meta name="description" content="${attr(description)}">
+<link rel="canonical" href="${canonical}">${alternates}${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:type" content="website">
-<meta property="og:title" content="${title}">
-<meta property="og:description" content="${description}">
-<meta property="og:image" content="${SITE_URL}assets/social.png">
+<meta property="og:url" content="${canonical}">
+<meta property="og:site_name" content="FocusFence">
+<meta property="og:locale" content="${OG_LOCALE[lang]}">${ogAlt}
+<meta property="og:title" content="${attr(title)}">
+<meta property="og:description" content="${attr(description)}">
+<meta property="og:image" content="${SITE_URL}assets/${lang}/social.png">
+<meta property="og:image:width" content="440">
+<meta property="og:image:height" content="280">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="${BASE}assets/favicon.png">
-<link rel="stylesheet" href="${BASE}assets/site.css">
+<link rel="icon" type="image/png" href="${base}assets/favicon.png">
+<link rel="stylesheet" href="${base}assets/site.css">
+<script src="${base}assets/lang.js" defer></script>
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
-  <a class="brand" href="${BASE}./">${LOGO(28)}<span>FocusFence</span></a>
-  <nav><a href="${BASE}./#features">Features</a><a href="${BASE}./#pricing">Pricing</a><a href="${BASE}blog/">Blog</a><a href="${BASE}privacy.html">Privacy</a></nav>
+  <a class="brand" href="${home || './'}">${LOGO(28)}<span>FocusFence</span></a>
+  <div class="nav-right">
+    <nav><a href="${home || './'}#features">${T.navFeatures}</a><a href="${home || './'}#pricing">${T.navPricing}</a><a href="${base}blog/" hreflang="en">${T.navBlog}</a><a href="${home}privacy.html">${T.navPrivacy}</a></nav>
+    <nav class="langs" aria-label="${attr(T.langLabel)}">${switcher}</nav>
+  </div>
 </div></header>
-${body}
+${fill(body)}
 <footer class="foot"><div class="wrap foot-in">
   <div class="brand">${LOGO(22)}<span>FocusFence</span></div>
-  <p>Free software under the <a href="${SOURCE_URL}/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="${SOURCE_URL}">Source code</a> · <a href="${BASE}privacy.html">Privacy policy</a> · <a href="${BASE}blog/">Blog</a></p>
-  <p class="muted">Not affiliated with Google. Chrome is a trademark of Google LLC.</p>
+  <p>${fill(T.footLicense)} · <a href="${SOURCE_URL}">${T.footSource}</a> · <a href="${home}privacy.html">${T.footPrivacy}</a> · <a href="${base}blog/" hreflang="en">${T.footBlog}</a></p>
+  <p class="muted">${fill(T.footNotAffiliated)}</p>
 </div></footer>
 </body>
 </html>
@@ -121,93 +181,119 @@ ${body}
 }
 
 /* --------------------------------------------------------------- landing */
-const check = (t) => `<li>${t}</li>`;
-const landing = page({
-  title: 'FocusFence — Website Blocker & Focus Timer for Chrome',
-  description:
-    'Block distracting websites in Chrome. Block YouTube Shorts but keep YouTube, schedule focus hours, run Pomodoro sessions and lock yourself in with strict mode. Private: nothing leaves your device.',
-  canonical: SITE_URL,
-  body: `
+function landing(lang) {
+  const T = SITE[lang];
+  const img = (name, alt, cls, extra = '') => {
+    const rel = `assets/${lang}/${name}.png`;
+    const [w, h] = pngSize(rel);
+    return `<img${cls ? ` class="${cls}"` : ''} src="${dirOf(lang) ? '../' : ''}${rel}" width="${w}" height="${h}"${extra} alt="${attr(alt)}">`;
+  };
+  const CTA = STORE_URL
+    ? `<a class="btn btn-primary" href="${STORE_URL}">${T.ctaAdd}</a>`
+    : `<span class="btn btn-primary is-soon" aria-disabled="true">${T.ctaSoon}</span>`;
+  const li = (t) => `<li>${t}</li>`;
+  const PRO = [false, true, true, true, true, true];
+  const body = `
 <main>
 <section class="hero"><div class="wrap hero-in">
   <div class="hero-copy">
-    <p class="eyebrow">Website blocker for Chrome</p>
-    <h1>Fence off the <em>endless feeds.</em></h1>
-    <p class="lead">FocusFence blocks the sites that steal your attention, in one click. Block all of Reddit, or only YouTube Shorts. Set focus hours. When willpower runs out, turn on strict mode.</p>
-    <div class="cta">${CTA}<a class="btn" href="#features">See features</a></div>
-    <p class="small muted">Free forever for unlimited sites · No account · No tracking</p>
+    <p class="eyebrow">${T.eyebrow}</p>
+    <h1>${T.h1}</h1>
+    <p class="lead">${T.lead}</p>
+    <div class="cta">${CTA}<a class="btn" href="#features">${T.ctaFeatures}</a></div>
+    <p class="small muted">${T.heroSmall}</p>
   </div>
-  <div class="hero-shot"><img src="assets/popup.png" width="360" height="437" alt="FocusFence popup with a running focus session and a one-click Block site button"></div>
+  <div class="hero-shot">${img('popup', T.altPopup, '')}</div>
 </div></section>
 
 <section class="band"><div class="wrap">
-  <img class="wide" src="assets/block-page.png" width="1280" height="800" loading="lazy" alt="The FocusFence block page: reddit.com is fenced off, with a motivational quote and time reclaimed today">
+  ${img('block-page', T.altBlock, 'wide', ' loading="lazy"')}
 </div></section>
 
 <section id="features"><div class="wrap">
-  <h2>Everything you need to stay focused. Nothing you don't.</h2>
+  <h2>${T.featuresH2}</h2>
   <div class="grid3">
-    <div class="feat"><h3>Block a site in one click</h3><p>Open the popup and press <strong>Block site</strong>. Blocking reddit.com also blocks old.reddit.com, m.reddit.com and every other subdomain.</p></div>
-    <div class="feat"><h3>Block only the bad part <span class="pro">PRO</span></h3><p>Block <code>youtube.com/shorts</code> and keep the rest of YouTube for tutorials and talks. Clicking into Shorts from inside YouTube is caught too. Keyword rules block any URL that contains a word.</p></div>
-    <div class="feat"><h3>Schedules <span class="pro">PRO</span></h3><p>Block only during work hours, on the days you choose. Overnight ranges work too, e.g. 22:00–06:00 for better sleep.</p></div>
-    <div class="feat"><h3>Pomodoro focus sessions <span class="pro">PRO</span></h3><p>Timed focus rounds and breaks. Everything on your list is blocked while you focus. The countdown sits on the toolbar icon.</p></div>
-    <div class="feat"><h3>Strict mode <span class="pro">PRO</span></h3><p>While strict mode is on, blocking can't be switched off and sites can't be removed. Ending it early takes a 10-minute cooling-off period and a typing challenge.</p></div>
-    <div class="feat"><h3>Stats, password lock &amp; more <span class="pro">PRO</span></h3><p>See blocked attempts per site and time reclaimed. Lock settings with a password, write your own block-page message, export and import your setup.</p></div>
+${T.features.map(([h, p], i) => `    <div class="feat"><h3>${h}${PRO[i] ? ' <span class="pro">PRO</span>' : ''}</h3><p>${p}</p></div>`).join('\n')}
   </div>
   <div class="shots">
-    <img src="assets/schedule.png" width="1280" height="800" loading="lazy" alt="Schedule, focus session and strict mode settings">
-    <img src="assets/stats.png" width="1280" height="800" loading="lazy" alt="Stats: blocked attempts per day and top sites">
+    ${img('schedule', T.altSchedule, '', ' loading="lazy"')}
+    ${img('stats', T.altStats, '', ' loading="lazy"')}
   </div>
 </div></section>
 
 <section class="privacy-band"><div class="wrap grid3">
-  <div><h3>Your data stays on your device</h3><p>Your blocklist, settings and stats live in Chrome's local storage. No account, no analytics, no ads.</p></div>
-  <div><h3>FocusFence doesn't read your pages</h3><p>Blocking runs in Chrome's built-in rule engine (declarativeNetRequest). FocusFence never sees the content of the pages you visit.</p></div>
-  <div><h3>Minimal permissions</h3><p>FocusFence asks for site access one site at a time, only for sites you block. If you say no, the site is still blocked.</p></div>
+${T.privacyBand.map(([h, p]) => `  <div><h3>${h}</h3><p>${p}</p></div>`).join('\n')}
 </div></section>
 
 <section id="pricing"><div class="wrap">
-  <h2>Simple pricing</h2>
+  <h2>${T.pricingH2}</h2>
   <div class="prices">
-    <div class="price"><h3>Free</h3><div class="amt">$0</div><ul class="checks">${['Unlimited blocked sites', 'Subdomains included', 'One-click block from the popup', 'On/off switch', 'Calm block page'].map(check).join('')}</ul></div>
-    <div class="price"><h3>Pro monthly</h3><div class="amt">$2.99<span>/month</span></div><ul class="checks">${['Everything in Free', 'Schedules', 'Path & keyword blocking', 'Pomodoro focus sessions', 'Strict mode', 'Password lock, stats, custom message, backup'].map(check).join('')}</ul></div>
-    <div class="price featured"><h3>Pro yearly <span class="save">Save 44%</span></h3><div class="amt">$19.99<span>/year</span></div><ul class="checks">${['Everything in Pro monthly', '12 months for less than the price of 7'].map(check).join('')}</ul></div>
+    <div class="price"><h3>${T.planFree}</h3><div class="amt">${T.priceFree}</div><ul class="checks">${T.freeItems.map(li).join('')}</ul></div>
+    <div class="price"><h3>${T.planMonthly}</h3><div class="amt">${T.priceMonthly}<span>${T.perMonth}</span></div><ul class="checks">${T.monthlyItems.map(li).join('')}</ul></div>
+    <div class="price featured"><h3>${T.planYearly} <span class="save">${T.save}</span></h3><div class="amt">${T.priceYearly}<span>${T.perYear}</span></div><ul class="checks">${T.yearlyItems.map(li).join('')}</ul></div>
   </div>
-  <p class="small muted center">Payments are processed by ExtensionPay (Stripe).</p>
+  <p class="small muted center">${T.paymentsNote}</p>
 </div></section>
 
 <section id="faq"><div class="wrap narrow">
-  <h2>Questions</h2>
-  <details><summary>Can I block YouTube Shorts but still use YouTube?</summary><p>Yes, with Pro. Add <code>youtube.com/shorts</code> as a path rule. youtube.com, videos and search keep working. Shorts links and in-app navigation to Shorts are blocked.</p></details>
-  <details><summary>Does blocking reddit.com also block old.reddit.com?</summary><p>Yes. A domain rule covers every subdomain, in Free and Pro.</p></details>
-  <details><summary>Why does Chrome ask for permission when I add a site?</summary><p>Chrome only lets an extension redirect to its own block page on sites it has access to. FocusFence asks for that one site only. If you decline, the site is still blocked, but you'll see Chrome's error page instead of the FocusFence block page.</p></details>
-  <details><summary>Can strict mode be bypassed?</summary><p>Honest answer: Chrome always lets you disable or remove an extension, and FocusFence can't block the extensions page. A timed strict session <strong>pauses</strong> while FocusFence is off, so its time can't run out in the background. Incognito windows are only covered if you allow FocusFence in Incognito, and FocusFence warns you when it isn't. Other browsers and devices aren't covered.</p></details>
-  <details><summary>What data do you collect?</summary><p>None. See the <a href="privacy.html">privacy policy</a>. The only network traffic is ExtensionPay checking your license, and only after you choose to upgrade.</p></details>
-  <details><summary>Is FocusFence open source?</summary><p>Yes, under the GNU AGPL v3. <a href="${SOURCE_URL}">Read the code</a>.</p></details>
+  <h2>${T.faqH2}</h2>
+${T.faq.map(([q, a]) => `  <details><summary>${q}</summary><p>${a}</p></details>`).join('\n')}
 </div></section>
 
 <section class="final"><div class="wrap center">
-  <h2>Get your focus back.</h2>
+  <h2>${T.finalH2}</h2>
   <div class="cta center">${CTA}</div>
 </div></section>
-</main>`,
-});
+</main>`;
+  return page({
+    lang,
+    base: dirOf(lang) ? '../' : '',
+    file: '',
+    translated: true,
+    redirect: lang === 'en',
+    title: typo(lang, T.title),
+    description: typo(lang, T.description),
+    canonical: SITE_URL + dirOf(lang),
+    body,
+  });
+}
 
 /* ---------------------------------------------------------------- privacy */
-const md = fs.readFileSync(path.join(ROOT, 'store/privacy-policy.md'), 'utf8');
-const privacy = page({
-  title: 'Privacy Policy — FocusFence',
-  description: 'FocusFence privacy policy: no account, no analytics, no tracking. Your blocklist and stats stay on your device.',
-  canonical: SITE_URL + 'privacy.html',
-  body: `<main class="doc"><div class="wrap narrow prose">${markdown(md)}</div></main>`,
-});
+const privacyMd = (lang) => fs.readFileSync(path.join(ROOT, `store/privacy-policy${lang === 'en' ? '' : '.' + lang}.md`), 'utf8');
+const enPrivacy = privacyMd('en');
+const contactMatch = /## Contact\n\n[^\n]*\*\*(.+?)\*\*/.exec(enPrivacy);
+if (!contactMatch) throw new Error('store/privacy-policy.md: no **contact** on the line after "## Contact"');
+export const CONTACT = contactMatch[1];
 
-fs.writeFileSync(path.join(DOCS, 'index.html'), landing);
-fs.writeFileSync(path.join(DOCS, 'privacy.html'), privacy);
+function privacy(lang) {
+  const T = SITE[lang];
+  let md = privacyMd(lang);
+  if (lang !== 'en') {
+    if (!md.includes('{{CONTACT}}')) throw new Error(`privacy-policy.${lang}.md must use {{CONTACT}} for the contact address`);
+    md = typo(lang, md).split('{{CONTACT}}').join(CONTACT);
+  }
+  return page({
+    lang,
+    base: dirOf(lang) ? '../' : '',
+    file: 'privacy.html',
+    translated: true,
+    title: typo(lang, T.privacyTitle),
+    description: typo(lang, T.privacyDescription),
+    canonical: SITE_URL + dirOf(lang) + 'privacy.html',
+    body: `<main class="doc"><div class="wrap narrow prose">${markdown(md)}</div></main>`,
+  });
+}
+
+for (const lang of SITE_LANGS) {
+  fs.mkdirSync(path.join(DOCS, dirOf(lang)), { recursive: true });
+  fs.writeFileSync(path.join(DOCS, dirOf(lang), 'index.html'), landing(lang));
+  fs.writeFileSync(path.join(DOCS, dirOf(lang), 'privacy.html'), privacy(lang));
+}
 
 /* ------------------------------------------------------------------ blog */
 // Sources: ../marketing/blog/*.md with front-matter. Drafts are rendered with
 // <meta name="robots" content="noindex"> and left out of the sitemap.
+// Articles are English-only: their language switcher leads to each language's home page.
 const BLOG_SRC = path.resolve(ROOT, '..', 'marketing', 'blog');
 const posts = fs
   .readdirSync(BLOG_SRC)
@@ -226,40 +312,50 @@ const posts = fs
   })
   .sort((a, b) => (a.date < b.date ? 1 : -1));
 fs.mkdirSync(path.join(DOCS, 'blog'), { recursive: true });
-BASE = '../';
+const blogPage = (o, selfFile) =>
+  page({ ...o, lang: 'en', base: '../', file: '', translated: false, switchHref: (l) => (l === 'en' ? selfFile : '../' + dirOf(l)) });
 for (const post of posts) {
   fs.writeFileSync(
     path.join(DOCS, 'blog', post.slug + '.html'),
-    page({
-      title: post.title + ' — FocusFence',
-      description: post.description,
-      canonical: SITE_URL + 'blog/' + post.slug + '.html',
-      noindex: post.draft,
-      body: `<main class="doc"><article class="wrap narrow prose"><p class="muted small">${post.date}</p>${markdown(post.body)}</article></main>`,
-    })
+    blogPage(
+      {
+        title: post.title + ' — FocusFence',
+        description: post.description,
+        canonical: SITE_URL + 'blog/' + post.slug + '.html',
+        noindex: post.draft,
+        body: `<main class="doc"><article class="wrap narrow prose"><p class="muted small">${post.date}</p>${markdown(post.body)}</article></main>`,
+      },
+      post.slug + '.html'
+    )
   );
 }
 fs.writeFileSync(
   path.join(DOCS, 'blog', 'index.html'),
-  page({
-    title: 'Blog — FocusFence',
-    description: 'Guides on blocking distracting websites in Chrome, focus routines and privacy.',
-    canonical: SITE_URL + 'blog/',
-    noindex: posts.every((p) => p.draft),
-    body: `<main class="doc"><div class="wrap narrow prose"><h1>Blog</h1>${posts
-      .map((p) => `<h2><a href="${p.slug}.html">${esc(p.title)}</a></h2><p>${esc(p.description)}</p>`)
-      .join('\n')}</div></main>`,
-  })
+  blogPage(
+    {
+      title: 'Blog — FocusFence',
+      description: 'Guides on blocking distracting websites in Chrome, focus routines and privacy.',
+      canonical: SITE_URL + 'blog/',
+      noindex: posts.every((p) => p.draft),
+      body: `<main class="doc"><div class="wrap narrow prose"><h1>Blog</h1>${posts
+        .map((p) => `<h2><a href="${p.slug}.html">${esc(p.title)}</a></h2><p>${esc(p.description)}</p>`)
+        .join('\n')}</div></main>`,
+    },
+    './'
+  )
 );
-BASE = '';
+
+/* ------------------------------------------------- css, js, robots, sitemap */
 fs.writeFileSync(path.join(DOCS, 'assets', 'site.css'), fs.readFileSync(path.join(ROOT, 'scripts/site.css')));
-fs.writeFileSync(
-  path.join(DOCS, 'robots.txt'),
-  `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}sitemap.xml\n`
-);
+fs.writeFileSync(path.join(DOCS, 'assets', 'lang.js'), LANG_JS);
+fs.writeFileSync(path.join(DOCS, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}sitemap.xml\n`);
+const alt = (file) =>
+  SITE_LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${SITE_URL}${dirOf(l)}${file}"/>`).join('') +
+  `<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${file}"/>`;
 fs.writeFileSync(
   path.join(DOCS, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${SITE_URL}</loc></url>\n<url><loc>${SITE_URL}privacy.html</loc></url>\n` +
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
+    ['', 'privacy.html'].flatMap((file) => SITE_LANGS.map((l) => `<url><loc>${SITE_URL}${dirOf(l)}${file}</loc>${alt(file)}</url>\n`)).join('') +
     posts.filter((p) => !p.draft).map((p) => `<url><loc>${SITE_URL}blog/${p.slug}.html</loc></url>\n`).join('') +
     `</urlset>\n`
 );

@@ -31,7 +31,7 @@ src/                  the extension (load this folder unpacked)
   LICENSE, THIRD_PARTY_NOTICES.txt, licenses/
 tests/                Playwright: unit, e2e, accessibility, i18n, onboarding, site, store, zip
 scripts/              build, zip, cws-check, screenshots, icons, docs, i18n, test launcher
-store/                privacy policy, listings (en/fr/es/de), CWS submission checklist, screenshot plan + captions
+store/                privacy policy + translations, listings (en/fr/es/de), CWS submission checklist, screenshot plan + captions
 screenshots/          UI shots + store set (en); fr/, es/, de/ localized store sets
 dist/                 focusfence-<version>.zip (store package)
 ../docs/              static website (landing, privacy, blog drafts) for GitHub Pages
@@ -72,7 +72,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 84 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 91 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 
@@ -117,7 +117,17 @@ The UI, manifest name/description and store listings are available in **English 
 
 ## Website (GitHub Pages)
 
-`npm run docs` regenerates `../docs/` (repo root): landing page, `privacy.html` (rendered from `store/privacy-policy.md`) and `blog/` (rendered from `../marketing/blog/*.md`; posts with `draft: true` get `noindex` and stay out of the sitemap). Marketing drafts live in `../marketing/` and are not published. Live at https://nexarion434.github.io/focusfence/ (GitHub Pages, folder `/docs`; served from `feat/focusfence-v1` until PR #1 is merged, then from `main`).
+`npm run docs` regenerates `../docs/` (repo root). Live at https://nexarion434.github.io/focusfence/ (GitHub Pages, folder `/docs`; served from `feat/focusfence-v1` until PR #1 is merged, then from `main`).
+
+- **Languages:** English at the root (also `x-default`), French, Spanish and German under `docs/fr/`, `docs/es/`, `docs/de/`: landing page plus `privacy.html` each.
+  - Landing text: `scripts/site-strings.mjs`.
+  - Privacy: `store/privacy-policy.md` plus `privacy-policy.<lang>.md`. The translations use `{{CONTACT}}`, filled from the English Contact line, so the address is entered once.
+  - Screenshots come from `screenshots/<lang>/`.
+  - Every page has a language switcher, `hreflang`/canonical tags, localized `og:*` tags and the localized promo tile as `og:image`. The sitemap lists every language with alternates.
+- **First-visit redirect** (root `index.html` only): a visitor whose `navigator.languages` puts fr/es/de before English is sent to that language. A click in the switcher is saved in `localStorage` (`ff-lang`) and always wins. Arriving at the root from another page of the site never redirects.
+- **Blog:** `blog/` is English-only, rendered from `../marketing/blog/*.md`. Posts with `draft: true` get `noindex` and stay out of the sitemap.
+
+Marketing drafts live in `../marketing/` and are not published.
 
 ## License
 
