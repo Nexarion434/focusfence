@@ -294,43 +294,63 @@ test('pricing: the yearly comparison and the saving are computed from the real p
   }
 });
 
-test("the closing fence is the extension's row of glass pills in both themes, with nothing left of the older fences", () => {
+test("the closing fence is the extension's round 5 row of glass pills in both themes, with nothing left of the older fences", () => {
+  // the extension's pillProfile (src/lib/ui.js, round 5): a gentle cosine bell, the ends 0.575 of
+  // the middle pill; the light falls off with the distance; the ends fade to 0.6, their neighbours 0.92
+  const profile = (n) => {
+    const m = (n - 1) / 2;
+    return Array.from({ length: n }, (_, p) => {
+      const d = Math.abs(p - m);
+      return { d, k: 0.575 + 0.425 * Math.cos((Math.PI * (m ? d / m : 0)) / 2) ** 2, t: d ? Math.exp(-d / 1.25) : 1, v: d === m ? 0.6 : d === m - 1 ? 0.92 : 1 };
+    });
+  };
+  const seven = profile(7);
+  const five = profile(5);
   for (const lang of SITE_LANGS) {
     const rel = dirOf(lang) + 'index.html';
     const html = read('docs', rel);
     // nothing left of the first site's SVG fence or of round 3's lantern wall
     expect(html, rel).not.toMatch(/id="pickets"|class="wall|class="pk |class="bloom"/);
-    // the row and its reflection on the ground, with the light's pool in front
+    // the row and its reflection on the floor, with the light's pool in front
     expect(all(/<div class="(fence(?: mirror)?)">/g, html), rel).toEqual(['fence mirror', 'fence']);
     expect(html, rel).toContain('<span class="fence-pool"></span>');
     const row = /<div class="fence"><span class="fence-halo"><\/span>([\s\S]*?)<\/div>/.exec(html)[1];
-    const pills = [...row.matchAll(/<span class="pill( lit)?" style="--k:([\d.]+);--t0:([\d.]+);--v0:([\d.]+);--side:(-?\d);--i:(\d)"><\/span>/g)];
-    // seven pills, as on the demo's block page (six sites), the light in the middle
+    const pills = [...row.matchAll(/<span class="pill( lit| far)?" style="--k:([\d.]+);--t0:([\d.]+);--v0:([\d.]+);--side:(-?\d);--i:(\d)(?:;--k5:([\d.]+);--v5:([\d.]+))?"><\/span>/g)];
+    // seven pills, as on the demo's block page (six sites), the light in the middle; on narrower
+    // windows the two outer ones step aside and five remain (fewer pills, not thinner ones)
     expect(pills.length, rel).toBe(7);
-    expect(pills.filter((p) => p[1]).length, rel).toBe(1);
-    expect(pills[3][1], rel).toBe(' lit');
-    // each pill shaped by its place, with the extension's pillProfile (src/lib/ui.js)
-    const m = 3;
-    const sigma = 0.75 * (m + 1);
-    pills.forEach(([, , k, t, v, side, i], p) => {
-      const d = Math.abs(p - m);
-      expect([Number(i), Number(side)], `${rel} #${p}`).toEqual([d, Math.sign(p - m)]);
-      expect(Number(k), `${rel} #${p}`).toBeCloseTo(0.3 + 0.7 * Math.exp(-((d / sigma) ** 2)), 3);
-      expect(Number(t), `${rel} #${p}`).toBeCloseTo(d === 0 ? 1 : Math.exp(-d / 1.25), 3);
-      expect(Number(v), `${rel} #${p}`).toBeCloseTo(d === m ? 0.45 : d === m - 1 ? 0.75 : 1, 2);
+    expect(pills.map((p) => (p[1] || '').trim()), rel).toEqual(['far', '', '', 'lit', '', '', 'far']);
+    pills.forEach(([, , k, t, v, side, i, k5, v5], p) => {
+      const { d } = seven[p];
+      expect([Number(i), Number(side)], `${rel} #${p}`).toEqual([d, Math.sign(p - 3)]);
+      expect(Number(k), `${rel} #${p}`).toBeCloseTo(seven[p].k, 3);
+      expect(Number(t), `${rel} #${p}`).toBeCloseTo(seven[p].t, 3);
+      expect(Number(v), `${rel} #${p}`).toBeCloseTo(seven[p].v, 2);
+      // the five-pill row: the same light, its own heights and fade
+      if (d === 1 || d === 2) {
+        expect(Number(k5), `${rel} #${p}`).toBeCloseTo(five[p - 1].k, 3);
+        expect(Number(v5), `${rel} #${p}`).toBeCloseTo(five[p - 1].v, 2);
+      } else expect(k5, `${rel} #${p}`).toBeUndefined();
     });
+    // round 5's proportions: the end pills are 1.74 times shorter than the middle one
+    expect(1 / seven[0].k).toBeCloseTo(1.74, 2);
   }
   const css = read('focusfence/scripts/site.css');
-  // no lantern, rail or picket-tip leftovers
-  expect(css).not.toMatch(/--picket:|--picket-line|--rail|--wall-|--rim-rgb|\.wall\b|\.pk\b|\.bloom\b|clip-path: polygon|lantern/i);
-  // the extension's glass and light, at night and by day
+  // no lantern, rail or picket-tip leftovers, and no floor band or line (round 5's floor is seamless)
+  expect(css).not.toMatch(/--picket:|--picket-line|--rail|--wall-|--rim-rgb|\.wall\b|\.pk\b|\.bloom\b|clip-path: polygon|lantern|--ground-line|--floor-0/i);
+  // round 5's chunky pebbles: the middle pill 1.6 times as tall as wide, 9 % of a pill apart
+  expect(css).toContain('--ph: calc(var(--pw) * 1.6);');
+  expect(css).toContain('gap: calc(var(--pw) * 0.09);');
+  // the extension's glass and light, at night (a wide halo) and by day (milky sage glass)
   for (const token of [
     '--glass-0: rgb(205 245 222 / 0.1);',
-    '--glass-0: rgb(255 255 255 / 0.94);',
+    '--glass-0: rgb(240 246 242 / 0.94);',
     '--lit-1: #3fd67a;',
     '--lit-1: #1e8a45;',
     '--light-rgb: 63 214 122;',
     '--light-rgb: 30 138 69;',
+    '--halo-h: 2.05;',
+    '--halo-h: 1.4;',
   ])
     expect(css).toContain(token);
 });

@@ -206,23 +206,38 @@ const icon = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-
 const PRO = '<span class="pro">PRO</span>';
 /* The closing scene is the extension's block page (design/extension-ui: src/lib/ui.js FFUI.fence and
  * pillProfile, src/styles/base.css .fence and .pill, src/styles/blocked.css): a short row of glass
- * pills, one per blocked site, stepping down from the light in the middle like a bell. Each pill's
- * place sets its height (--k), how much of the light it catches (--t0), how much of it shows (--v0:
- * the ends fade), which side of the light it stands (--side) and its distance from it (--i: the
- * rise's stagger), with the extension's own formulas. Seven pills, as on the demo's block page (six
- * sites); the ground reflects them (the mirror). */
-const FENCE_N = 7;
-const PILLS = (() => {
-  const n = FENCE_N;
+ * pills, one per blocked site, stepping down gently from the light in the middle (round 5: chunky
+ * pebbles, the middle one 1.6 times as tall as wide, the ends 0.92). Each pill's place sets its
+ * height (--k), how much of the light it catches (--t0), how much of it shows (--v0: the ends fade
+ * to about two thirds), which side of the light it stands (--side) and its distance from it (--i:
+ * the rise's stagger), with the extension's own formulas. Seven pills, as on the demo's block page
+ * (six sites); the glossy floor mirrors every one of them (the mirror). Like the block page, narrower
+ * windows show fewer pills rather than thinner ones: five, so the two outer pills are marked `far`
+ * and the others also carry their place in a five-pill row (--k5, --v5; the light is the same). */
+const pillProfile = (n) => {
   const m = (n - 1) / 2;
-  const sigma = 0.75 * (m + 1);
   return Array.from({ length: n }, (_, p) => {
     const d = Math.abs(p - m);
-    const k = (0.3 + 0.7 * Math.exp(-((d / sigma) ** 2))).toFixed(3);
-    const t = (d === 0 ? 1 : Math.exp(-d / 1.25)).toFixed(3);
-    const v = (m >= 2 && d === m ? 0.45 : m >= 3 && d === m - 1 ? 0.75 : 1).toFixed(2);
-    return `<span class="pill${d ? '' : ' lit'}" style="--k:${k};--t0:${t};--v0:${v};--side:${Math.sign(p - m)};--i:${d}"></span>`;
-  }).join('');
+    const x = m ? d / m : 0;
+    return {
+      d,
+      side: Math.sign(p - m),
+      k: 0.575 + 0.425 * Math.cos((Math.PI * x) / 2) ** 2,
+      t: d === 0 ? 1 : Math.exp(-d / 1.25),
+      v: m >= 2 && d === m ? 0.6 : m >= 2 && d === m - 1 ? 0.92 : 1,
+    };
+  });
+};
+const PILLS = (() => {
+  const five = pillProfile(5);
+  return pillProfile(7)
+    .map(({ d, side, k, t, v }) => {
+      const near = five.find((q) => q.d === d && q.side === side);
+      let style = `--k:${k.toFixed(3)};--t0:${t.toFixed(3)};--v0:${v.toFixed(2)};--side:${side};--i:${d}`;
+      if (near && d) style += `;--k5:${near.k.toFixed(3)};--v5:${near.v.toFixed(2)}`;
+      return `<span class="pill${!d ? ' lit' : near ? '' : ' far'}" style="${style}"></span>`;
+    })
+    .join('');
 })();
 const FENCE = (cls) => `<div class="${cls}"><span class="fence-halo"></span>${PILLS}</div>`;
 // Prices as written in each language ('$2.99', '2,99 €', '2,99 US$'): the amount, and an amount
