@@ -76,6 +76,8 @@ They were brought to parity with the English, written for each market rather tha
 - **Spanish** switches the key places to **"páginas web"**. Searchers type "bloquear páginas web en chrome", "extensión para bloquear páginas web" and "bloqueador de páginas web"; "bloqueador de webs" barely registers in Google's suggestions. The description opens "Extensión gratis para bloquear páginas web en Chrome". The rest keeps the site's informal *tú* and "webs", which reads naturally in Spain. Prices stay in US$ with the euro note, because the Spanish page also serves Latin America (the extension charges in euros only in the eurozone).
 - **German** keeps *Sie*. The description uses "Webseiten blockieren" (as common as "Websites blockieren" in searches), the rest "Website", as before. "Ganz automatisch öffnen" carries the autopilot image, "wenn die Willenskraft nachlässt" stays.
 
+In the meta descriptions, schedules are something Pro *applies*: "applique vos horaires", "aplica tus horarios", "wendet Ihre Zeitpläne an". An earlier draft said the blocker "follows" your hours ("suit vos horaires"), which reads oddly in French; the Spanish draft could be read as "blocking of Shorts and of schedules", and the German one had no verb.
+
 Each language gets the same two new FAQ entries, the same Pomodoro and strict-mode specifics, alt text under 125 characters, and no em dash in short copy (checked by `tests/docs.spec.mjs`).
 
 ## Conversion review (cro)

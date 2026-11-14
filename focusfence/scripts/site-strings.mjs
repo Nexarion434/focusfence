@@ -150,7 +150,7 @@ export const SITE = {
   fr: {
     title: 'Bloqueur de sites gratuit pour Chrome | FocusFence',
     description:
-      'Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et suit vos horaires.',
+      'Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et applique vos horaires.',
     privacyTitle: 'Politique de confidentialité | FocusFence',
     privacyDescription:
       'Ce que FocusFence garde sur votre ordinateur et pourquoi il demande chaque autorisation. Avec Pro, ExtensionPay vérifie la licence.',
@@ -288,7 +288,7 @@ export const SITE = {
   es: {
     title: 'Bloqueador de páginas web gratis para Chrome | FocusFence',
     description:
-      'Extensión gratis para bloquear páginas web en Chrome con un clic y sin límite. Pro añade el bloqueo de Shorts de YouTube y horarios.',
+      'Extensión gratis para bloquear páginas web en Chrome sin límite. Pro bloquea los Shorts de YouTube y aplica tus horarios.',
     privacyTitle: 'Política de privacidad | FocusFence',
     privacyDescription:
       'Qué guarda FocusFence en tu ordenador y por qué pide cada permiso a Chrome. Si compras Pro, ExtensionPay comprueba tu licencia.',
@@ -423,7 +423,7 @@ export const SITE = {
   de: {
     title: 'Kostenloser Website-Blocker für Chrome | FocusFence',
     description:
-      'Ablenkende Webseiten in Chrome per Klick blockieren, kostenlos und ohne Limit. Mit Pro auch nur YouTube Shorts oder nach Zeitplan.',
+      'Ablenkende Webseiten in Chrome kostenlos und ohne Limit blockieren. Pro sperrt gezielt YouTube Shorts und wendet Ihre Zeitpläne an.',
     privacyTitle: 'Datenschutzerklärung | FocusFence',
     privacyDescription:
       'Was FocusFence auf Ihrem Computer speichert und wozu es jede Berechtigung braucht. Mit Pro prüft ExtensionPay Ihre Lizenz.',

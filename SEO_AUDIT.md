@@ -64,7 +64,7 @@ Severity follows the skill's scale: Critical blocks indexing, High hurts ranking
 | # | Finding (before) | Severity | Status |
 |---|---|---|---|
 | O1 | Titles: FR 71 and ES 75 characters (cut off), EN and DE brand-first without "free" | High | **Fixed.** Keyword first, brand last, 50–57 characters, a pipe separator (EN "Free Website Blocker Extension for Chrome \| FocusFence") |
-| O2 | Meta descriptions 196–247 characters on every landing page, 167 on the French privacy page | High | **Fixed.** 122–132 characters, each written for its page, so they fit both the 120–160 character rule and Google's ~920 px snippet width (the audit tool estimates about 7 px per character) |
+| O2 | Meta descriptions 196–247 characters on every landing page, 167 on the French privacy page | High | **Fixed.** 121–131 characters, each written for its page, so they fit both the 120–160 character rule and Google's ~920 px snippet width (the audit tool estimates about 7 px per character) |
 | O3 | Privacy titles under 30 characters (EN 27) | Low | **Fixed.** 33–43 characters |
 | O4 | Landing H1 was only the slogan; "Website blocker for Chrome" sat in a `<p>` above it | Medium | **Fixed.** Both are in the `<h1>` (eyebrow first). Same pixels on screen |
 | O5 | Spanish copy said "webs" where searchers type "páginas web" | Medium | **Fixed** in the title, description, H1, statement, pricing and FAQ |

@@ -13,9 +13,9 @@ FocusFence is a Manifest V3 extension for Chrome on computers. Blocking runs in 
 ## Pages
 
 - [Free Website Blocker Extension for Chrome | FocusFence](https://focusfence.dev/): Block distracting websites in Chrome in one click, with no limit on the free plan. Pro adds YouTube Shorts blocking and schedules.
-- [Bloqueur de sites gratuit pour Chrome | FocusFence](https://focusfence.dev/fr/): Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et suit vos horaires.
-- [Bloqueador de páginas web gratis para Chrome | FocusFence](https://focusfence.dev/es/): Extensión gratis para bloquear páginas web en Chrome con un clic y sin límite. Pro añade el bloqueo de Shorts de YouTube y horarios.
-- [Kostenloser Website-Blocker für Chrome | FocusFence](https://focusfence.dev/de/): Ablenkende Webseiten in Chrome per Klick blockieren, kostenlos und ohne Limit. Mit Pro auch nur YouTube Shorts oder nach Zeitplan.
+- [Bloqueur de sites gratuit pour Chrome | FocusFence](https://focusfence.dev/fr/): Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et applique vos horaires.
+- [Bloqueador de páginas web gratis para Chrome | FocusFence](https://focusfence.dev/es/): Extensión gratis para bloquear páginas web en Chrome sin límite. Pro bloquea los Shorts de YouTube y aplica tus horarios.
+- [Kostenloser Website-Blocker für Chrome | FocusFence](https://focusfence.dev/de/): Ablenkende Webseiten in Chrome kostenlos und ohne Limit blockieren. Pro sperrt gezielt YouTube Shorts und wendet Ihre Zeitpläne an.
 - [Privacy Policy | FocusFence Website Blocker](https://focusfence.dev/privacy.html): What FocusFence keeps on your computer and why it needs each Chrome permission. With Pro, ExtensionPay checks your license.
 
 ## FAQ
