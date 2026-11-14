@@ -108,9 +108,12 @@ async function capture(lang) {
     await blocked.setViewportSize({ width: WIN_W, height: BODY_H });
     await blocked.goto('https://www.reddit.com/r/all/');
     await waitFor(blocked, '#week', '89');
-    // the quote is picked at random: pin one, so every language shows the same
+    // The quote is picked at random: pin one, so every language shows the same. The page sizes its
+    // pills around its words (blocked.js layout(), run on resize), so lay it out again: in this
+    // short window a long first quote would otherwise leave small pills under a short one.
     await blocked.evaluate(() => {
       document.getElementById('message').textContent = self.FFCore.quote(1);
+      window.dispatchEvent(new Event('resize'));
     });
     await settle(blocked);
     shots.block = await blocked.screenshot();
