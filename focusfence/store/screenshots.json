@@ -1,195 +1,60 @@
 {
-  "_comment": "Single source for the Chrome Web Store screenshot captions (en, fr, es, de). Used by scripts/screenshots.mjs; documented in store/screenshots.md.",
+  "_comment": "Captions of the five Chrome Web Store screenshots (en, fr, es, de), in upload order. Used by scripts/store-assets.mjs (npm run store:assets); listed in store/assets/README.md. Each headline is two-tone like the website's: `headline` bright, then `dim`. `pro` adds a PRO chip to the kicker. Edit the texts here, never in the images.",
   "shots": [
     {
-      "file": "store-1-block-page.png",
-      "raw": "block-page.png",
+      "file": "1-block-page.png",
+      "scene": "block",
+      "pro": false,
       "text": {
-        "en": {
-          "kicker": "Block page",
-          "headline": "Distractions hit a calm wall",
-          "sub": "Blocked sites show a gentle reminder and today's count, not an error."
-        },
-        "fr": {
-          "kicker": "Page de blocage",
-          "headline": "Les distractions butent sur un mur apaisant",
-          "sub": "Les sites bloqués affichent un rappel bienveillant et le compte du jour, pas une erreur."
-        },
-        "es": {
-          "kicker": "Página de bloqueo",
-          "headline": "Las distracciones chocan con un muro tranquilo",
-          "sub": "Las webs bloqueadas muestran un recordatorio amable y el recuento de hoy, no un error."
-        },
-        "de": {
-          "kicker": "Sperrseite",
-          "headline": "Ablenkungen prallen an einer ruhigen Wand ab",
-          "sub": "Gesperrte Seiten zeigen eine freundliche Erinnerung und den heutigen Zähler – keinen Fehler."
-        }
+        "en": { "kicker": "Focus app for Chrome", "headline": "Fence off", "dim": "distracting websites.", "sub": "Sites on your list open this calm page instead. Free for as many websites as you like." },
+        "fr": { "kicker": "Appli de concentration pour Chrome", "headline": "Clôturez", "dim": "les sites qui vous distraient.", "sub": "Les sites de votre liste ouvrent cette page apaisante à la place. Gratuit pour autant de sites que vous voulez." },
+        "es": { "kicker": "App de concentración para Chrome", "headline": "Ponle una valla a", "dim": "las distracciones.", "sub": "Las webs de tu lista abren esta página tranquila en su lugar. Gratis para todas las webs que quieras." },
+        "de": { "kicker": "Fokus-App für Chrome", "headline": "Ablenkende Websites", "dim": "bleiben draußen.", "sub": "Websites auf deiner Liste zeigen stattdessen diese ruhige Seite. Kostenlos für beliebig viele Websites." }
       }
     },
     {
-      "file": "store-2-popup.png",
-      "raw": "popup.png",
+      "file": "2-popup.png",
+      "scene": "popup",
+      "pro": false,
       "text": {
-        "en": {
-          "kicker": "One click",
-          "headline": "Fence off the endless feeds.",
-          "sub": "Block distracting sites in one click, or just the worst part, like YouTube Shorts."
-        },
-        "fr": {
-          "kicker": "En un clic",
-          "headline": "Bloquez les fils sans fin.",
-          "sub": "Bloquez les sites qui vous distraient en un clic, ou seulement le pire, comme YouTube Shorts."
-        },
-        "es": {
-          "kicker": "Con un clic",
-          "headline": "Corta los feeds infinitos.",
-          "sub": "Bloquea las webs que te distraen con un clic, o solo lo peor, como YouTube Shorts."
-        },
-        "de": {
-          "kicker": "Ein Klick",
-          "headline": "Schluss mit endlosen Feeds.",
-          "sub": "Blockiere ablenkende Seiten mit einem Klick – oder nur das Schlimmste, wie YouTube Shorts."
-        }
+        "en": { "kicker": "One click", "headline": "Block the site", "dim": "you're on.", "sub": "Open FocusFence on any site and press Block site. Its subdomains are blocked too." },
+        "fr": { "kicker": "En un clic", "headline": "Bloquez le site", "dim": "où vous êtes.", "sub": "Ouvrez FocusFence sur un site et cliquez sur Bloquer le site. Ses sous-domaines sont bloqués aussi." },
+        "es": { "kicker": "Con un clic", "headline": "Bloquea la web", "dim": "en la que estás.", "sub": "Abre FocusFence en una web y pulsa Bloquear web. Sus subdominios también se bloquean." },
+        "de": { "kicker": "Ein Klick", "headline": "Blockiere die Seite,", "dim": "auf der du bist.", "sub": "Öffne FocusFence auf einer Website und klicke auf Seite blockieren. Ihre Subdomains werden mitblockiert." }
       }
     },
     {
-      "file": "store-3-options-blocklist.png",
-      "raw": "options.png",
+      "file": "3-focus-session.png",
+      "scene": "focus",
+      "pro": true,
       "text": {
-        "en": {
-          "kicker": "Blocklist",
-          "headline": "Block whole sites, or just the worst part",
-          "sub": "Subdomains included. Pro blocks paths like youtube.com/shorts, or any keyword."
-        },
-        "fr": {
-          "kicker": "Liste de blocage",
-          "headline": "Bloquez un site entier, ou juste le pire",
-          "sub": "Sous-domaines compris. Pro bloque des chemins comme youtube.com/shorts, ou un mot-clé."
-        },
-        "es": {
-          "kicker": "Lista de bloqueo",
-          "headline": "Bloquea webs enteras, o solo lo peor",
-          "sub": "Subdominios incluidos. Pro bloquea rutas como youtube.com/shorts o una palabra clave."
-        },
-        "de": {
-          "kicker": "Sperrliste",
-          "headline": "Ganze Seiten sperren – oder nur das Schlimmste",
-          "sub": "Subdomains inklusive. Pro sperrt Pfade wie youtube.com/shorts oder Stichwörter."
-        }
+        "en": { "kicker": "Focus sessions", "headline": "Work in Pomodoro rounds.", "dim": "Your list stays blocked.", "sub": "25 minutes of focus and a 5-minute break, four times by default. The minutes left show on the toolbar icon." },
+        "fr": { "kicker": "Sessions de concentration", "headline": "Travaillez par cycles.", "dim": "Votre liste reste bloquée.", "sub": "25 minutes de concentration et 5 minutes de pause, quatre fois par défaut. Les minutes restantes s’affichent sur l’icône." },
+        "es": { "kicker": "Sesiones de concentración", "headline": "Trabaja por rondas.", "dim": "Tu lista sigue bloqueada.", "sub": "25 minutos de concentración y 5 de descanso, cuatro veces por defecto. Los minutos que quedan aparecen en el icono." },
+        "de": { "kicker": "Fokus-Sitzungen", "headline": "Arbeite in Runden.", "dim": "Deine Liste bleibt blockiert.", "sub": "25 Minuten Fokus und 5 Minuten Pause, standardmäßig viermal. Die restlichen Minuten stehen auf dem Symbol." }
       }
     },
     {
-      "file": "store-4-schedule-focus-strict.png",
-      "raw": "options-schedule.png",
+      "file": "4-strict-mode.png",
+      "scene": "strict",
+      "pro": true,
       "text": {
-        "en": {
-          "kicker": "Schedules · Focus · Strict mode",
-          "headline": "Focus on your schedule",
-          "sub": "Block during work hours, run Pomodoro sessions, lock it in with strict mode."
-        },
-        "fr": {
-          "kicker": "Horaires · Concentration · Mode strict",
-          "headline": "Concentrez-vous selon vos horaires",
-          "sub": "Bloquez pendant le travail, lancez des sessions Pomodoro, verrouillez avec le mode strict."
-        },
-        "es": {
-          "kicker": "Horarios · Concentración · Modo estricto",
-          "headline": "Concéntrate según tu horario",
-          "sub": "Bloquea en horas de trabajo, haz sesiones Pomodoro y blíndalo con el modo estricto."
-        },
-        "de": {
-          "kicker": "Zeitpläne · Fokus · Strikter Modus",
-          "headline": "Fokus nach deinem Zeitplan",
-          "sub": "Sperre während der Arbeit, starte Pomodoro-Sitzungen, sichere alles mit dem strikten Modus."
-        }
+        "en": { "kicker": "Strict mode", "headline": "Lock it in", "dim": "before a deadline.", "sub": "While it's on, blocking can't be switched off. Ending early takes a 10-minute wait, then eight retyped words." },
+        "fr": { "kicker": "Mode strict", "headline": "Verrouillez tout", "dim": "avant une échéance.", "sub": "Tant qu’il est actif, impossible de couper le blocage. En sortir plus tôt demande 10 minutes d’attente, puis huit mots à recopier." },
+        "es": { "kicker": "Modo estricto", "headline": "Ciérralo con llave", "dim": "antes de una entrega.", "sub": "Mientras está activo, no se puede quitar el bloqueo. Salir antes exige 10 minutos de espera y volver a escribir ocho palabras." },
+        "de": { "kicker": "Strikter Modus", "headline": "Schließ dich ein,", "dim": "bevor die Deadline kommt.", "sub": "Solange er läuft, lässt sich das Blockieren nicht abschalten. Früher aufhören kostet 10 Minuten Wartezeit und acht abgetippte Wörter." }
       }
     },
     {
-      "file": "store-5-stats.png",
-      "raw": "options-stats.png",
+      "file": "5-blocklist.png",
+      "scene": "blocklist",
+      "pro": false,
       "text": {
-        "en": {
-          "kicker": "Private stats",
-          "headline": "See what you skipped",
-          "sub": "Blocked attempts per site and per day, counted on your device only."
-        },
-        "fr": {
-          "kicker": "Statistiques privées",
-          "headline": "Voyez ce que vous avez évité",
-          "sub": "Tentatives bloquées par site et par jour, comptées uniquement sur votre appareil."
-        },
-        "es": {
-          "kicker": "Estadísticas privadas",
-          "headline": "Mira lo que has evitado",
-          "sub": "Intentos bloqueados por web y por día, contados solo en tu dispositivo."
-        },
-        "de": {
-          "kicker": "Private Statistik",
-          "headline": "Sieh, was du ausgelassen hast",
-          "sub": "Blockierte Versuche pro Seite und Tag, nur auf deinem Gerät gezählt."
-        }
+        "en": { "kicker": "Blocklist", "headline": "Block a whole website.", "dim": "Or just the bad part.", "sub": "Subdomains are included for free. With Pro, block a path such as youtube.com/shorts, or any keyword." },
+        "fr": { "kicker": "Liste de blocage", "headline": "Bloquez tout le site.", "dim": "Ou juste la mauvaise partie.", "sub": "Sous-domaines compris, gratuitement. Avec Pro, bloquez un chemin comme youtube.com/shorts, ou un mot-clé." },
+        "es": { "kicker": "Lista de bloqueo", "headline": "Bloquea la web entera.", "dim": "O solo la parte mala.", "sub": "Subdominios incluidos, gratis. Con Pro, bloquea una ruta como youtube.com/shorts o una palabra clave." },
+        "de": { "kicker": "Sperrliste", "headline": "Ganze Website sperren.", "dim": "Oder nur den schlechten Teil.", "sub": "Subdomains sind kostenlos dabei. Mit Pro blockierst du einen Pfad wie youtube.com/shorts oder ein Stichwort." }
       }
     }
-  ],
-  "popupFrame": {
-    "en": {
-      "pre": "Fence off the ",
-      "em": "endless feeds.",
-      "bullets": [
-        "Unlimited sites, subdomains included",
-        "Pomodoro focus sessions & schedules",
-        "Strict mode when willpower runs out",
-        "100% private — nothing leaves your device"
-      ]
-    },
-    "fr": {
-      "pre": "Bloquez les ",
-      "em": "fils sans fin.",
-      "bullets": [
-        "Sites illimités, sous-domaines compris",
-        "Sessions Pomodoro et horaires",
-        "Mode strict quand la volonté flanche",
-        "100 % privé : rien ne quitte votre appareil"
-      ]
-    },
-    "es": {
-      "pre": "Corta los ",
-      "em": "feeds infinitos.",
-      "bullets": [
-        "Webs ilimitadas, subdominios incluidos",
-        "Sesiones Pomodoro y horarios",
-        "Modo estricto cuando falla la voluntad",
-        "100 % privado: nada sale de tu dispositivo"
-      ]
-    },
-    "de": {
-      "pre": "Schluss mit ",
-      "em": "endlosen Feeds.",
-      "bullets": [
-        "Unbegrenzt viele Seiten inkl. Subdomains",
-        "Pomodoro-Sitzungen & Zeitpläne",
-        "Strikter Modus, wenn die Willenskraft fehlt",
-        "100 % privat – nichts verlässt dein Gerät"
-      ]
-    }
-  },
-  "promo": {
-    "en": {
-      "headline": "Fence off distractions. Get your focus back.",
-      "sub": "Block sites, schedule focus, stay in strict mode."
-    },
-    "fr": {
-      "headline": "Bloquez les distractions. Retrouvez votre concentration.",
-      "sub": "Bloquez des sites, planifiez, passez en mode strict."
-    },
-    "es": {
-      "headline": "Bloquea distracciones. Recupera la concentración.",
-      "sub": "Bloquea webs, planifica tu foco, usa el modo estricto."
-    },
-    "de": {
-      "headline": "Ablenkungen aussperren. Fokus zurückholen.",
-      "sub": "Seiten sperren, Fokus planen, strikter Modus."
-    }
-  }
+  ]
 }
