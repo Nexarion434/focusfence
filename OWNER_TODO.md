@@ -96,7 +96,6 @@ Follow **`focusfence/store/SUBMISSION.md`** screen by screen. It has every value
 `tests/store.spec.mjs` keeps the guide in sync with the manifest, the listings, the privacy policy and the images.
 
 - [ ] Merge the release PR (`release/cws-v1`) first: it updates the privacy policy that the data-usage answers rely on.
-- [ ] Settle the ExtensionPay privacy link (§11) before the review.
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
 - [ ] `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.1.zip`.
@@ -128,6 +127,6 @@ All drafts are in `marketing/`. Each needs your own account on the platform and 
 - [ ] **Google Search Console:** add `focusfence.dev` as a *domain* property (a TXT record at Hostinger), then submit `https://focusfence.dev/sitemap.xml`. Search Console is the only first-party source for impressions, queries and indexing.
 - [ ] **Bing Webmaster Tools:** import the site from Search Console (one click once GSC is verified). Bing's index also powers Copilot answers.
 - [ ] **Legal notice:** France requires *mentions légales* on a commercial site, and Germany an *Impressum*. Both need your legal name and address, so they were not written for you.
-- [ ] **ExtensionPay privacy link:** `https://extensionpay.com/privacy`, cited in the privacy policy, still returns HTTP 500 (re-checked 2026-11-14 for the release, with `/privacy-policy`, `/terms` and `/legal`). ExtensionPay has no privacy page, only a privacy paragraph in its home-page FAQ. Options in `focusfence/store/SUBMISSION.md` §0; settle it before the store review.
+- [x] **ExtensionPay privacy link:** `https://extensionpay.com/privacy` returns HTTP 500 (so do `/privacy-policy`, `/terms` and `/legal`; checked 2026-11-14) and ExtensionPay has no privacy page. The privacy policy now links https://extensionpay.com/ and quotes the privacy answer of its FAQ (release PR #6). If ExtensionPay publishes a privacy page later, link it in `focusfence/store/privacy-policy*.md`.
 - [x] **Store name and summary vs. the site:** renamed in 1.0.1 to "FocusFence – Focus App & Website Blocker" (fr "Appli de concentration & bloqueur de sites", es "App de concentración y bloqueador de páginas web", de "Fokus-App & Website-Blocker"), and the summaries now lead with focus (release PR `release/cws-v1`).
 - [ ] **Links to the site:** set the GitHub repository's *Website* field to https://focusfence.dev, and use the store listing's website field. Launch posts (Product Hunt, Reddit, AlternativeTo as an alternative to BlockSite or StayFocusd) bring the first links and brand mentions.

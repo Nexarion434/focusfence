@@ -57,7 +57,7 @@ Severity follows the skill's scale: Critical blocks indexing, High hurts ranking
 | T9 | Pages are static HTML with all content and meta in the initial response | Pass | Nothing depends on JavaScript for indexing |
 | T10 | No HSTS, CSP, X-Frame-Options, Referrer-Policy or COOP headers; 10-minute cache on every file; gzip without Brotli | Info (security and speed, not ranking) | GitHub Pages can't set headers. A free proxy such as Cloudflare in front of Pages would add them, plus Brotli and long caching for `/assets/` |
 | T11 | Blog index and three articles are `noindex` and out of the sitemap | By design | They are unpublished drafts (`draft: true`). They enter the sitemap automatically when published |
-| T12 | `https://extensionpay.com/privacy`, linked from the privacy policy, returns HTTP 500 (every variant tried, browser user agent too) | Medium (trust) | **Owner action**: a legal text, so it wasn't changed. See OWNER_TODO.md §11 |
+| T12 | `https://extensionpay.com/privacy`, linked from the privacy policy, returns HTTP 500 (every variant tried, browser user agent too) | Medium (trust) | **Fixed** (release PR #6, approved by the owner): the policy now links https://extensionpay.com/ and quotes the privacy answer of its FAQ, the only privacy statement ExtensionPay publishes |
 
 ### On-page
 

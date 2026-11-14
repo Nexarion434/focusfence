@@ -144,6 +144,34 @@ test('data disclosures: the four ticked categories match the guide and are state
   }
 });
 
+test('ExtensionPay: the policy quotes its FAQ word for word, and nothing users see links the dead /privacy page', () => {
+  // https://extensionpay.com/privacy answers HTTP 500 (2026-11-14); the FAQ on the home page is
+  // ExtensionPay's only privacy statement ("What about user privacy?").
+  const FAQ =
+    "Users are anonymous until they pay and we don't store any credit card information on our servers — Stripe takes care of that. " +
+    'We run Google Analytics only on the extensionpay.com site, not in extensions themselves. ' +
+    "The only other identifying information we store is a user's email. We never sell or otherwise give away any data.";
+  expect(read('store/privacy-policy.md')).toContain('"What about user privacy?" in the FAQ on its home page, <https://extensionpay.com/>: "' + FAQ + '"');
+  for (const lang of ['fr', 'es', 'de']) {
+    const md = read(`store/privacy-policy.${lang}.md`);
+    expect(md, lang).toContain('What about user privacy?');
+    expect(md, lang).toContain('<https://extensionpay.com/>');
+  }
+  const REPO = path.resolve(ROOT, '..');
+  const files = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (/\.(html|md|js|json|txt)$/.test(e.name)) files.push(p);
+    }
+  };
+  for (const d of ['focusfence/src', 'focusfence/store', 'docs']) walk(path.join(REPO, d));
+  const userFacing = files.filter((f) => !f.endsWith('SUBMISSION.md')); // the guide explains why the link was replaced
+  const hits = userFacing.filter((f) => fs.readFileSync(f, 'utf8').includes('extensionpay.com/privacy')).map((f) => path.relative(REPO, f));
+  expect(hits).toEqual([]);
+});
+
 test('store images: 5 screenshots per language, promo tile, marquee and icon, at the exact sizes, documented', () => {
   const { shots } = JSON.parse(read('store/screenshots.json'));
   const readme = read('store/assets/README.md');

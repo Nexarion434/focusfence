@@ -38,7 +38,9 @@ Payments are handled by [ExtensionPay](https://extensionpay.com), a payment serv
 2. You enter your payment details and email **directly on ExtensionPay/Stripe pages**. FocusFence never sees or stores your card details.
 3. Afterwards, the extension periodically (at browser start-up, about every 12 hours, and when you open Settings) sends that identifier to ExtensionPay to check whether your subscription is active. No browsing data, blocklist or stats are ever sent.
 
-In `chrome.storage.sync`, the ExtensionPay library stores the identifier, the install date and the record ExtensionPay returns for that identifier: your subscription status and plan and, once you have paid, the payment date and the email address you paid with. If you have Chrome Sync turned on, Chrome syncs this data to your Google account so your purchase follows you to your other computers. ExtensionPay's own privacy policy applies to the data you give them: <https://extensionpay.com/privacy>.
+In `chrome.storage.sync`, the ExtensionPay library stores the identifier, the install date and the record ExtensionPay returns for that identifier: your subscription status and plan and, once you have paid, the payment date and the email address you paid with. If you have Chrome Sync turned on, Chrome syncs this data to your Google account so your purchase follows you to your other computers.
+
+For the data you give ExtensionPay, its privacy statement is the answer to "What about user privacy?" in the FAQ on its home page, <https://extensionpay.com/>: "Users are anonymous until they pay and we don't store any credit card information on our servers — Stripe takes care of that. We run Google Analytics only on the extensionpay.com site, not in extensions themselves. The only other identifying information we store is a user's email. We never sell or otherwise give away any data."
 
 ## Permissions and why they are needed
 
