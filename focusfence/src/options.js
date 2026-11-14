@@ -162,7 +162,28 @@
     renderStats();
     renderPlan();
     renderIncognito();
+    fitTopbar(); // the switch's label and the plan chip change with the state
   }
+
+  /* The top bar fits itself to the language. Translations differ in length (at full size, French
+     and Spanish need more than 1,200 px for all five tabs), so rather than breakpoints per language,
+     the bar sheds its extras one at a time until every tab fits: the tab icons, the plan chip, some
+     padding, the PRO tags, the switch's label, the wordmark (CSS: .topbar.fit-*). At 760 px and
+     below, the tabs get a row of their own and scroll. */
+  const TOPBAR_FIT = ['fit-icons', 'fit-chip', 'fit-tight', 'fit-tags', 'fit-label', 'fit-logo'];
+  const topbar = document.querySelector('.topbar');
+  const ownRow = window.matchMedia('(max-width: 760px)');
+  function fitTopbar() {
+    const tabs = $('nav');
+    topbar.classList.remove(...TOPBAR_FIT);
+    if (ownRow.matches) return;
+    for (const step of TOPBAR_FIT) {
+      if (tabs.scrollWidth <= tabs.clientWidth) return;
+      topbar.classList.add(step);
+    }
+  }
+  new ResizeObserver(() => fitTopbar()).observe(topbar);
+  document.fonts.ready.then(() => fitTopbar());
 
   function renderMaster() {
     const s = state;
@@ -739,6 +760,7 @@
   document.querySelectorAll('[data-plan]').forEach((b) =>
     b.addEventListener('click', () => act(() => send('openPayment', { plan: b.dataset.plan })))
   );
+  $('manage-sub').addEventListener('click', () => act(() => send('manageSubscription')));
   $('restore-link').addEventListener('click', (e) => {
     e.preventDefault();
     act(() => send('openLogin'));

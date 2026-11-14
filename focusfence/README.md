@@ -65,6 +65,7 @@ PRICES: {                // must match the ExtensionPay plans (amounts + nicknam
 
 - `DEV: true` → "Simulate Pro" switch in Settings → Plan; **no** ExtensionPay network calls.
 - `DEV: false` → real `extpay.getUser()` / `openPaymentPage()`; `extpay.onPaid` unlocks Pro immediately.
+- Pro users manage or cancel their subscription from Settings › Plan › **Manage subscription**: `extpay.openPaymentPage()` with no plan, which ExtensionPay shows a paying user as its subscription page (Stripe's billing portal: card, cancellation). Free users see the plans and "Restore purchase" instead.
 
 ## Develop
 
@@ -77,7 +78,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 117 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 124 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 
@@ -118,6 +119,7 @@ The UI, manifest name/description and store listings are available in **English 
 - Single source: `scripts/i18n/strings.mjs` (one table, four languages side by side).
 - `npm run i18n` writes `src/_locales/*/messages.json`; `npm run i18n:check` validates it (also part of `npm test`).
 - Pages use `data-i18n`, `data-i18n-rich` and `data-i18n-attr`. JS uses `FFI18N.t()` and `plural()`. Weekdays, dates, times and prices come from `Intl`.
+- Settings' top bar fits itself to the language: `fitTopbar()` in `options.js` sheds the tab icons, the plan chip, some padding, the PRO tags, the switch's label and the wordmark, in that order, until all five tabs fit (`tests/topbar.spec.mjs`, 761–1280 px).
 - To add a language: add a column to every row in `strings.mjs`, add the code to `LANGS`, run `npm run i18n`, add a `store/listing/<lang>.md` and its captions in `store/screenshots.json`, then run `npm run store:assets`.
 
 ## Onboarding

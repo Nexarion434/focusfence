@@ -117,6 +117,30 @@ body.is-pro #side-plan-btn {
   color: var(--muted);
   white-space: nowrap;
 }
+/* The bar fits itself to the language: translations differ in length (at full size, French and
+   Spanish need more than 1,200 px for all five tabs). fitTopbar() in options.js sheds these extras in
+   order until every tab fits, and gives them back when there is room again. */
+.topbar.fit-icons .tabs a .icon {
+  display: none;
+}
+.topbar.fit-chip .plan-chip {
+  display: none;
+}
+.topbar.fit-tight .bar-in {
+  gap: 16px;
+}
+.topbar.fit-tight .tabs a {
+  padding: 0 8px;
+}
+.topbar.fit-tags .tabs .pro-tag {
+  display: none;
+}
+.topbar.fit-label .master-label {
+  display: none;
+}
+.topbar.fit-logo .logo > span {
+  display: none;
+}
 @media (prefers-color-scheme: dark) {
   .tabs a[aria-current='page'] {
     background: var(--surface-2);
@@ -1078,6 +1102,26 @@ body.is-pro .plan-fence .pill.lit {
 .current-plan strong {
   font-weight: 600;
   color: var(--ink-2);
+}
+/* Pro: the subscription (card, cancellation) is managed on ExtensionPay's billing page.
+   Free sees the plans instead, and the restore link for a purchase made elsewhere. */
+.manage {
+  display: none;
+}
+body.is-pro .manage {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 460px;
+  margin: 4px auto 0;
+  text-align: center;
+}
+#manage-note {
+  color: var(--muted);
+  text-wrap: balance;
+}
+body.is-pro #restore-link {
+  display: none;
 }
 .plans {
   display: grid;
