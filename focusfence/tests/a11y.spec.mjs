@@ -38,6 +38,9 @@ async function seedPro(api) {
 
 for (const scheme of ['light', 'dark']) {
   test(`axe: popup, options and block page have no WCAG A/AA violations (${scheme})`, async ({ api, ext }) => {
+    // 14 audits, each after the page's animations settle: 53-56 s on a busy machine, against the
+    // 60 s default timeout, so it timed out under load.
+    test.slow();
     const problems = [];
     const open = async (url, viewport) => {
       const p = await ext.context.newPage();

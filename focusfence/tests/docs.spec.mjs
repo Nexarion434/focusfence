@@ -450,7 +450,17 @@ test('theme: follows the system, the header toggle switches light / dark / syste
   const env = { ...process.env };
   if (process.env.FF_CHROME_LIBS) env.LD_LIBRARY_PATH = process.env.FF_CHROME_LIBS;
   const browser = await chromium.launch({ env });
-  const url = 'file://' + path.join(DOCS, 'index.html');
+  // A real origin, as on focusfence.dev. Chrome sometimes gives two loads of the same file:// page
+  // different localStorage, so the stored choice looked lost after a reload (round 4).
+  const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.webp': 'image/webp', '.png': 'image/png', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
+  const server = http.createServer((req, res) => {
+    let p = path.join(DOCS, decodeURIComponent(new URL(req.url, 'http://x').pathname));
+    if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
+    if (!p.startsWith(DOCS) || !fs.existsSync(p)) return res.writeHead(404).end();
+    res.writeHead(200, { 'content-type': types[path.extname(p)] || 'application/octet-stream' }).end(fs.readFileSync(p));
+  });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const url = `http://127.0.0.1:${server.address().port}/`;
   const state = (page) =>
     page.evaluate(() => {
       const d = document.documentElement;
@@ -477,12 +487,12 @@ test('theme: follows the system, the header toggle switches light / dark / syste
       expect(st, colorScheme).toMatchObject({ pref: 'system', theme: null, bg, dark: colorScheme === 'dark', light: colorScheme === 'light' });
       await ctx.close();
     }
-    // 2. a stored choice wins over the system, from the first paint
+    // 2. a stored choice wins over the system, from the first paint (seeded once, before the first load)
     const ctx = await browser.newContext({ colorScheme: 'dark' });
     await ctx.addInitScript(() => {
-      if (!sessionStorage.getItem('seeded')) {
+      if (!localStorage.getItem('ff-test-seeded')) {
         localStorage.setItem('ff-theme', 'light');
-        sessionStorage.setItem('seeded', '1');
+        localStorage.setItem('ff-test-seeded', '1');
       }
     });
     const page = await ctx.newPage();
@@ -492,9 +502,6 @@ test('theme: follows the system, the header toggle switches light / dark / syste
     // 3. the toggle: dark, then back to system (the switch waits for the new theme's images, then cross-fades)
     await page.click('.theme label[data-v="dark"]');
     await expect.poll(() => state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK, dark: true, light: false, stored: 'dark', meta: ['#08090a', '#08090a'] });
-    // Chrome commits localStorage to the browser process asynchronously: on a busy machine, a reload
-    // fired at once could still read the old value (seen once in round 4). Let the write settle.
-    await page.waitForTimeout(200);
     await page.reload();
     expect(await state(page)).toMatchObject({ pref: 'dark', theme: 'dark', bg: DARK });
     await page.click('.theme label[data-v="system"]');
@@ -513,6 +520,7 @@ test('theme: follows the system, the header toggle switches light / dark / syste
     await ctx2.close();
   } finally {
     await browser.close();
+    server.close();
   }
 });
 
