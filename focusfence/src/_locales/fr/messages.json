@@ -863,6 +863,12 @@
   "restore": {
     "message": "Déjà payé ? Restaurer l’achat"
   },
+  "manageSubscription": {
+    "message": "Gérer l’abonnement"
+  },
+  "manageSubscriptionText": {
+    "message": "Ouvre la page de facturation d’ExtensionPay (Stripe), où vous pouvez changer de carte ou résilier."
+  },
   "aboutFree": {
     "message": "FocusFence est un logiciel libre."
   },

@@ -65,6 +65,7 @@ PRICES: {                // must match the ExtensionPay plans (amounts + nicknam
 
 - `DEV: true` → "Simulate Pro" switch in Settings → Plan; **no** ExtensionPay network calls.
 - `DEV: false` → real `extpay.getUser()` / `openPaymentPage()`; `extpay.onPaid` unlocks Pro immediately.
+- Pro users manage or cancel their subscription from Settings › Plan › **Manage subscription**: `extpay.openPaymentPage()` with no plan, which ExtensionPay shows a paying user as its subscription page (Stripe's billing portal: card, cancellation). Free users see the plans and "Restore purchase" instead.
 
 ## Develop
 

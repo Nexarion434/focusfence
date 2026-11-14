@@ -863,6 +863,12 @@
   "restore": {
     "message": "Already paid? Restore purchase"
   },
+  "manageSubscription": {
+    "message": "Manage subscription"
+  },
+  "manageSubscriptionText": {
+    "message": "Opens ExtensionPay's billing page (Stripe), where you can change your card or cancel."
+  },
   "aboutFree": {
     "message": "FocusFence is free software."
   },

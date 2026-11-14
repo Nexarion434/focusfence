@@ -414,6 +414,14 @@ export const S = {
   licenseNoteDate: { en: "Couldn't reach ExtensionPay to verify your plan (offline?). Using the last known status from $1.", fr: 'Impossible de joindre ExtensionPay pour vérifier votre abonnement (hors ligne ?). Statut du $1 utilisé.', es: 'No se pudo conectar con ExtensionPay para verificar tu plan (¿sin conexión?). Se usa el estado del $1.', de: 'ExtensionPay war zur Prüfung deines Tarifs nicht erreichbar (offline?). Es gilt der Status vom $1.' },
   paymentsFoot: { en: 'Payments are handled securely by ExtensionPay (Stripe).', fr: 'Les paiements sont gérés de façon sécurisée par ExtensionPay (Stripe).', es: 'Los pagos los gestiona de forma segura ExtensionPay (Stripe).', de: 'Zahlungen werden sicher über ExtensionPay (Stripe) abgewickelt.' },
   restore: { en: 'Already paid? Restore purchase', fr: 'Déjà payé ? Restaurer l’achat', es: '¿Ya has pagado? Restaurar compra', de: 'Schon bezahlt? Kauf wiederherstellen' },
+  // Pro: ExtensionPay's payment page shows a paying user the Stripe billing page (card, cancellation)
+  manageSubscription: { en: 'Manage subscription', fr: 'Gérer l’abonnement', es: 'Gestionar suscripción', de: 'Abo verwalten' },
+  manageSubscriptionText: {
+    en: "Opens ExtensionPay's billing page (Stripe), where you can change your card or cancel.",
+    fr: 'Ouvre la page de facturation d’ExtensionPay (Stripe), où vous pouvez changer de carte ou résilier.',
+    es: 'Abre la página de facturación de ExtensionPay (Stripe), donde puedes cambiar de tarjeta o cancelar.',
+    de: 'Öffnet die Abrechnungsseite von ExtensionPay (Stripe), auf der du deine Karte ändern oder kündigen kannst.',
+  },
   aboutFree: { en: 'FocusFence is free software.', fr: 'FocusFence est un logiciel libre.', es: 'FocusFence es software libre.', de: 'FocusFence ist freie Software.' },
   aboutLicense: { en: 'License: GNU AGPL v3 or later', fr: 'Licence : GNU AGPL v3 ou ultérieure', es: 'Licencia: GNU AGPL v3 o posterior', de: 'Lizenz: GNU AGPL v3 oder später' },
   aboutSource: { en: 'Source code', fr: 'Code source', es: 'Código fuente', de: 'Quellcode' },

@@ -685,6 +685,18 @@ const handlers = {
     return {};
   },
 
+  // Pro: for a user who has paid, ExtensionPay's payment page (no plan) is the subscription page,
+  // Stripe's billing portal, where the card can be changed and the subscription cancelled.
+  async manageSubscription() {
+    if (CONFIG.DEV) throw new FFError('DEV_ONLY', M('errDevPayments'));
+    try {
+      await extpay.openPaymentPage();
+    } catch (e) {
+      throw paymentError(e);
+    }
+    return {};
+  },
+
   async openLogin() {
     if (CONFIG.DEV) throw new FFError('DEV_ONLY', M('errDevPayments'));
     try {

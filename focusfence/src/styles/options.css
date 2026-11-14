@@ -1079,6 +1079,26 @@ body.is-pro .plan-fence .pill.lit {
   font-weight: 600;
   color: var(--ink-2);
 }
+/* Pro: the subscription (card, cancellation) is managed on ExtensionPay's billing page.
+   Free sees the plans instead, and the restore link for a purchase made elsewhere. */
+.manage {
+  display: none;
+}
+body.is-pro .manage {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 460px;
+  margin: 4px auto 0;
+  text-align: center;
+}
+#manage-note {
+  color: var(--muted);
+  text-wrap: balance;
+}
+body.is-pro #restore-link {
+  display: none;
+}
 .plans {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

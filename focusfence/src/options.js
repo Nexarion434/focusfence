@@ -739,6 +739,7 @@
   document.querySelectorAll('[data-plan]').forEach((b) =>
     b.addEventListener('click', () => act(() => send('openPayment', { plan: b.dataset.plan })))
   );
+  $('manage-sub').addEventListener('click', () => act(() => send('manageSubscription')));
   $('restore-link').addEventListener('click', (e) => {
     e.preventDefault();
     act(() => send('openLogin'));
