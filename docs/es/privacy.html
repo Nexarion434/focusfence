@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Política de privacidad — FocusFence</title>
-<meta name="description" content="Política de privacidad de FocusFence: sin cuenta, sin analíticas, sin rastreo. Tu lista y tus estadísticas se quedan en tu dispositivo.">
+<title>Política de privacidad | FocusFence</title>
+<meta name="description" content="Qué guarda FocusFence en tu ordenador y por qué pide cada permiso a Chrome. Si compras Pro, ExtensionPay comprueba tu licencia.">
 <link rel="canonical" href="https://focusfence.dev/es/privacy.html">
 <link rel="alternate" hreflang="en" href="https://focusfence.dev/privacy.html">
 <link rel="alternate" hreflang="fr" href="https://focusfence.dev/fr/privacy.html">
@@ -22,17 +22,22 @@
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:locale:alternate" content="de_DE">
-<meta property="og:title" content="Política de privacidad — FocusFence">
-<meta property="og:description" content="Política de privacidad de FocusFence: sin cuenta, sin analíticas, sin rastreo. Tu lista y tus estadísticas se quedan en tu dispositivo.">
-<meta property="og:image" content="https://focusfence.dev/assets/es/og.png">
+<meta property="og:title" content="Política de privacidad | FocusFence">
+<meta property="og:description" content="Qué guarda FocusFence en tu ordenador y por qué pide cada permiso a Chrome. Si compras Pro, ExtensionPay comprueba tu licencia.">
+<meta property="og:image" content="https://focusfence.dev/assets/es/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="FocusFence, el bloqueador de webs para Chrome: ponle una valla a los feeds infinitos.">
+<meta property="og:image:alt" content="FocusFence, app de concentración para Chrome: «Ponle una valla a las distracciones.» sobre una fila de pilares de cristal">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://focusfence.dev/assets/es/og.png">
+<meta name="twitter:image" content="https://focusfence.dev/assets/es/og.jpg">
+<meta name="twitter:image:alt" content="FocusFence, app de concentración para Chrome: «Ponle una valla a las distracciones.» sobre una fila de pilares de cristal">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
 <link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://focusfence.dev/es/privacy.html#webpage","url":"https://focusfence.dev/es/privacy.html","name":"Política de privacidad | FocusFence","description":"Qué guarda FocusFence en tu ordenador y por qué pide cada permiso a Chrome. Si compras Pro, ExtensionPay comprueba tu licencia.","inLanguage":"es","isPartOf":{"@id":"https://focusfence.dev/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"FocusFence","item":"https://focusfence.dev/es/"},{"@type":"ListItem","position":2,"name":"Política de privacidad","item":"https://focusfence.dev/es/privacy.html"}]}]}</script>
 <style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
    Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
 @font-face {
@@ -693,6 +698,16 @@ code {
 .display em {
   font-style: normal;
   color: var(--dim);
+}
+/* The h1 holds the eyebrow ("Focus app for Chrome", what the page is about) and the headline.
+   The eyebrow keeps the line it had as a paragraph (16px text, line-height 1.6); the headline is a
+   block below it. */
+.hero-h {
+  font-size: 16px;
+  font-weight: 400;
+}
+.hero-h .display {
+  display: block;
 }
 .hero-row {
   display: grid;
@@ -2179,7 +2194,7 @@ th {
 <h2 id="en-resumen">En resumen</h2>
 <ul><li><strong>Sin cuenta, sin analíticas, sin rastreo, sin anuncios.</strong> No tenemos ningún servidor y nunca recibimos tus datos.</li><li><strong>Tu lista de bloqueo, tus ajustes y tus estadísticas se quedan en tu dispositivo</strong>, en el almacenamiento local de extensiones de Chrome.</li><li><strong>La extensión no lee el contenido de las páginas.</strong> El bloqueo lo hace el motor <code>declarativeNetRequest</code> integrado en Chrome, que compara las direcciones con tu lista sin exponer tu navegación a la extensión.</li><li><strong>La única comunicación de red es con ExtensionPay</strong>, y solo si decides pasarte a Pro (detalles más abajo).</li></ul>
 <h2 id="que-se-guarda-en-tu-dispositivo">Qué se guarda en tu dispositivo</h2>
-<div class="table"><table><thead><tr><th>Dato</th><th>Para qué</th><th>Dónde</th></tr></thead><tbody><tr><td>Tu lista de bloqueo (dominios, rutas, palabras clave)</td><td>Para bloquear esas webs</td><td><code>chrome.storage.local</code></td></tr><tr><td>Ajustes (encendido/apagado, horario, duración de las sesiones, mensaje de la página de bloqueo)</td><td>Para aplicar tus preferencias</td><td><code>chrome.storage.local</code></td></tr><tr><td>Temporizadores de las sesiones de concentración y del modo estricto</td><td>Para que las sesiones sigan tras reiniciar el navegador</td><td><code>chrome.storage.local</code></td></tr><tr><td>Número de intentos bloqueados por web bloqueada y por día (últimos 90 días)</td><td>Para mostrar tus estadísticas (intentos bloqueados hoy y esta semana)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Bloqueo con contraseña: un hash PBKDF2-SHA-256 con sal (nunca la contraseña)</td><td>Para proteger tus ajustes</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicador de «desbloqueado» durante 15 minutos tras introducir la contraseña</td><td>Comodidad</td><td><code>chrome.storage.session</code> (se borra al cerrar el navegador)</td></tr><tr><td>Número de contraseñas incorrectas (para frenar los intentos)</td><td>Seguridad</td><td><code>chrome.storage.session</code> (se borra al cerrar el navegador)</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th scope="col">Dato</th><th scope="col">Para qué</th><th scope="col">Dónde</th></tr></thead><tbody><tr><td>Tu lista de bloqueo (dominios, rutas, palabras clave)</td><td>Para bloquear esas webs</td><td><code>chrome.storage.local</code></td></tr><tr><td>Ajustes (encendido/apagado, horario, duración de las sesiones, mensaje de la página de bloqueo)</td><td>Para aplicar tus preferencias</td><td><code>chrome.storage.local</code></td></tr><tr><td>Temporizadores de las sesiones de concentración y del modo estricto</td><td>Para que las sesiones sigan tras reiniciar el navegador</td><td><code>chrome.storage.local</code></td></tr><tr><td>Número de intentos bloqueados por web bloqueada y por día (últimos 90 días)</td><td>Para mostrar tus estadísticas (intentos bloqueados hoy y esta semana)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Bloqueo con contraseña: un hash PBKDF2-SHA-256 con sal (nunca la contraseña)</td><td>Para proteger tus ajustes</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicador de «desbloqueado» durante 15 minutos tras introducir la contraseña</td><td>Comodidad</td><td><code>chrome.storage.session</code> (se borra al cerrar el navegador)</td></tr><tr><td>Número de contraseñas incorrectas (para frenar los intentos)</td><td>Seguridad</td><td><code>chrome.storage.session</code> (se borra al cerrar el navegador)</td></tr></tbody></table></div>
 <p>Las estadísticas solo registran las visitas <strong>bloqueadas</strong>, etiquetadas con la regla que coincide (por ejemplo <code>reddit.com</code>). FocusFence no guarda un historial de las webs que visitas.</p>
 <p>Puedes borrar las estadísticas cuando quieras (Ajustes → Estadísticas → Borrar estadísticas). Al desinstalar la extensión se eliminan todos los datos anteriores.</p>
 <h2 id="que-sale-de-tu-dispositivo">Qué sale de tu dispositivo</h2>
@@ -2201,7 +2216,7 @@ th {
 <p>Preguntas sobre privacidad: <strong><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></strong></p></div></main>
 <footer class="foot"><div class="wrap">
   <div class="foot-grid">
-    <div class="foot-brand"><a class="brand" href="../es/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>Un bloqueador de webs para Chrome, tranquilo y privado.</p></div>
+    <div class="foot-brand"><a class="brand" href="../es/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>Una app de concentración para Chrome, tranquila y privada, que bloquea las webs que te distraen.</p></div>
     <div class="foot-col"><p class="foot-h">Producto</p><ul><li><a href="../es/#features">Funciones</a></li><li><a href="../es/#pricing">Precios</a></li><li><a href="../es/#faq">Preguntas</a></li></ul></div>
     <div class="foot-col"><p class="foot-h">Recursos</p><ul><li><a href="../blog/" hreflang="en">Blog (en inglés)</a></li><li><a href="https://github.com/Nexarion434/focusfence">Código fuente</a></li><li><a href="../es/privacy.html">Política de privacidad</a></li></ul></div>
     <div class="foot-col"><p class="foot-h">Contacto</p><ul><li><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></li></ul></div>

@@ -1,5 +1,6 @@
 ---
 title: The Best Free Website Blocker for Chrome in 2026 (and How to Choose One)
+seo_title: Best Free Website Blocker for Chrome in 2026
 description: What actually matters in a free Chrome website blocker in 2026 — subdomains, partial blocking, schedules, strict mode and privacy — plus an honest look at the main options.
 slug: best-free-website-blocker-chrome-2026
 date: 2026-11-13

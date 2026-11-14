@@ -166,56 +166,15 @@ async function seed(send, page) {
 /* ------------------------------------------------------------------ website
  * --site: crisp 2x captures of the real UI for the website (docs/), in the dark and
  * light themes (the site follows the visitor's theme), encoded to WebP in the browser
- * (no image tooling needed), plus the localized 1200x630 Open Graph image.
- * Output: screenshots/site/<lang>/ (read by scripts/docs.mjs).
+ * (no image tooling needed). Output: screenshots/site/<lang>/ (read by scripts/docs.mjs).
+ * The Open Graph images are drawn from the site's own fence: scripts/site-art.mjs.
  */
-function ogHtml(T) {
-  return `<!doctype html><html><head><meta charset="utf-8">
-<style>
-  @font-face{font-family:'InterOG';src:url('fonts/inter-opsz.woff2') format('woff2');font-weight:100 900}
-  :root{color-scheme:dark}
-  *{box-sizing:border-box}
-  body{width:1200px;height:630px;margin:0;overflow:hidden;position:relative;background:#08090A;color:#F3F5F4;
-    font-family:InterOG,sans-serif;font-feature-settings:'cv11','ss01';-webkit-font-smoothing:antialiased}
-  .light{position:absolute;inset:0;background:
-    radial-gradient(560px 380px at 86% 62%, rgba(58,154,91,.26), transparent 70%),
-    radial-gradient(900px 500px at 70% -10%, rgba(58,154,91,.08), transparent 70%)}
-  .copy{position:absolute;left:72px;top:66px;width:470px} /* clear of the popup at 556px */
-  .brand{display:flex;align-items:center;gap:14px;font-weight:620;font-size:25px;letter-spacing:-.02em}
-  .brand svg{border-radius:10px}
-  .kicker{margin-top:64px;display:inline-flex;align-items:center;gap:10px;height:34px;padding:0 15px 0 13px;border-radius:999px;
-    font-size:16px;font-weight:500;color:#C9D0CC;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);background:rgba(255,255,255,.03)}
-  .kicker i{width:7px;height:7px;border-radius:50%;background:#3A9A5B;box-shadow:0 0 0 3px rgba(58,154,91,.22),0 0 12px 2px rgba(58,154,91,.6)}
-  h1{margin:22px 0 0;font-size:68px;line-height:1;letter-spacing:-.046em;font-weight:620;text-wrap:balance}
-  h1 em{font-style:normal;color:#8E9893}
-  .foot{position:absolute;left:72px;bottom:56px;display:grid;gap:10px;font-size:17px;color:#8E9893;letter-spacing:-.01em}
-  .foot span{display:flex;align-items:center;gap:9px}
-  .foot svg{width:17px;height:17px;fill:none;stroke:#6CC58A;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-  .win{position:absolute;left:652px;top:74px;width:504px;border-radius:16px;overflow:hidden;background:#141917;
-    box-shadow:0 0 0 1px rgba(255,255,255,.11),0 40px 90px rgba(0,0,0,.65)}
-  .bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:#0E1211;border-bottom:1px solid rgba(255,255,255,.07)}
-  .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.13)}
-  .win img{display:block;width:504px;height:420px}
-  .pop{position:absolute;left:556px;top:262px;width:224px;border-radius:12px;overflow:hidden;
-    box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 70px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.5)}
-  .pop img{display:block;width:224px}
-</style></head><body><div class="light"></div>
-<div class="win"><div class="bar"><i></i><i></i><i></i></div><img src="og-block.png" alt=""></div>
-<div class="pop"><img src="og-popup.png" alt=""></div>
-<div class="copy"><div class="brand">${LOGO.replace(/SIZE/g, '44')}FocusFence</div>
-<div class="kicker"><i></i>${T.eyebrow}</div><h1>${T.h1}</h1></div>
-<div class="foot">${T.heroSmall.split(' · ').map((x) => `<span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>${x}</span>`).join('')}</div>
-</body></html>`;
-}
-
 /**
  * One theme of the website images. The extension follows the system theme, so the
  * same seeded demo state is captured once in dark and once in light.
  * Dark files keep their plain names (name.webp); light ones get a suffix (name-light.webp).
  */
 async function captureTheme(theme, SITE_OUT, written) {
-  const { SITE } = await import('./site-strings.mjs');
-  const OG_FONT = path.join(ROOT, 'node_modules/@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2');
   const sfx = theme === 'light' ? '-light' : '';
   const net = await startFakeInternet();
   const ext = await launchExtension({
@@ -223,12 +182,12 @@ async function captureTheme(theme, SITE_OUT, written) {
     colorScheme: theme,
     deviceScaleFactor: 2,
     ...(LANG === 'en' ? {} : { lang: LANG }),
-    mutate(mf, dir) {
+    mutate(mf) {
+      // the captures inject small <style> tags (hiding the Incognito warning, the schedule state)
       mf.content_security_policy.extension_pages = mf.content_security_policy.extension_pages.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'");
-      fs.copyFileSync(OG_FONT, path.join(dir, 'fonts', 'inter-opsz.woff2'));
     },
   });
-  const { context, base, extDir } = ext;
+  const { context, base } = ext;
   // WebP encoding in a blank page: Chromium's canvas encoder, optional downscale.
   const encoder = await context.newPage();
   // crop: a region in CSS px of a 2x capture (so a crop comes from the very same frame)
@@ -322,8 +281,6 @@ async function captureTheme(theme, SITE_OUT, written) {
       await settle(blocked);
       const png = await blocked.screenshot();
       await webp(png, name);
-      // the Open Graph image shows the block page in this smaller window
-      if (theme === 'dark' && name === 'block-card.webp') fs.writeFileSync(path.join(extDir, 'og-block.png'), png);
     }
     await blocked.close();
 
@@ -339,7 +296,6 @@ async function captureTheme(theme, SITE_OUT, written) {
     const popupPng = await popup.screenshot();
     await popup.close();
     await webp(popupPng, 'popup.webp');
-    if (theme === 'dark') fs.writeFileSync(path.join(extDir, 'og-popup.png'), popupPng);
 
     // ---- Settings, Blocklist: the fence of your sites, the composer and the site cards
     const opt = await context.newPage();
@@ -420,24 +376,6 @@ async function captureTheme(theme, SITE_OUT, written) {
     await webp(await strict.screenshot({ clip: await clipOf(strict, '#status-card', 0) }), 'strict.webp');
     await strict.close();
 
-    // ---- Open Graph image, 1200x630, from the dark captures (PNG: the most widely supported format for link previews)
-    if (theme === 'dark') {
-      fs.writeFileSync(path.join(extDir, 'og.html'), ogHtml(SITE[LANG]));
-      const og = await context.newPage();
-      await og.setViewportSize({ width: 1200, height: 630 });
-      await og.goto(base + 'og.html');
-      await og.evaluate(() => document.fonts.ready);
-      // Translations differ in length: shrink the headline until it clears the bottom list.
-      await og.evaluate(() => {
-        const h1 = document.querySelector('h1');
-        const limit = document.querySelector('.foot').getBoundingClientRect().top - 36;
-        let size = 68;
-        while (h1.getBoundingClientRect().bottom > limit && size > 44) h1.style.fontSize = --size + 'px';
-      });
-      await og.waitForTimeout(400);
-      fs.writeFileSync(path.join(SITE_OUT, 'og.png'), await og.screenshot({ scale: 'css' }));
-      written.push('og.png');
-    }
   } finally {
     await ext.close();
     await net.close();

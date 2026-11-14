@@ -1,5 +1,6 @@
 ---
 title: How to Block Websites in Chrome During Work Hours (Private, No Account)
+seo_title: Block Websites in Chrome During Work Hours
 description: Set up a work-hours website blocker in Chrome — schedules, overnight ranges, Pomodoro sprints and strict mode — without creating an account or sharing your browsing.
 slug: block-websites-during-work-hours-chrome
 date: 2026-11-13

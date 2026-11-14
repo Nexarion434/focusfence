@@ -1,0 +1,65 @@
+# FocusFence
+
+> A free productivity extension for Chrome that blocks distracting websites, with no limit. Pro adds focus sessions and strict mode.
+
+FocusFence is a focus app for Chrome on computers: a Manifest V3 extension that blocks the distracting websites you choose, such as social feeds, YouTube Shorts or news sites. It does not block ads, and the sites you don't block load unchanged. Blocking runs in Chrome's built-in rule engine (declarativeNetRequest); the blocklist, settings and stats stay in Chrome's local storage, and there is no account. It is coming soon to the Chrome Web Store.
+
+- Free plan: As many websites as you like; Subdomains included; One-click block from the popup; On/off switch; Calm block page.
+- Pro, $2.99/month or $19.99/year (€2.99 or €19.99 in the eurozone): Schedules; Path & keyword blocking; Pomodoro focus sessions; Strict mode; Password lock, stats, custom message, backup.
+- Languages: English, French, Spanish, German.
+- License: GNU AGPL v3 (https://github.com/Nexarion434/focusfence).
+- Contact: contact@focusfence.dev
+
+## Pages
+
+- [FocusFence: Block Distracting Websites & Stay Focused](https://focusfence.dev/): A free productivity extension for Chrome that blocks distracting websites, with no limit. Pro adds focus sessions and strict mode.
+- [FocusFence : bloquer les sites distrayants, rester concentré](https://focusfence.dev/fr/): Extension Chrome gratuite et illimitée contre les distractions. Pro ajoute des sessions de concentration et applique vos horaires.
+- [FocusFence: bloquear páginas que distraen y concentrarte](https://focusfence.dev/es/): Extensión gratis para bloquear páginas web que te distraen, sin límite. Pro añade sesiones de concentración y aplica tus horarios.
+- [FocusFence: Ablenkende Websites blockieren, Fokus behalten](https://focusfence.dev/de/): Kostenlose Chrome-Erweiterung, die ablenkende Websites unbegrenzt sperrt. Pro bringt Fokus-Sitzungen und wendet Zeitpläne an.
+- [Privacy Policy | FocusFence for Chrome](https://focusfence.dev/privacy.html): What FocusFence keeps on your computer and why it needs each Chrome permission. With Pro, ExtensionPay checks your license.
+
+## FAQ
+
+### How do I block a website in Chrome?
+
+Add FocusFence to Chrome, open the site you want to block, click the FocusFence icon in the toolbar and press Block site. For a site you’re not on, type its address in the popup or in Settings.
+
+### Is FocusFence an ad blocker?
+
+No. FocusFence is a focus app, and it leaves ads alone. It blocks only what you put on your list, such as a social network, YouTube Shorts or a news site. Every other site loads exactly as before.
+
+### Is FocusFence free?
+
+Yes. The free plan blocks as many websites as you like, subdomains included, for as long as you use it, and you never create an account. Pro is optional and adds paths such as youtube.com/shorts, keywords, schedules, Pomodoro focus sessions and strict mode.
+
+### Does FocusFence help with ADHD?
+
+FocusFence isn’t a medical or treatment tool. It can make your browser more ADHD-friendly by putting friction between an impulse and a feed. The sites on your list stay closed until you switch blocking off. With Pro, strict mode makes switching off take a 10-minute wait and eight retyped words, focus sessions split your work into Pomodoro rounds, and schedules start blocking at the hours you set.
+
+### Can I block YouTube Shorts but still use YouTube?
+
+Yes, with Pro. Add youtube.com/shorts as a path rule. youtube.com, videos and search keep working. Shorts links and in-app navigation to Shorts are blocked.
+
+### Does blocking reddit.com also block old.reddit.com?
+
+Yes. A domain rule covers every subdomain, in Free and Pro.
+
+### Why does Chrome ask for permission when I add a site?
+
+Chrome only lets an extension redirect to its own block page on sites it has access to. FocusFence asks for that one site only. If you decline, the site is still blocked, but you'll see Chrome's error page instead of the FocusFence block page.
+
+### Can strict mode be bypassed?
+
+Yes, if you work at it. Chrome always lets you disable or remove an extension, and FocusFence can't block the extensions page. A timed strict session pauses while FocusFence is off, so its time can't run out in the background. Incognito windows are only covered if you allow FocusFence in Incognito, and FocusFence warns you when it isn't. Other browsers and devices aren't covered.
+
+### What data do you collect?
+
+None. See the [privacy policy](https://focusfence.dev/privacy.html). The only network traffic is ExtensionPay checking your license, and only after you choose to upgrade.
+
+### Is FocusFence open source?
+
+Yes, under the GNU AGPL v3. [Read the code](https://github.com/Nexarion434/focusfence).
+
+## Optional
+
+- [Source code](https://github.com/Nexarion434/focusfence): the extension and this website

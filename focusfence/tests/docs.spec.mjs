@@ -59,7 +59,7 @@ test('landing, privacy and blog pages pass axe (WCAG A/AA) with no horizontal sc
   try {
     const problems = [];
     const localized = SITE_LANGS.flatMap((l) => [(l === 'en' ? '' : l + '/') + 'index.html', (l === 'en' ? '' : l + '/') + 'privacy.html']);
-    for (const rel of [...localized, 'blog/index.html', 'blog/block-youtube-shorts-chrome.html']) {
+    for (const rel of [...localized, 'blog/index.html', 'blog/block-youtube-shorts-chrome.html', '404.html']) {
       for (const [width, colorScheme] of [[1280, 'dark'], [1280, 'light'], [390, 'light'], [360, 'dark']]) {
         // reduced motion: every block is in its final, visible state (no scroll reveal), so axe checks it all
         const context = await browser.newContext({ viewport: { width, height: 800 }, colorScheme, reducedMotion: 'reduce' });
@@ -179,23 +179,38 @@ test('landing + privacy exist in en/fr/es/de with lang, canonical, reciprocal hr
         expect(title, rel).not.toBe(/<title>([^<]+)<\/title>/.exec(en)[1]);
         expect(desc, rel).not.toBe(/<meta name="description" content="([^"]+)">/.exec(en)[1]);
       }
-      // og:image is the localized 1200x630 Open Graph image, and exists with the declared size
+      // og:image is the localized 1200x630 Open Graph image (a JPEG well under the ~300 KB some
+      // apps accept for a link preview), and exists with the declared size and type
       const og = /<meta property="og:image" content="([^"]+)">/.exec(html)[1];
-      expect(og, rel).toBe(`${SITE_URL}assets/${lang}/og.png`);
+      expect(og, rel).toBe(`${SITE_URL}assets/${lang}/og.jpg`);
       const ogFile = path.join(DOCS, og.slice(SITE_URL.length));
       expect(fs.existsSync(ogFile), og).toBe(true);
-      const ogBuf = fs.readFileSync(ogFile);
-      expect([ogBuf.readUInt32BE(16), ogBuf.readUInt32BE(20)], og).toEqual([1200, 630]);
+      expect(jpegSize(ogFile), og).toEqual([1200, 630]);
+      expect(fs.statSync(ogFile).size, og).toBeLessThan(150 * 1024);
+      expect(html, rel).toContain('<meta property="og:image:type" content="image/jpeg">');
       expect(html, rel).toContain('<meta property="og:image:width" content="1200">');
       expect(html, rel).toContain('<meta property="og:image:height" content="630">');
       expect(html, rel).toContain(`<meta name="twitter:image" content="${og}">`);
-      expect(/<meta property="og:image:alt" content="([^"]+)">/.exec(html), rel).toBeTruthy();
+      const ogAlt = /<meta property="og:image:alt" content="([^"]+)">/.exec(html);
+      expect(ogAlt, rel).toBeTruthy();
+      expect(html, rel).toContain(`<meta name="twitter:image:alt" content="${ogAlt[1]}">`);
       expect(desc.length, rel + ' description').toBeLessThanOrEqual(300);
       expect(html, rel).not.toContain('{{');
       expect(html, rel).not.toMatch(/\{(source|privacy|license)\}/);
     }
   }
 });
+
+/** Width and height of a JPEG: the start-of-frame segment (SOF0-15, but DHT, JPG and DAC). */
+function jpegSize(file) {
+  const b = fs.readFileSync(file);
+  expect([b[0], b[1]], file).toEqual([0xff, 0xd8]);
+  for (let i = 2; i + 9 < b.length; i += 2 + b.readUInt16BE(i + 2)) {
+    const m = b[i + 1];
+    if (m >= 0xc0 && m <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(m)) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+  }
+  throw new Error('no SOF segment in ' + file);
+}
 
 // srcset="a.webp 1280w, b.webp 2560w" -> ['a.webp', 'b.webp']
 const srcsets = (html) => all(/ srcset="([^"]+)"/g, html).flatMap((v) => v.split(',').map((c) => c.trim().split(/\s+/)[0]));
@@ -538,7 +553,7 @@ test('every referenced local file exists (src, href and srcset)', () => {
 
 test('every page has a language switcher with all 4 languages, the current one marked, links resolving', () => {
   const pages = allHtml();
-  expect(pages.length).toBe(12); // 4 x (landing + privacy) + blog index + 3 articles
+  expect(pages.length).toBe(13); // 4 x (landing + privacy) + blog index + 3 articles + 404
   for (const rel of pages) {
     const html = read('docs', rel);
     const nav = /<nav class="langs" aria-label="([^"]+)">([\s\S]*?)<\/nav>/.exec(html);
@@ -707,5 +722,190 @@ test('first-visit redirect: root only, follows navigator.language, never overrid
   } finally {
     await browser.close();
     server.close();
+  }
+});
+
+/* -------------------------------------------------------------------- SEO */
+// See ../SEO_AUDIT.md. Search snippets cut titles at about 60 characters and descriptions at about
+// 155-160; short copy (titles, buttons, ticks, headings) carries no em dash and no "No X · No Y" list.
+const pageHead = (html) => ({
+  title: /<title>([^<]+)<\/title>/.exec(html)[1].replace(/&amp;/g, '&'),
+  description: /<meta name="description" content="([^"]+)">/.exec(html)[1].replace(/&amp;/g, '&'),
+  noindex: html.includes('<meta name="robots" content="noindex">'),
+  canonical: (/<link rel="canonical" href="([^"]+)">/.exec(html) || [])[1] || null,
+  h1: (html.match(/<h1[\s>]/g) || []).length,
+  ld: [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])),
+});
+
+test('SEO: titles and descriptions fit the snippet, are unique, and every page has exactly one h1', () => {
+  const titles = new Map();
+  const descs = new Map();
+  for (const rel of allHtml()) {
+    const h = pageHead(read('docs', rel));
+    expect(h.h1, rel + ' h1').toBe(1);
+    expect(h.title, rel).not.toMatch(/—/);
+    if (h.noindex) continue; // drafts and the 404 page are never shown in search results
+    expect(h.title.length, `${rel} title "${h.title}"`).toBeGreaterThanOrEqual(30);
+    expect(h.title.length, `${rel} title "${h.title}"`).toBeLessThanOrEqual(60);
+    expect(h.description.length, `${rel} description`).toBeGreaterThanOrEqual(120);
+    expect(h.description.length, `${rel} description`).toBeLessThanOrEqual(160);
+    expect(titles.has(h.title), `${rel} duplicates the title of ${titles.get(h.title)}`).toBe(false);
+    expect(descs.has(h.description), `${rel} duplicates the description of ${descs.get(h.description)}`).toBe(false);
+    titles.set(h.title, rel);
+    descs.set(h.description, rel);
+  }
+  expect(titles.size).toBe(8); // 4 landing pages + 4 privacy pages (the blog is still a draft)
+  // the landing h1 starts with what the page is about (the eyebrow: "Focus app for Chrome")
+  for (const lang of SITE_LANGS) {
+    const html = read('docs', dirOf(lang) + 'index.html');
+    const h1 = /<h1 class="hero-h">([\s\S]*?)<\/h1>/.exec(html)[1].replace(/<[^>]+>/g, '');
+    expect(h1.startsWith(SITE[lang].eyebrow), lang).toBe(true);
+  }
+});
+
+test('SEO: short copy has no em dash or negation list, and alt text stays under 125 characters', () => {
+  for (const lang of SITE_LANGS) {
+    const T = SITE[lang];
+    const short = [T.title, T.description, T.privacyTitle, T.privacyDescription, T.ctaAdd, T.ctaNav, T.ctaFeatures, T.ctaSoon, T.eyebrow, T.h1, T.heroSmall, T.finalH2, T.pricingH2, ...T.blockH2, ...T.focusH2, ...T.statsH2, ...T.privacyH2];
+    for (const s of short) expect(s, `${lang}: ${s}`).not.toMatch(/—/);
+    // at most one absence among the ticks under the call to action ("No account")
+    const negations = T.heroSmall.split(' · ').filter((t) => /^(No|Sans|Sin|Kein)\b/.test(t));
+    expect(negations.length, `${lang} heroSmall`).toBeLessThanOrEqual(1);
+    for (const k of Object.keys(T).filter((k) => k.startsWith('alt'))) expect(T[k].length, `${lang}.${k}`).toBeLessThanOrEqual(125);
+  }
+});
+
+test('positioning: a focus app first, plainly not an ad blocker, and an ADHD answer without medical claims', () => {
+  const focus = { en: /focus/i, fr: /concentr/i, es: /concentr/i, de: /fokus|konzentr/i };
+  const adBlocker = { en: /ad blocker/i, fr: /bloqueur de publicités/i, es: /bloqueador de anuncios/i, de: /werbeblocker/i };
+  const no = { en: 'No.', fr: 'Non.', es: 'No.', de: 'Nein.' };
+  const adhd = { en: 'ADHD', fr: 'TDAH', es: 'TDAH', de: 'ADHS' };
+  const medical = { en: /medical/, fr: /médical/, es: /médica/, de: /Medizin/ };
+  // medical promises in any of the four languages (whole words, accents included)
+  const claims = /(?<!\p{L})(cures?|treats|heals|clinically|proven|guaranteed?|guérit|soigne|traite|cliniquement|prouvée?s?|garantie?s?|cura|trata|clínicamente|probado|garantizado|heilt|behandelt|klinisch|bewiesen|garantiert)(?!\p{L})/iu;
+  for (const lang of SITE_LANGS) {
+    const T = SITE[lang];
+    // what search results, the first screen, the intro and the footer call FocusFence
+    for (const k of ['title', 'description', 'eyebrow', 'lead', 'footTagline']) expect(T[k], `${lang}.${k}`).toMatch(focus[lang]);
+    expect(T.statement[0], `${lang}.statement`).toMatch(focus[lang]);
+    // one FAQ entry names ad blockers, and its answer opens with a plain no
+    const ads = T.faq.filter(([q]) => adBlocker[lang].test(q));
+    expect(ads.length, lang).toBe(1);
+    expect(ads[0][1].startsWith(no[lang] + ' '), lang).toBe(true);
+    const rest = JSON.stringify({ ...T, faq: T.faq.filter((e) => e !== ads[0]) });
+    expect(rest, `${lang}: only the FAQ mentions ad blockers`).not.toMatch(adBlocker[lang]);
+    // one ADHD question; its answer opens with the disclaimer and makes no medical promise
+    const q = T.faq.filter(([q]) => q.includes(adhd[lang]));
+    expect(q.length, lang).toBe(1);
+    expect(q[0][1].split('. ')[0], lang).toMatch(medical[lang]);
+    expect(q[0][1], lang).not.toMatch(claims);
+    // structured data files FocusFence under productivity, in the page's language
+    const app = pageHead(read('docs', dirOf(lang) + 'index.html')).ld[0]['@graph'].find((g) => g['@type'] === 'SoftwareApplication');
+    expect(app.applicationSubCategory, lang).toBe(T.appCategory);
+    expect(app.applicationCategory, lang).toBe('BrowserApplication');
+  }
+  const llms = read('docs/llms.txt');
+  expect(llms).toContain('FocusFence is a focus app for Chrome');
+  expect(llms).toContain('It does not block ads');
+});
+
+test('SEO: JSON-LD describes the real product, prices and FAQ, with absolute URLs and no invented ratings', () => {
+  const n = (price) => /(\d+)[.,](\d\d)/.exec(price).slice(1).join('.');
+  for (const rel of allHtml()) {
+    const html = read('docs', rel);
+    const { ld } = pageHead(html);
+    for (const doc of ld) {
+      expect(doc['@context'], rel).toBe('https://schema.org');
+      const text = JSON.stringify(doc);
+      expect(text, rel).not.toMatch(/aggregateRating|"review"|ratingValue/);
+      for (const [, u] of text.matchAll(/"(?:url|item|@id|image|logo|mainEntityOfPage|license|primaryImageOfPage)":"([^"]+)"/g)) expect(u, rel).toMatch(/^https:\/\//);
+    }
+    if (rel === '404.html') expect(ld, rel).toEqual([]);
+  }
+  for (const lang of SITE_LANGS) {
+    const T = SITE[lang];
+    const html = read('docs', dirOf(lang) + 'index.html');
+    const graph = pageHead(html).ld[0]['@graph'];
+    expect(graph.map((g) => g['@type']), lang).toEqual(['Organization', 'WebSite', 'WebPage', 'SoftwareApplication', 'FAQPage']);
+    const app = graph[3];
+    expect(app.name).toBe('FocusFence');
+    expect(app.url, lang).toBe(SITE_URL + dirOf(lang));
+    const cur = T.priceMonthly.includes('€') ? 'EUR' : 'USD';
+    expect(app.offers.map((o) => [o.name, o.price, o.priceCurrency]), lang).toEqual([
+      [T.planFree, '0', cur],
+      [T.planMonthly, n(T.priceMonthly), cur],
+      [T.planYearly, n(T.priceYearly), cur],
+    ]);
+    expect(app.offers.slice(1).map((o) => o.priceSpecification.billingDuration)).toEqual(['P1M', 'P1Y']);
+    // the FAQ markup is the visible FAQ, question for question
+    const visible = [...html.matchAll(/<summary><span>([^<]+)<\/span>/g)].map((m) => m[1]);
+    expect(graph[4].mainEntity.map((q) => q.name), lang).toEqual(visible);
+    expect(visible.length, lang).toBe(T.faq.length);
+    for (const q of graph[4].mainEntity) expect(q.acceptedAnswer.text, lang).not.toMatch(/<code>|\{\w+\}/);
+  }
+  // privacy pages: a breadcrumb from the home page of their language
+  for (const lang of SITE_LANGS) {
+    const graph = pageHead(read('docs', dirOf(lang) + 'privacy.html')).ld[0]['@graph'];
+    const crumbs = graph.find((g) => g['@type'] === 'BreadcrumbList').itemListElement.map((i) => i.item);
+    expect(crumbs, lang).toEqual([SITE_URL + dirOf(lang), SITE_URL + dirOf(lang) + 'privacy.html']);
+  }
+});
+
+test('SEO: the sitemap lists exactly the indexable pages, each at its canonical URL, with a lastmod', () => {
+  const sm = read('docs/sitemap.xml');
+  const locs = [...sm.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>(\d{4}-\d\d-\d\d)<\/lastmod>/g)].map((m) => m[1]);
+  expect(locs.length, 'every <url> has a lastmod').toBe((sm.match(/<url>/g) || []).length);
+  const indexable = allHtml()
+    .map((rel) => ({ rel, ...pageHead(read('docs', rel)) }))
+    .filter((p) => !p.noindex);
+  expect(indexable.map((p) => p.canonical).sort()).toEqual([...locs].sort());
+  for (const p of indexable) expect(p.canonical, p.rel).toBe(SITE_URL + p.rel.replace(/index\.html$/, ''));
+  // the dates are kept between runs, keyed by URL (scripts/sitemap-dates.json)
+  const dates = JSON.parse(read('focusfence/scripts/sitemap-dates.json'));
+  for (const u of locs.filter((u) => !u.includes('/blog/'))) expect(sm, u).toContain(`<loc>${u}</loc><lastmod>${dates[u].date}</lastmod>`);
+});
+
+test('SEO: 404 page, robots.txt, llms.txt, favicon.ico and web manifest', () => {
+  // GitHub Pages serves docs/404.html for any missing path, at any depth: root-absolute links only
+  const nf = read('docs/404.html');
+  expect(nf).toContain('<meta name="robots" content="noindex">');
+  expect(nf).not.toContain('rel="canonical"');
+  for (const ref of all(/(?:src|href)="([^"#:]+)(?:#[^"]*)?"/g, nf)) expect(ref, '404.html').toMatch(/^\//);
+  for (const l of SITE_LANGS) expect(nf, l).toContain(`href="/${dirOf(l)}" hreflang="${l}"`);
+  expect(read('docs/sitemap.xml')).not.toContain('404');
+  // robots.txt: everything open, the AI crawlers named, the sitemap declared
+  const robots = read('docs/robots.txt');
+  expect(robots).toMatch(/^User-agent: \*\nAllow: \/$/m);
+  expect(robots).not.toMatch(/Disallow/);
+  for (const bot of ['OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'GPTBot', 'ClaudeBot', 'Google-Extended']) expect(robots, bot).toContain(`User-agent: ${bot}\n`);
+  expect(robots).toContain(`Sitemap: ${SITE_URL}sitemap.xml`);
+  // llms.txt: the product in a few lines, and every language's page
+  const llms = read('docs/llms.txt');
+  expect(llms).toMatch(/^# FocusFence\n\n> /);
+  for (const l of SITE_LANGS) expect(llms, l).toContain(`](${SITE_URL}${dirOf(l)})`);
+  expect(llms).not.toMatch(/<[a-z]|\{\w+\}/);
+  // favicon.ico: the extension's 16, 32 and 48 px icons, stored as PNG
+  const ico = fs.readFileSync(path.join(DOCS, 'favicon.ico'));
+  expect([ico.readUInt16LE(0), ico.readUInt16LE(2), ico.readUInt16LE(4)]).toEqual([0, 1, 3]);
+  const sizes = [0, 1, 2].map((i) => ico[6 + 16 * i]);
+  expect(sizes).toEqual([16, 32, 48]);
+  for (let i = 0; i < 3; i++) {
+    const off = ico.readUInt32LE(6 + 16 * i + 12);
+    expect(ico.toString('ascii', off + 1, off + 4)).toBe('PNG');
+  }
+  // the web manifest and its icons, and the home-screen icon every page links
+  const mf = JSON.parse(read('docs/site.webmanifest'));
+  expect(mf.name).toBe('FocusFence');
+  for (const icon of mf.icons) {
+    const b = fs.readFileSync(path.join(DOCS, icon.src.replace(/^\//, '')));
+    expect(`${b.readUInt32BE(16)}x${b.readUInt32BE(20)}`, icon.src).toBe(icon.sizes);
+  }
+  expect(mf.icons.some((i) => i.purpose === 'maskable')).toBe(true);
+  const touch = fs.readFileSync(path.join(DOCS, 'assets/apple-touch-icon.png'));
+  expect([touch.readUInt32BE(16), touch.readUInt32BE(20)]).toEqual([180, 180]);
+  for (const rel of allHtml()) {
+    const html = read('docs', rel);
+    expect(html, rel).toMatch(/<link rel="apple-touch-icon" href="[^"]*assets\/apple-touch-icon\.png">/);
+    expect(html, rel).toMatch(/<link rel="manifest" href="[^"]*site\.webmanifest">/);
   }
 });

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Block YouTube Shorts in Chrome (and Keep the Rest of YouTube) — FocusFence</title>
+<title>How to Block YouTube Shorts in Chrome | FocusFence</title>
 <meta name="description" content="A step-by-step guide to blocking only YouTube Shorts in Chrome — including in-app navigation — while tutorials, search and subscriptions keep working.">
 <link rel="canonical" href="https://focusfence.dev/blog/block-youtube-shorts-chrome.html">
 <meta name="robots" content="noindex">
@@ -11,21 +11,27 @@
 <meta name="theme-color" content="#08090a" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
 <script>(function(){var d=document.documentElement,p='system',t;try{p=localStorage.getItem("ff-theme")||p}catch(e){}if(p!=='light'&&p!=='dark')p='system';d.setAttribute('data-theme-pref',p);if(p==='system')t=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';else{t=p;d.setAttribute('data-theme',p);var m=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].setAttribute('content',p==='light'?'#fbfaf7':'#08090a')}})();</script>
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:url" content="https://focusfence.dev/blog/block-youtube-shorts-chrome.html">
 <meta property="og:site_name" content="FocusFence">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="How to Block YouTube Shorts in Chrome (and Keep the Rest of YouTube) — FocusFence">
+<meta property="og:title" content="How to Block YouTube Shorts in Chrome | FocusFence">
 <meta property="og:description" content="A step-by-step guide to blocking only YouTube Shorts in Chrome — including in-app navigation — while tutorials, search and subscriptions keep working.">
-<meta property="og:image" content="https://focusfence.dev/assets/en/og.png">
+<meta property="og:image" content="https://focusfence.dev/assets/en/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="FocusFence, the website blocker for Chrome: fence off the endless feeds.">
+<meta property="og:image:alt" content="FocusFence, focus app for Chrome: “Fence off distracting websites.” above a row of glass pills, the middle one lit">
+<meta property="article:published_time" content="2026-11-13">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://focusfence.dev/assets/en/og.png">
+<meta name="twitter:image" content="https://focusfence.dev/assets/en/og.jpg">
+<meta name="twitter:image:alt" content="FocusFence, focus app for Chrome: “Fence off distracting websites.” above a row of glass pills, the middle one lit">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
 <link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://focusfence.dev/#organization","name":"FocusFence","url":"https://focusfence.dev/","logo":{"@type":"ImageObject","url":"https://focusfence.dev/assets/icon-512.png","width":512,"height":512},"email":"contact@focusfence.dev","sameAs":["https://github.com/Nexarion434/focusfence"]},{"@type":"BlogPosting","@id":"https://focusfence.dev/blog/block-youtube-shorts-chrome.html#article","headline":"How to Block YouTube Shorts in Chrome (and Keep the Rest of YouTube)","description":"A step-by-step guide to blocking only YouTube Shorts in Chrome — including in-app navigation — while tutorials, search and subscriptions keep working.","datePublished":"2026-11-13","dateModified":"2026-11-13","inLanguage":"en","url":"https://focusfence.dev/blog/block-youtube-shorts-chrome.html","mainEntityOfPage":"https://focusfence.dev/blog/block-youtube-shorts-chrome.html","image":"https://focusfence.dev/assets/en/og.jpg","author":{"@id":"https://focusfence.dev/#organization"},"publisher":{"@id":"https://focusfence.dev/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"FocusFence","item":"https://focusfence.dev/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://focusfence.dev/blog/"},{"@type":"ListItem","position":3,"name":"How to Block YouTube Shorts in Chrome (and Keep the Rest of YouTube)","item":"https://focusfence.dev/blog/block-youtube-shorts-chrome.html"}]}]}</script>
 <style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
    Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
 @font-face {
@@ -686,6 +692,16 @@ code {
 .display em {
   font-style: normal;
   color: var(--dim);
+}
+/* The h1 holds the eyebrow ("Focus app for Chrome", what the page is about) and the headline.
+   The eyebrow keeps the line it had as a paragraph (16px text, line-height 1.6); the headline is a
+   block below it. */
+.hero-h {
+  font-size: 16px;
+  font-weight: 400;
+}
+.hero-h .display {
+  display: block;
 }
 .hero-row {
   display: grid;
@@ -2174,14 +2190,14 @@ th {
 <h2 id="step-by-step-with-focusfence">Step by step with FocusFence</h2>
 <ol><li><strong>Install FocusFence</strong> from the Chrome Web Store and pin it to your toolbar.</li><li>Open <strong>Settings → Blocklist</strong>.</li><li>Choose <strong>Path</strong> as the rule type and enter <code>youtube.com/shorts</code>.</li><li>When Chrome asks, <strong>allow access to youtube.com</strong>. This lets FocusFence show its block page and catch Shorts opened from inside YouTube. If you decline, direct Shorts links are still blocked, but with Chrome's error page.</li><li>Test it: <code>youtube.com/shorts/anything</code> should show the FocusFence block page, while <code>youtube.com/watch?v=…</code> and search keep working.</li></ol>
 <p>What gets blocked:</p>
-<div class="table"><table><thead><tr><th>Address</th><th>Result</th></tr></thead><tbody><tr><td><code>https://www.youtube.com/shorts/abc123</code></td><td>Blocked</td></tr><tr><td><code>https://m.youtube.com/shorts/xyz</code></td><td>Blocked (subdomains included)</td></tr><tr><td>Tapping a Short from the YouTube home page</td><td>Blocked (in-app navigation is caught)</td></tr><tr><td><code>https://www.youtube.com/watch?v=…</code></td><td>Still works</td></tr><tr><td><code>https://www.youtube.com/</code> and search</td><td>Still work</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th scope="col">Address</th><th scope="col">Result</th></tr></thead><tbody><tr><td><code>https://www.youtube.com/shorts/abc123</code></td><td>Blocked</td></tr><tr><td><code>https://m.youtube.com/shorts/xyz</code></td><td>Blocked (subdomains included)</td></tr><tr><td>Tapping a Short from the YouTube home page</td><td>Blocked (in-app navigation is caught)</td></tr><tr><td><code>https://www.youtube.com/watch?v=…</code></td><td>Still works</td></tr><tr><td><code>https://www.youtube.com/</code> and search</td><td>Still work</td></tr></tbody></table></div>
 <h2 id="make-it-stick">Make it stick</h2>
 <ul><li><strong>Schedule it:</strong> block Shorts only during work or study hours (Settings → Schedule).</li><li><strong>Pair it with a focus timer:</strong> a 25-minute Pomodoro session blocks everything on your list, even outside your schedule.</li><li><strong>Add friction for "just once":</strong> strict mode makes you wait 10 minutes and type a sentence before you can turn blocking off.</li></ul>
 <h2 id="limitations-to-know-about">Limitations to know about</h2>
 <ul><li>Path rules are a <strong>Pro</strong> feature in FocusFence. Free covers whole-site blocking.</li><li>Any Chrome extension can be disabled from <code>chrome://extensions</code>.</li><li>Incognito windows are only covered if you allow FocusFence in Incognito (FocusFence tells you when it isn't).</li><li>This covers Chrome on your computer, not the YouTube app on your phone.</li></ul></article></main>
 <footer class="foot"><div class="wrap">
   <div class="foot-grid">
-    <div class="foot-brand"><a class="brand" href="../"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>A calm, private website blocker for Chrome.</p></div>
+    <div class="foot-brand"><a class="brand" href="../"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>A calm, private focus app for Chrome that blocks distracting websites.</p></div>
     <div class="foot-col"><p class="foot-h">Product</p><ul><li><a href="../#features">Features</a></li><li><a href="../#pricing">Pricing</a></li><li><a href="../#faq">Questions</a></li></ul></div>
     <div class="foot-col"><p class="foot-h">Resources</p><ul><li><a href="../blog/" hreflang="en">Blog (English)</a></li><li><a href="https://github.com/Nexarion434/focusfence">Source code</a></li><li><a href="../privacy.html">Privacy policy</a></li></ul></div>
     <div class="foot-col"><p class="foot-h">Contact</p><ul><li><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></li></ul></div>
