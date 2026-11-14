@@ -4,7 +4,7 @@
 // {privacy} = privacy page of the same language, {license} = license URL,
 // {contact} = contact e-mail link.
 // Two-item arrays named *H2 / statement are [bright, dimmed] halves of one heading.
-// Prices follow the store listings (store/listing*.md). Every claim must match
+// Prices follow the store listings (store/listing/<lang>.md). Every claim must match
 // the extension (src/), the store listing or the privacy policy: no invented numbers.
 
 export const SITE_LANGS = ['en', 'fr', 'es', 'de'];
