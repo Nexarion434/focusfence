@@ -1,6 +1,6 @@
 # FocusFence
 
-A calm, private, freemium **Chrome extension (Manifest V3)** that blocks distracting websites.
+A calm, private, freemium **focus app for Chrome** (a Manifest V3 extension): it blocks the distracting websites you choose. Store name: "FocusFence – Focus App & Website Blocker".
 
 | Free | Pro ($2.99/month or $19.99/year; €2.99 / €19.99 in the eurozone) |
 |---|---|
@@ -12,7 +12,7 @@ A calm, private, freemium **Chrome extension (Manifest V3)** that blocks distrac
 
 No backend, no analytics; nothing leaves the device except ExtensionPay license checks after a user starts an upgrade.
 
-![Popup](screenshots/store-2-popup.png)
+![The FocusFence popup on a site, with the one-click Block site button (Chrome Web Store screenshot)](store/assets/en/2-popup.png)
 
 ## Layout
 
@@ -26,14 +26,16 @@ src/                  the extension (load this folder unpacked)
   lib/ui.js           shared page helpers
   popup.*  options.*  blocked.*  onboarding.*   UI
   spa-guard.js        tiny content script for path rules on single-page apps
-  config.js           DEV flag, ExtensionPay id (placeholder 'focusfence'), prices, URLs
+  config.js           DEV flag, ExtensionPay id ('focusfence-dev'), prices, URLs
   vendor/ExtPay.js    ExtensionPay library (unmodified copy of extpay@3.1.2)
   LICENSE, THIRD_PARTY_NOTICES.txt, licenses/
 tests/                Playwright: unit, e2e, accessibility, i18n, onboarding, site, store, zip
 scripts/              build, zip, cws-check, screenshots, icons, docs, i18n, test launcher
-store/                privacy policy + translations, listings (en/fr/es/de), CWS submission checklist, screenshot plan + captions
-screenshots/          UI shots + store set (en); fr/, es/, de/ localized store sets
-dist/                 focusfence-<version>.zip (store package)
+store/                Chrome Web Store: SUBMISSION.md (step by step), listing/<lang>.md (en/fr/es/de),
+                      assets/ (screenshots per language, promo tiles, icon), screenshots.json (captions),
+                      privacy policy + translations
+screenshots/site/     the website's product images (2x WebP, dark + light, per language)
+dist/                 focusfence-<version>.zip (store package, committed) + focusfence/ (unpacked, ignored)
 ../docs/              static website (landing, privacy, blog drafts) for GitHub Pages
 ../marketing/         unpublished drafts (Product Hunt, Reddit, blog sources)
 ```
@@ -54,8 +56,7 @@ dist/                 focusfence-<version>.zip (store package)
 
 ```js
 DEV: true,              // build flips this to false
-EXTPAY_ID: 'focusfence' // placeholder — replace with your ExtensionPay extension id
-EXTPAY_ID: 'focusfence-dev'
+EXTPAY_ID: 'focusfence-dev', // the extension id registered on extensionpay.com
 PRICES: {                // must match the ExtensionPay plans (amounts + nicknames)
   USD: { monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly', yearly: 'yearly' } },
   EUR: { monthly: 2.99, yearly: 19.99, plans: { monthly: 'monthly-eur', yearly: 'yearly-eur' } },
@@ -76,7 +77,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 100 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 117 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 
@@ -91,9 +92,10 @@ FF_CHROME_LIBS=/path/to/libs npm test
 ## Build & assets
 
 ```bash
-npm run build            # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=false)
+npm run build            # dist/focusfence/ + dist/focusfence-<version>.zip (DEV=false; reproducible)
 npm run cws:check        # build + Chrome Web Store pre-submission checks on the zip
-npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
+npm run store:assets     # Chrome Web Store images -> store/assets/: 5 screenshots in en, fr, es, de, promo tiles, icon
+                         # (also npm run screenshots:all; npm run screenshots = English screenshots only)
 npm run screenshots:site # website images: 2x WebP captures of the real UI, en, fr, es, de
 npm run site:art         # website artwork: 1200x630 Open Graph images (en, fr, es, de) and home-screen icons
 npm run design:shots     # design review: every screen and state, light + dark -> ../design/extension-ui/screenshots/
@@ -116,7 +118,7 @@ The UI, manifest name/description and store listings are available in **English 
 - Single source: `scripts/i18n/strings.mjs` (one table, four languages side by side).
 - `npm run i18n` writes `src/_locales/*/messages.json`; `npm run i18n:check` validates it (also part of `npm test`).
 - Pages use `data-i18n`, `data-i18n-rich` and `data-i18n-attr`. JS uses `FFI18N.t()` and `plural()`. Weekdays, dates, times and prices come from `Intl`.
-- To add a language: add a column to every row in `strings.mjs`, add the code to `LANGS`, run `npm run i18n`, and add a `store/listing.<lang>.md`.
+- To add a language: add a column to every row in `strings.mjs`, add the code to `LANGS`, run `npm run i18n`, add a `store/listing/<lang>.md` and its captions in `store/screenshots.json`, then run `npm run store:assets`.
 
 ## Onboarding
 

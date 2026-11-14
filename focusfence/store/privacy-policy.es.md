@@ -1,6 +1,6 @@
 # Política de privacidad de FocusFence
 
-_Fecha de entrada en vigor: 13 de noviembre de 2026_
+_Fecha de entrada en vigor: 14 de noviembre de 2026_
 
 _Esto es una traducción. En caso de discrepancia, prevalece la [versión en inglés](../privacy.html)._
 
@@ -22,6 +22,7 @@ FocusFence («la extensión») es una extensión de Chrome que bloquea las webs 
 | Temporizadores de las sesiones de concentración y del modo estricto | Para que las sesiones sigan tras reiniciar el navegador | `chrome.storage.local` |
 | Número de intentos bloqueados por web bloqueada y por día (últimos 90 días) | Para mostrar tus estadísticas (intentos bloqueados hoy y esta semana) | `chrome.storage.local` |
 | Bloqueo con contraseña: un hash PBKDF2-SHA-256 con sal (nunca la contraseña) | Para proteger tus ajustes | `chrome.storage.local` |
+| Estado de tu licencia Pro (si Pro está activo, el plan y cuándo se comprobó por última vez) | Para desbloquear Pro, también sin conexión | `chrome.storage.local` |
 | Indicador de «desbloqueado» durante 15 minutos tras introducir la contraseña | Comodidad | `chrome.storage.session` (se borra al cerrar el navegador) |
 | Número de contraseñas incorrectas (para frenar los intentos) | Seguridad | `chrome.storage.session` (se borra al cerrar el navegador) |
 
@@ -39,7 +40,9 @@ Los pagos los gestiona [ExtensionPay](https://extensionpay.com), un servicio de 
 2. Introduces tus datos de pago y tu correo **directamente en las páginas de ExtensionPay/Stripe**. FocusFence nunca ve ni guarda los datos de tu tarjeta.
 3. Después, la extensión envía periódicamente ese identificador a ExtensionPay (al iniciar el navegador, cada 12 horas aproximadamente y al abrir los ajustes) para comprobar si tu suscripción está activa. Nunca se envían datos de navegación, la lista de bloqueo ni las estadísticas.
 
-La biblioteca de ExtensionPay guarda el identificador, la fecha de instalación y el estado de tu suscripción en `chrome.storage.sync`. Si tienes activada la sincronización de Chrome, Chrome sincroniza estos datos con tu cuenta de Google para que tu compra te acompañe en tus otros ordenadores. A los datos que le facilites se aplica la política de privacidad de ExtensionPay: <https://extensionpay.com/privacy>.
+En `chrome.storage.sync`, la biblioteca de ExtensionPay guarda el identificador, la fecha de instalación y la ficha que ExtensionPay devuelve para ese identificador: el estado de tu suscripción y tu plan y, una vez que hayas pagado, la fecha del pago y el correo electrónico con el que pagaste. Si tienes activada la sincronización de Chrome, Chrome sincroniza estos datos con tu cuenta de Google para que tu compra te acompañe en tus otros ordenadores.
+
+Para los datos que facilites a ExtensionPay, su declaración de privacidad es la respuesta a «What about user privacy?» («¿Y la privacidad de los usuarios?») en las preguntas frecuentes de su página principal, en inglés: <https://extensionpay.com/>. ExtensionPay escribe allí que los usuarios son anónimos hasta que pagan y que no guarda ningún dato de tarjetas de crédito en sus servidores, porque de eso se encarga Stripe; que solo usa Google Analytics en el sitio extensionpay.com, no en las extensiones; que la única otra información identificativa que guarda es el correo electrónico del usuario, y que nunca vende ni cede ningún dato.
 
 ## Permisos y para qué se usan
 

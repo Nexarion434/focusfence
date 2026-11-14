@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 100 automated tests green. Repo **public**; site **live** at https://focusfence.dev/ (custom domain; privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip in `focusfence/dist/` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, size 162 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
+Current state: PR #1 open, 100 automated tests green. Repo **public**; site **live** at https://focusfence.dev/ (custom domain; privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip `focusfence/dist/focusfence-1.0.1.zip` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, 206 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
 
 ## Costs at a glance
 
@@ -47,7 +47,7 @@ Repo made public on 2026-11-13 after a history scan: gitleaks 8.21.2 found 0 lea
 - [ ] **Enforce HTTPS** once GitHub has issued the certificate for focusfence.dev (Settings → Pages shows it, usually within an hour of the DNS being right):
       `gh api -X PUT repos/Nexarion434/focusfence/pages -F https_enforced=true`
 - [ ] Recommended: **verify the domain** for your account (GitHub → Settings → Pages → Verified domains, a TXT record at Hostinger). This prevents domain takeover.
-- [ ] **Next extension release:** `PRIVACY_URL` in `focusfence/src/config.js` still points to the github.io address (it redirects). The 1.0.0 zip was deliberately left unchanged; switch it to `https://focusfence.dev/privacy.html` in the next version, then run `npm run build`.
+- [x] **Extension privacy link:** since 1.0.1, `PRIVACY_URL` in `focusfence/src/config.js` is `https://focusfence.dev/privacy.html` (it was the github.io address, which redirects).
 - [ ] If the domain or repo changes again, update `SITE_URL` in `focusfence/scripts/docs.mjs` (it also writes `docs/CNAME`), `SOURCE_URL`/`PRIVACY_URL` in `focusfence/src/config.js` and the URLs in `focusfence/store/*.md`. Then run `npm run docs` (plus `npm run build` if `config.js` changed).
 
 ## 3. Privacy policy contact
@@ -87,27 +87,25 @@ Load `focusfence/dist/focusfence/` unpacked after `npm run build`. These checks 
 
 ## 7. Chrome Web Store submission
 
-Follow **`focusfence/store/cws-submission.md`** field by field. It has the exact values to paste:
-- privacy URL
-- single-purpose statement
-- one justification per permission plus the host permission
-- remote code: No
-- data-usage boxes and certifications
-- distribution: in-app purchases
-- reviewer test instructions
+Follow **`focusfence/store/SUBMISSION.md`** screen by screen. It has every value to paste and every file to upload:
+- the package, `focusfence/dist/focusfence-1.0.1.zip`
+- the listing texts, `focusfence/store/listing/<lang>.md`, and the images, `focusfence/store/assets/`
+- the Privacy tab: single purpose, one justification per permission plus host permissions, remote code (No), data usage (four categories ticked; the guide explains why) and the privacy URL
+- distribution, reviewer test instructions, the ExtensionPay and Stripe settings to check, and what to do after approval
 
-A test keeps it in sync with the manifest and the listing.
+`tests/store.spec.mjs` keeps the guide in sync with the manifest, the listings, the privacy policy and the images.
 
+- [ ] Merge the release PR (`release/cws-v1`) first: it updates the privacy policy that the data-usage answers rely on.
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
-- [ ] After setting `EXTPAY_ID` (step 5): `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.0.zip`.
-- [ ] Fill the Store listing, Privacy, Distribution and Test instructions tabs from the checklist. Upload the 5 English screenshots plus the promo tile.
-- [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the checklist.
+- [ ] `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.1.zip`.
+- [ ] Fill the Store listing (English, then French, Spanish and German), Privacy, Distribution and Test instructions tabs from the guide.
+- [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the guide.
 
 ## 8. Translations
 
-- [ ] In the dashboard, add the **French, Spanish and German** listings from `focusfence/store/listing.fr.md`, `listing.es.md` and `listing.de.md`. Title and short description must match `src/_locales/<lang>/messages.json`.
-- [ ] For each of those languages, upload its own screenshots and promo tile from `focusfence/screenshots/fr/`, `es/` and `de/` (same order as English).
+- [ ] In the dashboard, add the **French, Spanish and German** listings from `focusfence/store/listing/fr.md`, `es.md` and `de.md`. The name and summary come from `src/_locales/<lang>/messages.json`.
+- [ ] For each of those languages, upload its own five screenshots from `focusfence/store/assets/fr/`, `es/` and `de/` (same order as English). The store can't localize promo tiles: one set serves every language.
 - [ ] Optional: have a native speaker proofread the UI strings (`focusfence/scripts/i18n/strings.mjs`, one table for all four languages), then run `npm run i18n`.
 - [ ] Optional but recommended: have the **website** translations proofread too: `focusfence/scripts/site-strings.mjs` (landing) and `focusfence/store/privacy-policy.{fr,es,de}.md`. The translated policies say the English version prevails. Then run `npm run docs`.
 
@@ -121,14 +119,14 @@ All drafts are in `marketing/`. Each needs your own account on the platform and 
 
 ## 10. After approval
 
-- [ ] Set `STORE_URL` in `focusfence/scripts/docs.mjs` to the store link, run `npm run docs`, commit and push. This also turns on the "Add to Chrome" buttons and adds the install URL to the structured data.
-- [ ] Add localized listings (FR, DE, ES, PT-BR) and reply to early reviews.
+- [ ] Set `STORE_URL` in `focusfence/scripts/docs.mjs` to the store link, run `npm run docs` and `npm test`, commit and open a PR. This replaces the "Coming soon to the Chrome Web Store" status with "Add to Chrome" buttons and adds the install URL to the structured data (details: `focusfence/store/SUBMISSION.md` §9).
+- [ ] Reply to early reviews. A Brazilian Portuguese listing would first need a `pt_BR` locale in the extension.
 
 ## 11. Search visibility (details in `SEO_AUDIT.md`)
 
 - [ ] **Google Search Console:** add `focusfence.dev` as a *domain* property (a TXT record at Hostinger), then submit `https://focusfence.dev/sitemap.xml`. Search Console is the only first-party source for impressions, queries and indexing.
 - [ ] **Bing Webmaster Tools:** import the site from Search Console (one click once GSC is verified). Bing's index also powers Copilot answers.
 - [ ] **Legal notice:** France requires *mentions légales* on a commercial site, and Germany an *Impressum*. Both need your legal name and address, so they were not written for you.
-- [ ] **ExtensionPay privacy link:** `https://extensionpay.com/privacy`, cited in the privacy policy, returned HTTP 500 on 2026-11-14 at every URL variant tried. Check it, or ask ExtensionPay for the current address, before the store review.
-- [ ] **Store name and summary vs. the site (decide):** the site now calls FocusFence a focus app ("Focus app for Chrome"), while the store name is still "FocusFence – Website Blocker & Pomodoro Focus Timer" (from `src/_locales/*/messages.json`, also `store/listing*.md`). Visitors who come from the site should find the same category in the store. One option that keeps the store's highest-intent query: "FocusFence – Focus App & Website Blocker". It changes the extension build, so it was left to you (`COPY_CHANGES.md`, round 2).
+- [x] **ExtensionPay privacy link:** `https://extensionpay.com/privacy` returns HTTP 500 (so do `/privacy-policy`, `/terms` and `/legal`; checked 2026-11-14) and ExtensionPay has no privacy page. The privacy policy now links https://extensionpay.com/ and quotes the privacy answer of its FAQ (release PR #6). If ExtensionPay publishes a privacy page later, link it in `focusfence/store/privacy-policy*.md`.
+- [x] **Store name and summary vs. the site:** renamed in 1.0.1 to "FocusFence – Focus App & Website Blocker" (fr "Appli de concentration & bloqueur de sites", es "App de concentración y bloqueador de páginas web", de "Fokus-App & Website-Blocker"), and the summaries now lead with focus (release PR `release/cws-v1`).
 - [ ] **Links to the site:** set the GitHub repository's *Website* field to https://focusfence.dev, and use the store listing's website field. Launch posts (Product Hunt, Reddit, AlternativeTo as an alternative to BlockSite or StayFocusd) bring the first links and brand mentions.

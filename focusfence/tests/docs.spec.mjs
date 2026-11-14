@@ -628,7 +628,7 @@ test('site strings: every language has the same keys and shapes as English, and 
       expect(tags(b), `${lang}.${k} markup`).toBe(tags(a));
     }
     // prices match the store listing for that language
-    const listing = read(`focusfence/store/listing.${lang}.md`);
+    const listing = read(`focusfence/store/listing/${lang}.md`);
     for (const k of ['priceMonthly', 'priceYearly']) expect(listing, `${lang}.${k}`).toContain(SITE[lang][k]);
   }
 });

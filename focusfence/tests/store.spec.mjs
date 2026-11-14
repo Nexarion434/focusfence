@@ -1,70 +1,206 @@
-// Store-readiness checks: listing limits, manifest consistency, screenshot assets.
+// Store-readiness checks: listing texts and limits, manifest consistency, the submission guide,
+// the data disclosures against the privacy policy, and the store images.
 import { test, expect } from '@playwright/test';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../scripts/launch.mjs';
 import { S } from '../scripts/i18n/strings.mjs';
 
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const pngSize = (f) => {
+const png = (f) => {
   const b = fs.readFileSync(path.join(ROOT, f));
-  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  expect(b.readUInt32BE(0), f).toBe(0x89504e47);
+  return { size: [b.readUInt32BE(16), b.readUInt32BE(20)], colorType: b[25] };
 };
+const LANGS = ['en', 'fr', 'es', 'de'];
+const listing = (lang) => read(`store/listing/${lang}.md`);
+/** The code block after a bold label such as **storage** (the label line may go on). */
+const labelled = (doc, label) => {
+  const m = new RegExp('\\*\\*' + label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\*\\*[^\\n]*\\n```\\n([\\s\\S]*?)\\n```').exec(doc);
+  return m && m[1];
+};
+/** The first code block of a listing is its detailed description. */
+const description = (lang) => /```\n([\s\S]*?)\n```/.exec(listing(lang))[1];
+const SITE_URL = /const SITE_URL = '([^']+)'/.exec(read('scripts/docs.mjs'))[1];
+const MANIFEST = JSON.parse(read('src/manifest.json'));
 
-test('manifest is localized and each store listing matches its locale', () => {
-  const mf = JSON.parse(read('src/manifest.json'));
-  expect(mf.default_locale).toBe('en');
-  expect(mf.name).toBe('__MSG_extName__');
-  expect(mf.description).toBe('__MSG_extDescription__');
-  for (const [lang, file] of [['en', 'store/listing.md'], ['fr', 'store/listing.fr.md'], ['es', 'store/listing.es.md'], ['de', 'store/listing.de.md']]) {
-    const listing = read(file);
+test('the store name and summary come from the package and lead with focus, in every listing', () => {
+  expect(MANIFEST.default_locale).toBe('en');
+  expect(MANIFEST.name).toBe('__MSG_extName__');
+  expect(MANIFEST.description).toBe('__MSG_extDescription__');
+  const focus = { en: /focus/i, fr: /concentr/i, es: /conc[eé]ntr/i, de: /fokus|konzentr/i };
+  for (const lang of LANGS) {
     expect(S.extName[lang].length, lang).toBeLessThanOrEqual(75);
     expect(S.extDescription[lang].length, lang).toBeLessThanOrEqual(132);
-    expect(listing, file + ' title').toContain('\n' + S.extName[lang] + '\n');
-    expect(listing, file + ' short description').toContain('\n' + S.extDescription[lang] + '\n');
+    // a focus app first; "website blocker" (bloqueur, bloqueador, Blocker) stays as the search term
+    expect(S.extName[lang], lang).toMatch(focus[lang]);
+    expect(S.extName[lang], lang).toMatch(/blocker|bloqueur|bloqueador/i);
+    expect(S.extDescription[lang].split(':')[0], lang).toMatch(focus[lang]);
+    const doc = listing(lang);
+    expect(doc, `${lang} name`).toContain('\n' + S.extName[lang] + '\n');
+    expect(doc, `${lang} summary`).toContain('\n' + S.extDescription[lang] + '\n');
+    expect(doc, lang).toContain('Workflow & Planning');
   }
 });
 
-test('five 1280x800 store screenshots + 440x280 promo tile per language, captions documented', () => {
-  const { shots, promo } = JSON.parse(read('store/screenshots.json'));
-  const plan = read('store/screenshots.md');
-  expect(shots).toHaveLength(5);
-  for (const lang of ['en', 'fr', 'es', 'de']) {
-    const dir = lang === 'en' ? 'screenshots/' : `screenshots/${lang}/`;
-    for (const s of shots) {
-      expect(pngSize(dir + s.file), dir + s.file).toEqual([1280, 800]);
-      expect(plan, `${lang} headline in plan`).toContain(s.text[lang].headline);
+test('listing descriptions: focus first, never an ad blocker, an honest ADHD answer, real prices and links', () => {
+  const focus = { en: /focus/i, fr: /concentr/i, es: /conc[eé]ntr/i, de: /fokus|konzentr/i };
+  const adBlocker = { en: /ad ?blocker|adblock/i, fr: /bloqueur de pub/i, es: /bloqueador de anuncios/i, de: /werbeblocker/i };
+  const adhd = { en: 'ADHD', fr: 'TDAH', es: 'TDAH', de: 'ADHS' };
+  const medical = { en: /medical/, fr: /médical/, es: /médica/, de: /Medizin/ };
+  const claims = /(?<!\p{L})(cures?|treats|heals|clinically|proven|guaranteed?|guérit|soigne|traite|cliniquement|prouvée?s?|garantie?s?|cura|trata|clínicamente|probado|garantizado|heilt|behandelt|klinisch|bewiesen|garantiert)(?!\p{L})/iu;
+  const prices = /PRICES: Object\.freeze\(\{[\s\S]*?\n\s*\}\),/.exec(read('src/config.js'))[0];
+  for (const lang of LANGS) {
+    const d = description(lang);
+    expect(d.length, lang).toBeLessThanOrEqual(16000); // the dashboard's limit
+    const paragraphs = d.split('\n\n');
+    expect(paragraphs[0], `${lang}: the first paragraph says what FocusFence is for`).toMatch(focus[lang]);
+    expect(d, `${lang}: never called an ad blocker`).not.toMatch(adBlocker[lang]);
+    // one ADHD answer, opening with the disclaimer, and no medical promise anywhere
+    const answers = paragraphs.filter((p) => p.includes(adhd[lang]));
+    expect(answers.length, lang).toBe(1);
+    expect(answers[0].split('\n')[1].split('. ')[0], lang).toMatch(medical[lang]);
+    expect(d, lang).not.toMatch(claims);
+    // the prices the extension charges (src/config.js), in dollars and euros
+    for (const amount of ['2.99', '19.99']) {
+      expect(prices, amount).toContain(amount);
+      expect(d, `${lang} ${amount}`).toContain(lang === 'en' ? amount : amount.replace('.', ','));
     }
-    expect(pngSize(dir + 'promo-tile-440x280.png'), lang).toEqual([440, 280]);
-    expect(promo[lang].headline).toBeTruthy();
+    expect(d, lang).toMatch(/US\$|\$ US/); // 2.99 US$ (fr: 2,99 $ US)
+    expect(d, lang).toContain('€');
+    // links: the site and privacy policy in the listing's language, support, source
+    const home = SITE_URL + (lang === 'en' ? '' : lang + '/');
+    expect(d, lang).toContain(home + '\n');
+    expect(d, lang).toContain(home + 'privacy.html');
+    expect(d, lang).toContain('contact@focusfence.dev');
+    expect(d, lang).toContain('https://github.com/Nexarion434/focusfence');
   }
-  expect(pngSize('src/icons/icon128.png')).toEqual([128, 128]);
 });
 
-test('CWS submission checklist: every permission justified (≤ 1000 chars), values match manifest, listing and config', () => {
-  const doc = read('store/cws-submission.md');
-  const mf = JSON.parse(read('src/manifest.json'));
-  const block = (label) => {
-    const m = new RegExp('\\*\\*' + label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\*\\*[^\\n]*\\n```\\n([\\s\\S]*?)\\n```').exec(doc);
-    return m && m[1];
-  };
-  for (const p of mf.permissions) {
-    const j = block(p);
+test('submission guide: every permission justified (≤ 1000 chars) and identical in the guide and the English listing', () => {
+  const guide = read('store/SUBMISSION.md');
+  const en = listing('en');
+  for (const p of MANIFEST.permissions) {
+    const j = labelled(guide, p);
     expect(j, `justification for ${p}`).toBeTruthy();
     expect(j.length, p).toBeLessThanOrEqual(1000);
+    expect(labelled(en, p), p).toBe(j);
+    // the translations, for reference, cover every permission too
+    for (const lang of ['fr', 'es', 'de']) expect(labelled(listing(lang), p), `${lang} ${p}`).toBeTruthy();
   }
-  const host = block('Host permission');
+  const host = labelled(guide, 'Host permissions');
   expect(host.length).toBeLessThanOrEqual(1000);
-  for (const h of [...mf.optional_host_permissions, ...mf.content_scripts.flatMap((c) => c.matches)]) expect(host).toContain(h);
-  const single = /## Single purpose description\n\n```\n([\s\S]*?)\n```/.exec(doc)[1];
+  expect(labelled(en, 'Host permissions')).toBe(host);
+  for (const lang of ['fr', 'es', 'de']) {
+    const h = labelled(listing(lang), 'Host permissions');
+    expect(h.length, lang).toBeLessThanOrEqual(1000);
+    for (const m of [...MANIFEST.optional_host_permissions, ...MANIFEST.content_scripts.flatMap((c) => c.matches)]) expect(h, lang).toContain(m);
+  }
+  for (const h of [...MANIFEST.optional_host_permissions, ...MANIFEST.content_scripts.flatMap((c) => c.matches)]) expect(host).toContain(h);
+  const single = /### Single purpose description\n\n```\n([\s\S]*?)\n```/.exec(guide)[1];
   expect(single.length).toBeLessThanOrEqual(1000);
-  expect(read('store/listing.md')).toContain(single);
-  const site = /const SITE_URL = '([^']+)'/.exec(read('scripts/docs.mjs'))[1];
-  expect(doc).toContain('```\n' + site + 'privacy.html\n```');
-  // the extension's own link may still use the github.io address, which Pages redirects to the custom domain
-  const inExtension = /PRIVACY_URL: '([^']+)'/.exec(read('src/config.js'))[1];
-  expect([site + 'privacy.html', 'https://nexarion434.github.io/focusfence/privacy.html']).toContain(inExtension);
-  expect(doc).toContain(S.extName.en);
+  expect(/## Single purpose\n\n```\n([\s\S]*?)\n```/.exec(en)[1]).toBe(single);
+  // the privacy policy: on the site, in the guide, and the extension's own link
+  expect(guide).toContain('```\n' + SITE_URL + 'privacy.html\n```');
+  expect(/PRIVACY_URL: '([^']+)'/.exec(read('src/config.js'))[1]).toBe(SITE_URL + 'privacy.html');
+  expect(guide).toContain(S.extName.en);
+  expect(guide).toContain(S.extDescription.en);
+  expect(guide).toContain('contact@focusfence.dev');
+  expect(guide).toContain('`' + SITE_URL + '`'); // homepage URL
+});
+
+test('submission guide names the package to upload, with its real version and checksum', () => {
+  const guide = read('store/SUBMISSION.md');
+  const zip = `dist/focusfence-${MANIFEST.version}.zip`;
+  expect(JSON.parse(read('package.json')).version).toBe(MANIFEST.version);
+  expect(guide).toContain('`' + zip + '`');
+  expect(guide).toContain('`' + MANIFEST.version + '`');
+  // the build is reproducible: after any change to src/, run npm run build and quote the new hash
+  const sha = crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, zip))).digest('hex');
+  expect(guide, `SUBMISSION.md must quote the SHA-256 of ${zip}`).toContain(sha);
+  // no other package lies around in dist/ to be uploaded by mistake
+  expect(fs.readdirSync(path.join(ROOT, 'dist')).filter((f) => f.endsWith('.zip'))).toEqual([path.basename(zip)]);
+});
+
+test('data disclosures: the four ticked categories match the guide and are stated in the privacy policy', () => {
+  const ticked = (doc) =>
+    doc
+      .split('\n')
+      .filter((l) => /^\| [^|]+ \| \*\*Yes\*\* \|/.test(l))
+      .map((l) => l.split('|')[1].trim())
+      .sort();
+  const expected = ['Authentication information', 'Financial and payment information', 'Personally identifiable information', 'Web history'];
+  expect(ticked(listing('en'))).toEqual(expected);
+  expect(ticked(read('store/SUBMISSION.md'))).toEqual(expected);
+  // what each ticked box points to is in the published policy (store/privacy-policy.md -> docs/)
+  const policy = read('store/privacy-policy.md');
+  for (const fact of ['the email address you paid with', 'your subscription status and plan', 'payment date', 'salted PBKDF2-SHA-256 hash', 'random identifier (an API key)', 'Blocked-attempt counts per blocked site per day', 'read the address of the current tab']) {
+    expect(policy, fact).toContain(fact);
+  }
+  // and the translations say it too (the site serves them)
+  for (const [lang, phrase] of [['fr', 'l’adresse e-mail avec laquelle vous avez payé'], ['es', 'el correo electrónico con el que pagaste'], ['de', 'die E-Mail-Adresse, mit der Sie bezahlt haben']]) {
+    expect(read(`store/privacy-policy.${lang}.md`), lang).toContain(phrase);
+  }
+});
+
+test('ExtensionPay: the policy quotes its FAQ word for word, and nothing users see links the dead /privacy page', () => {
+  // https://extensionpay.com/privacy answers HTTP 500 (2026-11-14); the FAQ on the home page is
+  // ExtensionPay's only privacy statement ("What about user privacy?").
+  const FAQ =
+    "Users are anonymous until they pay and we don't store any credit card information on our servers — Stripe takes care of that. " +
+    'We run Google Analytics only on the extensionpay.com site, not in extensions themselves. ' +
+    "The only other identifying information we store is a user's email. We never sell or otherwise give away any data.";
+  expect(read('store/privacy-policy.md')).toContain('"What about user privacy?" in the FAQ on its home page, <https://extensionpay.com/>: "' + FAQ + '"');
+  for (const lang of ['fr', 'es', 'de']) {
+    const md = read(`store/privacy-policy.${lang}.md`);
+    expect(md, lang).toContain('What about user privacy?');
+    expect(md, lang).toContain('<https://extensionpay.com/>');
+  }
+  const REPO = path.resolve(ROOT, '..');
+  const files = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (/\.(html|md|js|json|txt)$/.test(e.name)) files.push(p);
+    }
+  };
+  for (const d of ['focusfence/src', 'focusfence/store', 'docs']) walk(path.join(REPO, d));
+  const userFacing = files.filter((f) => !f.endsWith('SUBMISSION.md')); // the guide explains why the link was replaced
+  const hits = userFacing.filter((f) => fs.readFileSync(f, 'utf8').includes('extensionpay.com/privacy')).map((f) => path.relative(REPO, f));
+  expect(hits).toEqual([]);
+});
+
+test('store images: 5 screenshots per language, promo tile, marquee and icon, at the exact sizes, documented', () => {
+  const { shots } = JSON.parse(read('store/screenshots.json'));
+  const readme = read('store/assets/README.md');
+  expect(shots.map((s) => s.file)).toEqual(['1-block-page.png', '2-popup.png', '3-focus-session.png', '4-strict-mode.png', '5-blocklist.png']);
+  for (const lang of LANGS) {
+    const dir = `store/assets/${lang}/`;
+    expect(fs.readdirSync(path.join(ROOT, dir)).sort(), lang).toEqual(shots.map((s) => s.file));
+    for (const s of shots) {
+      const img = png(dir + s.file);
+      expect(img.size, dir + s.file).toEqual([1280, 800]);
+      expect(img.colorType, `${dir}${s.file}: 24-bit, no alpha`).toBe(2);
+      const t = s.text[lang];
+      for (const k of ['kicker', 'headline', 'dim', 'sub']) expect(t[k], `${lang} ${s.file} ${k}`).toBeTruthy();
+      // the README lists every caption, and each listing names its screenshots in upload order
+      expect(readme, `${lang} ${s.file}`).toContain(lang === 'en' ? `**${t.headline}** ${t.dim}` : `${t.headline} ${t.dim}`);
+    }
+    const order = shots.map((s) => listing(lang).indexOf('`' + s.file + '`'));
+    expect(order.every((i, n) => i > 0 && (n === 0 || i > order[n - 1])), `${lang} lists the screenshots in order`).toBe(true);
+  }
+  const small = png('store/assets/promo-small-440x280.png');
+  expect(small.size).toEqual([440, 280]);
+  expect(small.colorType).toBe(2);
+  const marquee = png('store/assets/marquee-1400x560.png');
+  expect(marquee.size).toEqual([1400, 560]);
+  expect(marquee.colorType).toBe(2);
+  expect(png('store/assets/icon-128.png').size).toEqual([128, 128]);
+  expect(fs.readFileSync(path.join(ROOT, 'store/assets/icon-128.png')).equals(fs.readFileSync(path.join(ROOT, 'src/icons/icon128.png')))).toBe(true);
+  const guide = read('store/SUBMISSION.md');
+  for (const f of ['store/assets/icon-128.png', 'store/assets/promo-small-440x280.png', 'store/assets/marquee-1400x560.png']) expect(guide, f).toContain(f);
 });
 
 test('no estimated "time saved / reclaimed" claims anywhere users can see them', () => {

@@ -10,7 +10,8 @@ import { ROOT, launchExtension } from '../scripts/launch.mjs';
 import { checkZip } from '../scripts/cws-check.mjs';
 import { readZip, writeZip } from '../scripts/zip.mjs';
 
-const ZIP = path.join(ROOT, 'dist/focusfence-1.0.0.zip');
+const { version } = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/manifest.json'), 'utf8'));
+const ZIP = path.join(ROOT, `dist/focusfence-${version}.zip`);
 
 function extract(zip) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'focusfence-zip-'));

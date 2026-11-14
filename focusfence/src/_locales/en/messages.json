@@ -1,12 +1,12 @@
 {
   "extName": {
-    "message": "FocusFence – Website Blocker & Pomodoro Focus Timer"
+    "message": "FocusFence – Focus App & Website Blocker"
   },
   "extShortName": {
     "message": "FocusFence"
   },
   "extDescription": {
-    "message": "Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomodoro focus timer and strict mode. 100% private."
+    "message": "Stay focused: block distracting websites for free, with no limit. Pro adds focus sessions, strict mode and YouTube Shorts blocking."
   },
   "badgeOff": {
     "message": "OFF"

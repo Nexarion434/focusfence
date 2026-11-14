@@ -19,11 +19,11 @@
 
 ## Gallery (1270×760 recommended; reuse store art)
 
-1. `focusfence/screenshots/store-1-block-page.png`: "Distractions hit a calm wall"
-2. `focusfence/screenshots/store-2-popup.png`: one-click block from the popup
-3. `focusfence/screenshots/store-3-options-blocklist.png`: block whole sites or just paths
-4. `focusfence/screenshots/store-4-schedule-focus-strict.png`: schedules, Pomodoro, strict mode
-5. `focusfence/screenshots/store-5-stats.png`: private stats
+1. `focusfence/store/assets/en/1-block-page.png`: "Fence off distracting websites."
+2. `focusfence/store/assets/en/2-popup.png`: one-click block from the popup
+3. `focusfence/store/assets/en/3-focus-session.png`: Pomodoro focus sessions (Pro)
+4. `focusfence/store/assets/en/4-strict-mode.png`: strict mode with a 10-minute cooling-off (Pro)
+5. `focusfence/store/assets/en/5-blocklist.png`: block whole sites, or just paths and keywords
 
 Thumbnail: `focusfence/src/icons/icon128.png` (upload a 240×240 version).
 
