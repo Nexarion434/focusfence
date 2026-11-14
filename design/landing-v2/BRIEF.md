@@ -1,6 +1,6 @@
 # FocusFence landing page v2: brief, decisions and critique log
 
-Status: **proposal on branch `design/landing-v2`** (PR #3 against `feat/focusfence-v1`, to be retargeted to `main`). Nothing outside the website was changed, apart from an opt-in `--site` mode in the screenshot script (the extension's own styles are untouched).
+Status: **proposal on branch `design/landing-v2`** (PR #3 against `feat/focusfence-v1`, to be retargeted to `main`). Nothing outside the website was changed, apart from an opt-in `--site` mode in the screenshot script (the extension's own styles are untouched). Since round 4 the branch also contains PR #4 (`design/extension-ui`, merged in up to its final round 5, `3078c89`), so PR #3 can be merged right after PR #4 without conflicts.
 
 Round 2 (owner feedback on PR #3) added:
 - a light theme that follows the system, with a light / dark / system toggle in the header;
@@ -8,9 +8,7 @@ Round 2 (owner feedback on PR #3) added:
 
 Round 3 (design review) fitted the hero into the first screen and showed every product image whole on phones.
 
-Round 4 follows the approved extension redesign (PR #4, `design/extension-ui` at `b51d0c3`): the fence is now drawn as **lanterns**. Every product image is re-captured from that UI, the page closes on its block-page scene, and the copy says what the free plan really allows. See sections 2, 6, 7 and 10.
-
-**Round 4 is in progress.** PR #4's own round 4 redraws the fence again (frosted-glass pills). This branch follows PR #4's round 3 lantern for now. The hero images and the closing fence will be re-synced to PR #4's round 4 once it is done. The copy, the capture pipeline (`--src`), the phone captures and the tests carry over unchanged.
+Round 4 follows the approved extension redesign, through PR #4's final fence (`design/extension-ui`, round 5 at `3078c89`): a row of **chunky frosted-glass pills** on a seamless glossy floor that mirrors them, the one in the middle holding the light. PR #4 is merged into this branch and every product image is captured from it. The page closes on the extension's block-page scene, and the copy says what the free plan really allows. See sections 2, 3, 6, 7 and 10.
 
 Reference: [linear.app](https://linear.app), studied on 2026-11-13 with desktop (1440 px) and mobile (390 px) captures and its computed styles. We borrow its level of craft, not its assets, copy or brand.
 
@@ -36,10 +34,10 @@ FocusFence sells the absence of noise. The page feels like the product does when
 
 Signature details:
 
-- **The lantern fence** (round 4, from the extension). One picket per site, drawn with the logo's 45° tip, lettered and lit from within. The page uses the extension's own fence and nothing else:
+- **The glass-pill fence** (from the extension, its round 5). One chunky frosted-glass pill per site, in a short row that steps down gently from the middle (the middle pill 1.6 times as tall as wide, the ends 0.92); the middle one holds the light. The page uses the extension's own fence and nothing else:
   - in the product images;
-  - in front of each kicker, the extension's 8×13 picket ornament (as on its focus-round counters);
-  - at the end of the page, the extension's block-page scene: a wall of pickets on a reflecting ground, with one lantern lit in the middle (graphite at night, sage at dawn).
+  - in front of each kicker, the extension's small pill ornament (7×12, as on its focus-round counters and plan marks);
+  - at the end of the page, the extension's block-page scene: the row on a seamless glossy floor that mirrors every pill. At night the lit pill glows emerald from inside, with a wide, soft halo behind it; by day it is a solid green pill among milky sage glass with bright rims, on warm paper.
 - **Dimmed distractions.** In two-tone headings the distracting thing is set in the muted grey.
 - **One moment, told everywhere.** The hero's popup, Settings and block page show the same six sites and the same counts after the block-page visit (5 blocked today, 89 this week), and so do the stats further down. The focus card shows a session at exactly 18:42.
 
@@ -57,23 +55,27 @@ The site follows the system theme (`prefers-color-scheme`) until the visitor pic
 | `--text-2` | `#C9D0CC` | `#3B4842` | emphasis, list items | 12.7 / 9.2 : 1 |
 | `--muted` | `#8E9893` | `#5A645F` | body, nav | 6.7 / 5.9 : 1 (5.6 on `--screen`) |
 | `--dim` | `#8E9893` | `#7E8883` | dimmed half of headings, ≥ 26 px only | 6.7 / 3.5 : 1 (AA large) |
-| `--green` | `#3A9A5B` | `#3A9A5B` | field green: logo tile, glows, kicker pickets (never small text) | |
+| `--green` | `#3A9A5B` | `#3A9A5B` | field green: logo tile, glows, kicker pills (never small text) | |
 | `--accent` | `#6CC58A` | `#276B5B` | ticks, step numbers, focus ring | 9.5 / 6.0 : 1 |
 | `--cta` | `#5DBE7E`, ink text | `#276B5B`, white text | primary button (the product's own light button colour) | 8.3 / 6.3 : 1 |
 | `--pro` | `#D9A74B` on 12 % amber | `#7D5710` on `#F7EEDB` | PRO badges (as in the extension) | 8.0 / 5.6 : 1 |
 
 Light-theme details: cards are white with a hairline and a 1 px shadow instead of translucent white; windows get soft ink shadows instead of black ones.
 
-**The lantern fence** (round 4) brings the extension's own picket tokens, unchanged:
+**The glass-pill fence** brings the extension's own glass and light tokens (its round 5), unchanged:
 
-| Token | Dark (night) | Light (dawn) | Use |
+| Token | Dark (night) | Light (day) | Use |
 |---|---|---|---|
-| `--wall-0` / `-1` / `-2` | `#232927` / `#151A18` / `#0B0E0D` (graphite) | `#C3D1C8` / `#D0DBD4` / `#E2E9E4` (sage) | the wall's pickets, top to foot |
-| `--lit-0` / `-1` / `-2` | `#C4F4D4` / `#5CC583` / `#2C7C48` | `#52B678` / `#3A9A5B` / `#2A7845` | the lantern (the middle stop is the logo green) |
-| `--rail` | `#0F1412` | `#D2DDD6` | rails, lit near the lantern |
-| `--pool`, `--refl` | green at 50 %, reflection 30 % | green at 24 %, reflection 16 % | the light on the ground and the wall's reflection |
+| `--glass-0` / `-1` | pale green-white at 10 % / 3.5 % | milky sage `rgb(240 246 242)` at 94 % / `rgb(222 234 226)` at 86 % | the frosted glass, top to foot, with a bright rim |
+| `--glass-tint` | `63 214 122` at up to 30 % | `112 176 134` at up to 42 % | greener the nearer the light |
+| `--glass-blur` | `blur(16px) saturate(1.4)` | `blur(14px) saturate(1.15)` | the frost (a backdrop filter) |
+| `--light-rgb` | `63 214 122` (emerald) | `30 138 69` | the light on the neighbours, the halo and the pool |
+| `--lit-0` / `-1` / `-2` | `#66E396` / `#3FD67A` / `#1E9F55` | `#33A861` / `#1E8A45` / `#17723A` | the lit pill |
+| `--halo-a`, `--halo-h` | 55 %, 2.05 × the middle pill | 26 %, 1.4 × | the halo: wide and soft at night, a bloom by day |
+| `--refl`, `--mirror-*` | 70 %; silhouettes at 20–55 % of the tint | 62 %; 16–46 % | the floor's reflection: every pill, faint, in its own tint |
+| `--floor` | black from 0 to 55 % | ink from 0 to 3.5 % | the seamless floor: a breath of shade, no band, no line |
 
-Only the sky and the ground are tuned to the page. The section starts on the page's own background and ends on the extension's ground colours, warmed slightly in light to sit on the paper.
+The section starts on the page's own background and ends on the extension's horizon and floor: a deep green horizon over black at night (`#041309`), warm paper by day (`#F7F8F5`).
 
 ### Theme switching, without a flash
 
@@ -113,24 +115,24 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 2. **Hero:** kicker pill, two-tone H1 on one line in every language at 1440 px, then a split row with the lead on the left and the actions plus three ticks on the right. Until the store link exists, the primary action is an honest status ("Coming soon to the Chrome Web Store", a dot that pings three times), not a dead button.
 
    Below it, the product in one look, all inside the first screen at 1440×900 and 390×844 (a test checks it in every language). Each window's tab title comes from the extension's own strings.
-   - **What you control:** the real Settings window (1280×740), on its Blocklist: the top bar with five destinations, your fence of six lit pickets (R, Y, X, F, N, #), the composer and the site cards.
-   - **One click:** the real popup, as the extension shows it idle with Pro: its lit fence, "Blocking is on", the full-width Block site button, the focus row and the counts. It hangs from the toolbar icon, whole, at its real height (448 px in English).
-   - **What you get instead:** the real block page in a 720×600 window, to the right: "reddit.com is fenced off", the quote, today's counts, and the wall with reddit.com's lantern. It slips under the popup's edge, in the page's empty margin.
+   - **What you control:** the real Settings window (1280×740), on its Blocklist: the top bar with five destinations, your fence (six glass pills and a spare, reddit.com's lit with its R), the composer and the site cards.
+   - **One click:** the real popup, as the extension shows it idle with Pro: its row of pills with the newest lit, "Blocking is on", the full-width Block site button, the focus row and the counts. It hangs from the toolbar icon, whole, at its real height (448 px in every language).
+   - **What you get instead:** the real block page in a 720×600 window, to the right: "reddit.com is fenced off", the quote, today's counts, and the row of glass pills with reddit.com's lit. It slips under the popup's edge, in the page's empty margin.
 
    On phones, the settings window runs off the right edge behind the other two; the popup sits on the right and the block page on the left, side by side, both whole.
 3. **Statement + three steps** (from onboarding): pick up to three sites, allow the block page, get back to work.
 4. **Block** (`#features`): the full block page in a browser window (1280×800, the whole scene down to its reflecting ground), then the two block features. On phones the window shows the same page in a 400 px window, whole.
-5. **Focus:** bento of three cards with real UI crops: the schedule with its week ribbon, the popup's focus row at 18:42 (round pickets and progress), and strict mode as the popup shows it (the fence turns amber, the switch locks).
-6. **Stats:** the real stats panel, large (the 7-day chart drawn as pickets, today's lit), then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check). On phones, the panel comes from the extension's own narrow layout, shown whole.
+5. **Focus:** bento of three cards with real UI crops: the schedule with its week ribbon, the popup's focus row at 18:42 (round pills and progress), and strict mode as the popup shows it (the light turns amber, the switch locks).
+6. **Stats:** the real stats panel, large (the 7-day chart drawn as pills, today's lit), then a hairline grid of six smaller real features (password lock, own block-page message, export/import, light and dark, four languages, incognito check). On phones, the panel comes from the extension's own narrow layout, shown whole.
 7. **Privacy:** two-tone statement, three points, and a mono card listing what FocusFence actually asks Chrome for, plus the single network exception (ExtensionPay, only after upgrading).
 8. **Pricing:** Free / Pro monthly / Pro yearly (lit card, "Save 44%"), localized prices, how to upgrade, payment note. The yearly card ends with "One year of Pro": two quiet bars, 12 × Pro monthly ($35.88) against Pro yearly ($19.99), computed from the prices and written like each language's own prices (a test checks the arithmetic).
 9. **FAQ:** heading and contact line left (sticky on desktop), accordion right.
-10. **Closing:** logo in its light, "Get your focus back.", the action, then the extension's block-page scene: a wall of pickets on a reflecting ground, the lantern lit in the middle, its light on the rails, its neighbours and the ground. It rises in a wave from the lantern when it comes into view (section 8).
+10. **Closing:** logo in its light, "Get your focus back.", the action, then the extension's block-page scene (round 5): seven chunky frosted-glass pills on a seamless glossy floor that mirrors every one, the middle one lit, its halo rising behind it, its neighbours catching the light and a pool of it under it. Like the block page, windows of 900 px and under show five pills rather than thinner ones. It rises in a wave from the light when it comes into view (section 8).
 11. **Footer:** brand line, Product / Resources / Contact (contact@focusfence.dev), license and trademark notes.
 
 ## 7. Product imagery
 
-`npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`. Round 4 captures the redesigned UI (PR #4 at `b51d0c3`) through `--src <its focusfence/src>`, because that UI is not merged into this branch yet. Once it is, `npm run screenshots:site` gives the same images from `src/`.
+`npm run screenshots:site` (new `--site` mode of the existing `scripts/screenshots.mjs`) drives the real extension with the same seeded data as the store shots and writes `screenshots/site/<lang>/`. Since round 4, PR #4's redesigned UI is merged into this branch, so the captures come from `src/` (pass 13 used a temporary `--src` option while it lived on its own branch; it is gone).
 
 - 2x captures in **both themes** (`name.webp` and `name-light.webp`), encoded to WebP by Chromium's own canvas encoder (no image tooling needed).
   - Hero: the Blocklist in a 1280×740 window (1x and 2x for `srcset`), the idle popup, and the block page in a 720×600 window.
@@ -141,9 +143,9 @@ Inter (opsz 14–32, wght 100–900), `font-optical-sizing: auto`, features `cv1
 - **Phones** get the extension's own narrow layouts, served by `<picture>` below 720 px, still one per theme and lazy:
   - the block page at 400 px;
   - the stats at 400 px;
-  - the schedule at the narrowest window where the whole card fits: 400 px in English and Spanish, 440 px in German, 480 px in French, whose save buttons need the room.
+  - the schedule at the narrowest window where the whole card fits: 400 px in every language since PR #4's round 4, whose card footers wrap (the script still checks every capture fits).
 - **Schedule.** It is switched on for its picture, so its week ribbon is green. Its "active / paused now" note depends on the clock at capture time, so it is hidden, like the Incognito warning.
-- **Popup height.** The popup is captured at its real height, 448 px in English and Spanish. It is 461 px in German and 511 px in French, where the focus row and the footer wrap; the hero leaves room for that.
+- **Popup height.** The popup is captured at its real height: 448 px in all four languages since PR #4's round 4, which shortened two French labels and one German one.
 - **Focus timer.** It is captured at exactly 18:42; the script waits for that tick.
 - **Open Graph.** `og.png` (1200×630) per language is composed from the same captures: logo, localized kicker and two-tone headline (auto-fitted, clear of the popup), ticks, the 720×600 block page and the popup.
 
@@ -155,11 +157,17 @@ Subtle and optional; nothing is hidden without JavaScript, and `prefers-reduced-
 - A soft light follows the pointer across cards and plans (fine pointers only).
 - FAQ answers open with a height transition where the browser supports it.
 - No endless animation: the status dot pings three times and rests.
-- The closing wall rises once, the first time it comes into view: in a wave from the lantern (24 ms per picket, the extension's spring curve), then the lantern and its pool of light fade in. It uses the extension's timings and only animates `transform` and `opacity`. Without the script, or with reduced motion, it simply stands.
+- The closing fence rises once, the first time it comes into view: in a wave from the light (45 ms a pill, the extension's spring curve), out of the ground line; then its halo breathes in and the pool of light fades in. It uses the extension's timings and only animates `transform` and `opacity`. Without the script, or with reduced motion, it simply stands.
 
 ## 9. Quality bar (measured)
 
-- **Lighthouse** (v12.6, local static server with gzip). The server is shared with other agents and often saturated (6 cores, load average 3–6), so the figures are medians of three runs, with their range. These were re-measured for round 3, at a load average of 2.7–4.3:
+- **Lighthouse, round 4** (v12.6, local static server with gzip), measured on the final build (PR #4's round 5 merged in), at a load average of 2–4 on a shared 6-core server:
+  - **Desktop:** 99–100 on `/` in both themes (three runs each) and 100 on `/privacy.html`.
+  - **Accessibility, best practices and SEO:** 100 on every page measured: `/`, `/fr/`, `/de/` and `/privacy.html`, both themes, phone and desktop.
+  - **Phones:** `/` scored 72, 99 and 81 in dark (median 81) and 88, 85 and 96 in light (88); `/fr/` 70–82; `/de/` 63–85; `/privacy.html` 97–98. The spread is the machine: Lighthouse's CPU benchmark read 466–1152 that night, against 1125–1183 for the round 3 runs below.
+  - **No regression (interleaved A/B on the same server).** The round 3 build (`463553c`) and this one were run alternately on `/de/`, phone, dark: round 3 scored 72, 72 and 70, this build 91, 70 and 70. The same build without its closing scene scored 63, 70 and 70, and with the scene deferred (`content-visibility`) 74, 73 and 69, so the fence costs nothing measurable. A first A/B on `/` at a load of 7–10 gave round 3 86, 94, 70 and 76, against 74, 85, 74 and 75 for round 4. Only blocking time moves with the load.
+  - LCP is 2.0–2.3 s on the landing pages on phones (1.5 s on privacy), CLS 0, and a phone downloads about 220 KB on load.
+- **Lighthouse, round 3**, for reference. The server is shared with other agents and often saturated (6 cores, load average 3–6), so the figures are medians of three runs, with their range. These were measured at a load average of 2.7–4.3:
 
   | Page | Perf, phone (median, range) | Perf, desktop | A11y | Best practices | SEO |
   |---|---|---|---|---|---|
@@ -175,7 +183,7 @@ Subtle and optional; nothing is hidden without JavaScript, and `prefers-reduced-
   - focus-visible rings, including on the theme toggle, which is a native radio group;
   - real `<details>` for the FAQ;
   - alt text on every product image (the hidden theme's image is `display: none`, so it is never announced twice).
-- **Weight:** about 190–210 KB before scrolling on a phone. That covers HTML with inline CSS (17 KB gzipped), the font (73 KB), and the three hero captures: settings 33–38 KB at 1x, popup 33–39 KB and block-page card 31–37 KB. On phones the Block section reuses that card. All of a language's product images in one theme come to 350–380 KB (dark) or 376–406 KB (light) on disk, desktop and phone variants included. A visitor fetches one theme, and one variant of each image.
+- **Weight (round 4):** about 220 KB before scrolling on a phone (Lighthouse's transfer size). That covers HTML with inline CSS (19 KB gzipped), the font (73 KB), and the three hero captures: settings 28–30 KB at 1x, popup 29–33 KB and block-page card 35–43 KB. On phones the Block section reuses that card. All of a language's product images in one theme come to 411–445 KB (dark) or 399–433 KB (light) on disk, desktop and phone variants included. A visitor fetches one theme, and one variant of each image.
 
 ## 10. Critique log
 
@@ -321,7 +329,7 @@ Fixes:
   - Main-thread work without throttling: layout 31.5 vs 32.4 ms, style 10.6 vs 10.8 ms, script 7.5 vs 7.5 ms (medians of six).
   - Lighthouse, phone, dark, four runs each: round 2 scored 97, 99, 99, 99; this build scored 99, 99, 99, 99, with lower TBT.
 
-### Round 4: the redesigned extension UI (in progress)
+### Round 4: the redesigned extension UI
 
 **Pass 13** (synced to PR #4 round 3, the lantern):
 - Every product image was re-captured from PR #4's source at `b51d0c3`, through the new `--src` option, in both themes and all four languages.
@@ -337,9 +345,51 @@ Fixes:
   - The French popup is 511 px tall, not 448, because its focus row wraps beside "Lancer la concentration". Its footer also wraps in French and German.
   - The schedule footer overflows a 400 px window in French and German.
 
+**Pass 14** (PR #4 round 4, the glass pills, merged in):
+- **Merge.** `origin/design/extension-ui` (round 4, `42938c4`) is merged into this branch with a normal merge commit, so PR #3 sits on top of PR #4. Every conflict was in generated website files:
+  - the landing pages, regenerated from the merged sources;
+  - the old site's PNG captures, which stay deleted (this branch serves WebP captures);
+  - two new command lines in the README, both kept.
+- **`--src` is gone:** the captures come from `src/`.
+- **Product images.** All of them were re-captured from the merged UI, in both themes and all four languages:
+  - the popup's row of pills, 448 px tall in every language now;
+  - the Blocklist's fence header;
+  - the block page, with reddit.com's pill lit;
+  - the stats chart, drawn as pills;
+  - strict mode's amber light.
+- **Closing fence.** It is ported from the extension's `base.css` (`.fence`, `.pill`) and `blocked.css`. Seven pills (the demo's six sites and a spare), each shaped by `pillProfile`. The row clips at the ground line, so the pills rise out of the ground in a wave from the light; the reflection and the pool of light are the extension's. 14 pills replace 66 pickets.
+- **Kicker glyph:** the extension's small pill (7×12).
+- **Alt texts:** they describe the pills in all four languages.
+- **Checked:**
+  - the first screen at 1440×900 and 390×844 in every language (tested);
+  - the closing scene in both themes, on desktop and phone;
+  - the rise mid-animation: nothing shows below the ground line.
+- **Found and fixed:** the theme test failed now and then: after a reload, the stored choice was gone. The cause was the test's `file://` URLs, not the site: Chrome sometimes gives two loads of the same `file://` page different localStorage (reproduced 1 time in 10, and 5 in 20 with a second tab). The test now loads the site from a local HTTP origin, as on focusfence.dev: 12 out of 12 runs pass, and 20 out of 20 in the standalone reproduction.
+- **Both findings for PR #4 are fixed there.** The popup is 448 px in every language, and the schedule fits a 400 px window in every language, so every phone capture uses 400 px.
+
+**Pass 15** (PR #4 round 5, the final fence, merged in):
+- **Merge.** PR #4's round 5 (`3078c89`) is merged in with a second normal merge commit. Its only conflicts were the old site's PNG captures, which PR #4 had regenerated again; they stay deleted. The README and the landing pages merged cleanly.
+- **Product images.** All re-captured from round 5, in both themes and all four languages. Every surface shows chunky pills, each mirrored on the seamless floor:
+  - the popup: up to seven pills;
+  - the Settings header: up to nine;
+  - the block page: seven at 1280 px, five in the hero's 720 px window.
+- **Closing fence.** Re-ported from round 5's `base.css` and `blocked.css`:
+  - **Profile:** `pillProfile` is round 5's cosine bell. The middle pill is 1.6 times as tall as wide and the ends 0.92 (1.74 times shorter), 9 % of a pill apart; the ends fade to about two thirds.
+  - **Floor:** seamless, with no band and no line. It mirrors every pill as a faint silhouette in its own tint, with the pool under the middle one.
+  - **Light:** at night the halo is wider and softer (2.05 times the middle pill), and the light spills further onto the neighbours. By day the glass is a milkier sage with a visible rim.
+  - **Size:** pills are 112 px wide at 1440 px (the block page's are 132 px). At 900 px and under, the row shows five pills instead of seven, like the block page, so phones get 64 px pebbles rather than seven 45 px ones.
+- **Checked:**
+  - the first screens at 1440×900 and 390×844 in every language (tested);
+  - the closing scene in both themes, on desktop and phone;
+  - the full test suite.
+- **Found and fixed:** PR #4's axe test runs 14 audits per theme, each after the animations settle. On this server it took 53–56 s against Playwright's 60 s default, and timed out in one full run under load. It is marked slow here, as this branch's own heaviest tests already are; that is a note for PR #4.
+- **Performance.** On phones, Lighthouse swung widely that night: 63 to 99 for the same build. An interleaved A/B against the round 3 build showed the same range for both, and removing or deferring the closing scene changed nothing, so nothing was traded away (section 9). Desktop stays 99–100; accessibility, best practices and SEO stay 100.
+
 ## 11. Open points for the owner
 
 - New French, Spanish and German strings in `focusfence/scripts/site-strings.mjs` deserve a native proofread, like the rest of the site. They cover the statement, steps, section heads, details, permissions card, pricing notes, the theme toggle labels and the "One year of Pro" caption.
 - The German extension UI says "du" while the site says "Sie" (unchanged here; the screenshots show the product as it is).
 - When the store listing is live, set `STORE_URL` in `focusfence/scripts/docs.mjs` and run `npm run docs`: the header pill and the green buttons appear automatically.
-- If the extension's UI is redesigned (another branch is working on it), run `npm run screenshots:site` and `npm run docs`: every website image, in both themes and all four languages, is re-captured from the real UI.
+- Merge order: PR #4 first, then this PR, which already contains PR #4 (merged in up to `3078c89`, no conflicts left).
+- If the extension's UI changes again, run `npm run screenshots:site` and `npm run docs`: every website image, in both themes and all four languages, is re-captured from the real UI. A change to the fence's CSS also needs the closing scene in `scripts/site.css` (ported from `base.css` and `blocked.css`).
+- Round 4's new alt texts name the pills "piliers de verre", "pilares de cristal" and "gläserne Säulen"; a native speaker may prefer another word.
