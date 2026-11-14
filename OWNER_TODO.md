@@ -1,7 +1,7 @@
 # FocusFence: owner actions before publication
 
 Everything below needs the owner's accounts, money or decisions, so it was left for you. Paths are relative to the repo root; the extension lives in `focusfence/`.
-Current state: PR #1 open, 100 automated tests green. Repo **public**; site **live** at https://focusfence.dev/ (custom domain; privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip `focusfence/dist/focusfence-1.0.1.zip` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, 206 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
+Current state: PR #1 open, 100 automated tests green. Repo **public**; site **live** at https://focusfence.dev/ (custom domain; privacy: `/privacy.html`), also in French (`/fr/`), Spanish (`/es/`) and German (`/de/`). The store zip `focusfence/dist/focusfence-1.0.2.zip` passes the pre-submission checks (`npm run cws:check`: MV3, icons, no remote code, 208 KB). UI, listings and screenshots in English, French, Spanish and German. Logo: **Picket F** (design/logo direction 1) is integrated in the icons, UI, website, screenshots and promo tiles.
 
 ## Costs at a glance
 
@@ -81,14 +81,14 @@ Load `focusfence/dist/focusfence/` unpacked after `npm run build`. These checks 
 - [ ] Add a site from the popup and accept Chrome's permission prompt: the block page appears, not the error page.
 - [ ] Decline the prompt for another site: it is still blocked (error page) and Settings offers "Allow".
 - [ ] Real YouTube: block `youtube.com/shorts`. Shorts are blocked when opened directly and when clicked from the home page; regular videos still play.
-- [ ] Real purchase in ExtensionPay **test mode**, once with Chrome's language set to an English (US) locale (USD plan) and once to a eurozone locale such as French or German (EUR plan): the right plan opens and Pro unlocks; "Restore purchase" works on a second profile; offline, Settings shows the "Couldn't reach ExtensionPay" note and keeps Pro.
+- [ ] Real purchase in ExtensionPay **test mode**, once with Chrome's language set to an English (US) locale (USD plan) and once to a eurozone locale such as French or German (EUR plan): the right plan opens and Pro unlocks; "Restore purchase" works on a second profile; offline, Settings shows the "Couldn't reach ExtensionPay" note and keeps Pro. Since 1.0.2, Settings › Plan › **Manage subscription** opens ExtensionPay's subscription page: check that you can update the card and cancel there.
 - [ ] Strict mode: the Incognito warning shows until "Allow in Incognito" is on. Disabling FocusFence during a timed session pauses its clock.
 - [ ] Screen reader spot check (e.g. ChromeVox or NVDA) on the popup and Settings. Automated axe checks already pass.
 
 ## 7. Chrome Web Store submission
 
 Follow **`focusfence/store/SUBMISSION.md`** screen by screen. It has every value to paste and every file to upload:
-- the package, `focusfence/dist/focusfence-1.0.1.zip`
+- the package, `focusfence/dist/focusfence-1.0.2.zip`
 - the listing texts, `focusfence/store/listing/<lang>.md`, and the images, `focusfence/store/assets/`
 - the Privacy tab: single purpose, one justification per permission plus host permissions, remote code (No), data usage (four categories ticked; the guide explains why) and the privacy URL
 - distribution, reviewer test instructions, the ExtensionPay and Stripe settings to check, and what to do after approval
@@ -98,7 +98,7 @@ Follow **`focusfence/store/SUBMISSION.md`** screen by screen. It has every value
 - [ ] Merge the release PR (`release/cws-v1`) first: it updates the privacy policy that the data-usage answers rely on.
 - [ ] Register the developer account (cost #1) and turn on 2-step verification.
 - [ ] Complete the **trader / non-trader** declaration (EU Digital Services Act) and the publisher contact details.
-- [ ] `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.1.zip`.
+- [ ] `cd focusfence && npm test && npm run cws:check`, then upload `focusfence/dist/focusfence-1.0.2.zip`.
 - [ ] Fill the Store listing (English, then French, Spanish and German), Privacy, Distribution and Test instructions tabs from the guide.
 - [ ] Submit for review. Expect questions about the optional `*://*/*` host permission; the justification is in the guide.
 

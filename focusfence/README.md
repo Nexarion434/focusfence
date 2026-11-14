@@ -78,7 +78,7 @@ npx playwright install chromium
 ## Test
 
 ```bash
-npm test            # 117 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
+npm test            # 124 tests: unit, e2e blocking, accessibility (axe), i18n fr/es/de, onboarding,
                     # website, store assets, production build, zip pre-submission checks
 ```
 

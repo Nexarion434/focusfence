@@ -4,7 +4,7 @@ Every screen of the Chrome Web Store Developer Dashboard, in order, with what to
 
 | What | Where |
 |---|---|
-| Package | `dist/focusfence-1.0.1.zip` (version 1.0.1, 206 KB, SHA-256 `c78a3f71231a282fc45e7620fed9799d46839151b86c081816de318608f9e405`) |
+| Package | `dist/focusfence-1.0.2.zip` (version 1.0.2, 208 KB, SHA-256 `c9c32892991f8c3da57aed044bb15fcb45884bb6be51621e5e1124931b20377e`) |
 | Listing texts, per language | `store/listing/en.md`, `fr.md`, `es.md`, `de.md` |
 | Images | `store/assets/` (what goes where: `store/assets/README.md`) |
 | Privacy policy | https://focusfence.dev/privacy.html (French, Spanish, German under `/fr/`, `/es/`, `/de/`) |
@@ -22,7 +22,7 @@ Every screen of the Chrome Web Store Developer Dashboard, in order, with what to
       npm test
       npm run cws:check
       ```
-      `cws:check` rebuilds the zip and must end with `PASSED`. The zip is reproducible: `sha256sum dist/focusfence-1.0.1.zip` must print the hash above.
+      `cws:check` rebuilds the zip and must end with `PASSED`. The zip is reproducible: `sha256sum dist/focusfence-1.0.2.zip` must print the hash above.
 - [ ] Load `dist/focusfence/` unpacked in your own Chrome once (chrome://extensions → Developer mode → Load unpacked): the welcome tab opens, you can block a site, and the store name reads "FocusFence – Focus App & Website Blocker".
 
 ## 1. Developer account (once)
@@ -40,7 +40,7 @@ Open https://chrome.google.com/webstore/devconsole with the Google account that 
 
 ## 2. Package
 
-**Items → New item**, then upload `dist/focusfence-1.0.1.zip`.
+**Items → New item**, then upload `dist/focusfence-1.0.2.zip`.
 
 The dashboard reads these from the package, so they are not typed anywhere:
 
@@ -48,7 +48,7 @@ The dashboard reads these from the package, so they are not typed anywhere:
 |---|---|
 | Name | `FocusFence – Focus App & Website Blocker` (40/75; fr 55, es 61, de 40) |
 | Summary | `Stay focused: block distracting websites for free, with no limit. Pro adds focus sessions, strict mode and YouTube Shorts blocking.` (131/132; fr 130, es 129, de 126) |
-| Version | `1.0.1` |
+| Version | `1.0.2` |
 | Languages | English (default), French, Spanish, German |
 | Icon | `icons/icon128.png` |
 
@@ -190,7 +190,7 @@ ExtensionPay (https://extensionpay.com/home):
 - [ ] Subscription plans and nicknames match `PRICES` in `src/config.js` exactly, in **live** mode: `monthly` US$2.99/month, `yearly` US$19.99/year, `monthly-eur` €2.99/month, `yearly-eur` €19.99/year. Settings → Plan opens `monthly`/`yearly` for every browser locale outside the eurozone and the `-eur` plans inside it.
 - [ ] Stripe is connected in live mode. Unpacked installs are "development" installs, which ExtensionPay keeps in test mode (it asks for your ExtensionPay password before checkout). Installs from the store are live.
 - [ ] Test the whole flow on the unpacked `dist/focusfence/` with Stripe's test card `4242 4242 4242 4242`: Pro unlocks right after paying; "Already paid? Restore purchase" unlocks a second Chrome profile through the emailed login link; offline, Settings → Plan shows the "Couldn't reach ExtensionPay" note and keeps Pro.
-- [ ] **Cancelling (known gap).** For a paying user, Settings → Plan hides the plan buttons, and nothing in FocusFence opens ExtensionPay's subscription page (`extpay.openPaymentPage()` after payment, which shows Stripe's "Cancel subscription"). In test mode, find out where a subscriber can cancel (ExtensionPay's emails, the Stripe customer portal). Then either document it in the FAQ, or add a "Manage subscription" button to Settings → Plan in the next release, as ExtensionPay's docs recommend.
+- [ ] **Managing and cancelling.** Since 1.0.2, a Pro subscriber has a **Manage subscription** button in Settings › Plan. It calls `extpay.openPaymentPage()` with no plan, which ExtensionPay turns, for a user who has paid, into its subscription page (Stripe's billing portal). In test mode, after the test purchase, click it: the page must offer to update the card and to **cancel** the subscription. If cancelling is missing, turn it on in Stripe → Settings → Billing → Customer portal.
 
 Stripe (https://dashboard.stripe.com):
 
