@@ -1,0 +1,399 @@
+/* Toolbar popup (360 px, height follows content, < 600 px):
+   the stage (your fence + state), the tab you're on, focus, the day's count. */
+html,
+body {
+  background: var(--surface);
+}
+body {
+  width: 360px;
+  min-height: 160px;
+  overflow-x: hidden;
+}
+.popup {
+  display: flex;
+  flex-direction: column;
+}
+.spacer {
+  flex: 1;
+}
+
+/* ---------- header ---------- */
+.top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 8px 0 16px;
+  position: relative;
+  z-index: 2;
+}
+.top .logo {
+  font-size: 13.5px;
+}
+.top .icon-btn {
+  color: var(--muted);
+}
+.top .icon-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- the stage: your fence, a compact row of glass pills ---------- */
+.stage {
+  --stage-tint: var(--signal);
+  position: relative;
+  padding: 2px 16px 12px;
+  /* light: a faint wash rising from the ground, in the colour of the state */
+  background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 6%, var(--surface)) 0%, var(--surface) 62%);
+  transition: background-color 0.4s ease;
+}
+.stage.is-off {
+  --stage-tint: transparent;
+}
+.stage.is-strict {
+  --stage-tint: var(--pro-solid);
+}
+.stage-fence {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  /* the pills sink below the ground when blocking is off; the light stays inside the stage */
+  height: 62px;
+  clip-path: inset(-6px -40px 0 -40px);
+}
+#fence {
+  /* chunky glass pills: the middle one 1.6 times as tall as wide */
+  --pw: 37px;
+  --ph: 59px;
+  --halo-h: 1.15;
+}
+/* the ground: a soft line that fades out well before the edges */
+.ground {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  margin: 0 -16px 10px;
+  background: linear-gradient(to right, transparent 12%, var(--line-2) 38%, var(--line-2) 62%, transparent 88%);
+}
+.state {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.status-text {
+  flex: 1;
+  min-width: 0;
+}
+.state h2 {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 620;
+  letter-spacing: -0.018em;
+}
+#status-sub {
+  margin-top: 1px;
+  font-size: 12.5px;
+  line-height: 17px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+@media (prefers-color-scheme: dark) {
+  /* dark: near-black with a deep green tint at the ground, like the block page */
+  .stage {
+    background: linear-gradient(to top, color-mix(in srgb, var(--stage-tint) 9%, #0b0e0d) 0%, var(--surface) 70%);
+  }
+  .stage.is-off {
+    background: var(--surface);
+  }
+}
+
+/* ---------- body: notes, the tab you're on, add ---------- */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--line);
+}
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.note[hidden] {
+  display: none;
+}
+.note .icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--warn);
+}
+.unlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+.unlock p {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--ink-2);
+}
+.unlock p .icon {
+  margin-top: 1px;
+  color: var(--muted);
+}
+.unlock strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+.row .input {
+  flex: 1;
+  height: 32px;
+}
+
+.here {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.here-site {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+.here-site .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+.here-text {
+  flex: 1;
+  min-width: 0;
+}
+.current-host {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  line-height: 19px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.current-note {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.here-btn {
+  width: 100%;
+  height: 36px;
+  font-size: 13.5px;
+  border-radius: var(--radius-md);
+}
+.here-btn:not([disabled]):active {
+  transform: scale(0.985);
+}
+/* browser pages can't be blocked: the note says so, no dead button */
+.here.is-browser {
+  padding: 10px 12px;
+}
+.here.is-browser .here-btn {
+  display: none;
+}
+#current-avatar.empty {
+  background: var(--bg-2);
+  color: var(--muted);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+/* already fenced: a confirmed state, not a greyed-out button */
+.here-btn.is-blocked,
+.here-btn.is-blocked:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent);
+  box-shadow: none;
+  cursor: default;
+}
+.here-btn.is-blocked::before {
+  content: '';
+  width: 9px;
+  height: 4.5px;
+  margin: -3px 4px 0 0;
+  border-left: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  transform: rotate(-45deg);
+}
+@media (prefers-color-scheme: dark) {
+  .here {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.add {
+  display: flex;
+  gap: 8px;
+}
+.add .input {
+  flex: 1;
+  height: 32px;
+  font-size: 13px;
+}
+.add .btn {
+  height: 32px;
+}
+
+/* ---------- focus: one line until it runs, then the timer ---------- */
+.focus {
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+}
+.focus-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.focus-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--muted);
+}
+.focus-icon .icon {
+  width: 17px;
+  height: 17px;
+}
+.focus-main {
+  flex: 1;
+  min-width: 0;
+}
+.focus-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: -0.006em;
+}
+.focus-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.focus-sub {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.timer {
+  display: none;
+  font-size: 30px;
+  line-height: 34px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.focus .btn {
+  flex: none;
+}
+.rounds {
+  display: inline-flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+.rounds:empty {
+  display: none;
+}
+.rounds .picket {
+  width: 6px;
+  height: 10px;
+  color: var(--bg-2);
+}
+.rounds .picket.done {
+  color: var(--signal);
+  opacity: 0.55;
+}
+.rounds .picket.now {
+  color: var(--signal);
+}
+/* running: the timer takes the row */
+.focus.running .focus-title {
+  display: none;
+}
+.focus.running .timer {
+  display: block;
+}
+.focus.running .focus-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.focus.running .progress {
+  margin-top: 10px;
+}
+.focus.break .progress > span {
+  background: var(--faint);
+}
+
+/* ---------- footer ---------- */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 12px;
+  line-height: 16px;
+}
+.foot .stats {
+  color: var(--muted);
+}
+.foot .stats b {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.foot a {
+  white-space: nowrap;
+  font-weight: 550;
+  color: var(--accent);
+}
+@media (prefers-color-scheme: dark) {
+  .foot {
+    background: #0d100f;
+  }
+}

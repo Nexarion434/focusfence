@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Concept C · Day</title>
+<link rel="stylesheet" href="../../../focusfence/src/styles/base.css">
+<link rel="stylesheet" href="board.css">
+<style>
+  .pop { width: 360px; }
+  .now { padding: 22px 18px 16px; }
+  .now .big { font-size: 26px; font-weight: 620; letter-spacing: -0.03em; }
+  .now .big span { color: var(--muted); }
+  .ribbon { position: relative; height: 34px; margin-top: 18px; border-radius: 8px; background: var(--bg-2); overflow: hidden; }
+  .ribbon i { position: absolute; top: 0; bottom: 0; background: color-mix(in srgb, var(--signal) 55%, transparent); }
+  .ribbon .dot { position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+  .ribbon .nowm { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); }
+  .hours { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .blk { margin: 0 18px 16px; display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
+  .blk .btn { margin-left: auto; }
+  .foot { padding: 10px 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .bp { height: 100%; display: grid; place-items: center; text-align: center; background: var(--bg); }
+  .bp .t { font-size: 22px; color: var(--muted); font-family: var(--mono); }
+  .bp h3 { font-size: 56px; letter-spacing: -0.04em; font-weight: 620; margin-top: 10px; }
+  .bp .ribbon { width: 760px; margin: 34px auto 0; height: 44px; }
+  .wk { height: 100%; background: var(--surface); padding: 34px 44px; }
+  .wk .row { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 14px; margin-bottom: 14px; font-size: 18px; color: var(--muted); }
+  .wk .row .ribbon { margin: 0; height: 40px; }
+</style>
+</head>
+<body>
+<div class="board-head"><span class="tag">Concept C</span><h1>Day</h1></div>
+<p class="board-head" style="display:block;margin-top:-18px;color:var(--muted);font-size:16px;max-width:900px">Focus is about time, so organise around today, in the calm of Things. A 24-hour ribbon shows when you're protected, where you are now and when you reached for a distraction. Settings become a week planner.</p>
+<div class="boards">
+  <div class="art">
+    <div class="label">Popup — today at a glance</div>
+    <div class="frame pop">
+      <div class="now"><div class="big">Protected <span>until 12:30</span></div>
+        <div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i><span class="nowm" style="left:44%"></span><span class="dot" style="left:39%"></span><span class="dot" style="left:41%"></span><span class="dot" style="left:43%"></span></div>
+        <div class="hours"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div></div>
+      <div class="blk"><span class="avatar" style="--h:240">I</span><b>instagram.com</b><span class="btn btn-primary btn-sm">Block</span></div>
+      <div class="foot">3 attempts this morning · 89 this week</div>
+    </div>
+    <p class="note"><b>2 seconds:</b> "Protected until 12:30", plus the shape of your day. Strong with a schedule; empty without one.</p>
+  </div>
+  <div class="stack">
+    <div class="art">
+      <div class="label">Block page — the time is the message</div>
+      <div class="frame" style="height:320px"><div class="mini bp"><div><div class="t">10:42 · protected until 12:30</div><h3>reddit.com can wait.</h3>
+        <div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i><span class="nowm" style="left:44%"></span></div></div></div></div>
+    </div>
+    <div class="art">
+      <div class="label">Settings — a week planner</div>
+      <div class="frame" style="height:320px"><div class="mini wk">
+        <div class="row"><span>Mon</span><div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i></div></div>
+        <div class="row"><span>Tue</span><div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i></div></div>
+        <div class="row"><span>Wed</span><div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i></div></div>
+        <div class="row"><span>Thu</span><div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i></div></div>
+        <div class="row"><span>Fri</span><div class="ribbon"><i style="left:37.5%;width:14.5%"></i><i style="left:56%;width:19%"></i></div></div>
+        <div class="row"><span>Sat</span><div class="ribbon"></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

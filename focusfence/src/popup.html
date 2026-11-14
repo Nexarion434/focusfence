@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="extShortName">FocusFence</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/popup.css" />
+  </head>
+  <body>
+    <main class="popup" id="app" aria-busy="true">
+      <h1 class="visually-hidden">FocusFence</h1>
+      <header class="top">
+        <span class="logo" id="logo"><span>FocusFence</span></span>
+        <span class="badge" id="plan-badge">FREE</span>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost icon-btn" id="open-options" title="Settings" aria-label="Open settings" data-i18n-attr="title:settings;aria-label:openSettings">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h8M16 8h4M4 16h4M12 16h8" /><circle cx="14" cy="8" r="2" /><circle cx="10" cy="16" r="2" /></svg>
+        </button>
+      </header>
+
+      <!-- The stage: your fence (one picket per blocked site), its posture is the state -->
+      <section class="stage" id="status-card">
+        <div class="stage-fence"><div id="fence"></div></div>
+        <div class="ground" aria-hidden="true"></div>
+        <div class="state">
+          <div class="status-text" aria-live="polite">
+            <h2 id="status-title" data-i18n="statusOn">Blocking is on</h2>
+            <p id="status-sub">—</p>
+          </div>
+          <label class="switch" title="Turn blocking on or off" data-i18n-attr="title:toggleTitle">
+            <input type="checkbox" id="toggle-enabled" aria-label="Blocking enabled" data-i18n-attr="aria-label:blockingEnabledAria" />
+            <span class="track"></span>
+          </label>
+        </div>
+      </section>
+
+      <div class="body">
+        <p class="note small" id="incognito-note" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 5.2a2 2 0 0 1 3.4 0l6.6 11.5a2 2 0 0 1-1.7 3H5.4a2 2 0 0 1-1.7-3z" /><path d="M12 10v3.5M12 16.6v.1" /></svg>
+          <span><span data-i18n="incognitoNote">Incognito windows aren't covered.</span> <a href="#" id="incognito-fix" data-i18n="incognitoFix">Allow FocusFence in Incognito</a></span>
+        </p>
+
+        <form class="unlock hidden" id="unlock-form">
+          <p class="small">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9.5" rx="2.2" /><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" /></svg>
+            <span><strong data-i18n="unlockTitle">Settings are locked.</strong> <span data-i18n="unlockText">Enter your password to continue.</span></span>
+          </p>
+          <div class="row">
+            <input class="input" type="password" id="unlock-password" placeholder="Password" aria-label="Password" data-i18n-attr="placeholder:password;aria-label:password" autocomplete="current-password" />
+            <button class="btn btn-primary" type="submit" data-i18n="unlock">Unlock</button>
+          </div>
+        </form>
+
+        <!-- The tab you're on, and the one action that matters -->
+        <section class="here" id="current-site">
+          <div class="here-site">
+            <span class="avatar" id="current-avatar" aria-hidden="true">?</span>
+            <div class="here-text">
+              <div class="current-host" id="current-host" data-i18n="thisPage">This page</div>
+              <div class="current-note" id="current-note" data-i18n="currentTab">Current tab</div>
+            </div>
+          </div>
+          <button class="btn btn-primary here-btn" id="quick-add" disabled data-i18n="blockSite">Block site</button>
+        </section>
+
+        <form class="add" id="add-form" autocomplete="off">
+          <input class="input" id="add-input" placeholder="Add a site, e.g. reddit.com" aria-label="Website to block" data-i18n-attr="placeholder:addPlaceholder;aria-label:addAria" />
+          <button class="btn" type="submit" id="add-btn" data-i18n="add">Add</button>
+        </form>
+      </div>
+
+      <section class="focus" id="focus-card">
+        <div class="focus-row">
+          <span class="focus-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7" /><path d="M12 10v3.5l2.2 1.6M10 3.5h4" /></svg></span>
+          <div class="focus-main">
+            <h3 class="focus-title"><span data-i18n="statusFocus">Focus session</span> <span class="badge badge-pro hidden" id="focus-pro">PRO</span></h3>
+            <div class="timer" id="focus-timer" role="timer" aria-label="Focus time" data-i18n-attr="aria-label:focusTimerAria">25:00</div>
+            <div class="focus-line">
+              <p class="focus-sub" id="focus-sub">25 min focus · 5 min break</p>
+              <span class="rounds" id="focus-rounds" aria-hidden="true"></span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="focus-start" data-i18n="startFocus">Start focus</button>
+          <button class="btn btn-sm hidden" id="focus-stop" data-i18n="stop">Stop</button>
+        </div>
+        <div class="progress hidden" id="focus-progress" aria-hidden="true"><span></span></div>
+      </section>
+
+      <footer class="foot">
+        <span class="stats" id="today-stats">0 blocked today</span>
+        <a href="#" id="open-options-2" data-i18n="allSettings">All settings →</a>
+      </footer>
+    </main>
+    <script src="lib/i18n.js"></script>
+    <script src="lib/core.js"></script>
+    <script src="lib/ui.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

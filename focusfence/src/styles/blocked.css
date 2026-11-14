@@ -1,0 +1,241 @@
+/* Block page: you hit the fence. Your fence is a short row of glass pills, one per blocked site,
+   standing on a glossy floor that mirrors every pill; the site you just tried is the pill in the
+   middle, and it holds the light: it glows from inside, a halo rises behind it, its neighbours
+   catch the light and a pool of it lies on the floor. The top half is left to the words.
+   Dark: near-black with a deep green tint at the horizon. Light: warm paper. The pills themselves
+   are the shared component (FFUI.fence, .pill in base.css). */
+html,
+body {
+  height: 100%;
+}
+body {
+  --floor-h: clamp(56px, 13vh, 120px);
+  /* the pill width, set by blocked.js (layout) from the window and the words' room; this is the
+     first paint's estimate. The middle pill is 1.6 times as tall as wide. */
+  --scene-pw: min(132px, 20vh, calc(min(1000px, 100vw - 48px) / 7.54));
+  --scene-ph: calc(var(--scene-pw) * 1.6);
+  --paper: #f7f8f5;
+  --horizon: rgb(30 138 69 / 0.07);
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    --paper: #000;
+    --horizon: rgb(63 214 122 / 0.13);
+  }
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(60vw 46vh at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    var(--paper);
+  animation: sky-in 1.2s ease both;
+}
+@media (prefers-color-scheme: dark) {
+  /* near-black with a deep green tint, fading to pure black at the top */
+  .sky {
+    background:
+      radial-gradient(64vw 50vh at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+      linear-gradient(to top, #041309 0%, #020a05 34%, #000 68%);
+  }
+}
+@keyframes sky-in {
+  from {
+    opacity: 0.6;
+  }
+}
+
+/* ---------- the floor: glossy and seamless (no band, no line); it mirrors the fence ---------- */
+.floor {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  /* a breath of shade below the horizon, fading in from nothing: no edge */
+  background: linear-gradient(rgb(24 66 40 / 0), rgb(24 66 40 / 0.035));
+}
+@media (prefers-color-scheme: dark) {
+  .floor {
+    background: linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.55));
+  }
+}
+
+/* ---------- the row: chunky pills that keep their proportions in any window ---------- */
+.scene-row {
+  /* the owner's reference: wide pills, the middle one 1.6 times as tall as wide, 9 % apart */
+  --pw: var(--scene-pw);
+  --ph: var(--scene-ph);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-h);
+  height: calc(var(--ph) * 2.2);
+}
+/* the reflection (.fence.mirror in base.css) lies on the floor, under the row it mirrors, and
+   fades out before the window's edge */
+.scene-row.mirror {
+  -webkit-mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent min(calc(var(--ph) * 0.62), calc(var(--floor-h) - 8px)));
+  mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent min(calc(var(--ph) * 0.62), calc(var(--floor-h) - 8px)));
+}
+.scene-row .pill-letter {
+  font-size: max(11px, calc(var(--pw) * 0.12));
+  letter-spacing: 0.02em;
+}
+/* ---------- brand ---------- */
+.brand {
+  position: fixed;
+  top: 24px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 620;
+  font-size: 14px;
+  letter-spacing: -0.015em;
+  color: var(--ink-2);
+}
+.brand .logo {
+  display: flex;
+}
+
+/* ---------- the message ---------- */
+.wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  /* the top half, above the tallest pill */
+  bottom: calc(var(--floor-h) + var(--scene-ph) + 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* centred while the words fit (the two spacers share the room); when they don't (a focus
+     session, a long note, a short window) they grow upward, never into the fence */
+  justify-content: flex-end;
+  padding: 72px 24px 24px;
+  text-align: center;
+  animation: copy-in 0.7s var(--ease) 0.15s both;
+}
+.wrap::before,
+.wrap::after {
+  content: '';
+  flex: 1 1 0;
+  min-height: 0;
+}
+/* only the spacers give way: the words never shrink (the URL, which clips its overflow, would
+   otherwise collapse to nothing) */
+.wrap > * {
+  flex-shrink: 0;
+}
+@keyframes copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+h1 {
+  max-width: 980px;
+  font-size: clamp(30px, min(5.2vw, 9vh), 64px);
+  line-height: 1.02;
+  font-weight: 620;
+  letter-spacing: -0.042em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+/* the distraction is dimmed, the fence is lit */
+h1 #site {
+  color: var(--muted);
+}
+.message {
+  margin: 22px 0 0;
+  max-width: 32em;
+  font-size: clamp(16px, 1.6vw, 19px);
+  line-height: 1.55;
+  font-weight: 420;
+  letter-spacing: -0.008em;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+.session {
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-line);
+  color: var(--accent);
+  font-weight: 550;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.session .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 22%, transparent);
+}
+.stats {
+  margin-top: 26px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.stats .num {
+  font-size: 22px;
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin-right: 3px;
+}
+.stats .sep {
+  width: 1px;
+  height: 18px;
+  background: var(--line-3);
+  align-self: center;
+}
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+.buttons .btn-primary {
+  min-width: 164px;
+}
+.url {
+  margin-top: 18px;
+  max-width: min(520px, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+@media (max-height: 640px) {
+  .wrap {
+    padding-top: 56px;
+  }
+}
+@media (max-width: 520px) {
+  .brand {
+    left: 20px;
+    top: 18px;
+  }
+}

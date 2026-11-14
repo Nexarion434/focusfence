@@ -1,0 +1,79 @@
+/* Shared frame for the concept boards (quick mockups, not product code). */
+body {
+  margin: 0;
+  width: 1600px;
+  padding: 48px 56px;
+  box-sizing: border-box;
+  background: var(--bg);
+}
+.board-head {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+.board-head .tag {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.board-head h1 {
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  font-weight: 620;
+}
+.board-head p {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 760px;
+}
+.boards {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.art {
+  position: relative;
+}
+.art > .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.frame {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface);
+}
+.mini {
+  /* page artboards are drawn at 1120x640 and shown at 47 % */
+  width: 1120px;
+  height: 640px !important;
+  zoom: 0.47;
+}
+.stack {
+  display: grid;
+  grid-template-columns: 528px 528px;
+  gap: 24px;
+}
+.stack .frame {
+  width: 528px;
+  height: auto !important;
+}
+.note {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.note b {
+  color: var(--ink);
+}
