@@ -1,3 +1,22 @@
+# FocusFence: every crawler may read the whole site.
 User-agent: *
 Allow: /
+
+# AI search crawlers (pages cited in AI answers)
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
+# AI training crawlers (the site and the extension are free software)
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://focusfence.dev/sitemap.xml

@@ -1,0 +1,57 @@
+# FocusFence
+
+> Block distracting websites in Chrome in one click, with no limit on the free plan. Pro adds YouTube Shorts blocking and schedules.
+
+FocusFence is a Manifest V3 extension for Chrome on computers. Blocking runs in Chrome's built-in rule engine (declarativeNetRequest); the blocklist, settings and stats stay in Chrome's local storage, and there is no account. It is coming soon to the Chrome Web Store.
+
+- Free plan: As many websites as you like; Subdomains included; One-click block from the popup; On/off switch; Calm block page.
+- Pro, $2.99/month or $19.99/year (€2.99 or €19.99 in the eurozone): Schedules; Path & keyword blocking; Pomodoro focus sessions; Strict mode; Password lock, stats, custom message, backup.
+- Languages: English, French, Spanish, German.
+- License: GNU AGPL v3 (https://github.com/Nexarion434/focusfence).
+- Contact: contact@focusfence.dev
+
+## Pages
+
+- [Free Website Blocker Extension for Chrome | FocusFence](https://focusfence.dev/): Block distracting websites in Chrome in one click, with no limit on the free plan. Pro adds YouTube Shorts blocking and schedules.
+- [Bloqueur de sites gratuit pour Chrome | FocusFence](https://focusfence.dev/fr/): Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et suit vos horaires.
+- [Bloqueador de páginas web gratis para Chrome | FocusFence](https://focusfence.dev/es/): Extensión gratis para bloquear páginas web en Chrome con un clic y sin límite. Pro añade el bloqueo de Shorts de YouTube y horarios.
+- [Kostenloser Website-Blocker für Chrome | FocusFence](https://focusfence.dev/de/): Ablenkende Webseiten in Chrome per Klick blockieren, kostenlos und ohne Limit. Mit Pro auch nur YouTube Shorts oder nach Zeitplan.
+- [Privacy Policy | FocusFence Website Blocker](https://focusfence.dev/privacy.html): What FocusFence keeps on your computer and why it needs each Chrome permission. With Pro, ExtensionPay checks your license.
+
+## FAQ
+
+### How do I block a website in Chrome?
+
+Add FocusFence to Chrome, open the site you want to block, click the FocusFence icon in the toolbar and press Block site. For a site you’re not on, type its address in the popup or in Settings.
+
+### Is FocusFence free?
+
+Yes. The free plan blocks as many websites as you like, subdomains included, for as long as you use it, and you never create an account. Pro is optional and adds paths such as youtube.com/shorts, keywords, schedules, Pomodoro focus sessions and strict mode.
+
+### Can I block YouTube Shorts but still use YouTube?
+
+Yes, with Pro. Add youtube.com/shorts as a path rule. youtube.com, videos and search keep working. Shorts links and in-app navigation to Shorts are blocked.
+
+### Does blocking reddit.com also block old.reddit.com?
+
+Yes. A domain rule covers every subdomain, in Free and Pro.
+
+### Why does Chrome ask for permission when I add a site?
+
+Chrome only lets an extension redirect to its own block page on sites it has access to. FocusFence asks for that one site only. If you decline, the site is still blocked, but you'll see Chrome's error page instead of the FocusFence block page.
+
+### Can strict mode be bypassed?
+
+Yes, if you work at it. Chrome always lets you disable or remove an extension, and FocusFence can't block the extensions page. A timed strict session pauses while FocusFence is off, so its time can't run out in the background. Incognito windows are only covered if you allow FocusFence in Incognito, and FocusFence warns you when it isn't. Other browsers and devices aren't covered.
+
+### What data do you collect?
+
+None. See the [privacy policy](https://focusfence.dev/privacy.html). The only network traffic is ExtensionPay checking your license, and only after you choose to upgrade.
+
+### Is FocusFence open source?
+
+Yes, under the GNU AGPL v3. [Read the code](https://github.com/Nexarion434/focusfence).
+
+## Optional
+
+- [Source code](https://github.com/Nexarion434/focusfence): the extension and this website

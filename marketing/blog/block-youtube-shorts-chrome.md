@@ -1,5 +1,6 @@
 ---
 title: How to Block YouTube Shorts in Chrome (and Keep the Rest of YouTube)
+seo_title: How to Block YouTube Shorts in Chrome
 description: A step-by-step guide to blocking only YouTube Shorts in Chrome — including in-app navigation — while tutorials, search and subscriptions keep working.
 slug: block-youtube-shorts-chrome
 date: 2026-11-13

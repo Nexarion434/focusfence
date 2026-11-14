@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Politique de confidentialité — FocusFence</title>
-<meta name="description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
+<title>Politique de confidentialité | FocusFence</title>
+<meta name="description" content="Ce que FocusFence garde sur votre ordinateur et pourquoi il demande chaque autorisation. Avec Pro, ExtensionPay vérifie la licence.">
 <link rel="canonical" href="https://focusfence.dev/fr/privacy.html">
 <link rel="alternate" hreflang="en" href="https://focusfence.dev/privacy.html">
 <link rel="alternate" hreflang="fr" href="https://focusfence.dev/fr/privacy.html">
@@ -22,17 +22,22 @@
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:locale:alternate" content="de_DE">
-<meta property="og:title" content="Politique de confidentialité — FocusFence">
-<meta property="og:description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
-<meta property="og:image" content="https://focusfence.dev/assets/fr/og.png">
+<meta property="og:title" content="Politique de confidentialité | FocusFence">
+<meta property="og:description" content="Ce que FocusFence garde sur votre ordinateur et pourquoi il demande chaque autorisation. Avec Pro, ExtensionPay vérifie la licence.">
+<meta property="og:image" content="https://focusfence.dev/assets/fr/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="FocusFence, le bloqueur de sites pour Chrome : clôturez les fils sans fin.">
+<meta property="og:image:alt" content="FocusFence, bloqueur de sites pour Chrome : « Clôturez les fils sans fin. » au-dessus d’une rangée de piliers de verre">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://focusfence.dev/assets/fr/og.png">
+<meta name="twitter:image" content="https://focusfence.dev/assets/fr/og.jpg">
+<meta name="twitter:image:alt" content="FocusFence, bloqueur de sites pour Chrome : « Clôturez les fils sans fin. » au-dessus d’une rangée de piliers de verre">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
 <link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://focusfence.dev/fr/privacy.html#webpage","url":"https://focusfence.dev/fr/privacy.html","name":"Politique de confidentialité | FocusFence","description":"Ce que FocusFence garde sur votre ordinateur et pourquoi il demande chaque autorisation. Avec Pro, ExtensionPay vérifie la licence.","inLanguage":"fr","isPartOf":{"@id":"https://focusfence.dev/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"FocusFence","item":"https://focusfence.dev/fr/"},{"@type":"ListItem","position":2,"name":"Politique de confidentialité","item":"https://focusfence.dev/fr/privacy.html"}]}]}</script>
 <style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
    Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
 @font-face {
@@ -693,6 +698,16 @@ code {
 .display em {
   font-style: normal;
   color: var(--dim);
+}
+/* The h1 holds the eyebrow ("Website blocker for Chrome", what the page is about) and the headline.
+   The eyebrow keeps the line it had as a paragraph (16px text, line-height 1.6); the headline is a
+   block below it. */
+.hero-h {
+  font-size: 16px;
+  font-weight: 400;
+}
+.hero-h .display {
+  display: block;
 }
 .hero-row {
   display: grid;
@@ -2173,32 +2188,32 @@ th {
   <nav class="langs" aria-label="Langue"><a href="../privacy.html" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/privacy.html" hreflang="fr" lang="fr" data-set-lang="fr" aria-current="page"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/privacy.html" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/privacy.html" hreflang="de" lang="de" data-set-lang="de"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
 </div></header>
 <main class="doc" id="main"><div class="wrap prose"><h1 id="politique-de-confidentialite-de-focusfence">Politique de confidentialité de FocusFence</h1>
-<p><em>Date d’effet : 13 novembre 2026</em></p>
+<p><em>Date d’effet : 13 novembre 2026</em></p>
 <p><em>Ceci est une traduction. En cas de divergence, la <a href="../privacy.html">version anglaise</a> fait foi.</em></p>
-<p>FocusFence (« l’extension ») est une extension Chrome qui bloque les sites de votre choix pour vous aider à rester concentré. Elle est conçue pour fonctionner entièrement sur votre appareil. Cette politique explique ce que l’extension enregistre, ce qu’elle envoie (très peu) sur le réseau et les choix dont vous disposez.</p>
+<p>FocusFence (« l’extension ») est une extension Chrome qui bloque les sites de votre choix pour vous aider à rester concentré. Elle est conçue pour fonctionner entièrement sur votre appareil. Cette politique explique ce que l’extension enregistre, ce qu’elle envoie (très peu) sur le réseau et les choix dont vous disposez.</p>
 <h2 id="en-bref">En bref</h2>
 <ul><li><strong>Pas de compte, pas de statistiques d’audience, pas de pistage, pas de publicité.</strong> Nous n’exploitons aucun serveur et ne recevons jamais vos données.</li><li><strong>Votre liste de blocage, vos réglages et vos statistiques restent sur votre appareil</strong>, dans le stockage local des extensions de Chrome.</li><li><strong>L’extension ne lit pas le contenu des pages.</strong> Le blocage est assuré par le moteur <code>declarativeNetRequest</code> intégré à Chrome, qui compare les adresses à votre liste sans exposer votre navigation à l’extension.</li><li><strong>La seule communication réseau a lieu avec ExtensionPay</strong>, et seulement si vous choisissez de passer à Pro (détails ci-dessous).</li></ul>
 <h2 id="ce-qui-est-enregistre-sur-votre-appareil">Ce qui est enregistré sur votre appareil</h2>
-<div class="table"><table><thead><tr><th>Donnée</th><th>Pourquoi</th><th>Où</th></tr></thead><tbody><tr><td>Votre liste de blocage (domaines, chemins, mots-clés)</td><td>Pour bloquer ces sites</td><td><code>chrome.storage.local</code></td></tr><tr><td>Réglages (marche/arrêt, planning, durées des sessions, message de la page de blocage)</td><td>Pour appliquer vos préférences</td><td><code>chrome.storage.local</code></td></tr><tr><td>Minuteurs des sessions de concentration et du mode strict</td><td>Pour que les sessions continuent après un redémarrage du navigateur</td><td><code>chrome.storage.local</code></td></tr><tr><td>Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours)</td><td>Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même)</td><td>Pour protéger vos réglages</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe</td><td>Confort</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr><tr><td>Nombre de mots de passe erronés (pour ralentir les tentatives)</td><td>Sécurité</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th scope="col">Donnée</th><th scope="col">Pourquoi</th><th scope="col">Où</th></tr></thead><tbody><tr><td>Votre liste de blocage (domaines, chemins, mots-clés)</td><td>Pour bloquer ces sites</td><td><code>chrome.storage.local</code></td></tr><tr><td>Réglages (marche/arrêt, planning, durées des sessions, message de la page de blocage)</td><td>Pour appliquer vos préférences</td><td><code>chrome.storage.local</code></td></tr><tr><td>Minuteurs des sessions de concentration et du mode strict</td><td>Pour que les sessions continuent après un redémarrage du navigateur</td><td><code>chrome.storage.local</code></td></tr><tr><td>Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours)</td><td>Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même)</td><td>Pour protéger vos réglages</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe</td><td>Confort</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr><tr><td>Nombre de mots de passe erronés (pour ralentir les tentatives)</td><td>Sécurité</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr></tbody></table></div>
 <p>Les statistiques n’enregistrent que les visites <strong>bloquées</strong>, étiquetées par la règle correspondante (par exemple <code>reddit.com</code>). FocusFence ne conserve pas d’historique des sites que vous visitez.</p>
 <p>Vous pouvez effacer les statistiques à tout moment (Réglages → Statistiques → Effacer les statistiques). La désinstallation de l’extension supprime toutes les données ci-dessus.</p>
 <h2 id="ce-qui-quitte-votre-appareil">Ce qui quitte votre appareil</h2>
 <p><strong>Rien, sauf si vous décidez de passer à Pro.</strong></p>
-<p>Les paiements sont gérés par <a href="https://extensionpay.com">ExtensionPay</a>, un service de paiement pour extensions de navigateur qui utilise Stripe pour le traitement des cartes. Quand vous cliquez sur un bouton de passage à Pro ou de « restauration d’achat » :</p>
+<p>Les paiements sont gérés par <a href="https://extensionpay.com">ExtensionPay</a>, un service de paiement pour extensions de navigateur qui utilise Stripe pour le traitement des cartes. Quand vous cliquez sur un bouton de passage à Pro ou de « restauration d’achat » :</p>
 <ol><li>L’extension demande à ExtensionPay un identifiant aléatoire (une clé d’API) pour votre installation et ouvre la page de paiement d’ExtensionPay dans un nouvel onglet.</li><li>Vous saisissez vos informations de paiement et votre e-mail <strong>directement sur les pages d’ExtensionPay/Stripe</strong>. FocusFence ne voit ni n’enregistre jamais vos données de carte.</li><li>Ensuite, l’extension envoie périodiquement cet identifiant à ExtensionPay (au démarrage du navigateur, environ toutes les 12 heures et à l’ouverture des réglages) pour vérifier si votre abonnement est actif. Aucune donnée de navigation, liste de blocage ou statistique n’est jamais envoyée.</li></ol>
-<p>La bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et l’état de votre abonnement dans <code>chrome.storage.sync</code>. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <a href="https://extensionpay.com/privacy">https://extensionpay.com/privacy</a>.</p>
+<p>La bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et l’état de votre abonnement dans <code>chrome.storage.sync</code>. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <a href="https://extensionpay.com/privacy">https://extensionpay.com/privacy</a>.</p>
 <h2 id="permissions-et-raisons">Permissions et raisons</h2>
-<ul><li><strong>storage</strong> : enregistrer localement votre liste, vos réglages et vos statistiques.</li><li><strong>declarativeNetRequest</strong> : permettre à Chrome de bloquer ou de rediriger la navigation vers les sites de votre liste.</li><li><strong>alarms</strong> : faire fonctionner les plannings, les minuteurs de concentration et du mode strict.</li><li><strong>activeTab</strong> : lire l’adresse de l’onglet courant uniquement quand vous ouvrez la fenêtre de FocusFence, pour le bloquer en un clic.</li><li><strong>scripting</strong> : pour les règles de chemin (par ex. <code>youtube.com/shorts</code>), enregistrer un petit script uniquement sur ce site afin de bloquer aussi la navigation interne. Il transmet seulement l’adresse de la page à FocusFence ; il ne lit ni ne modifie le contenu de la page.</li><li><strong>Accès facultatif aux sites</strong> : demandé site par site, quand vous ajoutez ce site, pour que FocusFence affiche sa page de blocage au lieu de la page d’erreur de Chrome. Si vous refusez, le site reste bloqué.</li><li><strong>extensionpay.com</strong> : le script d’ExtensionPay ne s’exécute que sur extensionpay.com, pour confirmer un paiement effectué.</li></ul>
+<ul><li><strong>storage</strong> : enregistrer localement votre liste, vos réglages et vos statistiques.</li><li><strong>declarativeNetRequest</strong> : permettre à Chrome de bloquer ou de rediriger la navigation vers les sites de votre liste.</li><li><strong>alarms</strong> : faire fonctionner les plannings, les minuteurs de concentration et du mode strict.</li><li><strong>activeTab</strong> : lire l’adresse de l’onglet courant uniquement quand vous ouvrez la fenêtre de FocusFence, pour le bloquer en un clic.</li><li><strong>scripting</strong> : pour les règles de chemin (par ex. <code>youtube.com/shorts</code>), enregistrer un petit script uniquement sur ce site afin de bloquer aussi la navigation interne. Il transmet seulement l’adresse de la page à FocusFence ; il ne lit ni ne modifie le contenu de la page.</li><li><strong>Accès facultatif aux sites</strong> : demandé site par site, quand vous ajoutez ce site, pour que FocusFence affiche sa page de blocage au lieu de la page d’erreur de Chrome. Si vous refusez, le site reste bloqué.</li><li><strong>extensionpay.com</strong> : le script d’ExtensionPay ne s’exécute que sur extensionpay.com, pour confirmer un paiement effectué.</li></ul>
 <h2 id="enfants">Enfants</h2>
 <p>FocusFence ne s’adresse pas aux enfants de moins de 13 ans et ne collecte sciemment aucune information personnelle, de qui que ce soit.</p>
 <h2 id="vente-et-partage-des-donnees">Vente et partage des données</h2>
 <p>Nous ne vendons, ne louons ni ne partageons vos données. Nous ne les utilisons ni ne les transférons à des fins sans rapport avec l’objectif unique de l’extension, et nous ne les utilisons pas pour évaluer une solvabilité ou accorder un crédit.</p>
 <h2 id="open-source">Open source</h2>
-<p>FocusFence est un logiciel libre sous licence GNU Affero General Public License v3 (ou ultérieure). Vous pouvez vérifier chaque affirmation de cette politique dans le code source : <a href="https://github.com/Nexarion434/focusfence">https://github.com/Nexarion434/focusfence</a>.</p>
+<p>FocusFence est un logiciel libre sous licence GNU Affero General Public License v3 (ou ultérieure). Vous pouvez vérifier chaque affirmation de cette politique dans le code source : <a href="https://github.com/Nexarion434/focusfence">https://github.com/Nexarion434/focusfence</a>.</p>
 <h2 id="modifications">Modifications</h2>
 <p>Si cette politique change, la nouvelle version sera publiée à la même adresse avec une nouvelle date d’effet. Les changements importants seront signalés dans les notes de version de l’extension.</p>
 <h2 id="contact">Contact</h2>
-<p>Questions sur la confidentialité : <strong><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></strong></p></div></main>
+<p>Questions sur la confidentialité : <strong><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></strong></p></div></main>
 <footer class="foot"><div class="wrap">
   <div class="foot-grid">
     <div class="foot-brand"><a class="brand" href="../fr/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>Un bloqueur de sites pour Chrome, calme et privé.</p></div>

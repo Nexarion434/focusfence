@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Datenschutzerklärung — FocusFence</title>
-<meta name="description" content="Datenschutzerklärung von FocusFence: kein Konto, keine Analyse, kein Tracking. Ihre Sperrliste und Statistiken bleiben auf Ihrem Gerät.">
+<title>Datenschutzerklärung | FocusFence</title>
+<meta name="description" content="Was FocusFence auf Ihrem Computer speichert und wozu es jede Berechtigung braucht. Mit Pro prüft ExtensionPay Ihre Lizenz.">
 <link rel="canonical" href="https://focusfence.dev/de/privacy.html">
 <link rel="alternate" hreflang="en" href="https://focusfence.dev/privacy.html">
 <link rel="alternate" hreflang="fr" href="https://focusfence.dev/fr/privacy.html">
@@ -22,17 +22,22 @@
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:locale:alternate" content="es_ES">
-<meta property="og:title" content="Datenschutzerklärung — FocusFence">
-<meta property="og:description" content="Datenschutzerklärung von FocusFence: kein Konto, keine Analyse, kein Tracking. Ihre Sperrliste und Statistiken bleiben auf Ihrem Gerät.">
-<meta property="og:image" content="https://focusfence.dev/assets/de/og.png">
+<meta property="og:title" content="Datenschutzerklärung | FocusFence">
+<meta property="og:description" content="Was FocusFence auf Ihrem Computer speichert und wozu es jede Berechtigung braucht. Mit Pro prüft ExtensionPay Ihre Lizenz.">
+<meta property="og:image" content="https://focusfence.dev/assets/de/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="FocusFence, der Website-Blocker für Chrome: Zäunen Sie endlose Feeds ein.">
+<meta property="og:image:alt" content="FocusFence, Website-Blocker für Chrome: „Zäunen Sie endlose Feeds ein.“ über einer Reihe gläserner Säulen">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://focusfence.dev/assets/de/og.png">
+<meta name="twitter:image" content="https://focusfence.dev/assets/de/og.jpg">
+<meta name="twitter:image:alt" content="FocusFence, Website-Blocker für Chrome: „Zäunen Sie endlose Feeds ein.“ über einer Reihe gläserner Säulen">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
 <link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://focusfence.dev/de/privacy.html#webpage","url":"https://focusfence.dev/de/privacy.html","name":"Datenschutzerklärung | FocusFence","description":"Was FocusFence auf Ihrem Computer speichert und wozu es jede Berechtigung braucht. Mit Pro prüft ExtensionPay Ihre Lizenz.","inLanguage":"de","isPartOf":{"@id":"https://focusfence.dev/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"FocusFence","item":"https://focusfence.dev/de/"},{"@type":"ListItem","position":2,"name":"Datenschutzerklärung","item":"https://focusfence.dev/de/privacy.html"}]}]}</script>
 <style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
    Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
 @font-face {
@@ -693,6 +698,16 @@ code {
 .display em {
   font-style: normal;
   color: var(--dim);
+}
+/* The h1 holds the eyebrow ("Website blocker for Chrome", what the page is about) and the headline.
+   The eyebrow keeps the line it had as a paragraph (16px text, line-height 1.6); the headline is a
+   block below it. */
+.hero-h {
+  font-size: 16px;
+  font-weight: 400;
+}
+.hero-h .display {
+  display: block;
 }
 .hero-row {
   display: grid;
@@ -2179,7 +2194,7 @@ th {
 <h2 id="kurz-gesagt">Kurz gesagt</h2>
 <ul><li><strong>Kein Konto, keine Analyse, kein Tracking, keine Werbung.</strong> Wir betreiben keinen Server und erhalten Ihre Daten nie.</li><li><strong>Ihre Sperrliste, Einstellungen und Statistik bleiben auf Ihrem Gerät</strong>, im lokalen Erweiterungsspeicher von Chrome.</li><li><strong>Die Erweiterung liest keine Seiteninhalte.</strong> Gesperrt wird von der in Chrome eingebauten <code>declarativeNetRequest</code>-Engine, die Adressen mit Ihrer Liste abgleicht, ohne Ihr Surfverhalten der Erweiterung offenzulegen.</li><li><strong>Die einzige Netzwerkkommunikation erfolgt mit ExtensionPay</strong>, und nur, wenn Sie auf Pro upgraden (Details unten).</li></ul>
 <h2 id="was-auf-ihrem-gerat-gespeichert-wird">Was auf Ihrem Gerät gespeichert wird</h2>
-<div class="table"><table><thead><tr><th>Daten</th><th>Zweck</th><th>Ort</th></tr></thead><tbody><tr><td>Ihre Sperrliste (Domains, Pfade, Stichwörter)</td><td>Um diese Websites zu sperren</td><td><code>chrome.storage.local</code></td></tr><tr><td>Einstellungen (Ein/Aus, Zeitplan, Dauer der Fokus-Sitzungen, Nachricht der Sperrseite)</td><td>Um Ihre Vorlieben anzuwenden</td><td><code>chrome.storage.local</code></td></tr><tr><td>Timer für Fokus-Sitzungen und Strikt-Modus</td><td>Damit Sitzungen einen Browser-Neustart überstehen</td><td><code>chrome.storage.local</code></td></tr><tr><td>Anzahl gesperrter Aufrufe pro gesperrter Website und Tag (letzte 90 Tage)</td><td>Für Ihre Statistik (gesperrte Aufrufe heute und diese Woche)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Passwortschutz: ein gesalzener PBKDF2-SHA-256-Hash (nie das Passwort selbst)</td><td>Um Ihre Einstellungen zu schützen</td><td><code>chrome.storage.local</code></td></tr><tr><td>„Entsperrt“-Markierung für 15 Minuten nach Eingabe des Passworts</td><td>Komfort</td><td><code>chrome.storage.session</code> (wird beim Schließen des Browsers gelöscht)</td></tr><tr><td>Anzahl falscher Passworteingaben (um das Raten zu bremsen)</td><td>Sicherheit</td><td><code>chrome.storage.session</code> (wird beim Schließen des Browsers gelöscht)</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th scope="col">Daten</th><th scope="col">Zweck</th><th scope="col">Ort</th></tr></thead><tbody><tr><td>Ihre Sperrliste (Domains, Pfade, Stichwörter)</td><td>Um diese Websites zu sperren</td><td><code>chrome.storage.local</code></td></tr><tr><td>Einstellungen (Ein/Aus, Zeitplan, Dauer der Fokus-Sitzungen, Nachricht der Sperrseite)</td><td>Um Ihre Vorlieben anzuwenden</td><td><code>chrome.storage.local</code></td></tr><tr><td>Timer für Fokus-Sitzungen und Strikt-Modus</td><td>Damit Sitzungen einen Browser-Neustart überstehen</td><td><code>chrome.storage.local</code></td></tr><tr><td>Anzahl gesperrter Aufrufe pro gesperrter Website und Tag (letzte 90 Tage)</td><td>Für Ihre Statistik (gesperrte Aufrufe heute und diese Woche)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Passwortschutz: ein gesalzener PBKDF2-SHA-256-Hash (nie das Passwort selbst)</td><td>Um Ihre Einstellungen zu schützen</td><td><code>chrome.storage.local</code></td></tr><tr><td>„Entsperrt“-Markierung für 15 Minuten nach Eingabe des Passworts</td><td>Komfort</td><td><code>chrome.storage.session</code> (wird beim Schließen des Browsers gelöscht)</td></tr><tr><td>Anzahl falscher Passworteingaben (um das Raten zu bremsen)</td><td>Sicherheit</td><td><code>chrome.storage.session</code> (wird beim Schließen des Browsers gelöscht)</td></tr></tbody></table></div>
 <p>Die Statistik erfasst nur <strong>gesperrte</strong> Aufrufe, benannt nach der passenden Regel (zum Beispiel <code>reddit.com</code>). FocusFence führt keinen Verlauf der Websites, die Sie besuchen.</p>
 <p>Sie können die Statistik jederzeit löschen (Einstellungen → Statistik → Statistik löschen). Beim Deinstallieren der Erweiterung werden alle oben genannten Daten gelöscht.</p>
 <h2 id="was-ihr-gerat-verlasst">Was Ihr Gerät verlässt</h2>

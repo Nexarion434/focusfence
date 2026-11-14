@@ -11,6 +11,8 @@
     "screenshots": "node scripts/screenshots.mjs",
     "design:shots": "node scripts/design-shots.mjs",
     "docs": "node scripts/docs.mjs",
+    "site:art": "node scripts/site-art.mjs",
+    "site:shots": "node scripts/site-shots.mjs",
     "i18n": "node scripts/i18n/build.mjs",
     "i18n:check": "node scripts/i18n/build.mjs --check",
     "screenshots:all": "node scripts/screenshots.mjs && node scripts/screenshots.mjs --lang fr && node scripts/screenshots.mjs --lang es && node scripts/screenshots.mjs --lang de",
