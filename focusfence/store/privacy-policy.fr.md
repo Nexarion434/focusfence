@@ -1,6 +1,6 @@
 # Politique de confidentialité de FocusFence
 
-_Date d’effet : 13 novembre 2026_
+_Date d’effet : 14 novembre 2026_
 
 _Ceci est une traduction. En cas de divergence, la [version anglaise](../privacy.html) fait foi._
 
@@ -22,6 +22,7 @@ FocusFence (« l’extension ») est une extension Chrome qui bloque les sites d
 | Minuteurs des sessions de concentration et du mode strict | Pour que les sessions continuent après un redémarrage du navigateur | `chrome.storage.local` |
 | Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours) | Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine) | `chrome.storage.local` |
 | Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même) | Pour protéger vos réglages | `chrome.storage.local` |
+| État de votre licence Pro (Pro actif ou non, la formule, la date de la dernière vérification) | Pour débloquer Pro, même hors connexion | `chrome.storage.local` |
 | Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe | Confort | `chrome.storage.session` (effacé à la fermeture du navigateur) |
 | Nombre de mots de passe erronés (pour ralentir les tentatives) | Sécurité | `chrome.storage.session` (effacé à la fermeture du navigateur) |
 
@@ -39,7 +40,7 @@ Les paiements sont gérés par [ExtensionPay](https://extensionpay.com), un serv
 2. Vous saisissez vos informations de paiement et votre e-mail **directement sur les pages d’ExtensionPay/Stripe**. FocusFence ne voit ni n’enregistre jamais vos données de carte.
 3. Ensuite, l’extension envoie périodiquement cet identifiant à ExtensionPay (au démarrage du navigateur, environ toutes les 12 heures et à l’ouverture des réglages) pour vérifier si votre abonnement est actif. Aucune donnée de navigation, liste de blocage ou statistique n’est jamais envoyée.
 
-La bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et l’état de votre abonnement dans `chrome.storage.sync`. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <https://extensionpay.com/privacy>.
+Dans `chrome.storage.sync`, la bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et la fiche qu’ExtensionPay renvoie pour cet identifiant : l’état de votre abonnement et votre formule et, une fois que vous avez payé, la date du paiement et l’adresse e-mail avec laquelle vous avez payé. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <https://extensionpay.com/privacy>.
 
 ## Permissions et raisons
 
