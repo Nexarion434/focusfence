@@ -624,7 +624,7 @@ ${T.faq.map(([q, a]) => `      <details><summary><span>${q}</span>${icon('plus',
       url,
       description: typo(lang, T.description),
       applicationCategory: 'BrowserApplication',
-      applicationSubCategory: plain(T.eyebrow),
+      applicationSubCategory: T.appCategory,
       operatingSystem: 'Windows, macOS, Linux, ChromeOS',
       softwareRequirements: `Google Chrome ${MANIFEST.minimum_chrome_version}+`,
       softwareVersion: MANIFEST.version,
@@ -812,9 +812,9 @@ fs.writeFileSync(
     canonical: null,
     noindex: true,
     title: 'Page not found | FocusFence',
-    description: 'This page does not exist. FocusFence is a free website blocker for Chrome that keeps your blocklist on your computer.',
+    description: 'This page does not exist. FocusFence is a free focus app for Chrome that blocks distracting websites and keeps your list on your computer.',
     switchHref: (l) => ROOT_PATH + dirOf(l),
-    body: `<main class="doc" id="main"><div class="wrap prose"><h1>Page not found</h1><p class="doc-lead">This page doesn’t exist, or it has moved. FocusFence, the calm website blocker for Chrome, is one click away:</p><ul>${SITE_LANGS.map(
+    body: `<main class="doc" id="main"><div class="wrap prose"><h1>Page not found</h1><p class="doc-lead">This page doesn’t exist, or it has moved. FocusFence, the calm focus app for Chrome, is one click away:</p><ul>${SITE_LANGS.map(
       (l) => `<li lang="${l}"><a href="${ROOT_PATH}${dirOf(l)}" hreflang="${l}">${HOME_IN[l]}</a> (${LANG_NAMES[l]})</li>`
     ).join('')}</ul></div></main>`,
   })
@@ -870,7 +870,8 @@ fs.writeFileSync(
   fs.writeFileSync(
     path.join(DOCS, 'llms.txt'),
     `# FocusFence\n\n> ${plain(E.description)}\n\n` +
-      `FocusFence is a Manifest V3 extension for Chrome on computers. Blocking runs in Chrome's built-in rule engine (declarativeNetRequest); the blocklist, settings and stats stay in Chrome's local storage, and there is no account. ` +
+      `FocusFence is a focus app for Chrome on computers: a Manifest V3 extension that blocks the distracting websites you choose, such as social feeds, YouTube Shorts or news sites. It does not block ads, and the sites you don't block load unchanged. ` +
+      `Blocking runs in Chrome's built-in rule engine (declarativeNetRequest); the blocklist, settings and stats stay in Chrome's local storage, and there is no account. ` +
       `${STORE_URL ? `Install it from the Chrome Web Store: ${STORE_URL}` : 'It is coming soon to the Chrome Web Store.'}\n\n` +
       `- Free plan: ${E.freeItems.map(plain).join('; ')}.\n` +
       `- Pro, ${E.priceMonthly}${E.perMonth} or ${E.priceYearly}${E.perYear} (€2.99 or €19.99 in the eurozone): ${E.monthlyItems.slice(1).map(plain).join('; ')}.\n` +

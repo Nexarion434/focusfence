@@ -755,7 +755,7 @@ test('SEO: titles and descriptions fit the snippet, are unique, and every page h
     descs.set(h.description, rel);
   }
   expect(titles.size).toBe(8); // 4 landing pages + 4 privacy pages (the blog is still a draft)
-  // the landing h1 starts with what the page is about (the eyebrow: "Website blocker for Chrome")
+  // the landing h1 starts with what the page is about (the eyebrow: "Focus app for Chrome")
   for (const lang of SITE_LANGS) {
     const html = read('docs', dirOf(lang) + 'index.html');
     const h1 = /<h1 class="hero-h">([\s\S]*?)<\/h1>/.exec(html)[1].replace(/<[^>]+>/g, '');
@@ -773,6 +773,40 @@ test('SEO: short copy has no em dash or negation list, and alt text stays under 
     expect(negations.length, `${lang} heroSmall`).toBeLessThanOrEqual(1);
     for (const k of Object.keys(T).filter((k) => k.startsWith('alt'))) expect(T[k].length, `${lang}.${k}`).toBeLessThanOrEqual(125);
   }
+});
+
+test('positioning: a focus app first, plainly not an ad blocker, and an ADHD answer without medical claims', () => {
+  const focus = { en: /focus/i, fr: /concentr/i, es: /concentr/i, de: /fokus|konzentr/i };
+  const adBlocker = { en: /ad blocker/i, fr: /bloqueur de publicités/i, es: /bloqueador de anuncios/i, de: /werbeblocker/i };
+  const no = { en: 'No.', fr: 'Non.', es: 'No.', de: 'Nein.' };
+  const adhd = { en: 'ADHD', fr: 'TDAH', es: 'TDAH', de: 'ADHS' };
+  const medical = { en: /medical/, fr: /médical/, es: /médica/, de: /Medizin/ };
+  // medical promises in any of the four languages (whole words, accents included)
+  const claims = /(?<!\p{L})(cures?|treats|heals|clinically|proven|guaranteed?|guérit|soigne|traite|cliniquement|prouvée?s?|garantie?s?|cura|trata|clínicamente|probado|garantizado|heilt|behandelt|klinisch|bewiesen|garantiert)(?!\p{L})/iu;
+  for (const lang of SITE_LANGS) {
+    const T = SITE[lang];
+    // what search results, the first screen, the intro and the footer call FocusFence
+    for (const k of ['title', 'description', 'eyebrow', 'lead', 'footTagline']) expect(T[k], `${lang}.${k}`).toMatch(focus[lang]);
+    expect(T.statement[0], `${lang}.statement`).toMatch(focus[lang]);
+    // one FAQ entry names ad blockers, and its answer opens with a plain no
+    const ads = T.faq.filter(([q]) => adBlocker[lang].test(q));
+    expect(ads.length, lang).toBe(1);
+    expect(ads[0][1].startsWith(no[lang] + ' '), lang).toBe(true);
+    const rest = JSON.stringify({ ...T, faq: T.faq.filter((e) => e !== ads[0]) });
+    expect(rest, `${lang}: only the FAQ mentions ad blockers`).not.toMatch(adBlocker[lang]);
+    // one ADHD question; its answer opens with the disclaimer and makes no medical promise
+    const q = T.faq.filter(([q]) => q.includes(adhd[lang]));
+    expect(q.length, lang).toBe(1);
+    expect(q[0][1].split('. ')[0], lang).toMatch(medical[lang]);
+    expect(q[0][1], lang).not.toMatch(claims);
+    // structured data files FocusFence under productivity, in the page's language
+    const app = pageHead(read('docs', dirOf(lang) + 'index.html')).ld[0]['@graph'].find((g) => g['@type'] === 'SoftwareApplication');
+    expect(app.applicationSubCategory, lang).toBe(T.appCategory);
+    expect(app.applicationCategory, lang).toBe('BrowserApplication');
+  }
+  const llms = read('docs/llms.txt');
+  expect(llms).toContain('FocusFence is a focus app for Chrome');
+  expect(llms).toContain('It does not block ads');
 });
 
 test('SEO: JSON-LD describes the real product, prices and FAQ, with absolute URLs and no invented ratings', () => {

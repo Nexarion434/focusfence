@@ -1,7 +1,7 @@
 {
   "name": "FocusFence",
   "short_name": "FocusFence",
-  "description": "A calm, private website blocker for Chrome.",
+  "description": "A calm, private focus app for Chrome that blocks distracting websites.",
   "lang": "en",
   "start_url": "/",
   "scope": "/",

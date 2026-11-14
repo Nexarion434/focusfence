@@ -13,10 +13,10 @@ export const OG_LOCALE = { en: 'en_US', fr: 'fr_FR', es: 'es_ES', de: 'de_DE' };
 
 export const SITE = {
   en: {
-    title: 'Free Website Blocker Extension for Chrome | FocusFence',
+    title: 'FocusFence: Block Distracting Websites & Stay Focused',
     description:
-      'Block distracting websites in Chrome in one click, with no limit on the free plan. Pro adds YouTube Shorts blocking and schedules.',
-    privacyTitle: 'Privacy Policy | FocusFence Website Blocker',
+      'A free productivity extension for Chrome that blocks distracting websites, with no limit. Pro adds focus sessions and strict mode.',
+    privacyTitle: 'Privacy Policy | FocusFence for Chrome',
     privacyDescription:
       'What FocusFence keeps on your computer and why it needs each Chrome permission. With Pro, ExtensionPay checks your license.',
     skip: 'Skip to content',
@@ -33,20 +33,21 @@ export const SITE = {
     ctaSoon: 'Coming soon to the Chrome Web Store',
     ctaAdd: 'Add to Chrome for free',
     ctaNav: 'Add to Chrome',
-    ctaFeatures: 'See what it blocks',
-    eyebrow: 'Website blocker for Chrome',
-    h1: 'Fence off the <em>endless feeds.</em>',
+    ctaFeatures: 'See how it works',
+    eyebrow: 'Focus app for Chrome',
+    h1: 'Fence off <em>distracting websites.</em>',
     lead:
-      'Block the sites you open on autopilot, as many as you like, on the free plan. With Pro, block only YouTube Shorts, or turn on strict mode when willpower runs out.',
+      'Stay focused and get deep work done. FocusFence blocks the sites you open on autopilot, unlimited on the free plan. Pro adds focus sessions, strict mode and YouTube Shorts blocking.',
     heroSmall: 'Free for unlimited websites · No account · Open source',
     altPopup:
       'The FocusFence popup: six blocked sites as glass pills, “Blocking is on” and the one-click Block site button',
     altBlock:
       'The FocusFence block page: reddit.com is fenced off, with a quote, today’s blocked count and a row of glass pills',
     ogAlt:
-      'FocusFence, website blocker for Chrome: “Fence off the endless feeds.” above a row of glass pills, the middle one lit',
+      'FocusFence, focus app for Chrome: “Fence off distracting websites.” above a row of glass pills, the middle one lit',
+    appCategory: 'Productivity',
     statement: [
-      'A calm, private website blocker for Chrome.',
+      'A calm, private focus app for Chrome.',
       'Block a whole site, or only its worst part. FocusFence never reads your pages, and your list stays on your computer.',
     ],
     steps: [
@@ -64,7 +65,7 @@ export const SITE = {
     altBlocklist:
       'FocusFence settings: the Blocklist with one glass pill per site, above websites, the youtube.com/shorts path and a keyword',
     focusKicker: 'Focus',
-    focusH2: ['Block websites on a schedule.', 'Or lock yourself in.'],
+    focusH2: ['Protect your focus hours.', 'Or lock yourself in.'],
     focusLead: 'Pro adds time to the fence: block only during the hours you choose, work in Pomodoro rounds, and switch on strict mode when a deadline is close.',
     focusFeatures: [
       ['Schedules', 'Block only during work hours, on the days you choose. Overnight ranges work too, e.g. 22:00–06:00 for better sleep.'],
@@ -127,7 +128,9 @@ export const SITE = {
     faqSub: 'Something else on your mind? Write to {contact}.',
     faq: [
       ['How do I block a website in Chrome?', 'Add FocusFence to Chrome, open the site you want to block, click the FocusFence icon in the toolbar and press <strong>Block site</strong>. For a site you’re not on, type its address in the popup or in Settings.'],
+      ['Is FocusFence an ad blocker?', 'No. FocusFence is a focus app, and it leaves ads alone. It blocks only what you put on your list, such as a social network, YouTube Shorts or a news site. Every other site loads exactly as before.'],
       ['Is FocusFence free?', 'Yes. The free plan blocks as many websites as you like, subdomains included, for as long as you use it, and you never create an account. Pro is optional and adds paths such as <code>youtube.com/shorts</code>, keywords, schedules, Pomodoro focus sessions and strict mode.'],
+      ['Does FocusFence help with ADHD?', 'FocusFence isn’t a medical or treatment tool. It can make your browser more ADHD-friendly by putting friction between an impulse and a feed. The sites on your list stay closed until you switch blocking off. With Pro, strict mode makes switching off take a 10-minute wait and eight retyped words, focus sessions split your work into Pomodoro rounds, and schedules start blocking at the hours you set.'],
       ['Can I block YouTube Shorts but still use YouTube?', 'Yes, with Pro. Add <code>youtube.com/shorts</code> as a path rule. youtube.com, videos and search keep working. Shorts links and in-app navigation to Shorts are blocked.'],
       ['Does blocking reddit.com also block old.reddit.com?', 'Yes. A domain rule covers every subdomain, in Free and Pro.'],
       ['Why does Chrome ask for permission when I add a site?', "Chrome only lets an extension redirect to its own block page on sites it has access to. FocusFence asks for that one site only. If you decline, the site is still blocked, but you'll see Chrome's error page instead of the FocusFence block page."],
@@ -136,7 +139,7 @@ export const SITE = {
       ['Is FocusFence open source?', 'Yes, under the GNU AGPL v3. <a href="{source}">Read the code</a>.'],
     ],
     finalH2: 'Pick the three sites that cost you the most.',
-    footTagline: 'A calm, private website blocker for Chrome.',
+    footTagline: 'A calm, private focus app for Chrome that blocks distracting websites.',
     footProduct: 'Product',
     footResources: 'Resources',
     footContact: 'Contact',
@@ -148,9 +151,9 @@ export const SITE = {
   },
 
   fr: {
-    title: 'Bloqueur de sites gratuit pour Chrome | FocusFence',
+    title: 'FocusFence : bloquer les sites distrayants, rester concentré',
     description:
-      'Extension Chrome gratuite pour bloquer sans limite les sites distrayants. Pro bloque les Shorts YouTube et applique vos horaires.',
+      'Extension Chrome gratuite et illimitée contre les distractions. Pro ajoute des sessions de concentration et applique vos horaires.',
     privacyTitle: 'Politique de confidentialité | FocusFence',
     privacyDescription:
       'Ce que FocusFence garde sur votre ordinateur et pourquoi il demande chaque autorisation. Avec Pro, ExtensionPay vérifie la licence.',
@@ -168,20 +171,21 @@ export const SITE = {
     ctaSoon: 'Bientôt sur le Chrome Web Store',
     ctaAdd: 'Ajouter gratuitement à Chrome',
     ctaNav: 'Ajouter à Chrome',
-    ctaFeatures: 'Voir ce qu’il bloque',
-    eyebrow: 'Bloqueur de sites pour Chrome',
-    h1: 'Clôturez les <em>fils sans fin.</em>',
+    ctaFeatures: 'Voir comment ça marche',
+    eyebrow: 'Appli de concentration pour Chrome',
+    h1: 'Clôturez <em>les sites qui vous distraient.</em>',
     lead:
-      'Bloquez les sites que vous ouvrez machinalement, autant que vous voulez, avec la version gratuite. Avec Pro, bloquez seulement les Shorts YouTube, ou activez le mode strict quand la volonté flanche.',
+      'Restez concentré au travail. FocusFence bloque gratuitement et sans limite les sites que vous ouvrez machinalement. Pro ajoute sessions de concentration, mode strict et blocage des Shorts YouTube.',
     heroSmall: 'Gratuit, sites illimités · Sans compte · Open source',
     altPopup:
       'La fenêtre de FocusFence : six sites bloqués en piliers de verre, « Blocage activé » et le bouton « Bloquer le site »',
     altBlock:
       'La page de blocage de FocusFence : reddit.com est bloqué, avec une citation, le compteur du jour et des piliers de verre',
     ogAlt:
-      'FocusFence, bloqueur de sites pour Chrome : « Clôturez les fils sans fin. » au-dessus d’une rangée de piliers de verre',
+      'FocusFence, appli de concentration pour Chrome : « Clôturez les sites qui vous distraient. » au-dessus de piliers de verre',
+    appCategory: 'Productivité',
     statement: [
-      'Un bloqueur de sites pour Chrome, calme et privé.',
+      'Une appli de concentration pour Chrome, calme et privée.',
       'Bloquez tout un site, ou seulement sa pire partie. FocusFence ne lit jamais vos pages, et votre liste reste sur votre ordinateur.',
     ],
     steps: [
@@ -199,7 +203,7 @@ export const SITE = {
     altBlocklist:
       'La liste de blocage de FocusFence : un pilier de verre par site, puis des sites, le chemin youtube.com/shorts et un mot-clé',
     focusKicker: 'Concentration',
-    focusH2: ['Bloquez des sites selon un planning.', 'Ou enfermez-vous à double tour.'],
+    focusH2: ['Protégez vos heures de concentration.', 'Ou enfermez-vous à double tour.'],
     focusLead: 'Pro ajoute le temps à la clôture : bloquez seulement aux heures choisies, travaillez par cycles Pomodoro et activez le mode strict quand l’échéance approche.',
     focusFeatures: [
       ['Plannings', 'Bloquez seulement pendant vos heures de travail, les jours de votre choix. Les plages de nuit fonctionnent aussi, par ex. 22:00–06:00 pour mieux dormir.'],
@@ -265,7 +269,9 @@ export const SITE = {
     faqSub: 'Une autre question ? Écrivez à {contact}.',
     faq: [
       ['Comment bloquer un site sur Chrome ?', 'Ajoutez FocusFence à Chrome, ouvrez le site à bloquer, cliquez sur l’icône de FocusFence dans la barre d’outils et appuyez sur <strong>Bloquer le site</strong>. Pour un autre site, saisissez son adresse dans la fenêtre ou dans les réglages.'],
+      ['FocusFence est-il un bloqueur de publicités ?', 'Non. FocusFence est une appli de concentration, et il laisse les publicités tranquilles. Il bloque seulement ce que vous mettez dans votre liste, comme un réseau social, les Shorts YouTube ou un site d’actualité. Tous les autres sites s’affichent exactement comme avant.'],
       ['FocusFence est-il gratuit ?', 'Oui. Le plan Gratuit bloque autant de sites que vous voulez, sous-domaines compris, aussi longtemps que vous l’utilisez, et sans créer de compte. Pro est facultatif et ajoute les chemins comme <code>youtube.com/shorts</code>, les mots-clés, les plannings, les sessions Pomodoro et le mode strict.'],
+      ['FocusFence aide-t-il en cas de TDAH ?', 'FocusFence n’est ni un outil médical ni un traitement. Il peut rendre votre navigateur plus adapté au TDAH en plaçant un obstacle entre l’impulsion et le fil d’actualité. Les sites de votre liste restent fermés tant que vous ne coupez pas le blocage. Avec Pro, le mode strict impose 10 minutes d’attente et huit mots à recopier avant de pouvoir le couper, les sessions de concentration découpent votre travail en cycles Pomodoro, et les plannings lancent le blocage aux heures que vous avez choisies.'],
       ['Puis-je bloquer les Shorts YouTube et garder YouTube ?', 'Oui, avec Pro. Ajoutez <code>youtube.com/shorts</code> comme règle de chemin. youtube.com, les vidéos et la recherche continuent de fonctionner. Les liens vers les Shorts et la navigation vers les Shorts dans YouTube sont bloqués.'],
       ['Bloquer reddit.com bloque-t-il aussi old.reddit.com ?', 'Oui. Une règle de domaine couvre tous les sous-domaines, en Gratuit comme en Pro.'],
       ['Pourquoi Chrome demande-t-il une autorisation quand j’ajoute un site ?', 'Chrome ne permet à une extension d’afficher sa propre page de blocage que sur les sites auxquels elle a accès. FocusFence demande l’accès à ce seul site. Si vous refusez, le site reste bloqué, mais vous verrez la page d’erreur de Chrome au lieu de la page de FocusFence.'],
@@ -274,7 +280,7 @@ export const SITE = {
       ['FocusFence est-il open source ?', 'Oui, sous licence GNU AGPL v3. <a href="{source}">Lire le code</a>.'],
     ],
     finalH2: 'Choisissez les trois sites qui vous coûtent le plus.',
-    footTagline: 'Un bloqueur de sites pour Chrome, calme et privé.',
+    footTagline: 'Une appli de concentration pour Chrome, calme et privée, qui bloque les sites distrayants.',
     footProduct: 'Produit',
     footResources: 'Ressources',
     footContact: 'Contact',
@@ -286,9 +292,9 @@ export const SITE = {
   },
 
   es: {
-    title: 'Bloqueador de páginas web gratis para Chrome | FocusFence',
+    title: 'FocusFence: bloquear páginas que distraen y concentrarte',
     description:
-      'Extensión gratis para bloquear páginas web en Chrome sin límite. Pro bloquea los Shorts de YouTube y aplica tus horarios.',
+      'Extensión gratis para bloquear páginas web que te distraen, sin límite. Pro añade sesiones de concentración y aplica tus horarios.',
     privacyTitle: 'Política de privacidad | FocusFence',
     privacyDescription:
       'Qué guarda FocusFence en tu ordenador y por qué pide cada permiso a Chrome. Si compras Pro, ExtensionPay comprueba tu licencia.',
@@ -306,20 +312,21 @@ export const SITE = {
     ctaSoon: 'Muy pronto en Chrome Web Store',
     ctaAdd: 'Añadir gratis a Chrome',
     ctaNav: 'Añadir a Chrome',
-    ctaFeatures: 'Mira qué bloquea',
-    eyebrow: 'Bloqueador de páginas web para Chrome',
-    h1: 'Ponle una valla a los <em>feeds infinitos.</em>',
+    ctaFeatures: 'Mira cómo funciona',
+    eyebrow: 'App de concentración para Chrome',
+    h1: 'Ponle una valla a <em>las distracciones.</em>',
     lead:
-      'Bloquea las webs que abres sin pensar, todas las que quieras, con el plan gratuito. Con Pro, bloquea solo los Shorts de YouTube o activa el modo estricto cuando falle la fuerza de voluntad.',
+      'Concéntrate en tu trabajo. FocusFence bloquea las webs que abres sin pensar, sin límite en el plan gratuito. Pro añade sesiones de concentración, el modo estricto y el bloqueo de los Shorts de YouTube.',
     heroSmall: 'Gratis, webs ilimitadas · Sin cuenta · Código abierto',
     altPopup:
       'La ventana de FocusFence: seis webs bloqueadas en pilares de cristal, «Bloqueo activado» y el botón «Bloquear web»',
     altBlock:
       'La página de bloqueo de FocusFence: reddit.com está bloqueada, con una cita, los bloqueos de hoy y pilares de cristal',
     ogAlt:
-      'FocusFence, bloqueador de páginas web para Chrome: «Ponle una valla a los feeds infinitos.» sobre una fila de pilares de cristal',
+      'FocusFence, app de concentración para Chrome: «Ponle una valla a las distracciones.» sobre una fila de pilares de cristal',
+    appCategory: 'Productividad',
     statement: [
-      'Un bloqueador de páginas web para Chrome, tranquilo y privado.',
+      'Una app de concentración para Chrome, tranquila y privada.',
       'Bloquea una web entera o solo su peor parte. FocusFence nunca lee tus páginas y tu lista se queda en tu ordenador.',
     ],
     steps: [
@@ -337,7 +344,7 @@ export const SITE = {
     altBlocklist:
       'La lista de bloqueo de FocusFence: un pilar de cristal por web, sobre webs, la ruta youtube.com/shorts y una palabra clave',
     focusKicker: 'Concentración',
-    focusH2: ['Bloquea webs con horario.', 'O enciérrate con llave.'],
+    focusH2: ['Protege tus horas de concentración.', 'O enciérrate con llave.'],
     focusLead: 'Pro añade el tiempo a la valla: bloquea solo en las horas que elijas, trabaja en rondas Pomodoro y activa el modo estricto cuando se acerque una entrega.',
     focusFeatures: [
       ['Horarios', 'Bloquea solo en tu horario de trabajo, los días que elijas. También funcionan los tramos nocturnos, p. ej. 22:00–06:00 para dormir mejor.'],
@@ -400,7 +407,9 @@ export const SITE = {
     faqSub: '¿Tienes otra pregunta? Escribe a {contact}.',
     faq: [
       ['¿Cómo bloquear una página web en Chrome?', 'Añade FocusFence a Chrome, abre la web que quieras bloquear, haz clic en el icono de FocusFence en la barra de herramientas y pulsa <strong>Bloquear web</strong>. Para otra web, escribe su dirección en la ventana o en los ajustes.'],
+      ['¿FocusFence es un bloqueador de anuncios?', 'No. FocusFence es una app de concentración y no toca los anuncios. Solo bloquea lo que pones en tu lista, como una red social, los Shorts de YouTube o una web de noticias. Todas las demás webs cargan exactamente igual que antes.'],
       ['¿FocusFence es gratis?', 'Sí. El plan Gratis bloquea todas las páginas web que quieras, subdominios incluidos, todo el tiempo que lo uses y sin crear una cuenta. Pro es opcional y añade rutas como <code>youtube.com/shorts</code>, palabras clave, horarios, sesiones Pomodoro y el modo estricto.'],
+      ['¿FocusFence ayuda con el TDAH?', 'FocusFence no es una herramienta médica ni un tratamiento. Puede hacer tu navegador más adaptado al TDAH al poner un obstáculo entre el impulso y el feed. Las webs de tu lista siguen cerradas hasta que quites el bloqueo. Con Pro, el modo estricto exige esperar 10 minutos y volver a escribir ocho palabras antes de poder quitarlo, las sesiones de concentración dividen tu trabajo en rondas Pomodoro y los horarios activan el bloqueo a las horas que elijas.'],
       ['¿Puedo bloquear los Shorts de YouTube y seguir usando YouTube?', 'Sí, con Pro. Añade <code>youtube.com/shorts</code> como regla de ruta. youtube.com, los vídeos y la búsqueda siguen funcionando. Se bloquean los enlaces a Shorts y la navegación a Shorts dentro de YouTube.'],
       ['¿Bloquear reddit.com también bloquea old.reddit.com?', 'Sí. Una regla de dominio cubre todos los subdominios, en Gratis y en Pro.'],
       ['¿Por qué Chrome pide permiso cuando añado una web?', 'Chrome solo deja que una extensión muestre su propia página de bloqueo en las webs a las que tiene acceso. FocusFence pide acceso solo a esa web. Si lo rechazas, la web sigue bloqueada, pero verás la página de error de Chrome en lugar de la página de FocusFence.'],
@@ -409,7 +418,7 @@ export const SITE = {
       ['¿FocusFence es de código abierto?', 'Sí, bajo la licencia GNU AGPL v3. <a href="{source}">Lee el código</a>.'],
     ],
     finalH2: 'Elige las tres webs que más tiempo te roban.',
-    footTagline: 'Un bloqueador de páginas web para Chrome, tranquilo y privado.',
+    footTagline: 'Una app de concentración para Chrome, tranquila y privada, que bloquea las webs que te distraen.',
     footProduct: 'Producto',
     footResources: 'Recursos',
     footContact: 'Contacto',
@@ -421,9 +430,9 @@ export const SITE = {
   },
 
   de: {
-    title: 'Kostenloser Website-Blocker für Chrome | FocusFence',
+    title: 'FocusFence: Ablenkende Websites blockieren, Fokus behalten',
     description:
-      'Ablenkende Webseiten in Chrome kostenlos und ohne Limit blockieren. Pro sperrt gezielt YouTube Shorts und wendet Ihre Zeitpläne an.',
+      'Kostenlose Chrome-Erweiterung, die ablenkende Websites unbegrenzt sperrt. Pro bringt Fokus-Sitzungen und wendet Zeitpläne an.',
     privacyTitle: 'Datenschutzerklärung | FocusFence',
     privacyDescription:
       'Was FocusFence auf Ihrem Computer speichert und wozu es jede Berechtigung braucht. Mit Pro prüft ExtensionPay Ihre Lizenz.',
@@ -441,19 +450,20 @@ export const SITE = {
     ctaSoon: 'Bald im Chrome Web Store',
     ctaAdd: 'Kostenlos zu Chrome hinzufügen',
     ctaNav: 'Zu Chrome hinzufügen',
-    ctaFeatures: 'Was FocusFence sperrt',
-    eyebrow: 'Website-Blocker für Chrome',
-    h1: 'Zäunen Sie <em>endlose Feeds</em> ein.',
+    ctaFeatures: 'So funktioniert es',
+    eyebrow: 'Fokus-App für Chrome',
+    h1: 'Zäunen Sie <em>Ablenkungen</em> ein.',
     lead:
-      'Sperren Sie die Websites, die Sie ganz automatisch öffnen, so viele Sie wollen, im kostenlosen Tarif. Mit Pro sperren Sie nur YouTube Shorts oder schalten den strikten Modus ein, wenn die Willenskraft nachlässt.',
+      'Bleiben Sie konzentriert. FocusFence sperrt kostenlos und unbegrenzt die Websites, die Sie automatisch öffnen. Pro bringt Fokus-Sitzungen, strikten Modus und YouTube-Shorts-Sperre.',
     heroSmall: 'Kostenlos für beliebig viele Websites · Kein Konto · Open Source',
     altPopup:
       'Das FocusFence-Fenster: sechs gesperrte Websites als Glassäulen, „Blockieren ist an“ und die Schaltfläche „Seite blockieren“',
     altBlock:
       'Die Sperrseite von FocusFence: reddit.com ist gesperrt, mit Zitat, heutigen Sperrungen und einer Reihe gläserner Säulen',
-    ogAlt: 'FocusFence, Website-Blocker für Chrome: „Zäunen Sie endlose Feeds ein.“ über einer Reihe gläserner Säulen',
+    ogAlt: 'FocusFence, Fokus-App für Chrome: „Zäunen Sie Ablenkungen ein.“ über einer Reihe gläserner Säulen',
+    appCategory: 'Produktivität',
     statement: [
-      'Ein ruhiger, privater Website-Blocker für Chrome.',
+      'Eine ruhige, private Fokus-App für Chrome.',
       'Sperren Sie eine ganze Website oder nur ihren schlimmsten Teil. FocusFence liest nie Ihre Seiten, und Ihre Liste bleibt auf Ihrem Computer.',
     ],
     steps: [
@@ -471,7 +481,7 @@ export const SITE = {
     altBlocklist:
       'Die FocusFence-Sperrliste: eine Glassäule pro Website, darunter Websites, der Pfad youtube.com/shorts und ein Stichwort',
     focusKicker: 'Fokus',
-    focusH2: ['Websites nach Zeitplan sperren.', 'Oder sich selbst aussperren.'],
+    focusH2: ['Fokuszeiten schützen.', 'Oder sich selbst aussperren.'],
     focusLead: 'Pro bringt die Zeit ins Spiel: nur zu den Stunden Ihrer Wahl sperren, in Pomodoro-Runden arbeiten und vor einer Deadline den strikten Modus einschalten.',
     focusFeatures: [
       ['Zeitpläne', 'Nur während der Arbeitszeit sperren, an den Tagen Ihrer Wahl. Auch Zeiträume über Mitternacht funktionieren, z. B. 22:00–06:00 für besseren Schlaf.'],
@@ -534,7 +544,9 @@ export const SITE = {
     faqSub: 'Noch etwas auf dem Herzen? Schreiben Sie an {contact}.',
     faq: [
       ['Wie blockiere ich eine Website in Chrome?', 'Fügen Sie FocusFence zu Chrome hinzu, öffnen Sie die Website, klicken Sie in der Symbolleiste auf das FocusFence-Symbol und dann auf <strong>Seite blockieren</strong>. Andere Websites tragen Sie im Fenster oder in den Einstellungen ein.'],
+      ['Ist FocusFence ein Werbeblocker?', 'Nein. FocusFence ist eine Fokus-App und lässt Werbung in Ruhe. Es sperrt nur, was auf Ihrer Liste steht, etwa ein soziales Netzwerk, YouTube Shorts oder eine Nachrichtenseite. Alle anderen Websites laden genau wie vorher.'],
       ['Ist FocusFence kostenlos?', 'Ja. Der kostenlose Tarif sperrt beliebig viele Websites samt Subdomains, so lange Sie ihn nutzen, und ganz ohne Konto. Pro ist optional und bringt Pfade wie <code>youtube.com/shorts</code>, Stichwörter, Zeitpläne, Pomodoro-Sitzungen und den strikten Modus.'],
+      ['Hilft FocusFence bei ADHS?', 'FocusFence ist kein Medizinprodukt und keine Therapie. Es kann Ihren Browser ADHS-freundlicher machen, indem es eine Hürde zwischen Impuls und Feed stellt. Die Websites auf Ihrer Liste bleiben zu, bis Sie die Sperre abschalten. Mit Pro verlangt der strikte Modus 10 Minuten Wartezeit und acht abgetippte Wörter, bevor sich die Sperre abschalten lässt, Fokus-Sitzungen teilen Ihre Arbeit in Pomodoro-Runden, und Zeitpläne starten die Sperre zu den Zeiten, die Sie festlegen.'],
       ['Kann ich YouTube Shorts sperren und YouTube weiter nutzen?', 'Ja, mit Pro. Fügen Sie <code>youtube.com/shorts</code> als Pfad-Regel hinzu. youtube.com, Videos und die Suche funktionieren weiter. Links zu Shorts und die Navigation zu Shorts innerhalb von YouTube werden gesperrt.'],
       ['Sperrt reddit.com auch old.reddit.com?', 'Ja. Eine Domain-Regel gilt für alle Subdomains, in Kostenlos und Pro.'],
       ['Warum fragt Chrome nach einer Berechtigung, wenn ich eine Website hinzufüge?', 'Chrome erlaubt einer Erweiterung nur auf Websites, auf die sie Zugriff hat, ihre eigene Sperrseite anzuzeigen. FocusFence fragt nur nach dieser einen Website. Lehnen Sie ab, bleibt die Website gesperrt, Sie sehen dann aber die Fehlerseite von Chrome statt der Sperrseite von FocusFence.'],
@@ -543,7 +555,7 @@ export const SITE = {
       ['Ist FocusFence Open Source?', 'Ja, unter der GNU AGPL v3. <a href="{source}">Zum Quellcode</a>.'],
     ],
     finalH2: 'Wählen Sie die drei Websites, die Sie am meisten Zeit kosten.',
-    footTagline: 'Ein ruhiger, privater Website-Blocker für Chrome.',
+    footTagline: 'Eine ruhige, private Fokus-App für Chrome, die ablenkende Websites sperrt.',
     footProduct: 'Produkt',
     footResources: 'Ressourcen',
     footContact: 'Kontakt',

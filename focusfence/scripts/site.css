@@ -659,7 +659,7 @@ code {
   font-style: normal;
   color: var(--dim);
 }
-/* The h1 holds the eyebrow ("Website blocker for Chrome", what the page is about) and the headline.
+/* The h1 holds the eyebrow ("Focus app for Chrome", what the page is about) and the headline.
    The eyebrow keeps the line it had as a paragraph (16px text, line-height 1.6); the headline is a
    block below it. */
 .hero-h {
