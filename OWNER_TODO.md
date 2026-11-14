@@ -121,5 +121,13 @@ All drafts are in `marketing/`. Each needs your own account on the platform and 
 
 ## 10. After approval
 
-- [ ] Set `STORE_URL` in `focusfence/scripts/docs.mjs` to the store link, run `npm run docs`, commit and push.
+- [ ] Set `STORE_URL` in `focusfence/scripts/docs.mjs` to the store link, run `npm run docs`, commit and push. This also turns on the "Add to Chrome" buttons and adds the install URL to the structured data.
 - [ ] Add localized listings (FR, DE, ES, PT-BR) and reply to early reviews.
+
+## 11. Search visibility (details in `SEO_AUDIT.md`)
+
+- [ ] **Google Search Console:** add `focusfence.dev` as a *domain* property (a TXT record at Hostinger), then submit `https://focusfence.dev/sitemap.xml`. Search Console is the only first-party source for impressions, queries and indexing.
+- [ ] **Bing Webmaster Tools:** import the site from Search Console (one click once GSC is verified). Bing's index also powers Copilot answers.
+- [ ] **Legal notice:** France requires *mentions légales* on a commercial site, and Germany an *Impressum*. Both need your legal name and address, so they were not written for you.
+- [ ] **ExtensionPay privacy link:** `https://extensionpay.com/privacy`, cited in the privacy policy, returned HTTP 500 on 2026-11-14 at every URL variant tried. Check it, or ask ExtensionPay for the current address, before the store review.
+- [ ] **Links to the site:** set the GitHub repository's *Website* field to https://focusfence.dev, and use the store listing's website field. Launch posts (Product Hunt, Reddit, AlternativeTo as an alternative to BlockSite or StayFocusd) bring the first links and brand mentions.

@@ -1,0 +1,478 @@
+{
+  "block websites on chrome": {
+    "lang": "en",
+    "urls": [
+      "blog.hubspot.com/marketing/block-websites-on-chrome",
+      "androidauthority.com/how-to-block-websites-on-chrome-1010532",
+      "wpengine.co.uk/blog/block-websites-on-chrome",
+      "ubergizmo.com/how-to/how-to-block-websites-on-chrome",
+      "kinsta.com/blog/how-to-block-a-website-on-chrome",
+      "kinsta.com/se/blog/hur-man-kan-blockera-webbplatser-chrome",
+      "hostinger.ph/tutorials",
+      "laptopmag.com/how-to/how-to-block-a-website-on-google-chrome",
+      "kinsta.com",
+      "helpdeskgeek.com/how-to-block-websites-on-google-chrome"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (10/10): how-to guides 10"
+  },
+  "how to block a website on chrome": {
+    "lang": "en",
+    "urls": [
+      "profiletree.com/how-do-i-block-a-website-on-chrome",
+      "wbcomdesigns.com/how-to-block-a-website-on-google",
+      "softwaretestinghelp.com",
+      "laptopmag.com/how-to/block-a-website-on-google-chrome",
+      "laptopmag.com/how-to/how-to-block-a-website-on-google-chrome",
+      "laptopmag.com/uk/how-to/block-a-website-on-google-chrome",
+      "laptopmag.com/au/how-to/block-a-website-on-google-chrome",
+      "setapp.com/how-to/block-websites-on-chrome",
+      "kinsta.com",
+      "laptopmag.com/how-to/block-websites-in-chrome"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (10/10): how-to guides 10"
+  },
+  "website blocker chrome extension": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/jfkeinieegkalgncgipjonblnkmgfedo",
+      "chromewebstore.google.com/detail/gppkhppnogcgodjackcgcfoepdngfcpm",
+      "chromewebstore.google.com/detail/ifdepgnnjpnbkcgempionjablajancjc",
+      "chromewebstore.google.com/detail/pohdmcmfjhjnocjjhoobmhbgonebakad",
+      "chromewebstore.google.com/detail/habaaobnclljeaifmhlaimngklnieedl",
+      "chromewebstore.google.com/detail/ckpoldakgejbipihilelcllifakheokh",
+      "chromewebstore.google.com/detail/aoabjfoanlljmgnohepbkimcekolejjn",
+      "chromeboard.com/extension/website-blocker-—-block-s-kniediipngcpmbmpeacaoinhoeipfina",
+      "chromeboard.com/extension/website-blocker-extension-ckpoldakgejbipihilelcllifakheokh",
+      "chromeboard.com/extension/web-site-blocker-aoabjfoanlljmgnohepbkimcekolejjn"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (10/10): store listings 10 (Chrome Web Store 7, extension-directory mirrors 3)"
+  },
+  "free website blocker chrome": {
+    "lang": "en",
+    "urls": [
+      "opal.so/blog/free-chrome-site-blockers",
+      "chromewebstore.google.com/detail/pohdmcmfjhjnocjjhoobmhbgonebakad",
+      "chromewebstore.google.com/detail/ifdepgnnjpnbkcgempionjablajancjc",
+      "chromewebstore.google.com/detail/pgoeobojimoocdnilcajmjihiabcmabn",
+      "chromewebstore.google.com/detail/ijkcjieknpjcbofnmhahefckgaldmlfn",
+      "chromewebstore.google.com/detail/njlndibfjkaigciohbfdglklhechhnlc",
+      "chromewebstore.google.com/detail/eiimnmioipafcokbfikbljfdeojpcgbh",
+      "chromewebstore.google.com/detail/kniediipngcpmbmpeacaoinhoeipfina",
+      "chromeboard.com/extension/site-block-pro-free-websi-ijkcjieknpjcbofnmhahefckgaldmlfn",
+      "chromeboard.com/extension/free-site-blocker-ekmkhkgeocggfimlpajalnlpoiaieemh"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (9/10): store listings 9 (Chrome Web Store 7, extension-directory mirrors 2); listicles/reviews 1"
+  },
+  "chrome extension to block websites": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/pohdmcmfjhjnocjjhoobmhbgonebakad",
+      "chromewebstore.google.com/detail/lebiggkccaodkkmjeimmbogdedcpnmfb",
+      "slashgear.com/1709854/best-google-chrome-extensions-block-websites",
+      "chromewebstore.google.com/detail/ghjkimampnaopgkijfpdmjljnolonadk",
+      "chromewebstore.google.com/detail/npdmkaclnkaanhpmbphjbndichojafha",
+      "chromewebstore.google.com/detail/aidbgjddknjcgljldjfnnhhepckbihah",
+      "chromewebstore.google.com/detail/glelkmjlfnjmjejlnimifmmopjnocgkk",
+      "tomsguide.com/how-to/how-to-block-a-website-in-chrome",
+      "chromewebstore.google.com/detail/kakpmocecmeipnceaacjpigmamgikkpn",
+      "chromeboard.com/extension/block-website-kakpmocecmeipnceaacjpigmamgikkpn"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (8/10): store listings 8 (Chrome Web Store 7, extension-directory mirrors 1); listicles/reviews 1; how-to guides 1"
+  },
+  "block distracting websites": {
+    "lang": "en",
+    "urls": [
+      "addons.mozilla.org/firefox/addon/focusshield-block-distractions",
+      "freedom.to/blog/need-to-focus-block-these-10-sites",
+      "apps.apple.com/app/id1189844594",
+      "currentware.com/blog/block-distracting-websites-for-productivity",
+      "addons.mozilla.org/firefox/addon/distraction-block",
+      "freedom.to/blog/how-to-block-websites-that-are-distracting-harmful-and-even-dangerous",
+      "apps.apple.com/us/app/-/id1492879257",
+      "oneproductivity.substack.com/p/how-to-block-distracting-websites-d13",
+      "blog.rescuetime.com/getting-the-most-out-of-rescuetimes-website-blocking",
+      "chromewebstore.google.com/detail/lniombipmmhhighllijmcdncnefpjloi"
+    ],
+    "intent": "commercial (mixed with informational)",
+    "result_types": "mixed: store listings 5 (Firefox Add-ons 2, App Store 2, Chrome Web Store 1); how-to guides 5"
+  },
+  "site blocker chrome": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/fngiapkoclemjhlpgpkaokbmjcgihcof",
+      "chromewebstore.google.com/detail/gppkhppnogcgodjackcgcfoepdngfcpm",
+      "chromewebstore.google.com/detail/ifdepgnnjpnbkcgempionjablajancjc",
+      "chromewebstore.google.com/detail/aadnooghcahhgmkhkhkoflblfbhcndig",
+      "chromewebstore.google.com/detail/eiimnmioipafcokbfikbljfdeojpcgbh",
+      "chromeboard.com/extension/site-blocker-icfbhgndjfbhdeijhpenbbhgefbmhhbd",
+      "chromeboard.com/extension/site-blocker-dclikkblajmdinnjcgenjpfjccodbgha",
+      "chromeboard.com/extension/site-blocker-lnhhihonmlnafcgmlamndbpllcahjbjp",
+      "chromeboard.com/extension/site-blocker-ggkdfmmjcgppamcmlepgjmhemhjaclpc",
+      "chromeboard.com/extension/site-blocker-phgmdiohjekdjkkknfgibohccckjjilp"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (10/10): store listings 10 (Chrome Web Store 5, extension-directory mirrors 5)"
+  },
+  "chrome extension to block youtube shorts": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/mdfinipnjnpgkdhmopphfgbnjhbipelk",
+      "chromewebstore.google.com/detail/iiohlajanokhbaimiclmahallbcifcdj",
+      "chromewebstore.google.com/detail/aljlkinhomaaahfdojalfmimeidofpih",
+      "chromeboard.com/extension/block-youtube-shorts- -au-bpciannhcoipobpfeofondnhiadfcbib",
+      "chromeboard.com/extension/block-youtube-shorts-—-sh-hineadfehgklomeomhnofpihfpoahkpf",
+      "chromeboard.com/extension/block-youtube-shorts-dahbkndkpjkpahhldlkeoodleojbcokn",
+      "chromeboard.com/extension/youtube-shorts-blocker-–-lcnfadijblganffgnnjkealaeikaldfh",
+      "chromeboard.com/extension/youtube-shorts-blocker-ffajnggecilcmenhlpbpdbjejiaiokoa",
+      "chromeboard.com/extension/yt-shorts-blocker-hide-yo-apbobllopniigpcaefjpdeeehjeepcbk",
+      "chromeboard.com/extension/youtube-shorts-block-kpcihppklbfdolkgkojhlgiblmeheihp"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (10/10): store listings 10 (Chrome Web Store 3, extension-directory mirrors 7)"
+  },
+  "block youtube shorts on chrome": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/iiohlajanokhbaimiclmahallbcifcdj",
+      "chromewebstore.google.com/detail/ckagfhpboagdopichicnebandlofghbc",
+      "chromewebstore.google.com/detail/mdfinipnjnpgkdhmopphfgbnjhbipelk",
+      "dev.to/ktg0215/how-to-block-youtube-shorts-on-desktop-feed-search-homepage-4ajj",
+      "chromewebstore.google.com/detail/kombhaaijcekdbmoinneeabpdadofepl",
+      "chromeboard.com/extension/block-youtube-shorts-dahbkndkpjkpahhldlkeoodleojbcokn",
+      "chromeboard.com/extension/block-shorts-for-youtube-kombhaaijcekdbmoinneeabpdadofepl",
+      "chromeboard.com/extension/youtube-shorts-blocker-piglehnagbiapbcgdgabimgonlncenpj",
+      "chromeboard.com/extension/block-youtube-shorts-—-sh-hineadfehgklomeomhnofpihfpoahkpf",
+      "chromeboard.com/extension/youtube-shorts-blocker-–-ojibaeekbojdlkfjdekaeeepggmackmp"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (9/10): store listings 9 (Chrome Web Store 4, extension-directory mirrors 5); how-to guides 1"
+  },
+  "block websites during work hours chrome": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/glhbgoeibllffnpjiechdkiadcndlhai",
+      "chromewebstore.google.com/detail/ijoanhpbaehdhndeebfefblgnelcmllc",
+      "chromewebstore.google.com/detail/dcpbedhdekgkhigjgmlcbmcjoeaebbfm",
+      "chromewebstore.google.com/detail/ifdepgnnjpnbkcgempionjablajancjc",
+      "chromewebstore.google.com/detail/mfpkhkclkiccmflolbijcdfdpemlbllg",
+      "chromewebstore.google.com/detail/akhkbegojfdaifgnbdfilggmgnpppipc",
+      "chromewebstore.google.com/detail/legkbfahnlgegnaciihgojmckminpgei",
+      "chromewebstore.google.com/detail/paglophkpamlennmclglgiogonpkedna",
+      "chromewebstore.google.com/detail/bgoigpkikbkdbkadenmfnpaajjgojfoj",
+      "chromewebstore.google.com/detail/dmijhfnjdfpaanlbahmklnhjkbhegepm"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (10/10): store listings 10 (Chrome Web Store 10)"
+  },
+  "chrome extension to block websites at certain times": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/nofgeonbnbcmhhbgckkfgbponfjmgppm",
+      "chromewebstore.google.com/detail/kjnepmakcgjbllfnpdnppjpnfpoelabn",
+      "chromewebstore.google.com/detail/flkifjnihenphpjkijbegdpmlgoklnao",
+      "chromewebstore.google.com/detail/jkcldgebkojboafookknjdjplninekof",
+      "chromewebstore.google.com/detail/glelkmjlfnjmjejlnimifmmopjnocgkk",
+      "awesome.ecosyste.ms/projects/github.com%2Fjeremielitzler%2Fwebsite-blocker-extension",
+      "chromewebstore.google.com/detail/jhcmpofdkbcpgddhmijceimhmgiomohi",
+      "chromewebstore.google.com/detail/mfpkhkclkiccmflolbijcdfdpemlbllg",
+      "chromewebstore.google.com/detail/alflfcohkipknfihgnpmcdcoiihielde",
+      "chromewebstore.google.com/detail/ijoanhpbaehdhndeebfefblgnelcmllc"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (9/10): store listings 9 (Chrome Web Store 9); other 1 (open-source project directory)"
+  },
+  "pomodoro timer chrome extension with website blocker": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/fhnbdhpddlplookheppaagkaccfancck",
+      "chromewebstore.google.com/detail/iaanigfbldakklgdfcnbjonbehpbpecl",
+      "gridfiti.com/pomodoro-timer-chrome-extensions",
+      "habitica.fandom.com/wiki/Habitica_Pomodoro_SiteKeeper",
+      "chromewebstore.google.com/detail/koebbleaefghpjjmghelhjboilcmfpad",
+      "gridfiti.com",
+      "chromewebstore.google.com/detail/jbojhemhnilgooplglkfoheddemkodld",
+      "chromewebstore.google.com/detail/jiajknlaklngkhcgckjphbceclellojh",
+      "chromewebstore.google.com/detail/lcohmkfidkogblgfadjkeebngjbpdgfe",
+      "chromewebstore.google.com/detail/nobaiipcimhmefhfkgnpnpjibckbchnn"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (7/10): store listings 7 (Chrome Web Store 7); listicles/reviews 1; other 1 (wiki page about one extension); unclassified ?p= shortlinks 1"
+  },
+  "focus mode chrome extension": {
+    "lang": "en",
+    "urls": [
+      "github.com/alsm6169/Focus-Mode",
+      "extensionauditor.com/scan/focus-mode-mejjeecdcedjhiifopjgiiimgemcooaf",
+      "extensionauditor.com/scan/focus-mode-jjogkcpcgaaifccbffjmincckliocaca",
+      "chromeboard.com/extension/focus-mode-fcajcgfjhilkdnbnmighhcbogikibkmh",
+      "chromeboard.com/extension/focus-mode-–-task-distrac-dpgbdjbpnajcclcdfmlfdkmofaemhalk",
+      "chromeboard.com/extension/focus-mode-pro-jonddomloljehafphimpflhdnaodhkbm",
+      "chromeboard.com/extension/focus-mode-for-browsing-dfcnnefbpailoecmkbgoidgjfhfbidhe",
+      "chromeboard.com/extension/focus-mode-oibmhhgkcfdpldmidkbpjpkcbeafhgbd",
+      "chromeboard.com/extension/focus-mode-pro-obofjmameenaecdmeneopcifgchpnfkl",
+      "chromeboard.com/extension/focus-mode-bjkoadklgjgjffekfncfkogicgpmdbfo"
+    ],
+    "intent": "transactional (name-ambiguous: many different extensions are called 'Focus Mode')",
+    "result_types": "dominated by store listings (9/10): store listings 9 (extension-directory mirrors 9); other 1 (code repository)"
+  },
+  "website blocker with password chrome": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/pgoeobojimoocdnilcajmjihiabcmabn",
+      "chromewebstore.google.com/detail/ifdepgnnjpnbkcgempionjablajancjc",
+      "chromewebstore.google.com/detail/lebiggkccaodkkmjeimmbogdedcpnmfb",
+      "chromewebstore.google.com/detail/eiimnmioipafcokbfikbljfdeojpcgbh",
+      "logmeonce.com/resources",
+      "chromewebstore.google.com/detail/lbgoadondhcaigdkciejdegkgambbkne",
+      "addons.mozilla.org/sl/firefox/addon/passbrow",
+      "addons.mozilla.org/nn-NO/firefox/addon/passbrow",
+      "addons.mozilla.org/addon/passbrow",
+      "chromeboard.com/extension/website-locker-pacghcnpbcgdhojcfoifnkemopalimlo"
+    ],
+    "intent": "transactional",
+    "result_types": "dominated by store listings (9/10): store listings 9 (Chrome Web Store 5, Firefox Add-ons 3, extension-directory mirrors 1); unclassified ?p= shortlinks 1"
+  },
+  "blocksite alternative": {
+    "lang": "en",
+    "urls": [
+      "alternativeto.net/software/blocksite",
+      "theme404.com/blog/best-free-blocksite-alternatives",
+      "taskgate-landing-web.vercel.app/alternatives/blocksite",
+      "rigorousthemes.com/blog/best-blocksite-alternatives",
+      "digitalzen.app/blog/blocksite-alternative",
+      "compsmag.com/best/blocksite-alternatives",
+      "techradar.com/reviews/blocksite",
+      "compsmag.com",
+      "support.mozilla.com/gn/questions/798862",
+      "cisdem.com/resource/blocksite-review.html"
+    ],
+    "intent": "commercial",
+    "result_types": "dominated by listicles/reviews (8/10): listicles/reviews 8 (listicles 6, reviews/write-ups 2); unclassified ?p= shortlinks 1; forum threads 1"
+  },
+  "block reddit on chrome": {
+    "lang": "en",
+    "urls": [
+      "chromewebstore.google.com/detail/fllfmdjhnhhjokhdifhcdbpbfajfnhon",
+      "chromewebstore.google.com/detail/chijmnckamakdglnmmafhapcajkoonfh",
+      "help.nextdns.io/t/x2yl7br/denying-reddit-only-on-chrome",
+      "chromewebstore.google.com/detail/eclfcdibgmjbmnehpilggejlkabkgaok",
+      "kinsta.com/se/blog/hur-man-kan-blockera-webbplatser-chrome",
+      "kinsta.com/blog/how-to-block-a-website-on-chrome",
+      "chromeboard.com/extension/reddit-blocker-chijmnckamakdglnmmafhapcajkoonfh",
+      "chromewebstore.google.com/detail/fgccnfdfejlkabhnciellmnkdcaemhlc",
+      "addons.mozilla.org/firefox/addon/sns-detox",
+      "chromeboard.com/extension/hide-posts-ads-and-subred-albjlaheaefjbbgbhmkfhkpakbeoapol"
+    ],
+    "intent": "transactional (mixed with informational)",
+    "result_types": "dominated by store listings (7/10): store listings 7 (Chrome Web Store 4, extension-directory mirrors 2, Firefox Add-ons 1); how-to guides 2; forum threads 1"
+  },
+  "bloquer un site sur chrome": {
+    "lang": "fr",
+    "urls": [
+      "blog.openreplay.com/fr/comment-bloquer-un-site-web-sur-chrome",
+      "mackeeper.com/fr/blog/bloquer-un-site-sur-chrome",
+      "proton.me/fr/blog/how-to-block-websites-chrome",
+      "kinsta.com/fr",
+      "kinsta.com/fr/blog/comment-bloquer-sites-web-chrome",
+      "avg.com/fr/signal/how-to-block-websites-chrome",
+      "guru99.com/fr/how-to-block-websites-on-google-chrome.html",
+      "hostinger.com/fr/tutoriels/comment-bloquer-un-site",
+      "support.google.com/chrome/a/answer/7532419",
+      "parental-control.flashget.com/fr/how-to-block-websites-on-chrome"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (9/10): how-to guides 9; unclassified ?p= shortlinks 1"
+  },
+  "bloqueur de site gratuit": {
+    "lang": "fr",
+    "urls": [
+      "famisafe.wondershare.com/fr/block/how-to-block-websites-temporarily.html",
+      "justgeek.fr",
+      "clubic.com/telecharger-fiche434341-url-blocker.html",
+      "famisafe.wondershare.com/fr/block/website-blocker-apps-and-chrome-extension.html",
+      "filehippo.com/fr/download_website-blocker",
+      "parental-control.flashget.com/fr/how-to-block-websites-on-firefox",
+      "korben.info/surfshark-one-bloque-les-sites.html",
+      "airdroid.com/es/blocker/website-blocker",
+      "airdroid.com/pt/parent-control/website-blocker",
+      "codeur.com/blog/bloqueurs-de-pub-gratuits"
+    ],
+    "intent": "commercial",
+    "result_types": "dominated by listicles/reviews (6/10): listicles/reviews 6 (reviews/write-ups 2, listicles 4); how-to guides 2; other 2 (software download portal x2)"
+  },
+  "extension chrome bloquer site": {
+    "lang": "fr",
+    "urls": [
+      "korben.info/bloquer-lacces-a-certains-sites-sur-chrome-et-firefox-via-lextension-block-site-et-un-mot-de-passe.html",
+      "korben.info/bloquer-site-chrome-firefox-extension.html",
+      "techlockdown.com/es/artículos/extensiones-de-chrome-para-bloquear-sitios-web",
+      "avast.com/fr-fr/c-block-websites-chrome",
+      "mackeeper.com/fr/blog/bloquer-un-site-sur-chrome",
+      "korben.info/en/block-site-extension-to-block-websites.html",
+      "korben.info/ja/bloquer-site-chrome-firefox-extension.html",
+      "avg.com/fr/signal/how-to-block-websites-chrome",
+      "chromewebstore.google.com/detail/gapmocmoommgabdpknjkelccgkeekgom",
+      "avg.com/pt/signal/how-to-block-websites-chrome"
+    ],
+    "intent": "commercial (mixed with informational)",
+    "result_types": "mixed: listicles/reviews 5 (reviews/write-ups 4, listicles 1); how-to guides 4; store listings 1 (Chrome Web Store 1)"
+  },
+  "bloquer shorts youtube": {
+    "lang": "fr",
+    "urls": [
+      "siecledigital.fr/2026/01/15/youtube-permet-enfin-de-bloquer-les-shorts-pour-les-ados",
+      "movieguide.org/es/noticias-articulos/youtube-da-a-los-padres-herramientas-para-bloquear-shorts-esta-es-la-razon-por-la-que-es-algo-bueno.html",
+      "korben.info/youtube-permet-enfin-de-virer-les-shorts-de-votre-page-daccueil.html",
+      "root-nation.com/fr/news-fr/it-news-fr/fr-youtube-now-lets-you-hide-shorts",
+      "techlockdown.com/es/artículos/bloquear-los-cortos-de-youtube",
+      "marketing4ecommerce.net/inesperadamente-youtube-ya-te-permite-bloquear-los-shorts",
+      "dio.me/en/articles/bloquear-so-os-shorts-do-youtube-no-iphone-e-deixar-os-videos-normais-o-que-e-de-graca-em-2026-755b37dbf2cb",
+      "merca20.com",
+      "tecmundo.com.br/software/412448-youtube-permite-desativar-os-shorts-saiba-como-bloquear-videos-curtos.htm",
+      "androidphoria.com/tutoriales/como-bloquear-youtube-shorts-para-ninos"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by news articles (6/10): news articles 6; how-to guides 3; unclassified ?p= shortlinks 1"
+  },
+  "bloquear páginas web en chrome": {
+    "lang": "es",
+    "urls": [
+      "genbeta.com/navegadores/como-bloquear-paginas-web-google-chrome",
+      "genbeta.com/navegadores/como-bloquear-paginas-web-google-chrome/amp",
+      "trecebits.com/como-bloquear-paginas-web-google-chrome",
+      "genbeta.com/paso-a-paso/como-bloquear-pagina-web-google-chrome",
+      "genbeta.com/paso-a-paso/como-bloquear-pagina-web-google-chrome/amp",
+      "hostinger.com/co/tutoriales",
+      "hostinger.com/ar/tutoriales/como-bloquear-una-pagina-web-en-chrome",
+      "nordvpn.com/es/blog/como-bloquear-una-pagina-web",
+      "xataka.com/basics/como-bloquear-web-chrome",
+      "hostinger.com/mx/tutoriales"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (10/10): how-to guides 10"
+  },
+  "bloqueador de páginas web": {
+    "lang": "es",
+    "urls": [
+      "genbeta.com/paso-a-paso/como-bloquear-pagina-web-google-chrome",
+      "bandaancha.eu/articulos/etiqueta-bloqueo-webs/10",
+      "hostinger.com/es/tutoriales/como-bloquear-una-pagina-web-en-chrome",
+      "techlockdown.com/es/art%C3%ADculos/bloqueo-de-sitios-web-palabras-clave",
+      "hostinger.com/mx/tutoriales",
+      "airdroid.com/es/blocker/block-website-android",
+      "nordvpn.com/es/blog/como-bloquear-una-pagina-web",
+      "hostinger.com/ar/tutoriales/como-bloquear-una-pagina-web-en-chrome",
+      "hostinger.com/co/tutoriales",
+      "mackeeper.com/es/blog/bloquear-paginas-web-en-chrome"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (9/10): how-to guides 9; other 1 (tag archive page)"
+  },
+  "extensión para bloquear páginas web": {
+    "lang": "es",
+    "urls": [
+      "nordvpn.com/es/blog/como-bloquear-una-pagina-web",
+      "genbeta.com/paso-a-paso/como-bloquear-pagina-web-google-chrome",
+      "genbeta.com/paso-a-paso/como-bloquear-pagina-web-google-chrome/amp",
+      "hostinger.com/co/tutoriales",
+      "genbeta.com/navegadores/como-bloquear-paginas-web-google-chrome",
+      "hostinger.com/mx/tutoriales",
+      "hostinger.com/ar/tutoriales/como-bloquear-una-pagina-web-en-chrome",
+      "addons.mozilla.org/es-CL/firefox/addon/block-site-2",
+      "hostinger.com/es/tutoriales/como-bloquear-una-pagina-web-en-chrome",
+      "techlockdown.com/es/art%C3%ADculos/c%C3%B3mo-bloquear-las-extensiones-del-navegador"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (9/10): how-to guides 9; store listings 1 (Firefox Add-ons 1)"
+  },
+  "bloquear shorts de youtube": {
+    "lang": "es",
+    "urls": [
+      "dio.me/es/articles/bloquear-so-os-shorts-do-youtube-no-iphone-e-deixar-os-videos-normais-o-que-e-de-graca-em-2026-755b37dbf2cb",
+      "dio.me/en/articles/bloquear-so-os-shorts-do-youtube-no-iphone-e-deixar-os-videos-normais-o-que-e-de-graca-em-2026-755b37dbf2cb",
+      "chromewebstore.google.com/detail/mdfinipnjnpgkdhmopphfgbnjhbipelk",
+      "techlockdown.com/es/artículos/bloquear-los-cortos-de-youtube",
+      "airdroid.com/pt/app-tips/disable-youtube-shorts",
+      "movieguide.org/es/noticias-articulos/youtube-da-a-los-padres-herramientas-para-bloquear-shorts-esta-es-la-razon-por-la-que-es-algo-bueno.html",
+      "filmora.wondershare.es/youtube/disable-youtube-shorts.html",
+      "airdroid.com/pt/parent-control/disable-youtube-shorts",
+      "canaltech.com.br/apps/odeia-o-youtube-shorts-entao-voce-deveria-ativar-esta-configuracao",
+      "marketing4ecommerce.net/inesperadamente-youtube-ya-te-permite-bloquear-los-shorts"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (6/10): how-to guides 6; news articles 3; store listings 1 (Chrome Web Store 1)"
+  },
+  "websites blockieren chrome": {
+    "lang": "de",
+    "urls": [
+      "kinsta.com/de/blog/wie-man-webseiten-auf-chrome-blockiert",
+      "hostinger.com/de/tutorials",
+      "giga.de/downloads/google-chrome/tipps/seiten-sperren-webseiten-unter-firefox-chrome-blockieren",
+      "techlockdown.com/de/artikel/erwachsenen-websites-blockieren-chrome",
+      "proton.me/de/blog/how-to-block-websites-chrome",
+      "kinsta.com/de",
+      "mackeeper.com/de/blog/websiten-in-chrome-blockieren",
+      "techlockdown.com/de/artikel/Chrome-Erweiterungen-zum-Blockieren-von-Websites",
+      "guru99.com/de/how-to-block-websites-on-google-chrome.html",
+      "avast.com/de-de/c-block-websites-chrome"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (8/10): how-to guides 8; unclassified ?p= shortlinks 1; listicles/reviews 1"
+  },
+  "webseiten blockieren chrome": {
+    "lang": "de",
+    "urls": [
+      "kinsta.com/de/blog/wie-man-webseiten-auf-chrome-blockiert",
+      "hostinger.com/de/tutorials",
+      "giga.de/downloads/google-chrome/tipps/seiten-sperren-webseiten-unter-firefox-chrome-blockieren",
+      "proton.me/de/blog/how-to-block-websites-chrome",
+      "techlockdown.com/de/artikel/erwachsenen-websites-blockieren-chrome",
+      "mackeeper.com/de/blog/websiten-in-chrome-blockieren",
+      "kinsta.com/de",
+      "netzwelt.de/adblocker/chrome-werbung-blockieren.html",
+      "avast.com/de-de/c-block-websites-chrome",
+      "guru99.com/de/how-to-block-websites-on-google-chrome.html"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (8/10): how-to guides 8; unclassified ?p= shortlinks 1; listicles/reviews 1"
+  },
+  "website blocker chrome kostenlos": {
+    "lang": "de",
+    "urls": [
+      "famisafe.wondershare.com/de/block/website-blocker-apps-and-chrome-extension.html",
+      "airdroid.com/de/blocker/best-free-website-blocker",
+      "mackeeper.com/de/blog/websiten-in-chrome-blockieren",
+      "kinsta.com/de",
+      "techlockdown.com/de/artikel/Chrome-Erweiterungen-zum-Blockieren-von-Websites",
+      "kinsta.com/de/blog/wie-man-webseiten-auf-chrome-blockiert",
+      "chromewebstore.google.com/detail/hebalpmfcjmjenfmdfapeoehgikepagb",
+      "chromewebstore.google.com/detail/aoabjfoanlljmgnohepbkimcekolejjn",
+      "addons.mozilla.org/de/firefox/addon/blokhead",
+      "chromewebstore.google.com/detail/eiimnmioipafcokbfikbljfdeojpcgbh"
+    ],
+    "intent": "commercial",
+    "result_types": "mixed: store listings 4 (Chrome Web Store 3, Firefox Add-ons 1); listicles/reviews 3; how-to guides 2; unclassified ?p= shortlinks 1"
+  },
+  "youtube shorts blockieren": {
+    "lang": "de",
+    "urls": [
+      "filmora.wondershare.de/video-editing-tips/youtube-shorts-blockieren.html",
+      "techlockdown.com/de/artikel/youtube-shorts-blockieren",
+      "airdroid.com/de/app-tips/disable-youtube-shorts",
+      "addons.mozilla.org/nl/firefox/addon/shorts-block",
+      "addons.mozilla.org/de/firefox/addon/shorts-block",
+      "giga.de/tech/der-geheime-trick-gegen-shorts-so-deaktiviert-ihr-die-kurz-videos-bei-youtube--01J5QSMMEF46PQ4431WG0RK82V",
+      "parental-control.flashget.com/de/how-to-turn-off-shorts-on-youtube",
+      "parental-control.flashget.com/de/how-to-block-youtube-shorts",
+      "winfuture.de/news,158130.html",
+      "itc.ua/news/youtube-shorts-zero-limit-wellbeing-feature"
+    ],
+    "intent": "informational",
+    "result_types": "dominated by how-to guides (6/10): how-to guides 6; store listings 2 (Firefox Add-ons 2); news articles 2"
+  }
+}
