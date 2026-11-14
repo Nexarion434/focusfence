@@ -333,7 +333,7 @@
     "message": "Heute blockiert: $1 · Diese Woche: $2"
   },
   "allSettings": {
-    "message": "Alle Einstellungen →"
+    "message": "Einstellungen →"
   },
   "toastAlreadyBlocked": {
     "message": "$1 ist bereits blockiert"
@@ -355,6 +355,9 @@
   },
   "navFocus": {
     "message": "Fokus-Sitzungen"
+  },
+  "tabFocus": {
+    "message": "Fokus"
   },
   "navStrict": {
     "message": "Strikter Modus"
@@ -924,13 +927,13 @@
     "message": "Wähle 3 Seiten, die dir den Fokus rauben"
   },
   "ob1Text": {
-    "message": "Fang klein an: bis zu drei. Später kannst du beliebig viele hinzufügen – Gratis hat kein Limit."
+    "message": "Fang klein an: bis zu drei. Danach kannst du im Gratis-Tarif beliebig viele Websites hinzufügen; Pfade und Stichwörter brauchen Pro."
   },
   "obSitesAria": {
     "message": "Vorgeschlagene Seiten"
   },
   "obCustomPlaceholder": {
-    "message": "Oder eine andere Seite eingeben, z. B. news.example.com"
+    "message": "Andere Seite, z. B. news.example.com"
   },
   "obCustomAria": {
     "message": "Weitere zu blockierende Seite"

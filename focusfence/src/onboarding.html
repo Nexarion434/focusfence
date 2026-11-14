@@ -11,69 +11,90 @@
     <main class="ob">
       <header class="ob-head">
         <span class="logo" id="logo"><span>FocusFence</span></span>
-        <p class="step-label muted small" id="step-label" aria-live="polite">Step 1 of 3</p>
-        <ol class="dots" aria-hidden="true"><li></li><li></li><li></li></ol>
+        <div class="progress-wrap">
+          <p class="step-label" id="step-label" aria-live="polite">Step 1 of 3</p>
+          <ol class="dots" aria-hidden="true"><li></li><li></li><li></li></ol>
+        </div>
       </header>
 
-      <!-- STEP 1: pick sites -->
-      <section class="step card" id="step-1" aria-labelledby="ob1-title">
-        <h1 id="ob1-title" data-i18n="ob1Title">Pick 3 sites that steal your focus</h1>
-        <p class="lead" data-i18n="ob1Text">Start small: pick up to three.</p>
-        <div class="choices" id="choices" role="group" aria-label="Suggested sites" data-i18n-attr="aria-label:obSitesAria"></div>
-        <form class="custom" id="custom-form" autocomplete="off">
-          <input class="input" id="custom-input" placeholder="Or type another site" aria-label="Another site to block"
-            data-i18n-attr="placeholder:obCustomPlaceholder;aria-label:obCustomAria" />
-          <button class="btn" type="submit" data-i18n="add">Add</button>
-        </form>
-        <p class="counter" id="counter" aria-live="polite">0 of 3 selected</p>
-        <p class="note small" id="max-note" role="status" hidden data-i18n="obMax">Three is plenty to start.</p>
-        <p class="muted small" data-i18n="ob1Perm">Next, Chrome asks once…</p>
-        <div class="actions">
-          <button class="btn btn-ghost" id="skip-1" type="button" data-i18n="obSkip">Skip for now</button>
-          <button class="btn btn-primary" id="block-selected" type="button" disabled data-i18n="obBlockSelected">Block these sites</button>
-        </div>
-      </section>
+      <div class="ob-grid">
+        <div class="ob-steps">
+          <!-- STEP 1: build your fence -->
+          <section class="step" id="step-1" aria-labelledby="ob1-title">
+            <h1 id="ob1-title" data-i18n="ob1Title">Pick 3 sites that steal your focus</h1>
+            <p class="lead" data-i18n="ob1Text">Start small: pick up to three.</p>
+            <div class="choices" id="choices" role="group" aria-label="Suggested sites" data-i18n-attr="aria-label:obSitesAria"></div>
+            <form class="custom" id="custom-form" autocomplete="off">
+              <input class="input" id="custom-input" placeholder="Or type another site" aria-label="Another site to block"
+                data-i18n-attr="placeholder:obCustomPlaceholder;aria-label:obCustomAria" />
+              <button class="btn" type="submit" data-i18n="add">Add</button>
+            </form>
+            <p class="counter" id="counter" aria-live="polite">0 of 3 selected</p>
+            <p class="note small" id="max-note" role="status" hidden data-i18n="obMax">Three is plenty to start.</p>
+            <p class="fine small" data-i18n="ob1Perm">Next, Chrome asks once…</p>
+            <div class="actions">
+              <button class="btn btn-ghost" id="skip-1" type="button" data-i18n="obSkip">Skip for now</button>
+              <button class="btn btn-primary" id="block-selected" type="button" disabled data-i18n="obBlockSelected">Block these sites</button>
+            </div>
+          </section>
 
-      <!-- STEP 2: private browsing -->
-      <section class="step card" id="step-2" aria-labelledby="ob2-title" hidden>
-        <h1 id="ob2-title" data-i18n="ob2Title">Private browsing</h1>
-        <p class="lead" data-i18n="ob2Text">Chrome doesn't run extensions in Incognito windows unless you allow it.</p>
-        <div class="status-box" id="incognito-status" role="status">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span id="incognito-status-text" data-i18n="ob2StatusOff">FocusFence is not allowed in Incognito yet.</span>
-        </div>
-        <p data-i18n-rich="ob2How">Open the extension details and turn on Allow in Incognito.</p>
-        <div class="row-btns">
-          <button class="btn" id="open-details" type="button" data-i18n="openExtDetails">Open extension details</button>
-          <button class="btn btn-ghost" id="recheck" type="button" data-i18n="ob2Recheck">Check again</button>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost" id="back-2" type="button" data-i18n="obBack">Back</button>
-          <button class="btn btn-primary" id="next-2" type="button" data-i18n="obNext">Continue</button>
-        </div>
-      </section>
+          <!-- STEP 2: private browsing -->
+          <section class="step" id="step-2" aria-labelledby="ob2-title" hidden>
+            <h1 id="ob2-title" data-i18n="ob2Title">Private browsing</h1>
+            <p class="lead" data-i18n="ob2Text">Chrome doesn't run extensions in Incognito windows unless you allow it.</p>
+            <div class="status-box" id="incognito-status" role="status">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="incognito-status-text" data-i18n="ob2StatusOff">FocusFence is not allowed in Incognito yet.</span>
+            </div>
+            <p class="how" data-i18n-rich="ob2How">Open the extension details and turn on Allow in Incognito.</p>
+            <div class="row-btns">
+              <button class="btn" id="open-details" type="button" data-i18n="openExtDetails">Open extension details</button>
+              <button class="btn btn-ghost" id="recheck" type="button" data-i18n="ob2Recheck">Check again</button>
+            </div>
+            <div class="actions">
+              <button class="btn btn-ghost" id="back-2" type="button" data-i18n="obBack">Back</button>
+              <button class="btn btn-primary" id="next-2" type="button" data-i18n="obNext">Continue</button>
+            </div>
+          </section>
 
-      <!-- STEP 3: Free vs Pro -->
-      <section class="step card" id="step-3" aria-labelledby="ob3-title" hidden>
-        <h1 id="ob3-title" data-i18n="ob3Title">Free forever. Pro when you need more.</h1>
-        <div class="tiers">
-          <div class="tier">
-            <h2 data-i18n="obFree">Free</h2>
-            <p data-i18n="ob3Free">Unlimited sites, subdomains included, one-click blocking.</p>
+          <!-- STEP 3: Free vs Pro -->
+          <section class="step" id="step-3" aria-labelledby="ob3-title" hidden>
+            <h1 id="ob3-title" data-i18n="ob3Title">Free forever. Pro when you need more.</h1>
+            <div class="tiers">
+              <div class="tier">
+                <h2><span class="picket" aria-hidden="true"></span><span data-i18n="obFree">Free</span></h2>
+                <p data-i18n="ob3Free">Unlimited sites, subdomains included, one-click blocking.</p>
+              </div>
+              <div class="tier pro">
+                <h2><span class="picket" aria-hidden="true"></span><span data-i18n="obPro">Pro</span></h2>
+                <p data-i18n="ob3Pro">Schedules, YouTube Shorts-only blocking, Pomodoro…</p>
+                <p class="price" id="pro-price"></p>
+              </div>
+            </div>
+            <p class="fine small" data-i18n="ob3Private">Your blocklist and stats never leave this device.</p>
+            <div class="actions">
+              <button class="btn btn-ghost" id="back-3" type="button" data-i18n="obBack">Back</button>
+              <a class="btn" href="options.html#plan" id="see-pro" data-i18n="obSeePro">See Pro plans</a>
+              <a class="btn btn-primary" href="options.html#blocklist" id="finish" data-i18n="obFinish">Start focusing</a>
+            </div>
+          </section>
+        </div>
+
+        <!-- The stage: your fence, built picket by picket (decorative; the text says the same) -->
+        <div class="stage" id="ob-stage" data-step="1" aria-hidden="true">
+          <div class="stage-fence">
+            <div class="ob-scene">
+              <div class="fence ob-row" id="ob-row" data-state="up"><b class="fence-halo"></b><span class="ob-pills" id="slots"></span><b class="fence-pool"></b></div>
+              <div class="fence ob-row mirror" id="ob-mirror" data-state="up"><b class="fence-halo"></b><span class="ob-pills" id="slots-mirror"></span></div>
+            </div>
+            <p class="picked" id="picked"></p>
           </div>
-          <div class="tier pro">
-            <h2 data-i18n="obPro">Pro</h2>
-            <p data-i18n="ob3Pro">Schedules, YouTube Shorts-only blocking, Pomodoro…</p>
-            <p class="price" id="pro-price"></p>
+          <div class="windows">
+            <div class="win"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-fence fence" data-state="up"></div></div>
+            <div class="win incog"><div class="win-bar"><i></i><i></i><i></i></div><div class="win-mask"></div><div class="win-fence fence" data-state="up"></div></div>
           </div>
         </div>
-        <p class="muted small" data-i18n="ob3Private">Your blocklist and stats never leave this device.</p>
-        <div class="actions">
-          <button class="btn btn-ghost" id="back-3" type="button" data-i18n="obBack">Back</button>
-          <a class="btn" href="options.html#plan" id="see-pro" data-i18n="obSeePro">See Pro plans</a>
-          <a class="btn btn-primary" href="options.html#blocklist" id="finish" data-i18n="obFinish">Start focusing</a>
-        </div>
-      </section>
+      </div>
     </main>
     <script src="lib/i18n.js"></script>
     <script src="lib/core.js"></script>

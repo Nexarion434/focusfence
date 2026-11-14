@@ -1,185 +1,547 @@
+/* First run: "build your fence". The step on the left, a live stage on the right:
+   every site you pick rises into the fence. */
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(900px 520px at 0% 0%, var(--accent-soft), transparent 62%),
-    radial-gradient(800px 500px at 100% 0%, var(--pro-soft), transparent 60%),
-    var(--bg);
+  background: var(--bg);
 }
 .ob {
-  width: min(680px, calc(100% - 32px));
+  max-width: 1080px;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 48px 0 64px;
+  padding: 28px 40px 40px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
 }
+
+/* ---------- header: logo + progress ---------- */
 .ob-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 17px;
+  gap: 16px;
+  height: 40px;
+  font-size: 15px;
+}
+.progress-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .step-label {
-  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 .dots {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .dots li {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 22px;
+  height: 4px;
+  border-radius: 999px;
   background: var(--line-2);
+  transition: background-color 0.3s ease;
 }
 .dots li.on {
-  background: var(--accent);
+  background: var(--accent-solid);
+}
+
+/* ---------- the two columns ---------- */
+.ob-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  gap: 64px;
+  align-items: center;
+  padding: 24px 0;
 }
 .step {
-  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: var(--shadow);
+  gap: 18px;
+  animation: step-in 0.36s var(--ease);
 }
 .step[hidden] {
   display: none;
 }
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
 .step h1 {
-  font-size: 28px;
-  font-weight: 740;
-  letter-spacing: -0.03em;
+  font-size: 36px;
+  line-height: 1.06;
+  font-weight: 620;
+  letter-spacing: -0.038em;
+  max-width: 14em;
+}
+.step h1:focus {
+  outline: none;
+}
+.step h1:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 .lead {
-  font-size: 16px;
-  color: var(--ink-2);
+  margin-top: -6px;
+  max-width: 34em;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
 }
+
+/* ---------- site choices ---------- */
 .choices {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 .choice {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  height: 44px;
-  padding: 0 14px 0 8px;
-  border-radius: 12px;
-  border: 1.5px solid var(--line-2);
+  gap: 9px;
+  height: 40px;
+  padding: 0 14px 0 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-2);
   background: var(--surface);
-  font-weight: 560;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: var(--ink);
   cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--fast) ease,
+    background-color var(--fast) ease,
+    box-shadow var(--fast) ease,
+    transform 0.12s ease;
 }
-.choice .avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: inline-grid;
-  place-items: center;
-  color: #fff;
-  font-weight: 700;
-  font-size: 13px;
+.choice:hover {
+  border-color: var(--line-3);
+  background: var(--surface-2);
+}
+.choice:active {
+  transform: scale(0.98);
 }
 .choice[aria-pressed='true'] {
   border-color: var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: var(--accent-softer);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+  padding-right: 34px;
 }
 .choice[aria-pressed='true']::after {
-  content: '✓';
-  font-weight: 700;
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 10px;
+  height: 5px;
+  margin-top: -4px;
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+  animation: tick 0.18s var(--ease);
+}
+@keyframes tick {
+  from {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0.6);
+  }
 }
 .custom {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  max-width: 520px;
 }
 .custom .input {
   flex: 1;
+  height: 38px;
+}
+.custom .btn {
+  height: 38px;
 }
 .counter {
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 550;
   color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
 }
 .note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: var(--warn-soft);
+  color: var(--ink-2);
+  max-width: 520px;
 }
 .note[hidden] {
   display: none;
 }
+.fine {
+  color: var(--muted);
+  max-width: 34em;
+  text-wrap: pretty;
+}
 .actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 6px;
   flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 18px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.actions .btn {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 13.5px;
 }
 .row-btns {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
+
+/* ---------- step 2: Incognito ---------- */
 .status-box {
   display: flex;
   align-items: center;
   gap: 10px;
+  max-width: 520px;
   padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--warn-soft);
-  font-weight: 600;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-xs);
+  font-weight: 550;
+  font-size: 13.5px;
 }
 .status-box .status-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 20%, transparent);
   flex: none;
 }
-.status-box.ok {
-  background: var(--accent-soft);
-}
 .status-box.ok .status-dot {
-  background: var(--accent);
+  background: var(--signal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 22%, transparent);
 }
+.how {
+  color: var(--ink-2);
+  max-width: 34em;
+  text-wrap: pretty;
+}
+.how em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- step 3: Free vs Pro ---------- */
 .tiers {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
 }
 .tier {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 18px;
-  background: var(--surface-2);
-}
-.tier.pro {
-  border-color: var(--pro);
+  padding: 18px 18px 20px;
+  background: var(--surface);
 }
 .tier h2 {
-  font-size: 17px;
-  margin-bottom: 6px;
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.tier h2 .picket {
+  width: 7px;
+  height: 11px;
+  color: var(--signal);
 }
 .tier p {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.tier.pro {
+  border-color: var(--pro-line);
+  background:
+    radial-gradient(320px 160px at 100% 0, var(--pro-soft), transparent 75%),
+    var(--surface);
+  box-shadow: 0 0 0 1px var(--pro-line), var(--shadow-sm);
+}
+.tier.pro h2 .picket {
+  color: var(--pro-solid);
+}
+.tier.pro p {
   color: var(--ink-2);
 }
-.price {
-  margin-top: 10px !important;
-  font-weight: 700;
-  color: var(--ink) !important;
+.tier .price {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pro-line);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- the stage: the block page's scene, where you build your fence ---------- */
+.stage {
+  --paper: #f7f8f5;
+  --horizon: rgb(30 138 69 / 0.08);
+  --floor-h: 76px;
+  position: relative;
+  height: 460px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow), var(--edge);
+  /* a seamless glossy floor: no band, no line; the reflection is the floor */
+  background:
+    linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), rgb(24 66 40 / 0) calc(100% - var(--floor-h)), rgb(24 66 40 / 0.035)),
+    radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    var(--paper);
+}
+@media (prefers-color-scheme: dark) {
+  .stage {
+    --horizon: rgb(63 214 122 / 0.13);
+    background:
+      linear-gradient(to bottom, transparent calc(100% - var(--floor-h)), rgb(0 0 0 / 0) calc(100% - var(--floor-h)), rgb(0 0 0 / 0.5)),
+      radial-gradient(64% 48% at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+      linear-gradient(to top, #041309 0%, #020a05 40%, #000 80%);
+  }
+}
+.stage-fence {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 16px;
+  transition: opacity 0.35s ease, transform 0.45s var(--ease);
+}
+/* your fence in the making: five pills, the three in the middle are yours */
+.ob-scene {
+  position: relative;
+}
+.ob-row {
+  /* chunky glass pills: the middle one 1.6 times as tall as wide */
+  --pw: 72px;
+  --ph: 115px;
+}
+.ob-pills {
+  display: contents;
+}
+/* its reflection, over the same box, flipped at the ground line */
+.ob-row.mirror {
+  --refl-len: 0.42;
+  position: absolute;
+  inset: 0;
+}
+/* no site picked yet: no light */
+.ob-row:not(.is-lit) .fence-halo,
+.ob-row:not(.is-lit) .fence-pool {
+  opacity: 0;
+}
+/* the Pro pill (step 3): amber, with a lock, and fully visible although it stands at the end */
+.pill.pro {
+  --v: 1;
+  --lit-0: #f2c56e;
+  --lit-1: #d9a13f;
+  --lit-2: #b5832b;
+  --lit-core: rgb(255 248 230 / 0.25);
+  --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
+}
+/* the sites in your fence, named on the floor */
+.picked {
+  min-height: 18px;
+  /* below the reflection */
+  margin: 44px 24px 0;
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stage[data-step='3'] .picked {
+  visibility: hidden;
+}
+
+/* step 2: a normal window and an Incognito one; the second is fenced only if allowed */
+.windows {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.45s var(--ease);
+}
+.stage[data-step='2'] .windows {
+  opacity: 1;
+  transform: none;
+}
+.stage[data-step='2'] .stage-fence {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.win {
+  position: relative;
+  width: 168px;
+  height: 196px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  box-shadow: var(--shadow);
+}
+.win-bar {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.win-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-3);
+}
+.win.incog {
+  background: #26292b;
+  border-color: #33373a;
+}
+.win.incog .win-bar {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.win.incog .win-bar i {
+  background: rgba(255, 255, 255, 0.2);
+}
+/* a simple mask glyph */
+.win-mask {
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  width: 44px;
+  height: 18px;
+  margin-left: -22px;
+  border-radius: 9px 9px 14px 14px;
+  background: rgba(255, 255, 255, 0.16);
+}
+.win-mask::before,
+.win-mask::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  width: 10px;
+  height: 7px;
+  border-radius: 50%;
+  background: #26292b;
+}
+.win-mask::before {
+  left: 8px;
+}
+.win-mask::after {
+  right: 8px;
+}
+.win-fence {
+  --pw: 26px;
+  --ph: 42px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+/* not allowed in Incognito: that window's fence is only outlines, and holds no light */
+.stage:not(.incog-ok) .win.incog .pill {
+  --t: 0;
+  --v: 1;
+  background: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.stage:not(.incog-ok) .win.incog .fence-halo,
+.stage:not(.incog-ok) .win.incog .fence-pool {
+  opacity: 0;
+}
+
+/* ---------- narrow windows: the stage sits above the step ---------- */
+@media (max-width: 900px) {
+  .ob {
+    padding: 20px 20px 28px;
+  }
+  .ob-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .stage {
+    order: -1;
+    height: 230px;
+  }
+  .stage {
+    --floor-h: 40px;
+  }
+  .ob-row {
+    --pw: 50px;
+    --ph: 80px;
+  }
+  .stage-fence {
+    padding-bottom: 10px;
+  }
+  .picked {
+    margin-top: 30px;
+  }
+  .win {
+    width: 130px;
+    height: 150px;
+  }
+  .win-fence {
+    --pw: 20px;
+    --ph: 32px;
+  }
 }
 @media (max-width: 560px) {
+  .step h1 {
+    font-size: 28px;
+  }
   .tiers {
     grid-template-columns: 1fr;
   }
-  .step {
-    padding: 22px;
+  /* the field gets the whole width (placeholders and typed sites are never clipped) */
+  .custom {
+    flex-direction: column;
+  }
+  /* in a column, flex: 1 would mean a zero-height basis: keep the field's own height */
+  .custom .input {
+    flex: none;
+  }
+  .custom .btn {
+    width: 100%;
   }
 }

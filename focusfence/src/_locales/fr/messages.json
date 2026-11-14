@@ -249,7 +249,7 @@
     "message": "$1 · cycle $2 sur $3"
   },
   "startFocus": {
-    "message": "Lancer la concentration"
+    "message": "Démarrer"
   },
   "blockingEnabledAria": {
     "message": "Blocage activé"
@@ -333,7 +333,7 @@
     "message": "Bloqués aujourd’hui : $1 · Cette semaine : $2"
   },
   "allSettings": {
-    "message": "Tous les réglages →"
+    "message": "Réglages →"
   },
   "toastAlreadyBlocked": {
     "message": "$1 est déjà bloqué"
@@ -355,6 +355,9 @@
   },
   "navFocus": {
     "message": "Sessions de concentration"
+  },
+  "tabFocus": {
+    "message": "Concentration"
   },
   "navStrict": {
     "message": "Mode strict"
@@ -924,13 +927,13 @@
     "message": "Choisissez 3 sites qui vous déconcentrent"
   },
   "ob1Text": {
-    "message": "Commencez petit : jusqu’à trois. Vous pourrez en ajouter autant que vous voulez ensuite, l’offre gratuite est illimitée."
+    "message": "Commencez petit : jusqu’à trois. Ensuite, ajoutez autant de sites que vous voulez avec l’offre gratuite ; les chemins et mots-clés nécessitent Pro."
   },
   "obSitesAria": {
     "message": "Sites suggérés"
   },
   "obCustomPlaceholder": {
-    "message": "Ou saisissez un autre site, ex. : news.example.com"
+    "message": "Autre site, ex. : news.example.com"
   },
   "obCustomAria": {
     "message": "Autre site à bloquer"

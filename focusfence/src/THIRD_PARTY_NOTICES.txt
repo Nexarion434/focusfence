@@ -24,7 +24,8 @@ This package includes the following third-party components:
    License: Mozilla Public License 2.0 — see licenses/webextension-polyfill-MPL-2.0.txt
    Source code: https://github.com/mozilla/webextension-polyfill
 
-3. Inter typeface (variable, Latin subset) — fonts/inter-var-latin.woff2
+3. Inter typeface (variable: weight and optical size, Latin subset, from
+   @fontsource-variable/inter 5.3.0) — fonts/inter-var-latin.woff2
    https://github.com/rsms/inter
    Copyright 2016 The Inter Project Authors.
    License: SIL Open Font License 1.1 — see licenses/Inter-OFL-1.1.txt

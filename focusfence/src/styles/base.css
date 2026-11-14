@@ -1,4 +1,10 @@
+/*
+ * FocusFence design system: tokens and shared components for every extension page.
+ * Direction, tokens and contrast ratios: design/extension-ui/BRIEF.md.
+ * Light is the default; dark follows the system (prefers-color-scheme).
+ */
 @font-face {
+  /* Inter, variable weight + optical size (display cuts at large sizes), Latin subset */
   font-family: 'Inter';
   src: url('../fonts/inter-var-latin.woff2') format('woff2');
   font-weight: 100 900;
@@ -8,68 +14,116 @@
 
 :root {
   color-scheme: light;
-  --bg: #f5f4ef;
-  --bg-2: #ecebe4;
+  /* canvas and surfaces */
+  --bg: #f6f7f6;
+  --bg-2: #edefee;
   --surface: #ffffff;
-  --surface-2: #f9f8f5;
-  --ink: #1c2622;
-  --ink-2: #3b4842;
-  --muted: #5a645f;
-  --faint: #9aa29e;
-  --line: #e3e1d9;
-  --line-2: #d6d4ca;
-  --accent: #276b5b;
+  --surface-2: #f5f6f5;
+  --surface-3: #edefee;
+  --raised: #ffffff;
+  /* lines */
+  --line: #e5e8e6;
+  --line-2: #d7dbd9;
+  --line-3: #c2c8c5;
+  /* text */
+  --ink: #111513;
+  --ink-2: #3a423e;
+  --muted: #5e6763;
+  --faint: #8a938e;
+  /* green: --signal is the logo's field green (never small text), --accent is text-safe */
+  --signal: #3a9a5b;
+  --accent: #287743;
+  --accent-solid: #287743;
+  --accent-strong: #1f6337;
   --accent-ink: #ffffff;
-  --accent-strong: #1f5a4c;
-  --accent-soft: #e2efe9;
-  --accent-softer: #f0f7f3;
-  --pro: #7d5710;
-  --pro-soft: #f7eedb;
-  --pro-ink: #ffffff;
-  --danger: #a83d32;
-  --danger-soft: #f8e6e3;
-  --warn: #7f5009;
-  --warn-soft: #fbf0dc;
-  --shadow-sm: 0 1px 2px rgba(28, 38, 34, 0.06);
-  --shadow: 0 1px 2px rgba(28, 38, 34, 0.05), 0 8px 24px rgba(28, 38, 34, 0.06);
-  --shadow-lg: 0 2px 6px rgba(28, 38, 34, 0.06), 0 24px 60px rgba(28, 38, 34, 0.12);
+  --accent-soft: #e8f3ec;
+  --accent-softer: #f2f8f4;
+  --accent-line: #bfdfca;
+  --ring: rgba(40, 119, 67, 0.22);
+  --glow: rgba(58, 154, 91, 0.2);
+  /* amber: Pro and strict mode */
+  --pro: #8a5a0b;
+  --pro-soft: #fbf0da;
+  --pro-line: #ecd3a1;
+  --pro-solid: #d9a13f;
+  --pro-solid-hover: #cf942d;
+  --pro-ink: #1c1305;
+  --pro-glow: rgba(217, 161, 63, 0.24);
+  /* states */
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --warn: #9a5b00;
+  --warn-soft: #fdf3e1;
+  --switch-off: #868f8b;
+  --knob: #ffffff;
+  /* elevation */
+  --edge: 0 0 0 0 transparent; /* inner top highlight (dark only) */
+  --shadow-xs: 0 1px 1px rgba(17, 21, 19, 0.04);
+  --shadow-sm: 0 1px 2px rgba(17, 21, 19, 0.06), 0 1px 1px rgba(17, 21, 19, 0.03);
+  --shadow: 0 1px 2px rgba(17, 21, 19, 0.05), 0 6px 16px -4px rgba(17, 21, 19, 0.08);
+  --shadow-lg: 0 2px 6px rgba(17, 21, 19, 0.05), 0 24px 56px -12px rgba(17, 21, 19, 0.2);
+  /* radius */
+  --radius-xs: 6px;
   --radius-sm: 8px;
+  --radius-md: 10px;
   --radius: 12px;
-  --radius-lg: 18px;
-  --focus: 0 0 0 3px rgba(39, 107, 91, 0.45);
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --radius-lg: 16px;
+  /* type */
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: cubic-bezier(0.25, 1.35, 0.4, 1);
+  --fast: 0.12s;
+  /* kept for older references (store screenshot compositions) */
+  --focus: 0 0 0 3px var(--ring);
+  font-family: var(--font);
   font-feature-settings: 'cv11', 'ss01';
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --bg: #141917;
-    --bg-2: #1a201e;
-    --surface: #1d2422;
-    --surface-2: #222a27;
-    --ink: #e8ece9;
+    --bg: #0a0c0b;
+    --bg-2: #191d1b;
+    --surface: #111413;
+    --surface-2: #171a19;
+    --surface-3: #1d2120;
+    --raised: #151817;
+    --line: rgba(255, 255, 255, 0.07);
+    --line-2: rgba(255, 255, 255, 0.11);
+    --line-3: rgba(255, 255, 255, 0.18);
+    --ink: #f1f4f2;
     --ink-2: #c9d0cc;
-    --muted: #94a09a;
-    --faint: #6d7873;
-    --line: #2c3532;
-    --line-2: #37423e;
-    --accent: #5bb89f;
-    --accent-ink: #0f1614;
-    --accent-strong: #7ccbb4;
-    --accent-soft: #20352f;
-    --accent-softer: #1b2a26;
+    --muted: #8e9893;
+    --faint: #5f6964;
+    --accent: #6cc58a;
+    --accent-solid: #5dbe7e;
+    --accent-strong: #76cb93;
+    --accent-ink: #04130a;
+    --accent-soft: rgba(108, 197, 138, 0.12);
+    --accent-softer: rgba(108, 197, 138, 0.06);
+    --accent-line: rgba(108, 197, 138, 0.3);
+    --ring: rgba(108, 197, 138, 0.3);
+    --glow: rgba(58, 154, 91, 0.32);
     --pro: #d9a74b;
-    --pro-soft: #33291a;
-    --pro-ink: #1a1408;
-    --danger: #e0786c;
-    --danger-soft: #3a2421;
-    --warn: #e0a54b;
-    --warn-soft: #33291a;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
-    --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.3), 0 24px 60px rgba(0, 0, 0, 0.4);
-    --focus: 0 0 0 3px rgba(91, 184, 159, 0.35);
+    --pro-soft: rgba(217, 167, 75, 0.12);
+    --pro-line: rgba(217, 167, 75, 0.32);
+    --pro-solid: #d9a74b;
+    --pro-solid-hover: #e2b462;
+    --pro-ink: #1a1206;
+    --pro-glow: rgba(217, 167, 75, 0.26);
+    --danger: #f2766b;
+    --danger-soft: rgba(242, 118, 107, 0.12);
+    --warn: #e5b567;
+    --warn-soft: rgba(229, 181, 103, 0.1);
+    --switch-off: #5e6863;
+    --knob: #f1f4f2;
+    --edge: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    --shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 20px -6px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.4), 0 28px 64px -12px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -83,12 +137,16 @@ html,
 body {
   margin: 0;
   /* Chrome injects its own font-family on extension pages' body; override it. */
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
+  font-feature-settings: 'cv11', 'ss01';
+  font-optical-sizing: auto;
   background: var(--bg);
   color: var(--ink);
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -96,39 +154,53 @@ h2,
 h3,
 h4 {
   margin: 0;
-  letter-spacing: -0.015em;
+  font-weight: 600;
+  letter-spacing: -0.012em;
   line-height: 1.25;
+  text-wrap: balance;
 }
 
 p {
   margin: 0;
 }
 
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
 a {
   color: var(--accent);
   text-decoration: none;
+  border-radius: 3px;
 }
 a:hover {
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 /* Links inside running text must not rely on colour alone (WCAG 1.4.1). */
 p a,
-li a,
-.warn a {
+li a {
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
 }
-/* Visible keyboard focus everywhere. */
+p a:hover,
+li a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Visible keyboard focus everywhere: a 2 px green ring, offset from the control. */
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible,
 select:focus-visible,
-textarea:focus-visible,
-input:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;
@@ -144,6 +216,7 @@ select,
 textarea {
   font: inherit;
   color: inherit;
+  letter-spacing: inherit;
 }
 
 .hidden {
@@ -156,6 +229,38 @@ textarea {
 
 .small {
   font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Uppercase mono micro-label (section labels), as the website's kickers. */
+.mono-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- icons: in-house set on a 24 grid, 1.7 px rounded strokes ---------- */
+.icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ---------- buttons ---------- */
@@ -163,106 +268,207 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 10px;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line-2);
   background: var(--surface);
   color: var(--ink);
   font-weight: 550;
-  font-size: 13.5px;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: -0.003em;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.05s, box-shadow 0.15s;
+  box-shadow: var(--shadow-xs), var(--edge);
+  transition:
+    background-color var(--fast) ease,
+    border-color var(--fast) ease,
+    color var(--fast) ease,
+    box-shadow var(--fast) ease;
   white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
 }
 .btn:hover {
   background: var(--surface-2);
-  border-color: var(--faint);
+  border-color: var(--line-3);
+  text-decoration: none;
 }
 .btn:active {
-  transform: translateY(1px);
-}
-.btn:focus-visible,
-.input:focus-visible,
-.switch input:focus-visible + .track {
-  outline: none;
-  box-shadow: var(--focus);
+  background: var(--surface-3);
 }
 .btn[disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
+  box-shadow: none;
+}
+.btn[disabled],
+.btn[disabled]:hover {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--muted);
 }
 .btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-solid);
+  border-color: transparent;
   color: var(--accent-ink);
+  box-shadow: var(--shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .btn-primary:hover {
   background: var(--accent-strong);
-  border-color: var(--accent-strong);
+  border-color: transparent;
+}
+.btn-primary:active {
+  background: var(--accent-strong);
+  filter: brightness(0.96);
 }
 .btn-pro {
-  background: var(--pro);
-  border-color: var(--pro);
+  background: var(--pro-solid);
+  border-color: transparent;
   color: var(--pro-ink);
+  box-shadow: var(--shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .btn-pro:hover {
-  filter: brightness(1.05);
-  background: var(--pro);
-  border-color: var(--pro);
+  background: var(--pro-solid-hover);
+  border-color: transparent;
+}
+.btn-pro:active {
+  background: var(--pro-solid-hover);
+  filter: brightness(0.96);
+}
+.btn-pro-soft {
+  background: var(--pro-soft);
+  border-color: var(--pro-line);
+  color: var(--pro);
+  box-shadow: none;
+}
+.btn-pro-soft:hover {
+  background: color-mix(in srgb, var(--pro-soft) 82%, var(--pro-solid));
+  border-color: var(--pro-line);
+  color: var(--pro);
 }
 .btn-ghost {
   background: transparent;
   border-color: transparent;
+  box-shadow: none;
   color: var(--muted);
 }
 .btn-ghost:hover {
-  background: var(--bg-2);
+  background: var(--surface-3);
   border-color: transparent;
   color: var(--ink);
+}
+.btn-ghost:active {
+  background: var(--bg-2);
+}
+.btn-ghost[disabled],
+.btn-ghost[disabled]:hover {
+  background: transparent;
+  border-color: transparent;
 }
 .btn-danger {
   color: var(--danger);
 }
+.btn-danger:hover {
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  color: var(--danger);
+}
 .btn-sm {
-  height: 30px;
+  height: 28px;
   padding: 0 10px;
   font-size: 12.5px;
-  border-radius: 8px;
+  border-radius: 7px;
+}
+.btn-lg {
+  height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+  border-radius: var(--radius-md);
 }
 .btn-block {
   width: 100%;
 }
 .icon-btn {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   padding: 0;
+}
+.btn .icon {
+  width: 15px;
+  height: 15px;
 }
 
 /* ---------- inputs ---------- */
 .input,
 select.input {
-  height: 38px;
+  height: 36px;
   padding: 0 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--line-2);
   background: var(--surface);
   min-width: 0;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  font-size: 13.5px;
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--fast) ease,
+    box-shadow var(--fast) ease,
+    background-color var(--fast) ease;
 }
 .input::placeholder {
-  color: var(--faint);
+  color: var(--muted);
+  opacity: 1;
 }
-.input:focus {
+.input:hover {
+  border-color: var(--line-3);
+}
+.input:focus,
+.input:focus-visible {
+  outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+.input:disabled {
+  background: var(--surface-2);
+  color: var(--muted);
+  cursor: not-allowed;
 }
 textarea.input {
   height: auto;
   padding: 10px 12px;
   resize: vertical;
-  line-height: 1.5;
+  line-height: 1.55;
+}
+@media (prefers-color-scheme: dark) {
+  .input,
+  select.input {
+    background: rgba(255, 255, 255, 0.025);
+    box-shadow: none;
+  }
+}
+
+/* Native select with a drawn chevron (wrap it in .select). */
+.select {
+  position: relative;
+  display: inline-flex;
+}
+.select select.input {
+  appearance: none;
+  padding-right: 34px;
+  cursor: pointer;
+}
+.select::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -6px;
+  border-right: 1.6px solid var(--muted);
+  border-bottom: 1.6px solid var(--muted);
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
 /* ---------- switch ---------- */
@@ -283,33 +489,46 @@ textarea.input {
   z-index: 1;
 }
 .switch .track {
-  width: 42px;
-  height: 24px;
+  width: 34px;
+  height: 20px;
   border-radius: 999px;
-  background: var(--line-2);
+  background: var(--switch-off);
   position: relative;
-  transition: background 0.2s;
+  transition: background-color 0.18s ease;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.12);
 }
 .switch .track::after {
   content: '';
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s cubic-bezier(0.3, 0.7, 0.4, 1);
+  background: var(--knob);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.22),
+    0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s var(--ease);
 }
 .switch input:checked + .track {
-  background: var(--accent);
+  background: var(--accent-solid);
 }
 .switch input:checked + .track::after {
-  transform: translateX(18px);
+  transform: translateX(14px);
+}
+.switch:hover input:not(:disabled):not(:checked) + .track {
+  background: color-mix(in srgb, var(--switch-off) 88%, var(--ink));
+}
+.switch:hover input:not(:disabled):checked + .track {
+  background: var(--accent-strong);
+}
+.switch input:focus-visible + .track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .switch input:disabled + .track {
-  opacity: 0.55;
+  opacity: 0.5;
 }
 .switch input:disabled {
   cursor: not-allowed;
@@ -320,31 +539,29 @@ textarea.input {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 20px;
-  padding: 0 7px;
+  height: 18px;
+  /* caps only: centre the cap height, not the em box (1 px lower) */
+  padding: 2px 7px 0;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 650;
-  letter-spacing: 0.02em;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
   background: var(--bg-2);
   color: var(--muted);
   white-space: nowrap;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 .badge-pro {
   background: var(--pro-soft);
   color: var(--pro);
-}
-.badge-accent {
-  background: var(--accent-soft);
-  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--pro-line);
 }
 .badge-warn {
   background: var(--warn-soft);
   color: var(--warn);
-}
-.badge-danger {
-  background: var(--danger-soft);
-  color: var(--danger);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 30%, transparent);
 }
 
 /* ---------- cards ---------- */
@@ -352,17 +569,477 @@ textarea.input {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs), var(--edge);
+}
+
+/* ---------- site monogram: low-chroma tint from the site name (--h set by FFUI.siteAvatar) ---------- */
+.avatar {
+  --h: 150;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1;
+  background: hsl(var(--h) 26% 93%);
+  color: hsl(var(--h) 34% 29%);
+  box-shadow: inset 0 0 0 1px hsl(var(--h) 22% 86%);
+  user-select: none;
+}
+.avatar.kw,
+.avatar.empty {
+  background: var(--bg-2);
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+@media (prefers-color-scheme: dark) {
+  .avatar {
+    background: hsl(var(--h) 16% 16%);
+    color: hsl(var(--h) 38% 78%);
+    box-shadow: inset 0 0 0 1px hsl(var(--h) 18% 23%);
+  }
+}
+
+/* ---------- picket: a small pill, used as counter and ornament (focus rounds, plan tiers) ---------- */
+.picket {
+  display: inline-block;
+  width: 7px;
+  height: 12px;
+  flex: none;
+  background: currentColor;
+  border-radius: 99px 99px 1.5px 1.5px;
+}
+
+/* ---------- the fence: a row of glass pills, one per blocked site ----------
+ * Round 4 (the owner's abstract direction). Wide pills with a full semicircle top stand in a short,
+ * symmetrical row that steps down from the centre like a bell. They are frosted glass; the pill in
+ * the middle holds the light (the site you tried, the site on this tab, or your newest site) and
+ * lights its neighbours, less the farther they stand. Built by FFUI.fence() (and blocked.js); each
+ * pill gets, through the CSSOM: --k its height as a share of the tallest, --t how much of the light
+ * it catches (0..1), --v how much of it you see (the ends fade), --side -1 or 1 (which side of the
+ * light it stands), --i its distance from the light (for the stagger).
+ * <div class="fence" data-state="up|focus|paused|down|strict|empty"> */
+:root {
+  /* glass: milky, pale sage, greener near the light; a bright rim along the top */
+  --glass-0: rgb(240 246 242 / 0.94);
+  --glass-1: rgb(222 234 226 / 0.86);
+  --glass-tint: 112 176 134;
+  --glass-tint-a: 0.42;
+  --glass-rim: rgb(255 255 255 / 1);
+  --glass-edge: rgb(24 66 40 / 0.13);
+  --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+  --glass-blur: blur(14px) saturate(1.15);
+  /* the light: a solid, saturated green with a soft bloom */
+  --light-rgb: 30 138 69;
+  --lit-0: #33a861;
+  --lit-1: #1e8a45;
+  --lit-2: #17723a;
+  --lit-ink: #ffffff;
+  --lit-core: rgb(255 255 255 / 0.1);
+  --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+  --halo-a: 0.26;
+  --halo-h: 1.4;
+  --light: var(--light-rgb);
+  /* the light in strict mode */
+  --amber-rgb: 217 161 63;
+  /* unlit: the fence while it's down */
+  --dim-0: rgb(255 255 255 / 0.7);
+  --dim-1: rgb(236 240 237 / 0.7);
+  --ghost-line: rgb(24 66 40 / 0.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* glass: frosted and translucent, faintly emissive green */
+    --glass-0: rgb(205 245 222 / 0.1);
+    --glass-1: rgb(120 190 150 / 0.035);
+    --glass-tint: 63 214 122;
+    --glass-tint-a: 0.3;
+    --glass-rim: rgb(255 255 255 / 0.4);
+    --glass-edge: rgb(255 255 255 / 0.07);
+    --glass-shade: 0 0 0 transparent;
+    --glass-blur: blur(16px) saturate(1.4);
+    /* the light: bright emerald, glowing from inside */
+    --light-rgb: 63 214 122;
+    --lit-0: #66e396;
+    --lit-1: #3fd67a;
+    --lit-2: #1e9f55;
+    --lit-ink: #ffffff;
+    --lit-core: rgb(225 255 236 / 0.5);
+    --lit-bloom: 0 0 26px rgb(63 214 122 / 0.75), 0 0 70px rgb(63 214 122 / 0.35);
+    --halo-a: 0.55;
+    --halo-h: 2.05;
+    --light: var(--light-rgb);
+    --amber-rgb: 230 178 82;
+    --dim-0: rgb(255 255 255 / 0.06);
+    --dim-1: rgb(255 255 255 / 0.02);
+    --ghost-line: rgb(255 255 255 / 0.2);
+  }
+}
+.fence {
+  /* pill width, the middle pill's height (1.6 times the width, as in the owner's reference) and
+     the gap (9 % of a pill). Every page sets its own size. */
+  --pw: 36px;
+  --ph: 58px;
+  --gap: calc(var(--pw) * 0.09);
+  --drop: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--gap);
+}
+.pill {
+  --k: 1;
+  /* the JS sets the base values (--t0, --v0); postures and roles override the effective ones */
+  --t: var(--t0, 0);
+  --v: var(--v0, 1);
+  --side: 0;
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--pw);
+  height: calc(var(--ph) * var(--k));
+  /* a full semicircle on top, standing square on the ground */
+  border-radius: calc(var(--pw) / 2) calc(var(--pw) / 2) 0 0;
+  background:
+    /* the light, spilling onto the side that faces it */
+    linear-gradient(calc(var(--side) * 90deg), rgb(var(--light) / calc(var(--t) * 0.62)), transparent 72%),
+    /* greener the nearer the light */
+    linear-gradient(rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a))), rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a) * 0.45))),
+    linear-gradient(var(--glass-0), var(--glass-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 0 calc(var(--pw) * 0.3) rgb(var(--light) / calc(0.04 + var(--t) * 0.3)),
+    var(--glass-shade);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  opacity: var(--v);
+  transform: translateY(calc(var(--drop, 0) * 100%));
+  transition:
+    transform 0.55s var(--spring) calc(var(--i, 0) * 30ms),
+    opacity 0.4s ease;
+}
+/* a spare pill: the fence is never shorter than five, but the spare ones are fainter */
+.pill.pad {
+  --v: calc(var(--v0, 1) * 0.85);
+}
+/* a Pro rule kept after Pro lapsed: it stands in the fence, but catches no light */
+.pill.off {
+  --t: 0;
+}
+/* the pill that holds the light */
+.pill.lit {
+  z-index: 2;
+  background:
+    /* during a focus session, the light rises inside it as the round goes by */
+    linear-gradient(to top, rgb(255 255 255 / 0.16) var(--progress, 0%), transparent var(--progress, 0%)),
+    radial-gradient(60% 46% at 50% 62%, var(--lit-core), transparent),
+    linear-gradient(var(--lit-0), var(--lit-1) 42%, var(--lit-2));
+  box-shadow:
+    inset 0 1.5px 0 rgb(255 255 255 / 0.45),
+    inset 0 0 calc(var(--pw) * 0.35) rgb(255 255 255 / 0.22),
+    inset 0 -14px 22px -14px rgb(0 40 18 / 0.35),
+    var(--lit-bloom);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* the site's initial: small, centred near the top */
+.pill-letter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--pw) * 0.3);
+  text-align: center;
+  font-size: max(9px, calc(var(--pw) * 0.24));
+  font-weight: 650;
+  line-height: 1;
+  color: var(--lit-ink);
+  text-shadow: 0 1px 2px rgb(0 40 18 / 0.35);
+  user-select: none;
+}
+/* a lock on a lit pill: strict mode's gate, the Pro pill in onboarding */
+.pill .lock {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--pw) * 0.5);
+  width: 12px;
+  height: 9.5px;
+  margin-left: -6px;
+  border-radius: 2px;
+  background: var(--pro-ink);
+}
+.pill .lock::before {
+  content: '';
+  position: absolute;
+  left: 2.5px;
+  top: -5.5px;
+  width: 7px;
+  height: 6.5px;
+  border: 1.6px solid var(--pro-ink);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+/* the light's halo, rising behind the lit pill, and its pool on the ground */
+.fence-halo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  width: calc(var(--pw) * 4.6);
+  height: calc(var(--ph) * var(--halo-h));
+  margin-left: calc(var(--pw) * -2.3);
+  border-radius: 50%;
+  background:
+    radial-gradient(27% 60% at 50% 66%, rgb(var(--light) / var(--halo-a)), transparent),
+    radial-gradient(56% 40% at 50% 88%, rgb(var(--light) / calc(var(--halo-a) * 0.8)), transparent);
+  filter: blur(calc(var(--pw) * 0.22));
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  animation: halo-in 1.8s var(--ease) both;
+}
+@keyframes halo-in {
+  /* the light breathes in, once */
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(6%);
+  }
+}
+.fence-pool {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--pw) * -0.15);
+  z-index: 3;
+  width: calc(var(--pw) * 4.2);
+  height: calc(var(--pw) * 0.3);
+  margin-left: calc(var(--pw) * -2.1);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--light) / calc(var(--halo-a) * 1.3)), transparent);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+/* a fence's reflection in a glossy floor: the same row, flipped at the ground line (the page puts
+   it over the row it mirrors); every pill mirrored faintly, fading downward, the light brightest */
+.fence.mirror {
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: var(--refl, 0.62);
+  filter: blur(1.2px);
+  -webkit-mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent calc(var(--ph) * var(--refl-len, 0.62)));
+  mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent calc(var(--ph) * var(--refl-len, 0.62)));
+  pointer-events: none;
+}
+/* glass doesn't mirror as glass: a soft silhouette in its own tint, greener near the light */
+.fence.mirror .pill:not(.lit):not(.ghost) {
+  background: linear-gradient(rgb(var(--glass-tint) / calc(0.16 + var(--t) * 0.3)), rgb(var(--glass-tint) / calc(0.08 + var(--t) * 0.2)));
+  box-shadow: inset 0 1.5px 0 var(--glass-rim);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.fence.mirror .pill.lit {
+  box-shadow: none;
+}
+.fence.mirror .pill-letter,
+.fence.mirror .lock,
+.fence.mirror .fence-pool {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  .fence.mirror {
+    opacity: var(--refl, 0.7);
+  }
+  .fence.mirror .pill:not(.lit):not(.ghost) {
+    background: linear-gradient(rgb(var(--glass-tint) / calc(0.2 + var(--t) * 0.35)), rgb(var(--glass-tint) / calc(0.12 + var(--t) * 0.3)));
+  }
+}
+.pill.enter {
+  animation: pill-rise 0.7s var(--spring) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes pill-rise {
+  from {
+    transform: translateY(102%);
+  }
+}
+
+/* postures: the light is the state */
+.fence[data-state='focus'] {
+  --halo-a: 0.36;
+}
+.fence[data-state='strict'] {
+  --light: var(--amber-rgb);
+}
+.fence[data-state='strict'] .pill.lit {
+  --lit-0: #f2c56e;
+  --lit-1: #d9a13f;
+  --lit-2: #b5832b;
+  --lit-ink: var(--pro-ink);
+  --lit-core: rgb(255 248 230 / 0.25);
+  --lit-bloom: 0 14px 36px -10px rgb(217 161 63 / 0.55), 0 0 40px rgb(217 161 63 / 0.22);
+}
+.fence[data-state='strict'] .pill-letter {
+  text-shadow: none;
+}
+/* paused (outside the schedule) and down (blocking off): no light; the pills sink */
+.fence[data-state='paused'] {
+  --drop: 0.22;
+}
+.fence[data-state='down'] {
+  --drop: 0.42;
+}
+.fence[data-state='paused'] .pill,
+.fence[data-state='down'] .pill {
+  --t: 0;
+}
+.fence[data-state='paused'] .pill.lit,
+.fence[data-state='down'] .pill.lit {
+  background: linear-gradient(var(--dim-0), var(--dim-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    var(--glass-shade);
+}
+.fence[data-state='paused'] .pill.lit {
+  background: linear-gradient(rgb(var(--light-rgb) / 0.3), rgb(var(--light-rgb) / 0.14));
+}
+.fence[data-state='paused'] .pill-letter,
+.fence[data-state='down'] .pill-letter {
+  color: var(--muted);
+  text-shadow: none;
+}
+.fence[data-state='paused'] .fence-halo,
+.fence[data-state='paused'] .fence-pool,
+.fence[data-state='down'] .fence-halo,
+.fence[data-state='down'] .fence-pool,
+.fence[data-state='empty'] .fence-halo,
+.fence[data-state='empty'] .fence-pool {
+  opacity: 0;
+}
+/* empty: outlines waiting for a site */
+.pill.ghost,
+.fence[data-state='empty'] .pill {
+  --t: 0;
+  --v: 1;
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--ghost-line);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@media (prefers-color-scheme: dark) {
+  .fence[data-state='focus'] {
+    --halo-a: 0.65;
+  }
+  .fence[data-state='strict'] .pill.lit {
+    --lit-0: #f7d58f;
+    --lit-1: #e6b252;
+    --lit-2: #b88227;
+    --lit-bloom: 0 0 24px rgb(230 178 82 / 0.7), 0 0 64px rgb(230 178 82 / 0.32);
+  }
+}
+
+/* ---------- notices ---------- */
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-xs), var(--edge);
+}
+.notice[hidden] {
+  display: none;
+}
+.notice > .icon,
+.notice > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--warn);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.notice > div {
+  flex: 1;
+  min-width: 0;
+}
+.notice strong {
+  font-weight: 600;
+}
+.notice p {
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ---------- segmented control ---------- */
+.seg {
+  display: inline-flex;
+  align-self: flex-start;
+  background: var(--bg-2);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: var(--radius-xs);
+  font-weight: 550;
+  font-size: 12.5px;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    background-color var(--fast) ease,
+    color var(--fast) ease,
+    box-shadow var(--fast) ease;
+}
+.seg button:hover {
+  color: var(--ink);
+}
+.seg button[aria-pressed='true'] {
+  background: var(--raised);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--line), var(--edge);
+}
+
+/* ---------- progress ---------- */
+.progress {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--signal);
+  transition: width 0.6s linear;
 }
 
 /* ---------- toast ---------- */
 .toast-wrap {
   position: fixed;
   left: 50%;
-  bottom: 18px;
+  bottom: 16px;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   z-index: 1000;
   pointer-events: none;
@@ -371,17 +1048,28 @@ textarea.input {
 }
 .toast {
   background: var(--ink);
-  color: var(--bg);
+  color: var(--surface);
   padding: 9px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.4;
   box-shadow: var(--shadow-lg);
-  animation: toast-in 0.2s ease-out;
+  animation: toast-in 0.2s var(--ease);
 }
 .toast.error {
   background: var(--danger);
   color: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  .toast {
+    background: #f1f4f2;
+    color: #111513;
+  }
+  .toast.error {
+    background: #f2766b;
+    color: #1b0705;
+  }
 }
 @keyframes toast-in {
   from {
@@ -390,15 +1078,43 @@ textarea.input {
   }
 }
 
+/* ---------- logo ---------- */
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-weight: 700;
+  gap: 8px;
+  font-weight: 620;
   letter-spacing: -0.02em;
+  color: var(--ink);
 }
 .logo svg {
   flex: none;
+}
+
+/* Windows high contrast: system colours replace backgrounds, so draw the switch with them. */
+@media (forced-colors: active) {
+  .switch .track {
+    forced-color-adjust: none;
+    background: Canvas;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+  .switch .track::after {
+    top: 1px;
+    left: 1px;
+    background: CanvasText;
+    box-shadow: none;
+  }
+  .switch input:checked + .track {
+    background: Highlight;
+    border-color: Highlight;
+  }
+  .switch input:checked + .track::after {
+    background: HighlightText;
+  }
+  .switch input:focus-visible + .track {
+    outline-color: Highlight;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -407,5 +1123,6 @@ textarea.input {
   *::after {
     transition: none !important;
     animation: none !important;
+    scroll-behavior: auto !important;
   }
 }

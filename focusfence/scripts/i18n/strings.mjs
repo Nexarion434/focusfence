@@ -135,7 +135,7 @@ export const S = {
   phaseFocusing: { en: 'Focusing', fr: 'Concentration', es: 'Concentrado', de: 'Fokussiert' },
   phaseBreak: { en: 'Break', fr: 'Pause', es: 'Descanso', de: 'Pause' },
   focusRound: { en: '$1 · round $2 of $3', fr: '$1 · cycle $2 sur $3', es: '$1 · ronda $2 de $3', de: '$1 · Runde $2 von $3' },
-  startFocus: { en: 'Start focus', fr: 'Lancer la concentration', es: 'Empezar', de: 'Fokus starten' },
+  startFocus: { en: 'Start focus', fr: 'Démarrer', es: 'Empezar', de: 'Fokus starten' },
   blockingEnabledAria: { en: 'Blocking enabled', fr: 'Blocage activé', es: 'Bloqueo activado', de: 'Blockieren aktiviert' },
 
   // ------------------------------------------------------------ popup
@@ -165,7 +165,7 @@ export const S = {
   focusTeaser: { en: 'Pomodoro sessions that block everything on your list', fr: 'Des sessions Pomodoro qui bloquent toute votre liste', es: 'Sesiones Pomodoro que bloquean toda tu lista', de: 'Pomodoro-Sitzungen, die deine ganze Liste blockieren' },
   todayNone: { en: 'Nothing blocked yet today', fr: 'Rien de bloqué aujourd’hui', es: 'Nada bloqueado hoy todavía', de: 'Heute noch nichts blockiert' },
   todayCount: { en: 'Blocked today: $1 · This week: $2', fr: 'Bloqués aujourd’hui : $1 · Cette semaine : $2', es: 'Bloqueos hoy: $1 · Esta semana: $2', de: 'Heute blockiert: $1 · Diese Woche: $2' },
-  allSettings: { en: 'All settings →', fr: 'Tous les réglages →', es: 'Todos los ajustes →', de: 'Alle Einstellungen →' },
+  allSettings: { en: 'All settings →', fr: 'Réglages →', es: 'Todos los ajustes →', de: 'Einstellungen →' },
   toastAlreadyBlocked: { en: '$1 is already blocked', fr: '$1 est déjà bloqué', es: '$1 ya está bloqueada', de: '$1 ist bereits blockiert' },
   toastBlocked: { en: 'Blocked $1', fr: '$1 bloqué', es: '$1 bloqueada', de: '$1 blockiert' },
 
@@ -175,6 +175,7 @@ export const S = {
   navBlocklist: { en: 'Blocklist', fr: 'Liste de blocage', es: 'Lista de bloqueo', de: 'Sperrliste' },
   navSchedule: { en: 'Schedule', fr: 'Horaires', es: 'Horario', de: 'Zeitplan' },
   navFocus: { en: 'Focus sessions', fr: 'Sessions de concentration', es: 'Sesiones de concentración', de: 'Fokus-Sitzungen' },
+  tabFocus: { en: 'Focus', fr: 'Concentration', es: 'Concentración', de: 'Fokus' },
   navStrict: { en: 'Strict mode', fr: 'Mode strict', es: 'Modo estricto', de: 'Strikter Modus' },
   navBlockpage: { en: 'Block page', fr: 'Page de blocage', es: 'Página de bloqueo', de: 'Sperrseite' },
   navSecurity: { en: 'Password lock', fr: 'Mot de passe', es: 'Contraseña', de: 'Passwortschutz' },
@@ -436,9 +437,9 @@ export const S = {
   obDocTitle: { en: 'Welcome to FocusFence', fr: 'Bienvenue dans FocusFence', es: 'Bienvenido a FocusFence', de: 'Willkommen bei FocusFence' },
   obStep: { en: 'Step $1 of $2', fr: 'Étape $1 sur $2', es: 'Paso $1 de $2', de: 'Schritt $1 von $2' },
   ob1Title: { en: 'Pick 3 sites that steal your focus', fr: 'Choisissez 3 sites qui vous déconcentrent', es: 'Elige 3 webs que te roban la concentración', de: 'Wähle 3 Seiten, die dir den Fokus rauben' },
-  ob1Text: { en: 'Start small: pick up to three. You can add as many as you like later — Free has no limit.', fr: 'Commencez petit : jusqu’à trois. Vous pourrez en ajouter autant que vous voulez ensuite, l’offre gratuite est illimitée.', es: 'Empieza poco a poco: hasta tres. Luego puedes añadir todas las que quieras; el plan gratuito no tiene límite.', de: 'Fang klein an: bis zu drei. Später kannst du beliebig viele hinzufügen – Gratis hat kein Limit.' },
+  ob1Text: { en: 'Start small: pick up to three. Later, add as many websites as you like on the free plan; paths and keywords need Pro.', fr: 'Commencez petit : jusqu’à trois. Ensuite, ajoutez autant de sites que vous voulez avec l’offre gratuite ; les chemins et mots-clés nécessitent Pro.', es: 'Empieza poco a poco: hasta tres. Después, añade todas las webs que quieras con el plan gratuito; las rutas y palabras clave requieren Pro.', de: 'Fang klein an: bis zu drei. Danach kannst du im Gratis-Tarif beliebig viele Websites hinzufügen; Pfade und Stichwörter brauchen Pro.' },
   obSitesAria: { en: 'Suggested sites', fr: 'Sites suggérés', es: 'Webs sugeridas', de: 'Vorgeschlagene Seiten' },
-  obCustomPlaceholder: { en: 'Or type another site, e.g. news.example.com', fr: 'Ou saisissez un autre site, ex. : news.example.com', es: 'O escribe otra web, p. ej. news.example.com', de: 'Oder eine andere Seite eingeben, z. B. news.example.com' },
+  obCustomPlaceholder: { en: 'Another site, e.g. news.example.com', fr: 'Autre site, ex. : news.example.com', es: 'Otra web, p. ej. news.example.com', de: 'Andere Seite, z. B. news.example.com' },
   obCustomAria: { en: 'Another site to block', fr: 'Autre site à bloquer', es: 'Otra web que bloquear', de: 'Weitere zu blockierende Seite' },
   obSelectedCount: { en: '$1 of 3 selected', fr: '$1 sur 3 sélectionnés', es: '$1 de 3 seleccionadas', de: '$1 von 3 ausgewählt' },
   obMax: { en: 'Three is plenty to start — add more later in Settings.', fr: 'Trois suffisent pour commencer, vous en ajouterez d’autres dans les réglages.', es: 'Con tres basta para empezar; añade más luego en Ajustes.', de: 'Drei reichen für den Anfang – weitere später in den Einstellungen.' },

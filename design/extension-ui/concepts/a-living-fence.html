@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Concept A · The living fence</title>
+<link rel="stylesheet" href="../../../focusfence/src/styles/base.css">
+<link rel="stylesheet" href="board.css">
+<style>
+  .pk { --w: 14px; --h: 46px; width: var(--w); height: var(--h); background: var(--signal);
+    clip-path: polygon(0 calc(var(--w) / 2), 50% 0, 100% calc(var(--w) / 2), 100% 100%, 0 100%); }
+  .fence { position: relative; display: flex; align-items: flex-end; gap: 9px; }
+  .fence::before, .fence::after { content: ''; position: absolute; left: -10px; right: -10px; height: 4px; border-radius: 2px;
+    background: color-mix(in srgb, var(--signal) 45%, transparent); }
+  .fence::before { bottom: 30%; } .fence::after { bottom: 66%; }
+  .pk { position: relative; z-index: 1; filter: drop-shadow(0 0 8px rgba(58,154,91,.45)); }
+  /* popup */
+  .pop { width: 360px; }
+  .p-top { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px 0 16px; font-weight: 620; font-size: 13.5px; }
+  .p-top .sp { flex: 1; }
+  .stage { position: relative; padding: 18px 16px 14px; overflow: hidden;
+    background: radial-gradient(240px 120px at 50% 62%, rgba(58,154,91,.28), transparent 70%); }
+  .stage .fence { width: max-content; margin: 0 auto; height: 64px; }
+  .ground { height: 1px; background: var(--line-2); margin: 0 -16px 14px; }
+  .state { display: flex; align-items: center; justify-content: space-between; }
+  .state h2 { font-size: 17px; } .state p { font-size: 12.5px; color: var(--muted); }
+  .sw { width: 34px; height: 20px; border-radius: 99px; background: var(--accent-solid); position: relative; }
+  .sw::after { content: ''; position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+  .act { padding: 14px 16px; display: grid; gap: 8px; border-top: 1px solid var(--line); }
+  .slab { display: flex; align-items: center; gap: 10px; height: 48px; border-radius: 12px; padding: 0 14px 0 10px;
+    background: var(--accent-solid); color: var(--accent-ink); font-weight: 600; font-size: 14px; }
+  .slab .avatar { background: rgba(0,0,0,.18); color: inherit; box-shadow: none; }
+  .add { display: flex; gap: 8px; } .add .input { flex: 1; height: 34px; }
+  .focusrow { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13px; }
+  .focusrow .sp { flex: 1; color: var(--muted); }
+  .foot { display: flex; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); background: var(--bg); }
+  .foot b { color: var(--ink); } .foot a { color: var(--accent); font-weight: 550; }
+  /* block page */
+  .night { position: relative; height: 100%; overflow: hidden;
+    background: radial-gradient(900px 380px at 50% 100%, rgba(58,154,91,.42), transparent 70%), linear-gradient(#070908, #0b0f0d 70%, #0e1512); color: #f1f4f2; }
+  .night .copy { position: absolute; left: 0; right: 0; top: 120px; text-align: center; }
+  .night h3 { font-size: 64px; letter-spacing: -0.04em; font-weight: 620; }
+  .night h3 span { color: #8e9893; }
+  .night p.q { margin-top: 18px; font-size: 22px; color: #c9d0cc; }
+  .night .pill { display: inline-flex; gap: 16px; margin-top: 26px; font-size: 16px; color: #8e9893; }
+  .night .pill b { color: #f1f4f2; font-size: 20px; }
+  .night .btn-big { display: inline-block; margin-top: 30px; padding: 14px 28px; border-radius: 12px; background: #5dbe7e; color: #04130a; font-weight: 600; font-size: 18px; }
+  .wall { position: absolute; left: 0; right: 0; bottom: 0; height: 190px; display: flex; justify-content: center; align-items: flex-end; gap: 16px; }
+  .wall .pk { --w: 34px; --h: 150px; background: #020303; filter: none; }
+  .wall .pk.lit { --h: 176px; background: #3a9a5b; filter: drop-shadow(0 0 26px rgba(58,154,91,.8)); }
+  /* settings */
+  .set { height: 100%; background: var(--bg); }
+  .tabs { display: flex; align-items: center; gap: 6px; height: 72px; padding: 0 40px; border-bottom: 1px solid var(--line); background: var(--surface); }
+  .tabs .t { padding: 10px 18px; border-radius: 10px; font-size: 18px; font-weight: 550; color: var(--muted); }
+  .tabs .t.on { background: var(--surface-3); color: var(--ink); }
+  .tabs .brand { font-weight: 650; font-size: 20px; margin-right: 40px; display: flex; gap: 10px; align-items: center; }
+  .hero { padding: 40px 120px 0; }
+  .hero .fence { width: max-content; }
+  .hero .fence .pk { --w: 30px; --h: 96px; display: grid; place-items: end center; padding-bottom: 12px; color: #04130a; font-weight: 700; font-size: 15px; }
+  .hero h4 { margin-top: 26px; font-size: 32px; letter-spacing: -0.03em; }
+  .grid { margin: 24px 120px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .site { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); font-size: 17px; font-weight: 550; }
+  .site .avatar { width: 36px; height: 36px; }
+</style>
+</head>
+<body>
+<div class="board-head"><span class="tag">Concept A</span><h1>The living fence</h1></div>
+<p class="board-head" style="display:block;margin-top:-18px;color:var(--muted);font-size:16px;max-width:900px">Your blocklist <i>is</i> a fence. Every site is a picket; the fence's posture is the state. Up and lit when blocking, lowered when off or paused, amber and locked in strict mode. The same object greets you on the block page and grows as you pick sites in onboarding.</p>
+<div class="boards">
+  <div class="art">
+    <div class="label">Popup — read the fence, act on this tab</div>
+    <div class="frame pop">
+      <div class="p-top"><svg width="18" height="18" viewBox="0 0 16 16"><rect width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#fff"/></svg>FocusFence<span class="badge badge-pro">PRO</span><span class="sp"></span>⚙</div>
+      <div class="stage">
+        <div class="fence"><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i></div>
+        <div class="ground"></div>
+        <div class="state"><div><h2>Blocking is on</h2><p>6 sites fenced</p></div><span class="sw"></span></div>
+      </div>
+      <div class="act">
+        <div class="slab"><span class="avatar" style="--h:240">I</span>Block instagram.com</div>
+        <div class="add"><span class="input" style="display:flex;align-items:center;color:var(--muted)">Add a site, e.g. reddit.com</span><span class="btn">Add</span></div>
+      </div>
+      <div class="focusrow">◷ <b>Focus</b><span class="sp">25 min · 4 rounds</span><span class="btn btn-sm">Start</span></div>
+      <div class="foot"><span>Blocked today: <b>5</b> · This week: <b>89</b></span><a>All settings →</a></div>
+    </div>
+    <p class="note"><b>2 seconds:</b> the lit fence says "protected, 6 sites"; the one big button blocks the tab you're on.</p>
+  </div>
+  <div class="stack">
+    <div class="art">
+      <div class="label">Block page — you hit the fence (the site's picket is lit)</div>
+      <div class="frame" style="height:320px"><div class="mini night">
+        <div class="copy"><h3><span>reddit.com</span> is fenced off</h3><p class="q">Starve your distractions, feed your focus.</p>
+          <div class="pill"><span><b>5</b> blocked today</span><span><b>89</b> this week</span></div><br><span class="btn-big">Back to work</span></div>
+        <div class="wall"><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk lit"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i><i class="pk"></i></div>
+      </div></div>
+    </div>
+    <div class="art">
+      <div class="label">Settings — five destinations, the fence is home</div>
+      <div class="frame" style="height:320px"><div class="mini set">
+        <div class="tabs"><span class="brand">FocusFence</span><span class="t on">Blocklist</span><span class="t">Focus</span><span class="t">Strict</span><span class="t">Stats</span><span class="t">Plan</span></div>
+        <div class="hero"><div class="fence"><i class="pk">R</i><i class="pk">Y</i><i class="pk">X</i><i class="pk">F</i><i class="pk">N</i><i class="pk" style="background:#6b7570">#</i></div><h4>6 sites fenced</h4></div>
+        <div class="grid"><div class="site"><span class="avatar" style="--h:20">R</span>reddit.com</div><div class="site"><span class="avatar" style="--h:240">Y</span>youtube.com/shorts</div><div class="site"><span class="avatar" style="--h:40">X</span>x.com</div><div class="site"><span class="avatar" style="--h:200">F</span>facebook.com</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
