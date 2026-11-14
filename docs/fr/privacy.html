@@ -4,13 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Politique de confidentialité — FocusFence</title>
-<meta name="description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
+<meta name="description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
 <link rel="canonical" href="https://focusfence.dev/fr/privacy.html">
 <link rel="alternate" hreflang="en" href="https://focusfence.dev/privacy.html">
 <link rel="alternate" hreflang="fr" href="https://focusfence.dev/fr/privacy.html">
 <link rel="alternate" hreflang="es" href="https://focusfence.dev/es/privacy.html">
 <link rel="alternate" hreflang="de" href="https://focusfence.dev/de/privacy.html">
 <link rel="alternate" hreflang="x-default" href="https://focusfence.dev/privacy.html">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08090a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<script>(function(){var d=document.documentElement,p='system',t;try{p=localStorage.getItem("ff-theme")||p}catch(e){}if(p!=='light'&&p!=='dark')p='system';d.setAttribute('data-theme-pref',p);if(p==='system')t=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';else{t=p;d.setAttribute('data-theme',p);var m=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].setAttribute('content',p==='light'?'#fbfaf7':'#08090a')}})();</script>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://focusfence.dev/fr/privacy.html">
 <meta property="og:site_name" content="FocusFence">
@@ -19,54 +23,2190 @@
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:locale:alternate" content="de_DE">
 <meta property="og:title" content="Politique de confidentialité — FocusFence">
-<meta property="og:description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
-<meta property="og:image" content="https://focusfence.dev/assets/fr/social.png">
-<meta property="og:image:width" content="440">
-<meta property="og:image:height" content="280">
+<meta property="og:description" content="Politique de confidentialité de FocusFence : pas de compte, pas de statistiques d’audience, pas de pistage. Votre liste et vos statistiques restent sur votre appareil.">
+<meta property="og:image" content="https://focusfence.dev/assets/fr/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FocusFence, le bloqueur de sites pour Chrome : clôturez les fils sans fin.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="../assets/favicon.png">
-<link rel="stylesheet" href="../assets/site.css">
-<script src="../assets/lang.js" defer></script>
+<meta name="twitter:image" content="https://focusfence.dev/assets/fr/og.png">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="preload" href="../assets/inter.woff2" as="font" type="font/woff2" crossorigin>
+<style>/* FocusFence website. Dark, quiet, precise. Inlined into every page by scripts/docs.mjs.
+   Design notes: design/landing-v2/BRIEF.md. Every colour, size and duration is a token below. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/inter.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Dark is the base theme. The light theme overrides the theme tokens below, either because
+   the OS prefers light (and the visitor chose "System") or because the visitor chose "Light"
+   in the header toggle (html[data-theme], set before the first paint by an inline script). */
+:root {
+  color-scheme: dark;
+  /* surfaces */
+  --bg: #08090a;
+  --bg-2: #0b0d0c;
+  --screen: #141917; /* the extension's own background: product images sit on it seamlessly */
+  --line: rgba(255, 255, 255, 0.075);
+  --line-2: rgba(255, 255, 255, 0.11);
+  --line-3: rgba(255, 255, 255, 0.18);
+  /* text */
+  --text: #f3f5f4;
+  --text-2: #c9d0cc;
+  --muted: #8e9893;
+  --dim: #8e9893; /* the dimmed half of large two-tone headings */
+  /* brand */
+  --green: #3a9a5b; /* field green, the logo tile */
+  --accent: #6cc58a;
+  --cta: #5dbe7e;
+  --cta-hover: #73cb91;
+  --cta-ink: #04130a;
+  --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(93, 190, 126, 0.5), 0 10px 30px -10px rgba(93, 190, 126, 0.55);
+  --glow: rgba(58, 154, 91, 0.22);
+  --glow-2: rgba(58, 154, 91, 0.06);
+  --pro: #d9a74b;
+  --pro-bg: rgba(217, 167, 75, 0.12);
+  /* components */
+  --top-bg: rgba(8, 9, 10, 0.7);
+  --top-bg-stuck: rgba(8, 9, 10, 0.82);
+  --chip: rgba(255, 255, 255, 0.09);
+  --chip-weak: rgba(255, 255, 255, 0.03);
+  --ghost: rgba(255, 255, 255, 0.04);
+  --ghost-hover: rgba(255, 255, 255, 0.08);
+  --soon-bg: rgba(58, 154, 91, 0.1);
+  --soon-line: rgba(108, 197, 138, 0.28);
+  --bar: #0e1211;
+  --dots: rgba(255, 255, 255, 0.11);
+  --tab-bg: rgba(255, 255, 255, 0.05);
+  --win-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.1) inset, 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 100px -20px rgba(58, 154, 91, 0.18);
+  --shot-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 50px 100px -40px rgba(0, 0, 0, 0.9);
+  --pop-shadow: 0 0 0 1px rgba(255, 255, 255, 0.13), 0 24px 70px -10px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015) 60%);
+  --card-edge: inset 0 0 0 1px var(--line), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --pointer: rgba(255, 255, 255, 0.045);
+  --net-bg: rgba(58, 154, 91, 0.06);
+  --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.12), rgba(58, 154, 91, 0.03) 55%, rgba(255, 255, 255, 0.012));
+  --best-edge: inset 0 0 0 1px rgba(108, 197, 138, 0.3), inset 0 1px 0 0 rgba(108, 197, 138, 0.35), 0 30px 80px -40px rgba(58, 154, 91, 0.5);
+  --save-ink: #04130a;
+  --sel: rgba(108, 197, 138, 0.3);
+  /* the fence: the extension's glass pills (design/extension-ui, round 5: base.css .fence, .pill
+     and .fence.mirror, blocked.css), at night: frosted, faintly emissive glass and a bright emerald
+     light with a wide, soft halo */
+  --glass-0: rgb(205 245 222 / 0.1);
+  --glass-1: rgb(120 190 150 / 0.035);
+  --glass-tint: 63 214 122;
+  --glass-tint-a: 0.3;
+  --glass-rim: rgb(255 255 255 / 0.4);
+  --glass-edge: rgb(255 255 255 / 0.07);
+  --glass-shade: 0 0 0 transparent;
+  --glass-blur: blur(16px) saturate(1.4);
+  --light-rgb: 63 214 122;
+  --lit-0: #66e396;
+  --lit-1: #3fd67a;
+  --lit-2: #1e9f55;
+  --lit-core: rgb(225 255 236 / 0.5);
+  --lit-bloom: 0 0 26px rgb(63 214 122 / 0.75), 0 0 70px rgb(63 214 122 / 0.35);
+  --halo-a: 0.55;
+  --halo-h: 2.05;
+  /* its scene: a deep green horizon over black, and a seamless glossy floor that mirrors every
+     pill as a faint silhouette in its own tint */
+  --horizon: rgb(63 214 122 / 0.13);
+  --sky-low: #041309;
+  --floor: linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.55));
+  --refl: 0.7;
+  --mirror-0: 0.2;
+  --mirror-0t: 0.35;
+  --mirror-1: 0.12;
+  --mirror-1t: 0.3;
+  --link-line: rgba(108, 197, 138, 0.55);
+  --mark-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 60px 6px rgba(58, 154, 91, 0.35);
+  /* type */
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  /* layout */
+  --wrap: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --sec: clamp(88px, 11vw, 160px);
+  --r-sm: 8px;
+  --r: 14px;
+  --r-lg: 18px;
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --spring: cubic-bezier(0.25, 1.35, 0.4, 1); /* the extension's: pills rise with a little give */
+  --dur: 0.7s;
+}
+/* Light: warm paper and ink, like the extension's light theme (its #f5f4ef is --screen).
+   Every text pair passes WCAG AA; --dim (3.5:1) is only used on headings of 26 px and up. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    color-scheme: light;
+    --bg: #fbfaf7;
+    --bg-2: #f4f3ee;
+    --screen: #f5f4ef;
+    --line: rgba(28, 38, 34, 0.085);
+    --line-2: rgba(28, 38, 34, 0.13);
+    --line-3: rgba(28, 38, 34, 0.24);
+    --text: #161d1a;
+    --text-2: #3b4842;
+    --muted: #5a645f;
+    --dim: #7e8883;
+    --accent: #276b5b;
+    --cta: #276b5b;
+    --cta-hover: #1f5a4c;
+    --cta-ink: #ffffff;
+    --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
+    --glow: rgba(58, 154, 91, 0.13);
+    --glow-2: rgba(58, 154, 91, 0.04);
+    --pro: #7d5710;
+    --pro-bg: #f7eedb;
+    --top-bg: rgba(251, 250, 247, 0.72);
+    --top-bg-stuck: rgba(251, 250, 247, 0.88);
+    --chip: rgba(28, 38, 34, 0.07);
+    --chip-weak: rgba(28, 38, 34, 0.025);
+    --ghost: #ffffff;
+    --ghost-hover: #f4f3ee;
+    --soon-bg: rgba(39, 107, 91, 0.07);
+    --soon-line: rgba(39, 107, 91, 0.3);
+    --bar: #efeee8;
+    --dots: rgba(28, 38, 34, 0.16);
+    --tab-bg: #ffffff;
+    --win-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 100px -40px rgba(28, 38, 34, 0.32), 0 18px 36px -18px rgba(28, 38, 34, 0.16);
+    --shot-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 90px -40px rgba(28, 38, 34, 0.3);
+    --pop-shadow: 0 0 0 1px rgba(28, 38, 34, 0.12), 0 24px 60px -16px rgba(28, 38, 34, 0.32), 0 2px 6px rgba(28, 38, 34, 0.07);
+    --card-bg: #ffffff;
+    --card-edge: inset 0 0 0 1px var(--line), 0 1px 2px rgba(28, 38, 34, 0.04);
+    --pointer: rgba(39, 107, 91, 0.05);
+    --net-bg: rgba(39, 107, 91, 0.06);
+    --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.1), rgba(58, 154, 91, 0.02) 55%, #ffffff);
+    --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
+    --save-ink: #ffffff;
+    --sel: rgba(39, 107, 91, 0.18);
+    /* the fence by day: milky sage glass with a bright rim, greener near a solid green light */
+    --glass-0: rgb(240 246 242 / 0.94);
+    --glass-1: rgb(222 234 226 / 0.86);
+    --glass-tint: 112 176 134;
+    --glass-tint-a: 0.42;
+    --glass-rim: rgb(255 255 255 / 1);
+    --glass-edge: rgb(24 66 40 / 0.13);
+    --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+    --glass-blur: blur(14px) saturate(1.15);
+    --light-rgb: 30 138 69;
+    --lit-0: #33a861;
+    --lit-1: #1e8a45;
+    --lit-2: #17723a;
+    --lit-core: rgb(255 255 255 / 0.1);
+    --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+    --halo-a: 0.26;
+    --halo-h: 1.4;
+    /* its scene: warm paper, a faint green horizon and a seamless glossy floor */
+    --horizon: rgb(30 138 69 / 0.07);
+    --sky-low: #f7f8f5;
+    --floor: linear-gradient(rgb(24 66 40 / 0), rgb(24 66 40 / 0.035));
+    --refl: 0.62;
+    --mirror-0: 0.16;
+    --mirror-0t: 0.3;
+    --mirror-1: 0.08;
+    --mirror-1t: 0.2;
+    --link-line: rgba(39, 107, 91, 0.45);
+    --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
+  }
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #fbfaf7;
+  --bg-2: #f4f3ee;
+  --screen: #f5f4ef;
+  --line: rgba(28, 38, 34, 0.085);
+  --line-2: rgba(28, 38, 34, 0.13);
+  --line-3: rgba(28, 38, 34, 0.24);
+  --text: #161d1a;
+  --text-2: #3b4842;
+  --muted: #5a645f;
+  --dim: #7e8883;
+  --accent: #276b5b;
+  --cta: #276b5b;
+  --cta-hover: #1f5a4c;
+  --cta-ink: #ffffff;
+  --cta-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px #1f5a4c, 0 10px 24px -12px rgba(31, 90, 76, 0.55);
+  --glow: rgba(58, 154, 91, 0.13);
+  --glow-2: rgba(58, 154, 91, 0.04);
+  --pro: #7d5710;
+  --pro-bg: #f7eedb;
+  --top-bg: rgba(251, 250, 247, 0.72);
+  --top-bg-stuck: rgba(251, 250, 247, 0.88);
+  --chip: rgba(28, 38, 34, 0.07);
+  --chip-weak: rgba(28, 38, 34, 0.025);
+  --ghost: #ffffff;
+  --ghost-hover: #f4f3ee;
+  --soon-bg: rgba(39, 107, 91, 0.07);
+  --soon-line: rgba(39, 107, 91, 0.3);
+  --bar: #efeee8;
+  --dots: rgba(28, 38, 34, 0.16);
+  --tab-bg: #ffffff;
+  --win-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 100px -40px rgba(28, 38, 34, 0.32), 0 18px 36px -18px rgba(28, 38, 34, 0.16);
+  --shot-shadow: 0 0 0 1px rgba(28, 38, 34, 0.1), 0 40px 90px -40px rgba(28, 38, 34, 0.3);
+  --pop-shadow: 0 0 0 1px rgba(28, 38, 34, 0.12), 0 24px 60px -16px rgba(28, 38, 34, 0.32), 0 2px 6px rgba(28, 38, 34, 0.07);
+  --card-bg: #ffffff;
+  --card-edge: inset 0 0 0 1px var(--line), 0 1px 2px rgba(28, 38, 34, 0.04);
+  --pointer: rgba(39, 107, 91, 0.05);
+  --net-bg: rgba(39, 107, 91, 0.06);
+  --best-bg: linear-gradient(180deg, rgba(58, 154, 91, 0.1), rgba(58, 154, 91, 0.02) 55%, #ffffff);
+  --best-edge: inset 0 0 0 1px rgba(39, 107, 91, 0.35), 0 30px 70px -40px rgba(39, 107, 91, 0.45);
+  --save-ink: #ffffff;
+  --sel: rgba(39, 107, 91, 0.18);
+  /* the fence by day: milky sage glass with a bright rim, greener near a solid green light */
+  --glass-0: rgb(240 246 242 / 0.94);
+  --glass-1: rgb(222 234 226 / 0.86);
+  --glass-tint: 112 176 134;
+  --glass-tint-a: 0.42;
+  --glass-rim: rgb(255 255 255 / 1);
+  --glass-edge: rgb(24 66 40 / 0.13);
+  --glass-shade: 0 14px 26px -18px rgb(20 60 35 / 0.32);
+  --glass-blur: blur(14px) saturate(1.15);
+  --light-rgb: 30 138 69;
+  --lit-0: #33a861;
+  --lit-1: #1e8a45;
+  --lit-2: #17723a;
+  --lit-core: rgb(255 255 255 / 0.1);
+  --lit-bloom: 0 16px 40px -10px rgb(30 138 69 / 0.5), 0 0 46px rgb(30 138 69 / 0.2);
+  --halo-a: 0.26;
+  --halo-h: 1.4;
+  /* its scene: warm paper, a faint green horizon and a seamless glossy floor */
+  --horizon: rgb(30 138 69 / 0.07);
+  --sky-low: #f7f8f5;
+  --floor: linear-gradient(rgb(24 66 40 / 0), rgb(24 66 40 / 0.035));
+  --refl: 0.62;
+  --mirror-0: 0.16;
+  --mirror-0t: 0.3;
+  --mirror-1: 0.08;
+  --mirror-1t: 0.2;
+  --link-line: rgba(39, 107, 91, 0.45);
+  --mark-shadow: 0 0 0 1px rgba(28, 38, 34, 0.08), 0 0 50px 6px rgba(58, 154, 91, 0.25);
+}
+/* Every product image exists in both themes (real captures of the extension in each);
+   only the one matching the page is shown, and lazy loading skips the other. */
+.th-l {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .th-l {
+    display: block;
+  }
+  :root:not([data-theme='dark']) .th-d {
+    display: none;
+  }
+}
+:root[data-theme='light'] .th-l {
+  display: block;
+}
+:root[data-theme='light'] .th-d {
+  display: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+  interpolate-size: allow-keywords;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font: 400 16px/1.6 var(--sans);
+  font-feature-settings: 'cv11', 'ss01';
+  font-optical-sizing: auto;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+h1,
+h2,
+h3 {
+  color: var(--text);
+  font-weight: 590;
+  overflow-wrap: break-word;
+}
+strong {
+  color: var(--text-2);
+  font-weight: 560;
+}
+a {
+  color: inherit;
+}
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--text-2);
+  background: var(--chip-weak);
+  box-shadow: inset 0 0 0 1px var(--line);
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+::selection {
+  background: var(--sel);
+  color: var(--text);
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 560;
+  text-decoration: none;
+}
+.skip:focus {
+  top: 12px;
+}
+.wrap {
+  width: min(var(--wrap), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+.i {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dim {
+  color: var(--dim);
+}
+
+/* ------------------------------------------------------------------ header */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--top-bg);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  backdrop-filter: saturate(1.6) blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.top.is-stuck {
+  border-bottom-color: var(--line);
+  background: var(--top-bg-stuck);
+}
+.top-in {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 15.5px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.brand svg {
+  border-radius: 6px;
+}
+.links {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.links a {
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.links a:hover {
+  color: var(--text);
+}
+.langs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.langs a {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: var(--muted);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color 0.15s, background-color 0.15s;
+}
+.langs a:hover {
+  color: var(--text);
+}
+.langs a[aria-current='page'] {
+  color: var(--text);
+  background: var(--chip);
+}
+.top-cta {
+  margin-left: 4px;
+}
+/* theme toggle: light / dark / system, as a radio group (keyboard: arrows) */
+.theme {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  margin: 0 -14px 0 0;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+:root:not([data-theme-pref]) .theme {
+  display: none; /* without JavaScript the page simply follows the system */
+}
+.theme label {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: color 0.15s, background-color 0.15s;
+}
+.theme label:hover {
+  color: var(--text);
+}
+.theme input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.theme .i {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.7;
+}
+:root[data-theme-pref='light'] .theme [data-v='light'],
+:root[data-theme-pref='dark'] .theme [data-v='dark'],
+:root[data-theme-pref='system'] .theme [data-v='system'] {
+  color: var(--text);
+  background: var(--chip);
+}
+.theme label:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 560;
+  letter-spacing: -0.012em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.btn-sm {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 13.5px;
+}
+.btn-primary {
+  background: var(--cta);
+  color: var(--cta-ink);
+  box-shadow: var(--cta-shadow);
+}
+.btn-primary:hover {
+  background: var(--cta-hover);
+}
+.btn-primary .i-arrow {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: transform 0.2s var(--ease);
+}
+.btn-primary:hover .i-arrow {
+  transform: translateX(2px);
+}
+.btn-ghost {
+  color: var(--text);
+  background: var(--ghost);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.btn-ghost:hover {
+  background: var(--ghost-hover);
+}
+/* Before the store listing exists: a status, not a fake button. */
+.btn-soon {
+  gap: 10px;
+  padding: 0 18px 0 16px;
+  color: var(--text-2);
+  background: var(--soon-bg);
+  box-shadow: inset 0 0 0 1px var(--soon-line);
+  cursor: default;
+}
+.pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pulse::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------- hero */
+.hero {
+  position: relative;
+  padding-top: clamp(24px, 3.4vw, 48px);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.hero::before {
+  /* the light behind the fence */
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 34%;
+  width: min(1500px, 140vw);
+  height: 900px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--glow), var(--glow-2) 55%, transparent);
+  pointer-events: none;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 14px 0 12px;
+  border-radius: 999px;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--chip-weak);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(58, 154, 91, 0.22), 0 0 12px 2px rgba(58, 154, 91, 0.6);
+}
+.display {
+  margin-top: 20px;
+  max-width: 16em;
+  font-size: clamp(40px, 2.6vw + 27px, 64px);
+  font-weight: 620;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.display em {
+  font-style: normal;
+  color: var(--dim);
+}
+.hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px 64px;
+  align-items: end;
+  margin-top: 24px;
+}
+.lead {
+  max-width: 31em;
+  text-wrap: pretty;
+  font-size: clamp(16px, 0.25vw + 14.5px, 18px);
+  line-height: 1.55;
+  letter-spacing: -0.012em;
+}
+.hero-actions {
+  display: grid;
+  justify-items: end;
+  gap: 18px;
+}
+.hero-actions .cta,
+.hero-actions .ticks {
+  justify-content: flex-end;
+  margin-top: 0;
+}
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+.ticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 22px;
+  font-size: 13.5px;
+}
+.ticks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ticks .i {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+  color: var(--accent);
+}
+
+/* Product stage: three real surfaces composed as one picture. The settings window, the popup
+   hanging from its toolbar icon, and the block page a fenced-off site shows instead. Sizes are in
+   em, so the cluster scales as a whole (1em = 16px when it is 1280px wide). It also shrinks on
+   short screens, so all three surfaces stay in the first screen (--above: header and copy). */
+.stage {
+  position: relative;
+  margin-top: clamp(28px, 2.8vw, 40px);
+  padding: 0 var(--gutter) 1.5em;
+}
+.win-wrap {
+  --above: 404px;
+  position: relative;
+  width: 80em;
+  height: 34em; /* the settings window; the popup and the block page end by 29em */
+  margin-inline: auto;
+  font-size: min(16px, calc((100vw - 2 * var(--gutter)) / 80));
+  font-size: min(16px, calc((100vw - 2 * var(--gutter)) / 80), max(10px, calc((100svh - var(--above)) / 29)));
+}
+.win {
+  position: relative;
+  width: min(1280px, 100%);
+  margin-inline: auto;
+  border-radius: var(--r-lg);
+  background: var(--screen);
+  box-shadow: var(--win-shadow);
+}
+.win-bar {
+  position: relative;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 14px 0 16px;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: var(--bar);
+  border-bottom: 1px solid var(--line);
+}
+.win-dots {
+  display: flex;
+  gap: 7px;
+}
+.win-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--dots);
+}
+.win-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 14px 0 10px;
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 12.5px;
+  background: var(--tab-bg);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.win-tab span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.win-tab svg {
+  flex: none;
+  border-radius: 3px;
+}
+.win-ext {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--chip);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.win-ext svg {
+  border-radius: 4px;
+}
+.win-body {
+  overflow: hidden;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.win-img {
+  width: 100%;
+}
+/* the hero's windows: same chrome as above, in em */
+.win-wrap .win {
+  position: absolute;
+  width: auto;
+  border-radius: 0.875em;
+}
+.win-wrap .win-bar {
+  height: 2.5em;
+  gap: 1em;
+  padding: 0 0.75em 0 1em;
+  border-radius: 0.875em 0.875em 0 0;
+}
+.win-wrap .win-dots {
+  gap: 0.4375em;
+}
+.win-wrap .win-dots i {
+  width: 0.6875em;
+  height: 0.6875em;
+}
+.win-wrap .win-tab {
+  height: 1.75em;
+  gap: 0.5em;
+  padding: 0 0.875em 0 0.625em;
+  border-radius: 0.5em;
+  font-size: 1em;
+}
+.win-wrap .win-tab span {
+  font-size: 0.78em;
+}
+.win-wrap .win-tab svg {
+  width: 0.875em;
+  height: 0.875em;
+}
+.win-wrap .win-ext {
+  width: 1.875em;
+  height: 1.875em;
+  border-radius: 0.5em;
+}
+.win-wrap .win-ext svg {
+  width: 1em;
+  height: 1em;
+}
+.win-wrap .win-body {
+  border-radius: 0 0 0.875em 0.875em;
+}
+.win-wrap img {
+  width: 100%;
+}
+.win-wrap .win-hero {
+  left: 2em;
+  top: 0;
+  width: 54em;
+}
+.win-popup {
+  position: absolute;
+  z-index: 3;
+  left: 37.6em; /* hangs from the settings window's toolbar icon */
+  top: 3.25em;
+  width: 17.5em; /* the 360px popup at 0.78 */
+  border-radius: 0.75em;
+  overflow: hidden;
+  box-shadow: var(--pop-shadow);
+}
+.win-wrap .win-card {
+  z-index: 2;
+  left: 54.75em; /* just under the popup's edge, in the block page's empty margin */
+  top: 6.75em;
+  width: 23.5em; /* a 720 x 600 window */
+  border-radius: 0.75em;
+  box-shadow: var(--pop-shadow);
+}
+.win-card .win-bar {
+  height: 2em;
+  gap: 0.75em;
+  padding: 0 0.75em;
+  border-radius: 0.75em 0.75em 0 0;
+}
+.win-card .win-dots {
+  gap: 0.375em;
+}
+.win-card .win-dots i {
+  width: 0.5625em;
+  height: 0.5625em;
+}
+.win-card .win-tab {
+  height: 1.375em;
+  padding: 0 0.625em 0 0.5em;
+}
+.win-card .win-tab span {
+  font-size: 0.72em;
+}
+.win-card .win-tab svg {
+  width: 0.75em;
+  height: 0.75em;
+}
+.win-card .win-body {
+  border-radius: 0 0 0.75em 0.75em;
+}
+
+/* ----------------------------------------------------------------- sections */
+.sec {
+  position: relative;
+  padding-block: var(--sec);
+}
+
+.sec + .sec::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(var(--wrap), 100% - 2 * var(--gutter));
+  transform: translateX(-50%);
+  border-top: 1px solid var(--line);
+}
+.sec-intro {
+  padding-top: clamp(40px, 6vw, 72px);
+}
+.statement {
+  max-width: 25em;
+  font-size: clamp(26px, 1.8vw + 14px, 40px);
+  font-weight: 560;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: clamp(56px, 7vw, 104px);
+  border-top: 1px solid var(--line);
+  counter-reset: step;
+}
+.step {
+  padding: 28px 40px 0 0;
+}
+.step + .step {
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.step-n {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.step h3 {
+  margin-top: 20px;
+  font-size: 17px;
+  letter-spacing: -0.014em;
+}
+.step p {
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px 72px;
+  align-items: end;
+}
+.sec-head-solo {
+  grid-template-columns: 1fr;
+}
+.sec-head-center {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+}
+.sec-head-center .sec-lead {
+  max-width: 32em;
+}
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  color: var(--text-2);
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.picket {
+  /* the extension's picket ornament: a small pill, as on its focus-round counters and plan marks */
+  flex: none;
+  width: 7px;
+  height: 12px;
+  border-radius: 99px 99px 1.5px 1.5px;
+  background: var(--green);
+}
+.h2 {
+  font-size: clamp(32px, 1.9vw + 20px, 48px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+}
+.sec-lead {
+  max-width: 30em;
+  font-size: clamp(16px, 0.25vw + 15px, 18px);
+  line-height: 1.6;
+}
+
+/* framed product shot */
+.shot {
+  position: relative;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+.shot .win {
+  box-shadow: var(--shot-shadow);
+}
+.feats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 72px;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+.feat h3,
+.card h3,
+.details h3,
+.points h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 17px;
+  letter-spacing: -0.014em;
+  line-height: 1.35;
+}
+.feat p,
+.card p {
+  margin-top: 8px;
+  font-size: 15px;
+}
+.pro {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 6px;
+  color: var(--pro);
+  background: var(--pro-bg);
+  font: 600 10.5px/1 var(--sans);
+  letter-spacing: 0.06em;
+}
+.kicker .pro {
+  margin-left: 2px;
+}
+
+/* bento of real UI crops */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
+}
+.card::after,
+.plan::after {
+  /* pointer light (scripts/site.js sets --mx/--my on fine pointers) */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, -200%), var(--pointer), transparent 60%);
+  pointer-events: none;
+}
+.card-text {
+  padding: 30px 32px 0;
+  max-width: 36em;
+}
+.screen {
+  display: grid;
+  place-items: center;
+  margin: 28px 0 0;
+  padding: 28px;
+  background: var(--screen);
+  border-top: 1px solid var(--line);
+}
+.card .screen {
+  margin-top: auto;
+  flex: 1;
+}
+.card-text + .screen {
+  margin-top: 28px;
+}
+.card-schedule {
+  grid-column: span 7;
+}
+.card-timer {
+  grid-column: span 5;
+}
+.card-strict {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: stretch;
+}
+.card-strict .card-text {
+  align-self: center;
+  padding: 36px 40px;
+}
+.card-strict .screen {
+  margin: 0;
+  border-top: 0;
+  border-left: 1px solid var(--line);
+}
+.screen img {
+  border-radius: 12px;
+}
+
+/* stats panel */
+.screen-stats {
+  width: min(100%, 960px);
+  margin: clamp(48px, 6vw, 80px) auto 0;
+  padding: clamp(12px, 3vw, 40px);
+  border-radius: var(--r-lg);
+  border-top: 0;
+  box-shadow: var(--shot-shadow);
+}
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(64px, 8vw, 112px);
+  border-top: 1px solid var(--line);
+}
+.details li {
+  padding: 32px 36px 36px 0;
+  border-bottom: 1px solid var(--line);
+}
+.details li:not(:nth-child(3n + 1)) {
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.details li:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+.details .i,
+.points .i {
+  width: 22px;
+  height: 22px;
+  color: var(--text-2);
+  stroke-width: 1.5;
+}
+.details h3 {
+  margin-top: 20px;
+  font-size: 15.5px;
+}
+.details p {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* privacy */
+.privacy-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px 72px;
+  margin-top: clamp(48px, 6vw, 80px);
+  align-items: start;
+}
+.points {
+  display: grid;
+  gap: 36px;
+}
+.points li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 18px;
+}
+.points .i {
+  margin-top: 2px;
+}
+.points p {
+  margin-top: 6px;
+  font-size: 15px;
+}
+.manifest {
+  border-radius: var(--r-lg);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
+  overflow: hidden;
+}
+.manifest figcaption {
+  padding: 16px 22px;
+  color: var(--text-2);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+.manifest dl div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 16px;
+  padding: 13px 22px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.manifest dt {
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.manifest dt code {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  font-size: inherit;
+}
+.manifest-net {
+  display: flex;
+  gap: 10px;
+  padding: 16px 22px;
+  color: var(--text-2);
+  font-size: 14px;
+  background: var(--net-bg);
+}
+.manifest-net::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* pricing */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  border-radius: var(--r-lg);
+  background: var(--card-bg);
+  box-shadow: var(--card-edge);
+}
+.plan h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 560;
+  color: var(--text-2);
+}
+.plan-best {
+  background: var(--best-bg);
+  box-shadow: var(--best-edge);
+}
+.save {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: var(--save-ink);
+  background: var(--accent);
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 22px;
+}
+.amt {
+  color: var(--text);
+  font-size: clamp(40px, 2vw + 26px, 52px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.per {
+  font-size: 15px;
+}
+.plan-note {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.checks {
+  display: grid;
+  gap: 11px;
+  margin-top: 26px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.checks li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 12px;
+  color: var(--text-2);
+}
+.checks .i {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  stroke-width: 2.2;
+  color: var(--accent);
+}
+/* the yearly plan: a year of Pro, both ways (12 x the monthly price, and the yearly price) */
+.compare {
+  margin-top: auto;
+  padding-top: 28px;
+}
+.compare-h {
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+.compare ul {
+  display: grid;
+  gap: 14px;
+}
+.compare li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px 12px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.cmp-v {
+  font-variant-numeric: tabular-nums;
+}
+.cmp-best {
+  color: var(--text);
+  font-weight: 560;
+}
+.cmp-bar {
+  grid-column: 1 / -1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.cmp-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--line-3);
+}
+.cmp-best .cmp-bar i {
+  background: var(--accent);
+}
+.plans-foot {
+  margin-top: 32px;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  font-size: 14px;
+}
+.plans-foot p:first-child {
+  color: var(--text-2);
+}
+
+/* faq */
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: 40px 72px;
+  align-items: start;
+}
+.faq-head {
+  position: sticky;
+  top: 112px;
+}
+.faq-head p {
+  margin-top: 20px;
+  max-width: 22em;
+  font-size: 15px;
+}
+.faq-head a,
+.points a,
+.faq-a a,
+.plans-foot a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+.faq-head a:hover,
+.faq-a a:hover {
+  color: var(--text);
+  text-decoration-color: currentColor;
+}
+.faq-list {
+  border-top: 1px solid var(--line);
+}
+.faq-list details {
+  border-bottom: 1px solid var(--line);
+}
+.faq-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0;
+  color: var(--text);
+  font-size: 16.5px;
+  font-weight: 540;
+  letter-spacing: -0.014em;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.faq-list summary:hover .faq-i {
+  color: var(--text);
+}
+.faq-i {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  transition: transform 0.3s var(--ease), color 0.2s;
+}
+details[open] .faq-i {
+  transform: rotate(45deg);
+}
+.faq-a p {
+  padding: 0 48px 24px 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+@supports (interpolate-size: allow-keywords) {
+  .faq-list details::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 0.35s var(--ease), content-visibility 0.35s allow-discrete;
+  }
+  .faq-list details[open]::details-content {
+    height: auto;
+  }
+}
+
+/* final call: the page closes on the extension's block-page scene (design/extension-ui, round 5:
+   src/styles/base.css .fence, .pill and .fence.mirror, src/styles/blocked.css, src/lib/ui.js
+   pillProfile). A short row of chunky frosted-glass pills steps down gently from the middle, on a
+   seamless glossy floor that mirrors every pill. The pill in the middle holds the light: it glows from
+   inside, a wide soft halo rises behind it, the light spills onto the facing sides of its neighbours,
+   and a pool of it lies under it on the floor. A deep green horizon over black at night (dark), warm
+   paper by day (light). The row's markup and each pill's values come from scripts/docs.mjs. */
+.final {
+  --floor-h: 96px;
+  /* the extension's proportions: the middle pill 1.6 times as tall as wide, 9 % of a pill apart
+     (seven pills; the block page's are 132 px wide); on a phone they narrow to keep 24 px aside */
+  --n: 7;
+  --pw: min(112px, calc((100vw - 48px) / (var(--n) * 1.09 - 0.09)));
+  --ph: calc(var(--pw) * 1.6);
+  position: relative;
+  padding: clamp(96px, 10vw, 152px) 0 0;
+  overflow: hidden;
+  text-align: center;
+  isolation: isolate;
+  background:
+    radial-gradient(min(680px, 70vw) 440px at 50% calc(100% - var(--floor-h)), var(--horizon), transparent),
+    linear-gradient(to bottom, var(--bg) 0%, var(--bg) 40%, var(--sky-low) 100%);
+}
+.final-in {
+  display: grid;
+  justify-items: center;
+}
+.final-mark svg {
+  border-radius: 14px;
+  box-shadow: var(--mark-shadow);
+}
+.final-h {
+  margin-top: 36px;
+  font-size: clamp(38px, 3.6vw + 18px, 72px);
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.final .cta {
+  justify-content: center;
+  margin-top: 40px;
+}
+.final .ticks {
+  justify-content: center;
+}
+.scene {
+  position: relative;
+  /* room above the middle pill for its halo (2.05 times its height at night) */
+  height: calc(var(--ph) * 2.2 + var(--floor-h));
+  margin-top: clamp(8px, 1vw, 16px);
+}
+/* the floor: glossy and seamless (no band, no line); it mirrors the fence */
+.scene .floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  /* a breath of shade below the horizon, fading in from nothing: no edge */
+  background: var(--floor);
+}
+/* the row: the pills stand on the floor, and rise out of it (it clips what is below) */
+.fence {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-h);
+  height: calc(var(--ph) * 2.2);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: calc(var(--pw) * 0.09);
+  overflow: hidden;
+}
+/* the reflection in the glossy floor: the same row, flipped at the ground line; every pill mirrored
+   faintly, fading downward before the floor's edge, the light brightest */
+.fence.mirror {
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: var(--refl);
+  filter: blur(1.2px);
+  -webkit-mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent min(calc(var(--ph) * 0.62), calc(var(--floor-h) - 8px)));
+  mask-image: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent min(calc(var(--ph) * 0.62), calc(var(--floor-h) - 8px)));
+}
+/* glass doesn't mirror as glass: a soft silhouette in its own tint, greener near the light */
+.fence.mirror .pill:not(.lit) {
+  background: linear-gradient(
+    rgb(var(--glass-tint) / calc(var(--mirror-0) + var(--t) * var(--mirror-0t))),
+    rgb(var(--glass-tint) / calc(var(--mirror-1) + var(--t) * var(--mirror-1t)))
+  );
+  box-shadow: inset 0 1.5px 0 var(--glass-rim);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.fence.mirror .pill.lit {
+  box-shadow: none;
+}
+/* a pill: a full semicircle on top, standing square on the floor. Frosted glass, greener and lit
+   on the side that faces the light the nearer it stands. Per pill: --k its height as a share of the
+   middle one, --t0 how much of the light it catches, --v0 how much of it shows (the ends fade to
+   about two thirds), --side which side of the light it stands, --i its distance from it */
+.pill {
+  --t: var(--t0, 0);
+  --v: var(--v0, 1);
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: var(--pw);
+  height: calc(var(--ph) * var(--k, 1));
+  border-radius: calc(var(--pw) / 2) calc(var(--pw) / 2) 0 0;
+  background:
+    /* the light, spilling onto the side that faces it */
+    linear-gradient(calc(var(--side, 0) * 90deg), rgb(var(--light-rgb) / calc(var(--t) * 0.62)), transparent 72%),
+    /* greener the nearer the light */
+    linear-gradient(rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a))), rgb(var(--glass-tint) / calc(var(--t) * var(--glass-tint-a) * 0.45))),
+    linear-gradient(var(--glass-0), var(--glass-1));
+  box-shadow:
+    inset 0 1.5px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 0 calc(var(--pw) * 0.3) rgb(var(--light-rgb) / calc(0.04 + var(--t) * 0.3)),
+    var(--glass-shade);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  opacity: var(--v);
+}
+/* the pill that holds the light: it glows from inside */
+.pill.lit {
+  z-index: 2;
+  background:
+    radial-gradient(60% 46% at 50% 62%, var(--lit-core), transparent),
+    linear-gradient(var(--lit-0), var(--lit-1) 42%, var(--lit-2));
+  box-shadow:
+    inset 0 1.5px 0 rgb(255 255 255 / 0.45),
+    inset 0 0 calc(var(--pw) * 0.35) rgb(255 255 255 / 0.22),
+    inset 0 -14px 22px -14px rgb(0 40 18 / 0.35),
+    var(--lit-bloom);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* the light's halo, rising behind the lit pill: wide and soft */
+.fence-halo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  width: calc(var(--pw) * 4.6);
+  height: calc(var(--ph) * var(--halo-h));
+  margin-left: calc(var(--pw) * -2.3);
+  border-radius: 50%;
+  background:
+    radial-gradient(27% 60% at 50% 66%, rgb(var(--light-rgb) / var(--halo-a)), transparent),
+    radial-gradient(56% 40% at 50% 88%, rgb(var(--light-rgb) / calc(var(--halo-a) * 0.8)), transparent);
+  filter: blur(calc(var(--pw) * 0.22));
+  pointer-events: none;
+}
+/* its pool on the floor, under the lit pill, in front of the row */
+.fence-pool {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--floor-h) - var(--pw) * 0.15);
+  z-index: 3;
+  width: calc(var(--pw) * 4.2);
+  height: calc(var(--pw) * 0.3);
+  margin-left: calc(var(--pw) * -2.1);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--light-rgb) / calc(var(--halo-a) * 1.3)), transparent);
+  pointer-events: none;
+}
+/* narrower windows: fewer pills rather than thinner ones, as on the extension's block page. The two
+   outer pills step aside and the other five take their place in a five-pill row (--k5, --v5) */
+@media (max-width: 900px) {
+  .final {
+    --n: 5;
+  }
+  .fence .pill.far {
+    display: none;
+  }
+  .fence .pill {
+    --v: var(--v5, var(--v0, 1));
+    height: calc(var(--ph) * var(--k5, var(--k, 1)));
+  }
+}
+
+/* footer */
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 64px 0 48px;
+  font-size: 13.5px;
+  background: var(--bg-2);
+}
+.foot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: 40px;
+}
+.foot-brand p {
+  margin-top: 16px;
+  max-width: 22em;
+}
+.foot-h {
+  color: var(--text);
+  font-weight: 560;
+}
+.foot-col ul {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.foot-col a {
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.foot-col a:hover {
+  color: var(--text);
+}
+.foot-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 32px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.foot-base a {
+  color: var(--text-2);
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line-3);
+}
+
+/* ------------------------------------------------- privacy policy, blog */
+.doc {
+  padding: clamp(56px, 8vw, 112px) 0 clamp(80px, 10vw, 140px);
+}
+.prose {
+  max-width: 700px;
+  color: var(--text-2);
+  font-size: 16.5px;
+  line-height: 1.75;
+}
+.prose h1 {
+  font-size: clamp(36px, 2.6vw + 22px, 56px);
+  font-weight: 620;
+  line-height: 1.04;
+  letter-spacing: -0.042em;
+  text-wrap: balance;
+  margin-bottom: 28px;
+}
+.prose h2 {
+  margin: 56px 0 14px;
+  font-size: 24px;
+  letter-spacing: -0.026em;
+  line-height: 1.25;
+}
+.prose h3 {
+  margin: 36px 0 10px;
+  font-size: 18px;
+  letter-spacing: -0.016em;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 18px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 22px;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 6px 0;
+  padding-left: 4px;
+}
+.prose li::marker {
+  color: var(--muted);
+}
+.prose a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--link-line);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+.prose strong {
+  color: var(--text);
+}
+.prose em {
+  color: var(--text);
+}
+.table {
+  overflow-x: auto;
+  margin: 20px 0 28px;
+  border-radius: var(--r);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+tr:last-child td {
+  border-bottom: 0;
+}
+th {
+  color: var(--text);
+  font-weight: 560;
+  background: var(--chip-weak);
+}
+.doc-meta {
+  display: flex;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.doc-meta a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.doc-meta a:hover {
+  color: var(--text);
+}
+.doc-lead {
+  font-size: 19px;
+  color: var(--muted);
+}
+.prose .posts {
+  margin-top: 48px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.prose .posts li {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+.prose .posts a {
+  display: grid;
+  gap: 6px;
+  padding: 28px 0;
+  text-decoration: none;
+}
+.posts time {
+  color: var(--muted);
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.post-t {
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 590;
+  letter-spacing: -0.022em;
+  line-height: 1.3;
+}
+.post-d {
+  color: var(--muted);
+  font-size: 15.5px;
+}
+.posts a:hover .post-t {
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ motion */
+/* hidden at once, revealed with a short rise (scripts/site.js adds .motion and .in) */
+.motion [data-reveal]:not(.in) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.motion [data-reveal].in {
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+/* The closing fence rises once it comes into view, in a wave from the light (45 ms a pill, the
+   extension's spring), then the halo breathes in and the pool of light fades in (as on the
+   extension's block page). Without the script, or with reduced motion, it simply stands. */
+.motion [data-rise]:not(.in) .pill {
+  transform: translateY(102%);
+}
+.motion [data-rise]:not(.in) .fence-halo,
+.motion [data-rise]:not(.in) .fence-pool {
+  opacity: 0;
+}
+.motion [data-rise].in .pill {
+  animation: pill-rise 0.7s var(--spring) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 60ms);
+}
+.motion [data-rise].in .fence-halo {
+  animation: halo-in 1.8s var(--ease) 0.2s both;
+}
+.motion [data-rise].in .fence-pool {
+  animation: light-on 1.2s ease 0.35s both;
+}
+@keyframes pill-rise {
+  from {
+    transform: translateY(102%);
+  }
+}
+@keyframes halo-in {
+  /* the light breathes in, once */
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(6%);
+  }
+}
+@keyframes light-on {
+  from {
+    opacity: 0;
+  }
+}
+/* No endless animation: the status dot pings three times, then rests. */
+@media (prefers-reduced-motion: no-preference) {
+  .pulse::after {
+    animation: ping 2.4s var(--ease) 0.6s 3 both;
+  }
+}
+@keyframes ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* -------------------------------------------------------------- responsive */
+@media (max-width: 1024px) {
+  .win-wrap {
+    --above: 456px; /* the hero copy stacks */
+  }
+  .hero-row,
+  .sec-head,
+  .privacy-grid,
+  .faq {
+    grid-template-columns: 1fr;
+  }
+  .hero-actions {
+    justify-items: start;
+  }
+  .hero-actions .cta,
+  .hero-actions .ticks {
+    justify-content: flex-start;
+  }
+  .sec-head {
+    gap: 20px;
+  }
+  .faq-head {
+    position: static;
+  }
+  .card-schedule,
+  .card-timer {
+    grid-column: span 12;
+  }
+  .card-strict {
+    grid-template-columns: 1fr;
+  }
+  .card-strict .card-text {
+    padding: 30px 32px 0;
+  }
+  .card-strict .screen {
+    margin-top: 28px;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .details li:not(:nth-child(3n + 1)) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .details li:nth-child(even) {
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+  }
+  .details li:nth-last-child(-n + 3) {
+    border-bottom: 1px solid var(--line);
+  }
+  .details li:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .foot-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .foot-brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 860px) {
+  .plans {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+  .steps,
+  .feats {
+    grid-template-columns: 1fr;
+  }
+  .step,
+  .step + .step {
+    padding: 24px 0;
+    border-left: 0;
+  }
+  .step + .step {
+    border-top: 1px solid var(--line);
+  }
+}
+@media (max-width: 720px) {
+  .links {
+    display: none;
+  }
+  .theme {
+    margin-left: auto;
+  }
+  .top-cta {
+    display: none;
+  }
+  /* a compact hero, so the product cluster below fits in the first screen */
+  .display {
+    margin-top: 16px;
+    font-size: clamp(34px, 6vw + 16px, 44px);
+  }
+  .hero-row {
+    margin-top: 16px;
+    gap: 18px;
+  }
+  .lead {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .hero-actions {
+    gap: 14px;
+  }
+  .hero .btn-ghost {
+    display: none;
+  }
+  .hero .ticks {
+    flex-direction: row;
+    gap: 4px 14px;
+    font-size: 13px;
+  }
+  /* Phones: the same three surfaces, recomposed for a narrow screen (1em = 16px at 390px).
+     The settings window runs off the right edge; the popup and the block page sit side by side. */
+  .stage {
+    margin-top: 24px;
+    padding: 0 0 12px;
+    overflow: hidden;
+  }
+  .win-wrap {
+    width: 21.875em;
+    height: 23.5em;
+    font-size: min(20px, calc((100vw - 2 * var(--gutter)) / 21.875));
+  }
+  .win-wrap .win-bar {
+    font-size: 0.7em;
+  }
+  .win-wrap .win-hero {
+    left: 0;
+    width: 37.5em;
+  }
+  .win-popup {
+    left: auto;
+    right: 0;
+    top: 3.5em;
+    width: 11em;
+  }
+  .win-wrap .win-card {
+    left: 0;
+    top: 8em;
+    width: 12.5em;
+  }
+  /* product images are shown whole: the extension's own narrow layout (stats), the block
+     page's card, and the feature crops scaled to fit */
+  .screen {
+    padding: 16px;
+  }
+  .screen-stats {
+    padding: 0;
+    overflow: hidden;
+  }
+  .details {
+    grid-template-columns: 1fr;
+  }
+  .details li,
+  .details li:nth-child(even) {
+    padding: 28px 0;
+    border-left: 0;
+  }
+  .details li:nth-last-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .details li:last-child {
+    border-bottom: 0;
+  }
+  .card-text {
+    padding: 26px 24px 0;
+  }
+  .card-strict .card-text {
+    padding: 26px 24px 0;
+  }
+  .plan {
+    padding: 28px 24px;
+  }
+  .foot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .manifest dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .faq-a p {
+    padding-right: 0;
+  }
+}
+@media (max-width: 480px) {
+  .hero-actions {
+    justify-items: stretch;
+  }
+  .cta .btn {
+    width: 100%;
+  }
+  /* phones: a shorter floor, as on the extension's block page in a small window */
+  .final {
+    --floor-h: 64px;
+  }
+  .ticks {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-soon {
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
+    padding-block: 10px;
+  }
+}
+@media (max-width: 400px) {
+  .btn {
+    font-size: 14px;
+  }
+  .top .brand span {
+    display: none; /* logo only: room for the theme and language switchers */
+  }
+  .btn-soon {
+    padding-inline: 14px;
+  }
+}
+@media print {
+  .top,
+  .stage,
+  .scene {
+    display: none;
+  }
+}
+</style>
+<script src="../assets/site.js" defer></script>
 </head>
 <body>
-<header class="nav"><div class="wrap nav-in">
-  <a class="brand" href="../fr/"><svg width="32" height="32" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a>
-  <div class="nav-right">
-    <nav><a href="../fr/#features">Fonctionnalités</a><a href="../fr/#pricing">Tarifs</a><a href="../blog/" hreflang="en">Blog</a><a href="../fr/privacy.html">Confidentialité</a></nav>
-    <nav class="langs" aria-label="Langue"><a href="../privacy.html" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/privacy.html" hreflang="fr" lang="fr" data-set-lang="fr" aria-current="page"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/privacy.html" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/privacy.html" hreflang="de" lang="de" data-set-lang="de"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
-  </div>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="top"><div class="wrap top-in">
+  <a class="brand" href="../fr/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a>
+  <nav class="links" aria-label="Navigation principale"><a href="../fr/#features">Fonctionnalités</a><a href="../fr/#pricing">Tarifs</a><a href="../blog/" hreflang="en">Blog</a><a href="../fr/privacy.html">Confidentialité</a></nav>
+  <fieldset class="theme"><legend class="sr">Thème</legend><label data-v="light" title="Clair"><input type="radio" name="theme" value="light"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M3 12h2M19 12h2M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41"/></svg><span class="sr">Clair</span></label><label data-v="dark" title="Sombre"><input type="radio" name="theme" value="dark"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A7.5 7.5 0 0 1 9.4 4.5a7.5 7.5 0 1 0 10.1 10.1z"/></svg><span class="sr">Sombre</span></label><label data-v="system" title="Système"><input type="radio" name="theme" value="system"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg><span class="sr">Système</span></label></fieldset>
+  <nav class="langs" aria-label="Langue"><a href="../privacy.html" hreflang="en" lang="en" data-set-lang="en"><span aria-hidden="true">EN</span><span class="sr">English</span></a><a href="../fr/privacy.html" hreflang="fr" lang="fr" data-set-lang="fr" aria-current="page"><span aria-hidden="true">FR</span><span class="sr">Français</span></a><a href="../es/privacy.html" hreflang="es" lang="es" data-set-lang="es"><span aria-hidden="true">ES</span><span class="sr">Español</span></a><a href="../de/privacy.html" hreflang="de" lang="de" data-set-lang="de"><span aria-hidden="true">DE</span><span class="sr">Deutsch</span></a></nav>
 </div></header>
-<main class="doc"><div class="wrap narrow prose"><h1 id="politique-de-confidentialite-de-focusfence">Politique de confidentialité de FocusFence</h1>
-<p><em>Date d’effet : 13 novembre 2026</em></p>
+<main class="doc" id="main"><div class="wrap prose"><h1 id="politique-de-confidentialite-de-focusfence">Politique de confidentialité de FocusFence</h1>
+<p><em>Date d’effet : 13 novembre 2026</em></p>
 <p><em>Ceci est une traduction. En cas de divergence, la <a href="../privacy.html">version anglaise</a> fait foi.</em></p>
-<p>FocusFence (« l’extension ») est une extension Chrome qui bloque les sites de votre choix pour vous aider à rester concentré. Elle est conçue pour fonctionner entièrement sur votre appareil. Cette politique explique ce que l’extension enregistre, ce qu’elle envoie (très peu) sur le réseau et les choix dont vous disposez.</p>
+<p>FocusFence (« l’extension ») est une extension Chrome qui bloque les sites de votre choix pour vous aider à rester concentré. Elle est conçue pour fonctionner entièrement sur votre appareil. Cette politique explique ce que l’extension enregistre, ce qu’elle envoie (très peu) sur le réseau et les choix dont vous disposez.</p>
 <h2 id="en-bref">En bref</h2>
 <ul><li><strong>Pas de compte, pas de statistiques d’audience, pas de pistage, pas de publicité.</strong> Nous n’exploitons aucun serveur et ne recevons jamais vos données.</li><li><strong>Votre liste de blocage, vos réglages et vos statistiques restent sur votre appareil</strong>, dans le stockage local des extensions de Chrome.</li><li><strong>L’extension ne lit pas le contenu des pages.</strong> Le blocage est assuré par le moteur <code>declarativeNetRequest</code> intégré à Chrome, qui compare les adresses à votre liste sans exposer votre navigation à l’extension.</li><li><strong>La seule communication réseau a lieu avec ExtensionPay</strong>, et seulement si vous choisissez de passer à Pro (détails ci-dessous).</li></ul>
 <h2 id="ce-qui-est-enregistre-sur-votre-appareil">Ce qui est enregistré sur votre appareil</h2>
-<div class="table"><table><thead><tr><th>Donnée</th><th>Pourquoi</th><th>Où</th></tr></thead><tbody><tr><td>Votre liste de blocage (domaines, chemins, mots-clés)</td><td>Pour bloquer ces sites</td><td><code>chrome.storage.local</code></td></tr><tr><td>Réglages (marche/arrêt, planning, durées des sessions, message de la page de blocage)</td><td>Pour appliquer vos préférences</td><td><code>chrome.storage.local</code></td></tr><tr><td>Minuteurs des sessions de concentration et du mode strict</td><td>Pour que les sessions continuent après un redémarrage du navigateur</td><td><code>chrome.storage.local</code></td></tr><tr><td>Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours)</td><td>Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même)</td><td>Pour protéger vos réglages</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe</td><td>Confort</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr><tr><td>Nombre de mots de passe erronés (pour ralentir les tentatives)</td><td>Sécurité</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr></tbody></table></div>
+<div class="table"><table><thead><tr><th>Donnée</th><th>Pourquoi</th><th>Où</th></tr></thead><tbody><tr><td>Votre liste de blocage (domaines, chemins, mots-clés)</td><td>Pour bloquer ces sites</td><td><code>chrome.storage.local</code></td></tr><tr><td>Réglages (marche/arrêt, planning, durées des sessions, message de la page de blocage)</td><td>Pour appliquer vos préférences</td><td><code>chrome.storage.local</code></td></tr><tr><td>Minuteurs des sessions de concentration et du mode strict</td><td>Pour que les sessions continuent après un redémarrage du navigateur</td><td><code>chrome.storage.local</code></td></tr><tr><td>Nombre de tentatives bloquées par site bloqué et par jour (90 derniers jours)</td><td>Pour afficher vos statistiques (tentatives bloquées aujourd’hui et cette semaine)</td><td><code>chrome.storage.local</code></td></tr><tr><td>Verrouillage par mot de passe : une empreinte PBKDF2-SHA-256 salée (jamais le mot de passe lui-même)</td><td>Pour protéger vos réglages</td><td><code>chrome.storage.local</code></td></tr><tr><td>Indicateur « déverrouillé » pendant 15 minutes après la saisie du mot de passe</td><td>Confort</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr><tr><td>Nombre de mots de passe erronés (pour ralentir les tentatives)</td><td>Sécurité</td><td><code>chrome.storage.session</code> (effacé à la fermeture du navigateur)</td></tr></tbody></table></div>
 <p>Les statistiques n’enregistrent que les visites <strong>bloquées</strong>, étiquetées par la règle correspondante (par exemple <code>reddit.com</code>). FocusFence ne conserve pas d’historique des sites que vous visitez.</p>
 <p>Vous pouvez effacer les statistiques à tout moment (Réglages → Statistiques → Effacer les statistiques). La désinstallation de l’extension supprime toutes les données ci-dessus.</p>
 <h2 id="ce-qui-quitte-votre-appareil">Ce qui quitte votre appareil</h2>
 <p><strong>Rien, sauf si vous décidez de passer à Pro.</strong></p>
-<p>Les paiements sont gérés par <a href="https://extensionpay.com">ExtensionPay</a>, un service de paiement pour extensions de navigateur qui utilise Stripe pour le traitement des cartes. Quand vous cliquez sur un bouton de passage à Pro ou de « restauration d’achat » :</p>
+<p>Les paiements sont gérés par <a href="https://extensionpay.com">ExtensionPay</a>, un service de paiement pour extensions de navigateur qui utilise Stripe pour le traitement des cartes. Quand vous cliquez sur un bouton de passage à Pro ou de « restauration d’achat » :</p>
 <ol><li>L’extension demande à ExtensionPay un identifiant aléatoire (une clé d’API) pour votre installation et ouvre la page de paiement d’ExtensionPay dans un nouvel onglet.</li><li>Vous saisissez vos informations de paiement et votre e-mail <strong>directement sur les pages d’ExtensionPay/Stripe</strong>. FocusFence ne voit ni n’enregistre jamais vos données de carte.</li><li>Ensuite, l’extension envoie périodiquement cet identifiant à ExtensionPay (au démarrage du navigateur, environ toutes les 12 heures et à l’ouverture des réglages) pour vérifier si votre abonnement est actif. Aucune donnée de navigation, liste de blocage ou statistique n’est jamais envoyée.</li></ol>
-<p>La bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et l’état de votre abonnement dans <code>chrome.storage.sync</code>. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <a href="https://extensionpay.com/privacy">https://extensionpay.com/privacy</a>.</p>
+<p>La bibliothèque ExtensionPay enregistre l’identifiant, la date d’installation et l’état de votre abonnement dans <code>chrome.storage.sync</code>. Si la synchronisation Chrome est activée, Chrome synchronise ces données avec votre compte Google pour que votre achat vous suive sur vos autres ordinateurs. La politique de confidentialité d’ExtensionPay s’applique aux données que vous lui fournissez : <a href="https://extensionpay.com/privacy">https://extensionpay.com/privacy</a>.</p>
 <h2 id="permissions-et-raisons">Permissions et raisons</h2>
-<ul><li><strong>storage</strong> : enregistrer localement votre liste, vos réglages et vos statistiques.</li><li><strong>declarativeNetRequest</strong> : permettre à Chrome de bloquer ou de rediriger la navigation vers les sites de votre liste.</li><li><strong>alarms</strong> : faire fonctionner les plannings, les minuteurs de concentration et du mode strict.</li><li><strong>activeTab</strong> : lire l’adresse de l’onglet courant uniquement quand vous ouvrez la fenêtre de FocusFence, pour le bloquer en un clic.</li><li><strong>scripting</strong> : pour les règles de chemin (par ex. <code>youtube.com/shorts</code>), enregistrer un petit script uniquement sur ce site afin de bloquer aussi la navigation interne. Il transmet seulement l’adresse de la page à FocusFence ; il ne lit ni ne modifie le contenu de la page.</li><li><strong>Accès facultatif aux sites</strong> : demandé site par site, quand vous ajoutez ce site, pour que FocusFence affiche sa page de blocage au lieu de la page d’erreur de Chrome. Si vous refusez, le site reste bloqué.</li><li><strong>extensionpay.com</strong> : le script d’ExtensionPay ne s’exécute que sur extensionpay.com, pour confirmer un paiement effectué.</li></ul>
+<ul><li><strong>storage</strong> : enregistrer localement votre liste, vos réglages et vos statistiques.</li><li><strong>declarativeNetRequest</strong> : permettre à Chrome de bloquer ou de rediriger la navigation vers les sites de votre liste.</li><li><strong>alarms</strong> : faire fonctionner les plannings, les minuteurs de concentration et du mode strict.</li><li><strong>activeTab</strong> : lire l’adresse de l’onglet courant uniquement quand vous ouvrez la fenêtre de FocusFence, pour le bloquer en un clic.</li><li><strong>scripting</strong> : pour les règles de chemin (par ex. <code>youtube.com/shorts</code>), enregistrer un petit script uniquement sur ce site afin de bloquer aussi la navigation interne. Il transmet seulement l’adresse de la page à FocusFence ; il ne lit ni ne modifie le contenu de la page.</li><li><strong>Accès facultatif aux sites</strong> : demandé site par site, quand vous ajoutez ce site, pour que FocusFence affiche sa page de blocage au lieu de la page d’erreur de Chrome. Si vous refusez, le site reste bloqué.</li><li><strong>extensionpay.com</strong> : le script d’ExtensionPay ne s’exécute que sur extensionpay.com, pour confirmer un paiement effectué.</li></ul>
 <h2 id="enfants">Enfants</h2>
 <p>FocusFence ne s’adresse pas aux enfants de moins de 13 ans et ne collecte sciemment aucune information personnelle, de qui que ce soit.</p>
 <h2 id="vente-et-partage-des-donnees">Vente et partage des données</h2>
 <p>Nous ne vendons, ne louons ni ne partageons vos données. Nous ne les utilisons ni ne les transférons à des fins sans rapport avec l’objectif unique de l’extension, et nous ne les utilisons pas pour évaluer une solvabilité ou accorder un crédit.</p>
 <h2 id="open-source">Open source</h2>
-<p>FocusFence est un logiciel libre sous licence GNU Affero General Public License v3 (ou ultérieure). Vous pouvez vérifier chaque affirmation de cette politique dans le code source : <a href="https://github.com/Nexarion434/focusfence">https://github.com/Nexarion434/focusfence</a>.</p>
+<p>FocusFence est un logiciel libre sous licence GNU Affero General Public License v3 (ou ultérieure). Vous pouvez vérifier chaque affirmation de cette politique dans le code source : <a href="https://github.com/Nexarion434/focusfence">https://github.com/Nexarion434/focusfence</a>.</p>
 <h2 id="modifications">Modifications</h2>
 <p>Si cette politique change, la nouvelle version sera publiée à la même adresse avec une nouvelle date d’effet. Les changements importants seront signalés dans les notes de version de l’extension.</p>
 <h2 id="contact">Contact</h2>
-<p>Questions sur la confidentialité : <strong><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></strong></p></div></main>
-<footer class="foot"><div class="wrap foot-in">
-  <div class="brand"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></div>
-  <p>Logiciel libre sous licence <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a> · <a href="https://github.com/Nexarion434/focusfence">Code source</a> · <a href="../fr/privacy.html">Politique de confidentialité</a> · <a href="../blog/" hreflang="en">Blog (en anglais)</a></p>
-  <p class="muted">Non affilié à Google. Chrome est une marque de Google LLC.</p>
+<p>Questions sur la confidentialité : <strong><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></strong></p></div></main>
+<footer class="foot"><div class="wrap">
+  <div class="foot-grid">
+    <div class="foot-brand"><a class="brand" href="../fr/"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="16" height="16" rx="3.5" fill="#3A9A5B"/><polygon points="4,14 4,3.5 5.5,2 7,3.5 7,5 12,5 12,7 7,7 7,9 11,9 11,11 7,11 7,14" fill="#FFFFFF"/></svg><span>FocusFence</span></a><p>Un bloqueur de sites pour Chrome, calme et privé.</p></div>
+    <div class="foot-col"><p class="foot-h">Produit</p><ul><li><a href="../fr/#features">Fonctionnalités</a></li><li><a href="../fr/#pricing">Tarifs</a></li><li><a href="../fr/#faq">Questions</a></li></ul></div>
+    <div class="foot-col"><p class="foot-h">Ressources</p><ul><li><a href="../blog/" hreflang="en">Blog (en anglais)</a></li><li><a href="https://github.com/Nexarion434/focusfence">Code source</a></li><li><a href="../fr/privacy.html">Politique de confidentialité</a></li></ul></div>
+    <div class="foot-col"><p class="foot-h">Contact</p><ul><li><a href="mailto:contact@focusfence.dev">contact@focusfence.dev</a></li></ul></div>
+  </div>
+  <div class="foot-base"><p>Logiciel libre sous licence <a href="https://github.com/Nexarion434/focusfence/blob/main/focusfence/LICENSE">GNU AGPL v3</a></p><p>Non affilié à Google. Chrome est une marque de Google LLC.</p></div>
 </div></footer>
 </body>
 </html>

@@ -94,6 +94,7 @@ FF_CHROME_LIBS=/path/to/libs npm test
 npm run build            # dist/focusfence/ + dist/focusfence-1.0.0.zip (DEV=false)
 npm run cws:check        # build + Chrome Web Store pre-submission checks on the zip
 npm run screenshots:all  # store screenshots + promo tile in en, fr, es, de
+npm run screenshots:site # website images: 2x WebP captures of the real UI + 1200x630 Open Graph image, en, fr, es, de
 npm run design:shots     # design review: every screen and state, light + dark -> ../design/extension-ui/screenshots/
 npm run i18n             # regenerate src/_locales from scripts/i18n/strings.mjs
 npm run docs             # regenerate ../docs (website)
@@ -127,8 +128,11 @@ The UI, manifest name/description and store listings are available in **English 
 - **Languages:** English at the root (also `x-default`), French, Spanish and German under `docs/fr/`, `docs/es/`, `docs/de/`: landing page plus `privacy.html` each.
   - Landing text: `scripts/site-strings.mjs`.
   - Privacy: `store/privacy-policy.md` plus `privacy-policy.<lang>.md`. The translations use `{{CONTACT}}`, filled from the English Contact line, so the address is entered once.
-  - Screenshots come from `screenshots/<lang>/`.
-  - Every page has a language switcher, `hreflang`/canonical tags, localized `og:*` tags and the localized promo tile as `og:image`. The sitemap lists every language with alternates.
+  - Product images and the Open Graph image come from `screenshots/site/<lang>/` (`npm run screenshots:site`): real captures of the extension in its dark and light themes (`name.webp` / `name-light.webp`) at 2x, encoded to WebP in Chromium, plus a 1200×630 `og.png` per language. Below 720 px, `<picture>` serves captures made for phones: the extension's own narrow layouts in a 400 px window (`block-page-m`, `schedule-m`, `stats-m`). Every product image is shown whole on phones.
+  - The page ends on the extension's block-page scene (round 5): a short row of chunky frosted-glass pills on a seamless glossy floor that mirrors every pill, the one in the middle holding the light (emerald with a wide halo at night, a solid green pill among milky sage glass by day). Like the block page, narrower windows show five pills instead of seven, never thinner ones. It is plain CSS (`.fence` and `.pill` in `scripts/site.css`, ported from the extension's `base.css` and `blocked.css`); `scripts/docs.mjs` writes the row with each pill's height, light and fade, using the extension's `pillProfile` formulas.
+  - Every page has a language switcher, `hreflang`/canonical tags, localized `og:*` tags and the localized Open Graph image. The sitemap lists every language with alternates.
+- **Design:** Linear-inspired, dark and light (notes, palettes, type scale and critique log in `../design/landing-v2/BRIEF.md`). Styles live in `scripts/site.css` and are inlined into every page; `scripts/site.js` (deferred, ~2 KB) remembers the language choice, wires the theme toggle and adds subtle scroll motion, skipped under `prefers-reduced-motion`. One self-hosted font (Inter with the optical-size axis, from `@fontsource-variable/inter`), no framework, no CDN, no tracker.
+- **Themes:** the site follows the system (`prefers-color-scheme`) until the visitor picks Light, Dark or System in the header toggle. The choice is stored in `localStorage` (`ff-theme`) and applied by an inline script in `<head>`, before the styles, so there is no flash. Each product image exists in both themes; CSS shows the matching one and lazy loading never downloads the other.
 - **First-visit redirect** (root `index.html` only): a visitor whose `navigator.languages` puts fr/es/de before English is sent to that language. A click in the switcher is saved in `localStorage` (`ff-lang`) and always wins. Arriving at the root from another page of the site never redirects.
 - **Blog:** `blog/` is English-only, rendered from `../marketing/blog/*.md`. Posts with `draft: true` get `noindex` and stay out of the sitemap.
 
