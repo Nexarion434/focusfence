@@ -7,7 +7,8 @@ import { ROOT, launchExtension } from '../scripts/launch.mjs';
 
 test('store build: DEV flag off, no Simulate Pro, Free blocking works', async ({ net }) => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts/build.mjs')], { stdio: 'ignore' });
-  const zip = path.join(ROOT, 'dist/focusfence-1.0.0.zip');
+  const { version } = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/manifest.json'), 'utf8'));
+  const zip = path.join(ROOT, `dist/focusfence-${version}.zip`);
   expect(fs.existsSync(zip)).toBe(true);
   expect(fs.readFileSync(path.join(ROOT, 'dist/focusfence/config.js'), 'utf8')).toMatch(/DEV: false/);
   // AGPL compliance: license texts + notices ship in the package, ExtPay is unmodified from npm

@@ -1,7 +1,7 @@
 {
   "name": "focusfence",
-  "version": "1.0.0",
-  "description": "FocusFence — freemium Chrome extension that blocks distracting websites",
+  "version": "1.0.1",
+  "description": "FocusFence — freemium focus app for Chrome that blocks distracting websites",
   "scripts": {
     "test": "playwright test",
     "test:unit": "playwright test tests/core.spec.mjs",

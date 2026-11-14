@@ -7,18 +7,20 @@ export const LANGS = ['en', 'fr', 'es', 'de'];
 
 export const S = {
   // ------------------------------------------------------------ manifest
+  // Store name and summary (Chrome Web Store: name <= 75, description <= 132 characters).
+  // FocusFence is presented as a focus app; blocking is how it works, never an ad blocker.
   extName: {
-    en: 'FocusFence – Website Blocker & Pomodoro Focus Timer',
-    fr: 'FocusFence – Bloqueur de sites & minuteur Pomodoro',
-    es: 'FocusFence – Bloqueador de webs y temporizador Pomodoro',
-    de: 'FocusFence – Website-Blocker & Pomodoro-Fokus-Timer',
+    en: 'FocusFence – Focus App & Website Blocker',
+    fr: 'FocusFence – Appli de concentration & bloqueur de sites',
+    es: 'FocusFence – App de concentración y bloqueador de páginas web',
+    de: 'FocusFence – Fokus-App & Website-Blocker',
   },
   extShortName: { en: 'FocusFence', fr: 'FocusFence', es: 'FocusFence', de: 'FocusFence' },
   extDescription: {
-    en: 'Block distracting websites in one click, or just YouTube Shorts. Schedules, Pomodoro focus timer and strict mode. 100% private.',
-    fr: 'Bloquez les sites qui vous distraient en un clic, ou juste YouTube Shorts. Horaires, minuteur Pomodoro et mode strict. 100 % privé.',
-    es: 'Bloquea las webs que te distraen con un clic, o solo YouTube Shorts. Horarios, temporizador Pomodoro y modo estricto. 100 % privado.',
-    de: 'Blockiere ablenkende Websites mit einem Klick – oder nur YouTube Shorts. Zeitpläne, Pomodoro-Timer und strikter Modus. 100 % privat.',
+    en: 'Stay focused: block distracting websites for free, with no limit. Pro adds focus sessions, strict mode and YouTube Shorts blocking.',
+    fr: 'Restez concentré : bloquez gratuitement et sans limite les sites distrayants. Pro ajoute sessions de concentration et mode strict.',
+    es: 'Concéntrate: bloquea gratis y sin límite las páginas web que te distraen. Pro añade sesiones de concentración y el modo estricto.',
+    de: 'Bleib konzentriert: Blockiere ablenkende Websites kostenlos und unbegrenzt. Pro bringt Fokus-Sitzungen und den strikten Modus.',
   },
 
   // ------------------------------------------------------------ badge / action

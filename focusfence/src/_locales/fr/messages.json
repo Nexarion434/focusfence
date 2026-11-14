@@ -1,12 +1,12 @@
 {
   "extName": {
-    "message": "FocusFence – Bloqueur de sites & minuteur Pomodoro"
+    "message": "FocusFence – Appli de concentration & bloqueur de sites"
   },
   "extShortName": {
     "message": "FocusFence"
   },
   "extDescription": {
-    "message": "Bloquez les sites qui vous distraient en un clic, ou juste YouTube Shorts. Horaires, minuteur Pomodoro et mode strict. 100 % privé."
+    "message": "Restez concentré : bloquez gratuitement et sans limite les sites distrayants. Pro ajoute sessions de concentration et mode strict."
   },
   "badgeOff": {
     "message": "OFF"

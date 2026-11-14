@@ -9,7 +9,7 @@ self.FF_CONFIG = Object.freeze({
   DEV: true,
   EXTPAY_ID: 'focusfence-dev', // extension id registered on extensionpay.com
   SOURCE_URL: 'https://github.com/Nexarion434/focusfence', // AGPL: where users can get the source
-  PRIVACY_URL: 'https://nexarion434.github.io/focusfence/privacy.html', // GitHub Pages (docs/)
+  PRIVACY_URL: 'https://focusfence.dev/privacy.html', // the website (docs/, GitHub Pages custom domain)
   // Must match the plans configured in ExtensionPay (amounts and plan nicknames).
   // EUR for users whose locale region is in the eurozone, USD for everyone else
   // (see FFCore.pricingFor). Displayed with Intl currency formatting.
